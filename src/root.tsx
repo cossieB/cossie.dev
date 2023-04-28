@@ -1,7 +1,6 @@
 // @refresh reload
 import { Suspense } from "solid-js";
 import {
-    A,
     Body,
     ErrorBoundary,
     FileRoutes,
@@ -13,13 +12,13 @@ import {
     Title,
     Link,
 } from "solid-start";
-import "./root.css";
+import "./root.scss";
 
 export default function Root() {
     return (
         <Html lang="en">
             <Head>
-                <Title>Buntu Cossie</Title>
+                <Title>Cossie</Title>
                 <Meta charset="utf-8" />
                 <Meta name="viewport" content="width=device-width, initial-scale=1" />
                 <Meta name="description" content="Porfolio page of full-stack developer Buntu Cossie, built with Solid.js, SASS and Firebase" />
@@ -37,8 +36,9 @@ export default function Root() {
                 <Link rel="shortcut icon" type="image/ico" href="/favicon.ico" />
                 <Link rel="preconnect" href="https://fonts.googleapis.com" />
                 <Link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
+                <Link rel="manifest" href="/manifest.json" />
                 <Link
-                    href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;700&family=Press+Start+2P&family=Stick+No+Bills:wght@600&display=swap"
+                    href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;700&family=Press+Start+2P&family=Stick+No+Bills:wght@600&family=Orbitron:wght@500&display=swap"
                     rel="stylesheet" />
             </Head>
             <Body>

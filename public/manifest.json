@@ -1,6 +1,6 @@
 {
   "short_name": "cossie.dev",
-  "name": "cossie.dev",
+  "name": "Buntu Cossie's Portfolio App",
   "icons": [
     {
       "src": "favicon.ico",
@@ -18,8 +18,11 @@
       "sizes": "512x512"
     }
   ],
-  "start_url": ".",
   "display": "standalone",
   "theme_color": "#000000",
-  "background_color": "#ffffff"
+  "background_color": "#ffffff",
+  "start_url": "/",
+  "orientation": "portrait-primary",
+  "id": "/",
+  "description": "Portfolio page of full-stack developer Buntu Cossie"
 }
