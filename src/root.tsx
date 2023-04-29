@@ -18,7 +18,6 @@ export default function Root() {
     return (
         <Html lang="en">
             <Head>
-                <Title>Cossie</Title>
                 <Meta charset="utf-8" />
                 <Meta name="viewport" content="width=device-width, initial-scale=1" />
                 <Meta name="description" content="Porfolio page of full-stack developer Buntu Cossie, built with Solid.js, SASS and Firebase" />
@@ -40,6 +39,7 @@ export default function Root() {
                 <Link
                     href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;700&family=Press+Start+2P&family=Stick+No+Bills:wght@600&family=Orbitron:wght@500&display=swap"
                     rel="stylesheet" />
+                <Title>Cossie</Title>
             </Head>
             <Body>
                 <Suspense>

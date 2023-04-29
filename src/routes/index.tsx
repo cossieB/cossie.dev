@@ -1,47 +1,48 @@
 import styles from '~/components/Home/Home.module.scss'
-import { puzzleSvg, questionMarkSvg, phoneSvg, githubSvg, linkedInSvg, dockerSvg, freeCCSvg } from "../svgs";
-import { Title } from 'solid-start';
 import NavItem from '~/components/Home/NavItem';
 import ExternalLink from '~/components/shared/ExternalLink';
+import MySiteTitle from '~/components/shared/MySiteTitle';
+import { Motion } from '@motionone/solid';
+import { DockerSvg, FreeCCSvg, GithubSvg, LinkedInSvg, PhoneSvg, PuzzleSvg, QuestionMarkSvg } from '~/svgs';
 
 export default function Home() {
     return (
         <main id={styles.homeContainer} class="container">
-            <Title>&lt;Hello World/&gt;</Title>
+            <MySiteTitle>Hello World</MySiteTitle>
             <nav id={styles.navbar}>
                 <NavItem
                     href='/projects'
-                    icon={puzzleSvg}
+                    icon={<PuzzleSvg/>}
                     label='Projects'
                 />
                 <NavItem
                     href='/about'
-                    icon={questionMarkSvg}
+                    icon={<QuestionMarkSvg/>}
                     label='About'
                 />
                 <NavItem
                     href='/contact'
-                    icon={phoneSvg}
+                    icon={<PhoneSvg />}
                     label='Contact'
                 />
             </nav>
             <div id={styles.welcome}>
-                {/* <motion.h1 initial={{ y: 100, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 1 }} id={styles.name}>Cossie</motion.h1>
-                <motion.hr initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ duration: 1 }} />
-                <motion.h2 initial={{ y: -100, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 1 }} id={styles.title}>Full-Stack Developer</motion.h2> */}
+                <Motion.h1 initial={{ y: 100, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 1 }} id={styles.name}>Cossie</Motion.h1>
+                <Motion.hr initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ duration: 1 }} class={styles.line} />
+                <Motion.h2 initial={{ y: -100, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 1 }} id={styles.title}>Full-Stack Developer</Motion.h2>
             </div>
             <div class={styles.socials}>
                 <ExternalLink href='https://github.com/cossieB' title="GitHub">
-                    {githubSvg}
+                    {<GithubSvg />}
                 </ExternalLink>
                 <ExternalLink href="https://www.linkedin.com/in/cossieb/" title="LinkedIn" >
-                    {linkedInSvg}
+                    {<LinkedInSvg />}
                 </ExternalLink>
                 <ExternalLink href="https://hub.docker.com/u/cossie" title="Docker Hub">
-                    {dockerSvg}
+                    {<DockerSvg />}
                 </ExternalLink>
                 <ExternalLink href="https://www.freecodecamp.org/cossie" title="freeCodeCamp">
-                    {freeCCSvg}
+                    {<FreeCCSvg />}
                 </ExternalLink>
                 <a href="https://www.freecodecamp.org/cossie" target="_blank" rel="noreferrer" title="freeCodeCamp">
                 </a>

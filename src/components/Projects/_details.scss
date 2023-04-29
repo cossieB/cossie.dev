@@ -1,0 +1,146 @@
+.detailsPage {
+    display: flex;
+    flex-direction: column;
+    background-color: none;
+    z-index: 50;
+    height: 100vh;
+    width: 100vw;
+    position: fixed;
+    overflow-y: scroll;
+}
+
+.detail {
+    display: flex;
+    flex-direction: column;
+    background-color: #ddd;
+    color: #ddd;
+    z-index: 50;
+    opacity: 0.9;
+    width: 80%;
+    height: min-content;
+}
+
+.detailsOuter {
+    display: flex;
+}
+
+.detailsStack {
+    color: #222;
+    flex: 2;
+}
+
+.detailsStackLogos {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    justify-content: center;
+    row-gap: 10%;
+    margin-bottom: 1.5rem;
+
+    img {
+        max-height: 5rem;
+        max-width: 100%;
+    }
+}
+
+.detailsDesc {
+    font-size: 1.25rem;
+    padding: 1rem 1rem;
+    background-color: #373a39;
+    flex: 1;
+}
+
+.detailsHeader {
+    height: 100px;
+    background-color: rgb(49, 47, 49);
+    font-size: 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+
+    svg {
+        fill: #ddd;
+        transition: all 200ms ease;
+    }
+
+    div {
+        >* {
+            margin-left: 1rem;
+        }
+
+        a>svg:hover {
+            fill: springgreen;
+            transition: all 200ms ease;
+        }
+    }
+
+    >div {
+        :first-child svg:hover {
+            fill: #1f80ff;
+            transition: all 200ms ease;
+        }
+
+        >svg:last-child:hover {
+            fill: red;
+            transition: all 200ms ease;
+        }
+    }
+
+    a {
+        color: #ddd;
+        text-decoration: none;
+
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+}
+
+.logoImg {
+    +span {
+        color: aliceblue;
+    }
+    &:hover {
+        +span {
+            opacity: 1;
+        }
+    }
+}
+
+@media (max-width: 768px) {
+    .detail {
+        position: absolute;
+        top: auto;
+        left: auto;
+        width: 100%;
+    }
+
+    .detailsOuter {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 1rem;
+    }
+
+    .detailsDesc {
+        font-size: large;
+        flex: auto;
+    }
+
+    .detailsHeader {
+        svg {
+            height: 25px;
+            width: 25px;
+        }
+
+        h2 {
+            font-size: larger;
+        }
+    }
+}
+
+@media (min-width: 768px) {
+    .detailsPage {
+        justify-content: center;
+        align-items: center;
+    }
+}

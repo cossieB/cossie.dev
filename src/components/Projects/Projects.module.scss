@@ -1,0 +1,138 @@
+@use 'details';
+@import '../../mixins';
+
+#container {
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
+    color: white;
+
+    h1 {
+        color: white;
+        text-align: center;
+        font-family: "Stick No Bills", sans-serif;
+    }
+}
+
+.btns {
+    :first-child {
+        left: 0;
+    }
+}
+
+.pageBtn {
+    position: fixed;
+    height: 100vh;
+    width: 10%;
+    background-color: lavender;
+    $opac: 0.2;
+    color: black;
+    opacity: $opac;
+    font-size: clamp(1rem, 10vw, 20rem);
+    @include flexCenter;
+    cursor: pointer;
+    top: 0;
+    z-index: 2;
+    transition: all 150ms ease;
+
+    &.nextBtn {
+        right: 0;
+    }
+
+    &.disabled {
+        color: #b3b3b3;
+        opacity: $opac !important;
+    }
+}
+
+#projects {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 500px));
+    grid-gap: 1rem;
+    justify-content: center;
+    text-align: center;
+    font-size: larger;
+
+    a {
+        color: white;
+        text-decoration: none;
+
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+}
+
+.tile {
+    overflow: hidden;
+    position: relative;
+
+    img {
+        width: 100%;
+        border-radius: 0px 25px;
+        box-shadow: 0 0 10px slateblue;
+    }
+}
+
+// .tileMask {
+//     display: flex;
+//     align-items: center;
+//     justify-content: space-around;
+//     z-index: 11;
+//     transform: translateY(50%);
+//     opacity: 0;
+//     position: absolute;
+//     top: 0%;
+//     left: 0%;
+//     right: 0%;
+//     bottom: 0%;
+//     backdrop-filter: blur(10px);
+//     transition: all 200ms ease;
+
+//     &.show {
+//         opacity: 1;
+//         transform: translateY(0%);
+//         transition: all 200ms ease;
+//     }
+
+//     button {
+//         border: none;
+//         background: none;
+//     }
+// }
+
+// @media (max-width: 768px) {
+//     #projects {
+//         justify-content: center;
+//         align-items: center;
+//         padding-bottom: 5rem;
+//         align-self: center;
+//         width: 90%;
+
+//         >div {
+//             align-self: center;
+//             width: 100%;
+//         }
+//     }
+
+//     #projectContainer {
+//         overflow-x: hidden;
+//         height: auto;
+//     }
+// }
+
+// @media (min-width: 768px) {
+//     .main {
+//         align-items: center;
+//     }
+
+//     #projects {
+//         width: 100%;
+//     }
+
+//     .pageBtn {
+//         &:hover {
+//             opacity: 1;
+//         }
+//     }
+// }
