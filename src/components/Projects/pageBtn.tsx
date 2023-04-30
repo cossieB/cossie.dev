@@ -31,7 +31,7 @@ export default function PageBtn(props: Props) {
             classList={{[styles.disabled]: isDisabled()}}
             onClick={() => {
                 const nextPage = flipPage(props.page(), incrementBy, paginatedProjects.length - 1);
-                props.setPage(nextPage); console.log(className);
+                props.setPage(nextPage)
             }}
         >
             {props.label}

@@ -1,6 +1,7 @@
 import styles from "~/components/Projects/Projects.module.scss"
 import { Links } from "./Links"
-import { selected } from "~/routes/projects/(projects)"
+import { selected } from "./ProjectsMain"
+
 
 export default function Details() {
 

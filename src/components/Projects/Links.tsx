@@ -1,7 +1,7 @@
 import { Link } from "@solidjs/router";
 import styles from "~/components/Projects/Projects.module.scss";
 import { Projs } from "./projectArray";
-import { selected, setSelected } from "~/routes/projects/(projects)";
+import { selected, setSelected } from "./ProjectsMain";
 
 type Props = {
     proj: Projs
