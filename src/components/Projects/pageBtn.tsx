@@ -1,4 +1,4 @@
-import { Accessor, Setter, createEffect } from "solid-js";
+import { Accessor, Setter } from "solid-js";
 import styles from "~/components/Projects/Projects.module.scss";
 import { paginatedProjects } from "./ProjectList";
 import { flipPage } from "../../lib/flipPage";

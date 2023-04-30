@@ -26,15 +26,19 @@ sections.forEach(item => {
     updateStack(item)
 })
 
-export interface Projs {
+export type Projs = {
     title: string,
     img: string,
-    path?: string,
-    external?: boolean,
     description: string,
     stack: string[],
     repo: string
-}
+} & ({
+    external: true
+    path: string
+} | {
+    external?: false 
+    path?: string
+})
 
 export const projectArray: Projs[] = [
     {
