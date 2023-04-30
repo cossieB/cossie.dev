@@ -36,6 +36,9 @@ export default function Root() {
                 <Link rel="preconnect" href="https://fonts.googleapis.com" />
                 <Link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
                 <Link rel="manifest" href="/manifest.json" />
+                <Link rel="apple-touch--icon" sizes="180x180" href="/apple-touch-icon.png" />
+                <Link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+                <Link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
                 <Link
                     href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;700&family=Press+Start+2P&family=Stick+No+Bills:wght@600&family=Orbitron:wght@500&display=swap"
                     rel="stylesheet" />
