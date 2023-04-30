@@ -14,34 +14,44 @@
     }
 }
 
-.btns {
-    :first-child {
-        left: 0;
-    }
+.prevBtn {
+    left: 0;
+}
+.nextBtn {
+    right: 0;
 }
 
 .pageBtn {
     position: fixed;
     height: 100vh;
     width: 10%;
-    background-color: lavender;
-    $opac: 0.2;
+    background: linear-gradient(#dd07dd, #0ae9e9 );
     color: black;
-    opacity: $opac;
     font-size: clamp(1rem, 10vw, 20rem);
     @include flexCenter;
     cursor: pointer;
     top: 0;
     z-index: 2;
     transition: all 150ms ease;
-
-    &.nextBtn {
-        right: 0;
+    &::before {
+        opacity: 0;
+        position: absolute;
+        height: 100%;
+        width: 100%;
+        z-index: -1;
+        content: "";
+        background: linear-gradient(#0ae9e9, #dd07dd );
+        transition: opacity 500ms ease;
     }
-
     &.disabled {
         color: #b3b3b3;
-        opacity: $opac !important;
+        opacity: 0.2 !important;
+
+    }
+    &:not(.disabled):hover {
+        &::before {
+            opacity: 1;
+        }
     }
 }
 
