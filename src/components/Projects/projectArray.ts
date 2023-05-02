@@ -29,6 +29,7 @@ sections.forEach(item => {
 export type Projs = {
     title: string,
     img: string,
+    imgMobile?: string,
     description: string,
     stack: string[],
     repo: string
@@ -44,6 +45,7 @@ export const projectArray: Projs[] = [
     {
         title: "Meme Machine",
         img: "/screenshots/memes.png",
+        imgMobile: "/screenshots/memes_mobile.png",
         path: "https://mememachine.vercel.app/",
         external: true,
         description: "Full-stack CRUD application for posting and viewing memes. Features 'like', 'follow' functionality and OAuth login with Google and Facebook. Developed with TypeScript, Next.js, React and Tailwind CSS. The data is stored in Supabase PostgreSQL and Prisma ORM is used to interact with the database. Uses the Next-Auth library for authentication and tRPC to bridge the front-end and back-end. ",
@@ -58,6 +60,7 @@ export const projectArray: Projs[] = [
     }, {
         title: "Internet Games Database",
         img: "/screenshots/igdb.png",
+        imgMobile: "/screenshots/igdb_mobile.png",
         path: "https://internet-games-database.vercel.app/",
         external: true,
         description: "CRUD application for adding information about games and the gaming industry. Developed with TypeScript, Next.js, React and SASS. Uses Supabase Postgres as a database and Prisma ORM to interact with the database.",
@@ -66,6 +69,7 @@ export const projectArray: Projs[] = [
     },{
         title: "2048",
         img: "/screenshots/2048.png",
+        imgMobile: "/screenshots/2048_mobile.png",
         path: "/2048",
         description: "Clone of the 2048 puzzle/strategy game. Features mobile swipe controls. High scores stored in Firestore and local storage. This game has complex logic, so it was quite challenging to develop.",
         stack: ["typescript", "react", "firebase", "framer motion", "firestore", "sass"],
@@ -73,6 +77,7 @@ export const projectArray: Projs[] = [
     }, {
         title: "Microservices",
         img: "/screenshots/microservices.png",
+        imgMobile: "/screenshots/microservices_mobile.png",
         path: "https://cossie.netlify.app/",
         external: true,
         description: "Various REST APIs including header parser, file metadata, timestamp microservices, issue and exercise trackers and translator services. Deployed on Netlify and uses serverless Netlify functions.",
@@ -89,6 +94,7 @@ export const projectArray: Projs[] = [
     }, {
         title: "Wordle",
         img: "/screenshots/wordle.png",
+        imgMobile: "/screenshots/wordle_mobile.png",
         path: "/wordle",
         description: "My recreation of the popular game Wordle",
         stack: ["typescript", "react", "firebase", "framer motion"],
@@ -97,12 +103,14 @@ export const projectArray: Projs[] = [
         title: 'Memory Game',
         path: '/memory',
         img: "/screenshots/memory.png",
+        imgMobile: "/screenshots/memory_mobile.png",
         description: "Quiz that tests your memory. Features customizable game size. High scores stored in Firestore and local storage.",
         stack: ["typescript", "react", "firebase", "framer motion", "firestore"],
         repo: "https://github.com/cossieB/cossieb.github.io/tree/main/src/components/Memory"
     }, {
         title: "Sudoku",
-        img: 'screenshots/sudoku.png',
+        img: '/screenshots/sudoku.png',
+        imgMobile: '/screenshots/sudoku_mobile.png',
         path: "/sudoku",
         description: "Play sudoku. Features clash highlighting and custom puzzle creator. It can also solve most puzzles using the backtracking algorithm.",
         stack: ["typescript", "react", "firebase", "framer motion"],
@@ -110,6 +118,7 @@ export const projectArray: Projs[] = [
     }, {
         title: "Pomodoro",
         img: "/screenshots/pomodoro.png",
+        imgMobile: "/screenshots/pomodoro_mobile.png",
         path: "/pomodoro",
         description: "Timer for the pomodoro technique. You can change the session and the break lengths.",
         stack: ["typescript", "react", "firebase", "framer motion"],
@@ -117,6 +126,7 @@ export const projectArray: Projs[] = [
     }, {
         title: "Calculator",
         img: "/screenshots/calculator.png",
+        imgMobile: "/screenshots/calculator_mobile.png",
         path: "/calculator",
         description: "Non-scientific calculator.",
         stack: ["typescript", "react", "firebase", "framer motion"],
@@ -125,6 +135,7 @@ export const projectArray: Projs[] = [
         title: "Random Quote Machine",
         path: "/quotes",
         img: "/screenshots/quotes.png",
+        imgMobile: "/screenshots/quotes_mobile.png",
         description: "Some lighthearted quotes from across the ages.",
         stack: ["typescript", "react", "firebase", "framer motion"],
         repo: "https://github.com/cossieB/cossieb.github.io/tree/main/src/components/Quotes"

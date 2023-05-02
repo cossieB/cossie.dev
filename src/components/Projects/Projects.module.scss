@@ -123,6 +123,39 @@ $clr2: #0ae9e9;
     justify-content: space-around;
     width: 100%;
     transition: all 250ms ease;
+    svg {
+        color: aliceblue;
+        fill: aliceblue;
+    }
+}
+
+@mixin fillSvg($color) {
+    fill: $color;
+    color: $color;
+}
+.info {
+    &:hover {
+        $color: #1f80ff;
+        @include fillSvg($color)
+    }
+}
+.code {
+    &:hover {
+        $color: #f8e917;
+        @include fillSvg($color)
+    }
+}
+.external {
+    &:hover {
+        $color: springgreen;
+        @include fillSvg($color)
+    }
+}
+.close {
+    &:hover {
+        $color: red;
+        @include fillSvg($color)
+    }
 }
 
 // @media (max-width: 768px) {

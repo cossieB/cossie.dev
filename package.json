@@ -19,6 +19,7 @@
   "dependencies": {
     "@motionone/solid": "^10.16.0",
     "@prisma/client": "^4.13.0",
+    "@solid-primitives/keyed": "^1.2.0",
     "@solidjs/meta": "^0.28.2",
     "@solidjs/router": "^0.8.2",
     "graphql": "^16.6.0",

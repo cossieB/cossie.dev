@@ -6,7 +6,7 @@ import styles from "~/components/Projects/Projects.module.scss"
 import PageBtn from "~/components/Projects/pageBtn";
 import Details from "~/components/Projects/Details";
 
-export const [selected, setSelected] = createSignal<Projs | null>(null)
+export const [selected, setSelected] = createSignal<Projs | null>()
 
 export default function ProjectsMain() {
     const [page, setPage] = createSignal(0);
