@@ -157,39 +157,3 @@ $clr2: #0ae9e9;
         @include fillSvg($color)
     }
 }
-
-// @media (max-width: 768px) {
-//     #projects {
-//         justify-content: center;
-//         align-items: center;
-//         padding-bottom: 5rem;
-//         align-self: center;
-//         width: 90%;
-
-//         >div {
-//             align-self: center;
-//             width: 100%;
-//         }
-//     }
-
-//     #projectContainer {
-//         overflow-x: hidden;
-//         height: auto;
-//     }
-// }
-
-// @media (min-width: 768px) {
-//     .main {
-//         align-items: center;
-//     }
-
-//     #projects {
-//         width: 100%;
-//     }
-
-//     .pageBtn {
-//         &:hover {
-//             opacity: 1;
-//         }
-//     }
-// }

@@ -1,0 +1,96 @@
+@import "~/mixins";
+
+#container {
+    color: white;
+    font-size: large;
+    font-family: helvetica;
+    flex-direction: column;
+    display: flex;
+    flex-direction: column
+}
+
+#formDiv {
+    @include flexCenter(column);
+    height: 100%;
+}
+
+.formControl {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    margin: 0.75rem;
+}
+
+#form {
+    padding-top: 0.5rem;
+    width: 50vw;
+    background-color: #00000050;
+    border-radius: .5rem;
+    box-shadow: 0 0 20px black;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    textarea,
+    input,
+    button {
+        position: relative;
+        border-radius: .5rem;
+        color: white;
+        border: none;
+        background: #00000050;
+    }
+
+    textarea,
+    input {
+        padding: 0.25rem;
+        &:focus,
+        &:not(:placeholder-shown) {
+            outline: none;
+
+            +label {
+                top: -15px;
+                font-size: 12px;
+                color: hsl(180, 25%, 75%);
+            }
+        }
+    }
+
+    >div {
+        display: flex;
+        flex-direction: column;
+        width: 90%;
+    }
+    
+    textarea {
+        height: 12rem;
+    }
+    button {
+        margin-bottom: 1rem;
+        font-size: large;
+        width: inherit;
+        color: aliceblue;
+        height: 3rem;
+        width: 90%;
+        background: none;
+        border: 5px solid steelblue;
+        transition: all 250ms ease;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        &:hover:not(:disabled) {
+            background-color: steelblue;
+            box-shadow: 0 0 5px 5px aliceblue;
+            border: none;
+        }
+    }
+
+    label {
+        position: absolute;
+        top: 0;
+        transition: all 250ms ease-in-out;
+    }
+
+    input {
+        height: 25px;
+    }
+}
