@@ -9,6 +9,7 @@
   "type": "module",
   "devDependencies": {
     "@types/node": "^18.11.18",
+    "@types/nodemailer": "^6.4.7",
     "esbuild": "^0.14.54",
     "postcss": "^8.4.21",
     "sass": "^1.62.1",
@@ -22,7 +23,9 @@
     "@solid-primitives/keyed": "^1.2.0",
     "@solidjs/meta": "^0.28.2",
     "@solidjs/router": "^0.8.2",
+    "googleapis": "^118.0.0",
     "graphql": "^16.6.0",
+    "nodemailer": "^6.9.1",
     "prisma": "^4.13.0",
     "solid-js": "^1.7.2",
     "solid-start": "^0.2.26",
