@@ -1,4 +1,4 @@
-import { For, createEffect, createSignal, onCleanup, onMount } from "solid-js";
+import { For, createEffect, createSignal } from "solid-js";
 import { quotes as quotesList, Quote as QuoteType } from "./quotelist";
 import styles from "./quotes.module.scss"
 import { createStore } from "solid-js/store";
@@ -7,28 +7,15 @@ import { Quote } from "./Quote";
 import { ReactiveSet } from "@solid-primitives/set";
 import { getUniqueTags, colors } from "./utils";
 import { Tag } from "./Tag";
+import { useImage } from "./useImage";
+import { useResize } from "./useResize";
 
 export default function QuotesMain() {
     const tags = getUniqueTags();
-    const [windowWidth, setWindowWidth] = createSignal(0)
     const [filteredQuotes, setFilteredQuotes] = createSignal(quotesList)
+    const bgs = useImage()
+    const windowWidth = useResize()
 
-    const bgs: HTMLImageElement[] = []
-    onMount(() => {
-        setWindowWidth(window.innerWidth);
-        window.addEventListener('resize', resize)
-        for (let i = 1; i <= 5; i++) {
-            const image = new Image();
-            image.src = `/assets/image${i}.jpg`
-            bgs.push(image)
-        }
-    })
-    onCleanup(() => {
-        window.removeEventListener('resize', resize)
-    })
-    function resize() {
-        setWindowWidth(window.innerWidth)
-    }
     createEffect(() => {
         if (state.filters.size == 0) {
             setFilteredQuotes(quotesList)
@@ -55,7 +42,7 @@ export default function QuotesMain() {
         quote: () => filteredQuotes()[state.index],
         quoteTags: () => Array.from(state.quote().tags),
         otherTags: () => Array.from(setDifference(tags, state.quote().tags)),
-        filters: new ReactiveSet<string>(["portal"])
+        filters: new ReactiveSet<string>()
     })
 
     function toggleFilter(filter: string) {
@@ -73,34 +60,34 @@ export default function QuotesMain() {
         })
     }
     return (
-        <main
-            style={{ background: windowWidth() > 768 ? `url(${state.bgImg().src})` : state.color() }}
-            id={styles.quoteContainer}
-            class="container"
-        >
-            <div>
-                <Quote quote={state.quote} color={state.color} next={next} />
-                <div class={`${styles.quoteTags} ${styles.tags}`} >
-                    <For each={state.quoteTags()}>
-                        {tag => <Tag
-                            tag={tag}
-                            activeTags={state.quote().tags}
-                            color={state.color}
-                            toggleFilter={toggleFilter}
-                            filters={state.filters}
-                        />}
-                    </For>
-                    <For each={state.otherTags()}>
-                        {tag => <Tag
-                            tag={tag}
-                            activeTags={state.quote().tags}
-                            color={state.color}
-                            toggleFilter={toggleFilter}
-                            filters={state.filters}
-                        />}
-                    </For>
+            <main
+                style={{ background: windowWidth() > 768 ? `url(${state.bgImg().src})` : state.color() }}
+                id={styles.quoteContainer}
+                class="container"
+            >
+                <div>
+                    <Quote quote={state.quote} color={state.color} next={next} />
+                    <div class={`${styles.quoteTags} ${styles.tags}`} >
+                        <For each={state.quoteTags()}>
+                            {tag => <Tag
+                                tag={tag}
+                                activeTags={state.quote().tags}
+                                color={state.color}
+                                toggleFilter={toggleFilter}
+                                filters={state.filters}
+                            />}
+                        </For>
+                        <For each={state.otherTags()}>
+                            {tag => <Tag
+                                tag={tag}
+                                activeTags={state.quote().tags}
+                                color={state.color}
+                                toggleFilter={toggleFilter}
+                                filters={state.filters}
+                            />}
+                        </For>
+                    </div>
                 </div>
-            </div>
-        </main>
+            </main>
     )
 }
