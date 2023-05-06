@@ -8,10 +8,8 @@
     background-size: cover !important;
     transition: background 500ms ease;
     overflow: hidden;
-    > div {
-        width: 50%;
-    }
 }
+@include mixins.hideScrollbar("#quoteContainer");
 
 #quote-box {
     background: none;
@@ -69,18 +67,18 @@
 #new-quote:active {
     transform: scale(0.95);
 }
+
 .tags {
     --clr: gray;
     display: flex;
     flex-wrap: wrap;
+    position: absolute;
     >span {
         padding: 0.25rem;
         margin-bottom: 0.5rem;
         background-color: var(--clr);
         color: black;
         margin-left: 0.5rem;
-        cursor: pointer;
-        position: relative;
         &.inActive {
             opacity: 0.5;
         }
@@ -100,24 +98,37 @@
         left: 5%;
     }
     .tags {
-        flex-wrap: wrap;
+        >span {
+            background-color: var(--clr);
+            color: black;
+            margin-left: 0.5rem;
+            cursor: pointer;
+            position: relative;
+            &.filtered {
+                border: 1px solid antiquewhite;
+                box-shadow: 0 0 10px antiquewhite;
+            }
+        }
     }
     #quoteContainer {
         >div {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
+            position: relative;
+            width: 50%;
+            height: 100vh;
+            padding-top: 5%;
         }
     }
 }
 
 @media screen and (max-width: 768px) {
     #quoteContainer {
-        font-size: .8rem;
+        >div {
+            padding-top: 5%;
+        }
     }
 
     #quote-box {
-        width: 80%;
+        width: 90%;
         background-color: white;
         margin: 0 auto;
     }
@@ -125,8 +136,17 @@
     #socialButtons {
         width: 70%;
     }
+    .tags {
+        margin-top: 1rem;
+        >span {
+            background-color: white;
+            color: var(--clr);
 
-    .shareQuotes img {
-        padding-left: 3%;
+            &.filtered {
+                border: 1px solid black;
+                box-shadow: 0 0 10px black;
+            }
+
+        }
     }
 }

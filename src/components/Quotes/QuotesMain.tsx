@@ -67,7 +67,7 @@ export default function QuotesMain() {
             >
                 <div>
                     <Quote quote={state.quote} color={state.color} next={next} />
-                    <div class={`${styles.quoteTags} ${styles.tags}`} >
+                    <div class={`${styles.tags}`} >
                         <For each={state.quoteTags()}>
                             {tag => <Tag
                                 tag={tag}
