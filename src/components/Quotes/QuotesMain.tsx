@@ -22,13 +22,13 @@ export default function QuotesMain() {
             return next()
         }
         const arr: QuoteType[] = []
-        outer: for (const qt of quotesList) {
-            for (const tg of state.filters) {
-                if (!qt.tags.has(tg)) {
+        outer: for (const quote of quotesList) {
+            for (const filter of state.filters) {
+                if (!quote.tags.has(filter)) {
                     continue outer;
                 }
             }
-            arr.push(qt);
+            arr.push(quote);
         }
         setFilteredQuotes(arr)
         return next()

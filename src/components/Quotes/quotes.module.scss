@@ -81,12 +81,16 @@
         margin-left: 0.5rem;
         cursor: pointer;
         position: relative;
-        &:not(.active) {
+        &.inActive {
             opacity: 0.5;
         }
         &.filtered {
             border: 1px solid antiquewhite;
             box-shadow: 0 0 10px antiquewhite;
+        }
+        &.disabled {
+            background-color: gray;
+            cursor: not-allowed;
         }
     }
 }

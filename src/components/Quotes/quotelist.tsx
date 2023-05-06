@@ -88,7 +88,7 @@ export const quotes: Quote[] = [
     }, {
         quote: "I'm not crazy. My mother had me tested.",
         author: 'Sheldon Cooper',
-        tags: new Set(["humorous", "fiction", "sheldon cooper", "the big bang theory"])
+        tags: new Set(["humorous", "fiction", "sheldon cooper", "the big bang theory", "tv series"])
     }, {
         quote: "If this comedy thing doesn't work out, I've always got poverty to fall back on.",
         author: 'Trevor Noah',
@@ -104,7 +104,7 @@ export const quotes: Quote[] = [
     }, {
         quote: 'Gucci gang, Gucci gang, Gucci gang, Gucci gang, Gucci gang, Gucci gang, Gucci gang, Gucci gang, Gucci gang.',
         author: "Lil' Pump",
-        tags: new Set(["humorous", "non-fiction", "???"])
+        tags: new Set(["humorous", "non-fiction", "???", "song lyrics"])
     }, {
         quote: 'The rumors of my death have been greatly exaggerated.',
         author: 'Mark Twain',
@@ -116,7 +116,7 @@ export const quotes: Quote[] = [
     }, {
         quote: 'Shutting up, sir.',
         author: 'C-3PO',
-        tags: new Set(["humorous", "nerdy", "fiction", "star wars"])
+        tags: new Set(["humorous", "nerdy", "fiction", "star wars", "movie"])
     }, {
         quote: "You all need more therapy than I do, and I'm the crazy one.",
         author: 'Crazy Jane',
@@ -328,7 +328,7 @@ export const quotes: Quote[] = [
     }, {
         quote: "If I could only use this power for good I wouldn't, not even if I could.",
         author: 'Eminem',
-        tags: new Set(["humorous", "eminem", "song lyrics"])
+        tags: new Set(["humorous", "eminem", "song lyrics", "non-fiction"])
     }, {
         quote: "Britney Spears has shoulders like a man. I can say that and you'll laugh because there's a puppet on my hand",
         author: 'Eminem',
@@ -360,7 +360,7 @@ export const quotes: Quote[] = [
     }, {
         quote: "I'm sort of famous for being almost famous.",
         author: "Keeley Jones",
-        tags: new Set(["humorous", "fiction", "ted lasso"])
+        tags: new Set(["humorous", "fiction", "ted lasso", "tv series"])
     }, {
         quote: "Old people are so wise. They're like tall Yodas.",
         author: "Jamie Tartt",
@@ -508,19 +508,19 @@ export const quotes: Quote[] = [
     }, {
         quote: "I found the grinch to be a relatable, engaging character, and I was really with him until he succumbed to social convention and returned the presents and saved Christmas. What a buzzkill that was",
         author: "Sheldon Cooper",
-        tags: new Set(["humorous", "fiction", "the big bang theory", "sheldon cooper"])
+        tags: new Set(["humorous", "fiction", "the big bang theory", "tv series", "sheldon cooper"])
     }, {
         quote: "One cries because one is sad. For example, I cry because others are stupid and it makes me sad",
         author: "Sheldon Cooper",
-        tags: new Set(["humorous", "fiction", "the big bang theory", "sheldon cooper"])
+        tags: new Set(["humorous", "fiction", "the big bang theory", "tv series", "sheldon cooper"])
     }, {
         quote: "As my mom used to say, 'When you're doing a puzzle, it's like you've got a thousand friends.' She was full of fun lies like that.",
         author: "Amy Farrah Fowler",
-        tags: new Set(["humorous", "fiction", "the big bang theory"])
+        tags: new Set(["humorous", "fiction", "the big bang theory", "tv series"])
     }, {
         quote: "I don't want to stand in the way of your happiness. So, I will condemn you internally while maintaining an outward appearance of acceptance",
         author: "Sheldon Cooper",
-        tags: new Set(["humorous", "fiction", "the big bang theory", "sheldon cooper"])
+        tags: new Set(["humorous", "fiction", "the big bang theory", "tv series", "sheldon cooper"])
     }, {
         quote: "Make the plan, execute the plan, expect the plan to go off the rails, throw away the plan",
         author: "Leonard Snart",
@@ -852,15 +852,15 @@ export const quotes: Quote[] = [
     }, {
         quote: 'issuing correction on a previous post of mine, regarding the terror group ISIL. you do not, under any circumstances, "gotta give it to them"',
         author: "dril",
-        tags: new Set(["humorous", "fiction", "social media"])
+        tags: new Set(["humorous", "non-fiction", "social media"])
     }, {
         quote: "im not owned! im not owned!!, i continue to insist as i slowly shrink and transform into a corn cob",
         author: "dril",
-        tags: new Set(["humorous", "fiction", "surreal humor", "social media"])
+        tags: new Set(["humorous", "non-fiction", "surreal humor", "social media"])
     }, {
         quote: "and another thing: im not mad. please dont put in the newspaper that i got mad",
         author: "dril",
-        tags: new Set(["humorous", "fiction", "social media"])
+        tags: new Set(["humorous", "non-fiction", "social media"])
     }, {
         quote: "It is better to remain silent and be thought a fool than to talk and remove all doubt.",
         author: "unknown",
@@ -1012,6 +1012,34 @@ export const quotes: Quote[] = [
     }, {
         quote: "It's So Much Easier To See The World In Black And White. Gray? I Don't Know What To Do With Gray...",
         author: "Garrus Vakarian",
-        tags: new Set(["fiction", "video game", "hero"])
+        tags: new Set(["fiction", "video game", "hero", "mass effect"])
+    }, {
+        quote: "Ah, that's the thing about Sara Lance, she never stays dead for very long.",
+        author: "Damien Darhk",
+        tags: new Set(["fiction", "humorous", "legends of tomorrow"])
+    }, {
+        quote: "I don't make mistakes. I'm not “just like the rest of you.” I'm stronger. I'm smarter. I'm better. I am better.",
+        author: "Homelander",
+        tags: new Set(["villain", "fiction", "the boys", "tv series"])
+    }, {
+        quote: "If you want to make enemies, try to change something",
+        author: "Adam Jensen",
+        tags: new Set(["hero", "video game", "fiction"])
+    }, {
+        quote: "For the first time in history we have a chance to steal fire from the gods. To turn away from it now - to stop pursing a future in which technology and biology combine leading to the promise of a singularity - would mean to deny the very essence of who we are. No doubt the road to get there will be bumpy, hurting some people along the way. But won't achieving the dream be worth it? We can become the gods we've always been striving to be. We might as well get good at it",
+        author: "Adam Jensen",
+        tags: new Set(["hero", "video game", "fiction", "nerdy"])
+    }, {
+        quote: "It's in our nature to want to rise above our limits. Think about it. we were cold, so we harnessed fire, we were weak so we invented tools. Every time we met an obstacle we used creativity and ingenuity to overcome it. The cycle is inevitable",
+        author: "Adam Jensen",
+        tags: new Set(["hero", "video game", "fiction", "nerdy"])
+    }, {
+        quote: "Technology offers us strength, strength enables dominance, and dominance paves the way for abuse. Using technology to become something more than we are risks losing our ability to love, aspire or make moral choices - the very things that make us Human. It also risks giving some men the power to make others what they choose - regardless of the cost to human dignity",
+        author: "Adam Jensen",
+        tags: new Set(["hero", "video game", "fiction", "nerdy"])
+    }, {
+        quote: "Technological progress is like an axe in the hand of a pathological criminal",
+        author: "Albert Einstein",
+        tags: new Set(["non-fiction", "nerdy"])
     }
 ]
