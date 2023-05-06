@@ -21,6 +21,7 @@
     "@motionone/solid": "^10.16.0",
     "@prisma/client": "^4.13.0",
     "@solid-primitives/keyed": "^1.2.0",
+    "@solid-primitives/set": "^0.4.3",
     "@solidjs/meta": "^0.28.2",
     "@solidjs/router": "^0.8.2",
     "googleapis": "^118.0.0",

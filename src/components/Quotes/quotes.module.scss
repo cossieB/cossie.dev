@@ -1,0 +1,128 @@
+@use '../../mixins';
+
+#quoteContainer {
+    align-items: center;
+    background-color: black;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
+    background-size: cover !important;
+    transition: background 500ms ease;
+    overflow: hidden;
+    > div {
+        width: 50%;
+    }
+}
+
+#quote-box {
+    background: none;
+    border-radius: 10px;
+    padding: 1.5rem 1.5rem;
+    transition: all 500ms ease;
+    position: relative;
+    top: 0%;
+    &::before {
+        top: -2rem;
+        left: -2rem;
+        font-size: 10rem;
+        position: absolute;
+        content: open-quote;
+    }
+    &::after {
+        bottom: 0rem;
+        right: -2rem;
+        font-size: 10rem;
+        position: absolute;
+        content: close-quote;
+    }
+}
+#text {
+    position: relative;
+    font-size: 2rem;
+}
+#author {
+    text-align: right;
+    font-size: 1.5rem;
+}
+
+#quoteButtons {
+    height: 50px;
+    display: flex;
+    justify-content: space-around;
+}
+
+#new-quote {
+    background: none;
+    color: white;
+    font-size: 16px;
+    border: none;
+    transition: all 500ms ease;
+
+    &:hover {
+        background: inherit;
+    }
+}
+
+#socialButtons svg {
+    transition: all 500ms ease;
+}
+
+#new-quote:active {
+    transform: scale(0.95);
+}
+.tags {
+    --clr: gray;
+    display: flex;
+    flex-wrap: wrap;
+    >span {
+        padding: 0.25rem;
+        margin-bottom: 0.5rem;
+        background-color: var(--clr);
+        color: black;
+        margin-left: 0.5rem;
+        cursor: pointer;
+        position: relative;
+        &:not(.active) {
+            opacity: 0.5;
+        }
+        &.filtered {
+            border: 1px solid antiquewhite;
+            box-shadow: 0 0 10px antiquewhite;
+        }
+    }
+}
+
+@media screen and (min-width: 768px) {
+    #quote-box {
+        left: 5%;
+    }
+    .tags {
+        flex-wrap: wrap;
+    }
+    #quoteContainer {
+        >div {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+    }
+}
+
+@media screen and (max-width: 768px) {
+    #quoteContainer {
+        font-size: .8rem;
+    }
+
+    #quote-box {
+        width: 80%;
+        background-color: white;
+        margin: 0 auto;
+    }
+
+    #socialButtons {
+        width: 70%;
+    }
+
+    .shareQuotes img {
+        padding-left: 3%;
+    }
+}

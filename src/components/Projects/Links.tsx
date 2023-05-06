@@ -1,7 +1,7 @@
-import { Link } from "@solidjs/router";
 import styles from "~/components/Projects/Projects.module.scss";
 import { Projs } from "./projectArray";
 import { selected, setSelected } from "./ProjectsMain";
+import { A } from "solid-start";
 
 type Props = {
     proj: Projs
@@ -31,11 +31,11 @@ export function Links(props: Props) {
                 </svg>
             </a> :
             props.proj.path &&
-            <Link href={props.proj.path} style={{ "margin-right": '1rem' }}>
+            <A href={props.proj.path} style={{ "margin-right": '1rem' }}>
                 <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="springgreen" class={styles.external} viewBox="0 0 16 16">
                     <path fill-rule="evenodd" d="M6 8a.5.5 0 0 0 .5.5h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L12.293 7.5H6.5A.5.5 0 0 0 6 8zm-2.5 7a.5.5 0 0 1-.5-.5v-13a.5.5 0 0 1 1 0v13a.5.5 0 0 1-.5.5z" />
                 </svg>
-            </Link>
+            </A>
         }
         {selected() &&
             <svg onClick={() => setSelected(null)} xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="red" class={styles.close} viewBox="0 0 16 16">
