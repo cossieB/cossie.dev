@@ -1,21 +1,27 @@
-import { createSignal } from "solid-js";
-import { Projs } from "~/components/Projects/projectArray";
+import { createSignal, useContext } from "solid-js";
 import MySiteTitle from "~/components/shared/MySiteTitle";
 import { ProjectList } from "./ProjectList";
 import styles from "~/components/Projects/Projects.module.scss"
 import PageBtn from "~/components/Projects/pageBtn";
 import Details from "~/components/Projects/Details";
-
-export const [selected, setSelected] = createSignal<Projs | null>()
+import { ProjectsContext, ProjectsProvider } from "./ProjectsProvider";
 
 export default function ProjectsMain() {
+    return (
+        <ProjectsProvider>
+            <Main />
+        </ProjectsProvider>
+    )
+}
+function Main() {
     const [page, setPage] = createSignal(0);
+    const { selected } = useContext(ProjectsContext)!
     return (
         <main class="container" id={styles.container}>
             <MySiteTitle>Projects</MySiteTitle>
-            <div class={styles.main} classList={{[styles.hide]: !!selected()}}>
+            <div class={styles.main} classList={{ [styles.hide]: !!selected() }}>
                 <h1>Projects</h1>
-                <ProjectList page={page()} setSelected={setSelected} />
+                <ProjectList page={page()} />
                 <PageBtn
                     setPage={setPage}
                     isNextBtn={false}
@@ -33,5 +39,3 @@ export default function ProjectsMain() {
         </main>
     )
 }
-
-

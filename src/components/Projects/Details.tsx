@@ -1,10 +1,11 @@
 import styles from "~/components/Projects/Projects.module.scss"
 import { Links } from "./Links"
-import { selected } from "./ProjectsMain"
-import { For } from "solid-js"
+import { For, useContext } from "solid-js"
 import { StackLogo } from "./StackLogo"
+import { ProjectsContext } from "./ProjectsProvider"
 
 export default function Details() {
+    const {selected} = useContext(ProjectsContext)!
     return (
         <div
             class={styles.details}

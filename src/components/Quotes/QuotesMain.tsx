@@ -1,4 +1,4 @@
-import { For, createEffect, createSignal } from "solid-js";
+import { ErrorBoundary, For, createEffect, createSignal } from "solid-js";
 import { quotes as quotesList, Quote as QuoteType } from "./quotelist";
 import styles from "./quotes.module.scss"
 import { createStore } from "solid-js/store";
@@ -60,12 +60,13 @@ export default function QuotesMain() {
         })
     }
     return (
-            <main
-                style={{ background: windowWidth() > 768 ? `url(${state.bgImg().src})` : state.color() }}
-                id={styles.quoteContainer}
-                class="container"
-            >
-                <div>
+        <main
+            style={{ background: windowWidth() > 768 ? `url(${state.bgImg().src})` : state.color() }}
+            id={styles.quoteContainer}
+            class="container"
+        >
+            <div>
+                <ErrorBoundary fallback={<p>Error: No quotes to show. Please reload the page.</p>}>
                     <Quote quote={state.quote} color={state.color} next={next} />
                     <div class={`${styles.tags}`} >
                         <For each={state.quoteTags()}>
@@ -87,7 +88,8 @@ export default function QuotesMain() {
                             />}
                         </For>
                     </div>
-                </div>
-            </main>
+                </ErrorBoundary>
+            </div>
+        </main>
     )
 }

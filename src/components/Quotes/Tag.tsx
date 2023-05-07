@@ -15,7 +15,8 @@ export function Tag(props: Props) {
     const isFiltered = () => props.filters.has(props.tag);
     const isDisabled = createMemo(() => {
         if (props.filters.size == 0) return false;
-        outer: for (const quote of quotes) {
+        outer:
+        for (const quote of quotes) {
             if (!quote.tags.has(props.tag)) continue;
             let counter = 0;
             for (const filter of props.filters) {

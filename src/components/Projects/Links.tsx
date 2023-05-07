@@ -1,13 +1,15 @@
 import styles from "~/components/Projects/Projects.module.scss";
 import { Projs } from "./projectArray";
-import { selected, setSelected } from "./ProjectsMain";
 import { A } from "solid-start";
+import { useContext } from "solid-js";
+import { ProjectsContext } from "./ProjectsProvider";
 
 type Props = {
     proj: Projs
 }
 
 export function Links(props: Props) {
+    const {selected, setSelected} = useContext(ProjectsContext)!
     return <div class={styles.links}>
         {!selected() &&
             <svg

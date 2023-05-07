@@ -9,7 +9,6 @@ import { Links } from "./Links";
 
 export type Props = {
     proj: Projs,
-    setSelected: Setter<Projs | null>
     i: Accessor<number>
 }
 
