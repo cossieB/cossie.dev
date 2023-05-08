@@ -13,6 +13,7 @@ import {
     Link,
 } from "solid-start";
 import "./root.scss";
+import { UserProvider } from "./components/shared/Signup/UserProvider";
 
 export default function Root() {
     return (
@@ -44,16 +45,18 @@ export default function Root() {
                     rel="stylesheet" />
                 <Title>Cossie</Title>
             </Head>
-            <Body>
-                <Suspense>
-                    <ErrorBoundary>
-                        <Routes>
-                            <FileRoutes />
-                        </Routes>
-                    </ErrorBoundary>
-                </Suspense>
-                <Scripts />
-            </Body>
+            <UserProvider>
+                <Body>
+                    <Suspense>
+                        <ErrorBoundary>
+                            <Routes>
+                                <FileRoutes />
+                            </Routes>
+                        </ErrorBoundary>
+                    </Suspense>
+                    <Scripts />
+                </Body>
+            </UserProvider>
         </Html>
     );
 }
