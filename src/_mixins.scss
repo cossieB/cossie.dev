@@ -24,3 +24,8 @@
     }
 
 }
+
+@mixin fullScreen() {
+    height: 100vh;
+    width: 100vw;
+}

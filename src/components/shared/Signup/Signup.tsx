@@ -30,6 +30,7 @@ export default function Signup(props: Props) {
         <div id={styles.signupForm} class={props.className || ""} >
             <h4>Enter Your Name</h4>
             <input
+                aria-label="username"
                 oninput={(e) => {
                     setErrorMsg([])
                     setTempName(e.currentTarget.value);
