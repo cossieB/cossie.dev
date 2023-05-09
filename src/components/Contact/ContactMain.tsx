@@ -1,7 +1,7 @@
 import { FormInput, FormTextarea } from "./FormInput";
 import styles from "./Contact.module.scss"
 import { Match, Show, Switch } from "solid-js";
-import Loader from "../shared/Loader";
+import Loader from "../shared/Loader/Loader";
 import { Presence } from "@motionone/solid";
 import { createStore } from "solid-js/store";
 import Popup from "../shared/Popup";

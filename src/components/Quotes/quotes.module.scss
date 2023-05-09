@@ -78,13 +78,32 @@
         margin-bottom: 0.5rem;
         background-color: var(--clr);
         color: black;
-        margin-left: 0.5rem;
+        margin-inline: 0.25rem;
+        overflow: hidden;
+        position: relative;
+        z-index: 1;
+        transition: background-color 250ms ease;
         &.inActive {
             opacity: 0.5;
         }
         &.filtered {
-            border: 1px solid antiquewhite;
-            box-shadow: 0 0 10px antiquewhite;
+            &::before {
+                content: "";
+                position: absolute;
+                background: linear-gradient(red, black);
+                animation: vegas 20s linear infinite;
+                top: 0;
+                left: 0;
+                height: 120%;
+                width: 120%;
+                z-index: -2;
+            }
+            &::after {
+                z-index: -1;
+                position: absolute;
+                content: "";
+                inset: 2px;
+            }
         }
         &.disabled {
             background-color: gray;
@@ -92,7 +111,14 @@
         }
     }
 }
-
+@keyframes vegas {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(3600deg);
+    }
+}
 @media screen and (min-width: 768px) {
     #quote-box {
         left: 5%;
@@ -105,8 +131,9 @@
             cursor: pointer;
             position: relative;
             &.filtered {
-                border: 1px solid antiquewhite;
-                box-shadow: 0 0 10px antiquewhite;
+                &::after{
+                    background-color: var(--clr);
+                }
             }
         }
     }
@@ -115,18 +142,12 @@
             position: relative;
             width: 50%;
             height: 100vh;
-            padding-top: 5%;
+            padding-top: 1rem;
         }
     }
 }
 
 @media screen and (max-width: 768px) {
-    #quoteContainer {
-        >div {
-            padding-top: 5%;
-        }
-    }
-
     #quote-box {
         width: 90%;
         background-color: white;
@@ -141,12 +162,11 @@
         >span {
             background-color: white;
             color: var(--clr);
-
             &.filtered {
-                border: 1px solid black;
-                box-shadow: 0 0 10px black;
+                &::after{
+                    background-color: white;
+                }
             }
-
         }
     }
 }
