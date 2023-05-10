@@ -38,7 +38,6 @@ export function GlobalLeaders() {
                 let name = doc.data().name
                 return { score, name, date }
             })
-            console.log(resArr)
             return resArr
         }
         catch (e: any) {

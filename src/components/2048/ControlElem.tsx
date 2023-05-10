@@ -1,5 +1,6 @@
 import { createEffect, onMount } from 'solid-js';
 import styles from "./2048.module.scss"
+import { useResize } from '~/hooks/useResize';
 
 export class Elem {
     readonly id = Math.floor(Math.random() * 1000000).toString()
@@ -18,6 +19,7 @@ export class Elem {
 
 export function ControlElem(props: {item: Elem}) {
     let ref: HTMLDivElement;
+    const windowWidth = useResize()
     onMount(() => {
         ref.style.opacity = "0"
         setTimeout(() => {
@@ -35,7 +37,7 @@ export function ControlElem(props: {item: Elem}) {
     createEffect(() => {
         let htwt: number;
         let gap: number;
-        if (window.innerWidth > 768) {
+        if (windowWidth() > 1024) {
             htwt = 7.5;
             gap = 0.5
         }

@@ -8,7 +8,7 @@ import { ReactiveSet } from "@solid-primitives/set";
 import { getUniqueTags, colors } from "./utils";
 import { Tag } from "./Tag";
 import { useImage } from "./useImage";
-import { useResize } from "./useResize";
+import { useResize } from "../../hooks/useResize";
 
 export default function QuotesMain() {
     const tags = getUniqueTags();

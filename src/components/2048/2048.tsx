@@ -7,7 +7,7 @@ import { GlobalLeaders, LocalLeaders } from "./Leaders";
 import Logic2048 from "./Logic2048";
 import Signup from "../shared/Signup/Signup";
 import { UserContext } from "../shared/Signup/UserProvider";
-import { useResize } from "../Quotes/useResize";
+import { useResize } from "~/hooks/useResize";
 
 export default function Game2048() {
     const [score, setScore] = createSignal(0);
@@ -16,7 +16,7 @@ export default function Game2048() {
     const array = createMutable<Elem[]>([]);
     const windowWidth = useResize()
     return (
-        <div class={styles.container} >
+        <div class="container" id={styles.container} >
             <Switch fallback={<Signup className={styles.signup} />} >
                 <Match when={gameOver()}>
                     <GameOver

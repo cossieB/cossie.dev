@@ -3,7 +3,7 @@
 @import "~/mixins";
 
 $boardColor: #c8dd0f;
-.container {
+#container {
     background-color: #3b4b50;
     @include flexCenter;
     width: 100vw;
@@ -41,7 +41,9 @@ $boardColor: #c8dd0f;
 .score {
     font-family: 'Orbitron', sans-serif;
     @include flexCenter;
-
+    span {
+        font-size: clamp(1rem, 10vw, 5rem);
+    }
     >aside {
         color: #c8dd0f;
         font-size: 1rem;
@@ -131,9 +133,6 @@ $boardColor: #c8dd0f;
         height: 25%;
         padding: 0;
         margin: 0;
-        span {
-            font-size: 5rem;
-        }
     }
 
     $hgtwdth: 4rem; // USED IN JAVASCRIPT. DO NOT CHANGE!!!!!!!
@@ -215,7 +214,6 @@ $boardColor: #c8dd0f;
 
     .score {
         position: absolute;
-        font-size: 10rem;
         top: 40%;
         left: 1%;
         width: 25%;
