@@ -1,5 +1,5 @@
 import type { Cell } from "./Solver";
-import styles from "../../styles/sudoku.module.scss";
+import styles from "./sudoku.module.scss";
 import type { JSX } from "solid-js/jsx-runtime";
 import type { Setter } from "solid-js";
 
@@ -31,6 +31,9 @@ export default function Block(props: P34534) {
         <div
             style={style()}
             class={`${styles.sudoBlock}`}
+            classList={{
+                [styles.fixed]: props.cell.frozen
+            }}
             onClick={() => {
                 !props.hasWon && props.setSelected(props.cell)
             }}

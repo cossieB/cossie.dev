@@ -1,6 +1,6 @@
 import Block from "./Block"
 import Solver, { Cell } from "./Solver"
-import styles from "../../styles/sudoku.module.scss";
+import styles from "./sudoku.module.scss";
 import { createRenderEffect, createSignal, For, onCleanup, onMount, Setter } from "solid-js";
 import { createMutable } from "solid-js/store";
 
@@ -18,7 +18,7 @@ export default function PlaySudoku(props: Props) {
     const [hasWon, setHasWon] = createSignal(false)
     const [error, setError] = createSignal(false)
 
-    createRenderEffect(() => {
+    onMount(() => {
         if (window.innerWidth > 768) return
         const sudokuWidth = ref.clientWidth!;
         const width = sudokuWidth / 9;
@@ -27,7 +27,7 @@ export default function PlaySudoku(props: Props) {
         blocks.forEach(block => {
             block.style.height = `${width}px`
         })
-    }, [])
+    })
 
     onMount(() => {
         document.addEventListener('keydown', handleKeypress)
@@ -105,21 +105,21 @@ export default function PlaySudoku(props: Props) {
     }
 
     return (
-        <div class={`${styles.sudoGame} ${styles.container} ${styles.flexCenter} ${styles.flexColumn}`} onAuxClick={() => setSelected(undefined)}>
+        <div class="container" id={styles.container} onAuxClick={() => setSelected(undefined)}>
             {error() && <div style={{ 'font-size': '5rem', position: 'absolute', background: 'red' }}>Could not solve puzzle.</div>}
             <div style={{ 'margin-bottom': '1rem' }} >
-                    <button class={styles.sudoBtn} onClick={check}  >
-                        {puzzle.array.some(item => item.value == '.') ? "Check" : "Finish"}
-                    </button>
-                    <button class={styles.sudoBtn} onClick={reset}  >
-                        Reset
-                    </button>
-                    <button class={styles.sudoBtn} onClick={solve}  >
-                        Solve
-                    </button>
-                    <button class={styles.sudoBtn} onClick={() => props.setMode(false)}  >
-                        Custom Puzzle
-                    </button>
+                <button class={styles.sudoBtn} onClick={check}  >
+                    {puzzle.array.some(item => item.value == '.') ? "Check" : "Finish"}
+                </button>
+                <button class={styles.sudoBtn} onClick={reset}  >
+                    Reset
+                </button>
+                <button class={styles.sudoBtn} onClick={solve}  >
+                    Solve
+                </button>
+                <button class={styles.sudoBtn} onClick={() => props.setMode(false)}  >
+                    Custom Puzzle
+                </button>
             </div>
             <div ref={ref!} id={styles.sudoku}>
                 <For each={puzzle.array}>

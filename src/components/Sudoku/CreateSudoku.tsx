@@ -1,7 +1,7 @@
 import { createRenderEffect, createSignal, onCleanup, onMount, Setter } from "solid-js"
 import Block from "./Block"
 import Solver, {type Cell } from "./Solver"
-import styles from "../../styles/sudoku.module.scss";
+import styles from "./sudoku.module.scss";
 import { createMutable } from "solid-js/store";
 
 interface Props {

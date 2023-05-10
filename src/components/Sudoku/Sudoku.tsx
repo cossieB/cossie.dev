@@ -1,6 +1,6 @@
 import PlaySudoku from "./PlaySudoku"
 import CreateSudoku from "./CreateSudoku"
-import styles from "../../styles/sudoku.module.scss";
+import styles from "./sudoku.module.scss";
 import { createSignal } from "solid-js";
 
 export const puzzleStrings = [
