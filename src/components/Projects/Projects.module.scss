@@ -7,11 +7,12 @@
     overflow-x: hidden;
     color: white;
     position: relative;
-
+    
     h1 {
         color: white;
     }
 }
+@include hideScrollbar("#container");
 
 .main {
     position: absolute;
@@ -34,7 +35,7 @@ $clr1: #dd07dd;
 $clr2: #0ae9e9;
 
 .pageBtn {
-    position: absolute;
+    position: fixed;
     height: 100vh;
     width: 10%;
     background: linear-gradient($clr1, $clr2 );

@@ -7,9 +7,7 @@
     background-repeat: no-repeat !important;
     background-size: cover !important;
     transition: background 500ms ease;
-    overflow: hidden;
 }
-@include mixins.hideScrollbar("#quoteContainer");
 
 #quote-box {
     background: none;
@@ -72,7 +70,6 @@
     --clr: gray;
     display: flex;
     flex-wrap: wrap;
-    position: absolute;
     >span {
         padding: 0.25rem;
         margin-bottom: 0.5rem;
@@ -94,7 +91,7 @@
                 animation: vegas 20s linear infinite;
                 top: 0;
                 left: 0;
-                height: 120%;
+                height: 60%;
                 width: 120%;
                 z-index: -2;
             }
@@ -137,6 +134,7 @@
             }
         }
     }
+    @include mixins.hideScrollbar("#quoteContainer");
     #quoteContainer {
         >div {
             position: relative;
@@ -146,8 +144,19 @@
         }
     }
 }
+@media (min-width: 768px) and (max-width: 1024px) {
+    #quoteContainer > div {
+        width: 80%;
+    }
+}
 
-@media screen and (max-width: 768px) {
+@media (max-width: 768px) {
+    #quoteContainer {
+        min-height: 100%;
+        > div {
+            padding-top: 5rem;
+        }
+    }
     #quote-box {
         width: 90%;
         background-color: white;

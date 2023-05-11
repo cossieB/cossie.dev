@@ -17,7 +17,7 @@ export default function PlaySudoku(props: Props) {
     const [clashes, setClashes] = createSignal<{ [key in 'row' | 'column' | 'region']: Set<Cell> }>()
     const [hasWon, setHasWon] = createSignal(false)
     const [error, setError] = createSignal(false)
-
+    
     onMount(() => {
         if (window.innerWidth > 768) return
         const sudokuWidth = ref.clientWidth!;

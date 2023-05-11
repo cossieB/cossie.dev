@@ -63,7 +63,6 @@ export default function QuotesMain() {
         <main
             style={{ background: windowWidth() > 768 ? `url(${state.bgImg().src})` : state.color() }}
             id={styles.quoteContainer}
-            class="container"
         >
             <div>
                 <ErrorBoundary fallback={<p>Error: No quotes to show. Please reload the page.</p>}>
