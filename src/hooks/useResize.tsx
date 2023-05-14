@@ -1,4 +1,4 @@
-import { JSXElement, createSignal, onCleanup, onMount } from "solid-js";
+import { createSignal, onCleanup, onMount } from "solid-js";
 
 export function useResize() {
     const [windowWidth, setWindowWidth] = createSignal(0);

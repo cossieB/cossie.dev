@@ -21,7 +21,7 @@ export default function Root() {
             <Head>
                 <Meta charset="utf-8" />
                 <Meta name="viewport" content="width=device-width, initial-scale=1" />
-                <Meta name="description" content="Porfolio page of full-stack developer Buntu Cossie, built with Solid.js, SASS and Firebase" />
+                <Meta name="description" content="I am Buntu Cossie a full-stack developer from South Africa. I make web apps in TypeScript, C#, React, Next.js, Solid.js and PostgreSQL. This is my portfolio site built with Solid Start and SASS." />
                 <Meta name="application-name" content="cossie.dev" />
                 <Meta name="author" content="Buntu Cossie" />
                 <Meta name="keywords"
