@@ -3,11 +3,11 @@ import AboutMain from './AboutMain'
 
 export default function About() {
     return (
-        <div
+        <main
             id={styles.aboutContainer}
         >
             <AboutMain />
-        </div>
+        </main>
     )
 }
 

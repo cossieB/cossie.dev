@@ -4,7 +4,6 @@ import { aboutNavBtns } from "./utils"
 import { langs, frontend, backend, misc } from "./vars";
 import styles from './about.module.scss'
 import { For, Match, Switch, createSignal } from "solid-js";
-import { Presence } from "@motionone/solid";
 
 export default function AboutMain() {
     const [page, setPage] = createSignal<typeof aboutNavBtns[number][0]>(aboutNavBtns[0][0])
@@ -29,25 +28,23 @@ export default function AboutMain() {
                 </For>
             </div>
             <div id={styles.aboutContent}>
-                {/* <Presence > */}
-                    <Switch>
-                        <Match when={page() == 'About'}>
-                            <AboutMe />
-                        </Match>
-                        <Match when={page() == 'Languages'}>
-                            <Languages arr={langs} />
-                        </Match>
-                        <Match when={page() == 'Front-End'}>
-                            <Languages arr={frontend} />
-                        </Match>
-                        <Match when={page() == 'Back-End'}>
-                            <Languages arr={backend} />
-                        </Match>
-                        <Match when={page() == 'Misc'}>
-                            <Languages arr={misc} />
-                        </Match>
-                    </Switch>
-                {/* </Presence> */}
+                <Switch>
+                    <Match when={page() == 'About'}>
+                        <AboutMe />
+                    </Match>
+                    <Match when={page() == 'Languages'}>
+                        <Languages arr={langs} />
+                    </Match>
+                    <Match when={page() == 'Front-End'}>
+                        <Languages arr={frontend} />
+                    </Match>
+                    <Match when={page() == 'Back-End'}>
+                        <Languages arr={backend} />
+                    </Match>
+                    <Match when={page() == 'Misc'}>
+                        <Languages arr={misc} />
+                    </Match>
+                </Switch>
             </div>
         </div>
     )

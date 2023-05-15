@@ -1,6 +1,5 @@
 import { skillsMap } from "./skillsMap";
 import Tooltip from "../shared/Tooltip";
-import { variant } from "./utils";
 import { Lang } from "./vars";
 import styles from './about.module.scss'
 import { Accessor, For, Show, createSignal } from "solid-js";
@@ -40,7 +39,10 @@ function LangDiv(props: { lingo: Lang, i: Accessor<number>, length: number }) {
             transition={{
                 delay: props.i() * 0.050
             }}
-            // exit="exit"
+            exit={{
+                opacity: 0,
+                x: -50
+            }}
             ref={ref}
             onMouseEnter={e => {
                 const rect = e.currentTarget!.getBoundingClientRect()
@@ -69,11 +71,11 @@ function LangDiv(props: { lingo: Lang, i: Accessor<number>, length: number }) {
                     r={40}
                     initial={{
                         opacity: 0,
-                        "offset-path": 0
+                        offsetPath: 0
                     }}
                     animate={{
                         opacity: 1,
-                        "offset-path": props.lingo.skill / 10,
+                        offsetPath: props.lingo.skill / 10,
                         transition: {
                             duration: 2,
                             delay: 0.5
