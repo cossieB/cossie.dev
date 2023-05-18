@@ -19,21 +19,21 @@ function Main() {
     return (
         <main class="container" id={styles.container}>
             <MySiteTitle>Projects</MySiteTitle>
+            <PageBtn
+                setPage={setPage}
+                isNextBtn={false}
+                label="&#171;"
+                page={page}
+            />
+            <PageBtn
+                setPage={setPage}
+                isNextBtn
+                label="&#187;"
+                page={page}
+            />
             <div class={styles.main} classList={{ [styles.hide]: !!selected() }}>
                 <h1>Projects</h1>
                 <ProjectList page={page()} />
-                <PageBtn
-                    setPage={setPage}
-                    isNextBtn={false}
-                    label="&#171;"
-                    page={page}
-                />
-                <PageBtn
-                    setPage={setPage}
-                    isNextBtn
-                    label="&#187;"
-                    page={page}
-                />
             </div>
             <Details />
         </main>

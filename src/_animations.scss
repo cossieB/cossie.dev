@@ -1,6 +1,6 @@
 .slide-enter-active,
 .slide-exit-active {
-  transition: opacity 3s, transform 3s;
+  transition: opacity 250ms, transform 250ms;
 }
 .slide-enter,
 .slide-exit-to {

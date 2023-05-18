@@ -1041,5 +1041,13 @@ export const quotes: Quote[] = [
         quote: "Technological progress is like an axe in the hand of a pathological criminal",
         author: "Albert Einstein",
         tags: new Set(["non-fiction", "nerdy"])
+    }, {
+        quote: "When life gives you lemons, don't make lemonade. Make life take the lemons back! Get mad! I don't want your damn lemons! What am I supposed to do with these?! Demand to see life's manager! Make life rue the day it thought it could give Cave Johnson lemons! Do you know who I am?! I'm the man who's gonna burn your house down! With the lemons! I'm gonna get my engineers to invent a combustible lemon that burns your house down!",
+        author: "Cave Johnson",
+        tags: new Set(["fiction", "video game", "humorous", "portal"])
+    }, {
+        quote: "What is a man but the sum of his memories? We are the stories we live! The tales we tell ourselves!",
+        author: "Clay Kaczmarek",
+        tags: new Set(["fiction", "video game", "philosophical"])
     }
 ]

@@ -1,6 +1,6 @@
 import { Motion, Presence } from "@motionone/solid";
-import { Link } from "@solidjs/router";
-import { Accessor, Setter } from "solid-js";
+import { A } from "@solidjs/router";
+import { Accessor } from "solid-js";
 import { Projs } from "~/components/Projects/projectArray";
 import styles from "~/components/Projects/Projects.module.scss"
 import { External } from "~/svgs";
@@ -32,9 +32,9 @@ export default function ProjectTile(props: Props) {
                     </> :
                     <>
                         {props.proj.path ?
-                            <Link href={props.proj.path} >
+                            <A href={props.proj.path} >
                                 {props.proj.title}
-                            </Link> :
+                            </A> :
                             <span >
                                 {props.proj.title}
                             </span>

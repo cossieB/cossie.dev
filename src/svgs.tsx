@@ -5,7 +5,6 @@ export function Checkmark() {
         </svg>
     )
 }
-
 export function PhoneSvg() {
     return (
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
@@ -15,7 +14,6 @@ export function PhoneSvg() {
         </svg>
     )
 };
-
 export function PuzzleSvg() {
     return (
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
@@ -25,7 +23,6 @@ export function PuzzleSvg() {
         </svg>
     )
 };
-
 export function External() {
     return (
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-up-right" viewBox="0 0 16 16">
@@ -34,7 +31,6 @@ export function External() {
         </svg>
     )
 }
-
 export function GithubSvg() {
     return (
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-github"
@@ -44,7 +40,6 @@ export function GithubSvg() {
         </svg>
     )
 }
-
 export function QuestionMarkSvg() {
     return (
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
@@ -54,7 +49,6 @@ export function QuestionMarkSvg() {
         </svg>
     )
 };
-
 export function DockerSvg() {
     return (
         <svg xmlns="http://www.w3.org/2000/svg" xmlns-xlink="http://www.w3.org/1999/xlink" version="1.1"
@@ -67,7 +61,6 @@ export function DockerSvg() {
         </svg>
     )
 };
-
 export function FreeCCSvg() {
     return (
         <svg xmlns="http://www.w3.org/2000/svg" xmlns-xlink="http://www.w3.org/1999/xlink" width="712"
@@ -108,7 +101,6 @@ export function FreeCCSvg() {
         </svg>
     )
 }
-
 export function LanguageSvg() {
     return (
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-translate" viewBox="0 0 16 16">
@@ -117,7 +109,6 @@ export function LanguageSvg() {
         </svg>
     )
 }
-
 export function BackendSvg() {
     return (
         <svg xmlns="http://www.w3.org/2000/svg" xmlns-xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1" x="0px" y="0px" width="823px" height="823px" viewBox="0 0 823 823" xml-space="preserve">
@@ -161,7 +152,6 @@ export function BackendSvg() {
         </svg>
     )
 }
-
 export function FrontendSvg() {
     return (
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-columns" viewBox="0 0 16 16">
@@ -169,7 +159,6 @@ export function FrontendSvg() {
         </svg>
     )
 }
-
 export function MiscSvg() {
     return (
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-shuffle" viewBox="0 0 16 16">
@@ -178,7 +167,6 @@ export function MiscSvg() {
         </svg>
     )
 }
-
 export function StackSvg() {
     return (
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-stack" viewBox="0 0 16 16">
@@ -187,7 +175,6 @@ export function StackSvg() {
         </svg>
     )
 }
-
 export function LinkedInSvg() {
     return (
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-linkedin" viewBox="0 0 16 16">
@@ -195,7 +182,6 @@ export function LinkedInSvg() {
         </svg>
     )
 }
-
 export function ProficiencySvg() {
     return (
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
@@ -203,6 +189,35 @@ export function ProficiencySvg() {
             <path
                 d="m8 0 1.669.864 1.858.282.842 1.68 1.337 1.32L13.4 6l.306 1.854-1.337 1.32-.842 1.68-1.858.282L8 12l-1.669-.864-1.858-.282-.842-1.68-1.337-1.32L2.6 6l-.306-1.854 1.337-1.32.842-1.68L6.331.864 8 0z" />
             <path d="M4 11.794V16l4-1 4 1v-4.206l-2.018.306L8 13.126 6.018 12.1 4 11.794z" />
+        </svg>
+    )
+}
+export function MenuSvg() {
+    return (
+        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-list" viewBox="0 0 16 16">
+            <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z" />
+        </svg>
+    )
+}
+export function CloseSvg() {
+    return (
+        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+            <path fill-rule="evenodd" d="M13.854 2.146a.5.5 0 0 1 0 .708l-11 11a.5.5 0 0 1-.708-.708l11-11a.5.5 0 0 1 .708 0Z" />
+            <path fill-rule="evenodd" d="M2.146 2.146a.5.5 0 0 0 0 .708l11 11a.5.5 0 0 0 .708-.708l-11-11a.5.5 0 0 0-.708 0Z" />
+        </svg>
+    )
+}
+export function LeftArrowSvg() {
+    return (
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
+            <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z" />
+        </svg>
+    )
+}
+export function ChevronRight() {
+    return (
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-right" viewBox="0 0 16 16">
+            <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
         </svg>
     )
 }

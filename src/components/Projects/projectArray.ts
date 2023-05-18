@@ -32,7 +32,8 @@ export type Projs = {
     imgMobile?: string,
     description: string,
     stack: string[],
-    repo: string
+    repo: string,
+    type: 'large' | 'game' | 'api' | 'interactive'
 } & ({
     external: true
     path: string
@@ -50,13 +51,15 @@ export const projectArray: Projs[] = [
         external: true,
         description: "Full-stack CRUD application for posting and viewing memes. Features 'like', 'follow' functionality and OAuth login with Google and Facebook. Developed with TypeScript, Next.js, React and Tailwind CSS. The data is stored in Supabase PostgreSQL and Prisma ORM is used to interact with the database. Uses the Next-Auth library for authentication and tRPC to bridge the front-end and back-end. ",
         stack: ["typescript", "next.js", "react", "node.js", "postgresql", "prisma", "json web token", "vercel", "trpc", "tailwind"],
-        repo: 'https://github.com/cossieB/meme-machine'
+        repo: 'https://github.com/cossieB/meme-machine',
+        type: 'large'
     }, {
         title: "Spaza Game Store",
         img: "/screenshots/spaza.png",
         description: "Full-stack ecommerce website. Developed with TypeScript, React on the frontend and C#, ASP.NET, Entity Framework and Postgres on the backend. Features a JsonWebToken based authentication system. To view a working demo, please clone the repo and run docker-compose up in your terminal.",
         stack: ["typescript", "react", "c#", "postgresql", "entity framework", "asp.net", "bootstrap", "json web token", "docker"],
-        repo: "https://github.com/cossieB/spaza-ecommerce"
+        repo: "https://github.com/cossieB/spaza-ecommerce",
+        type: 'large'
     }, {
         title: "Internet Games Database",
         img: "/screenshots/igdb.png",
@@ -65,7 +68,8 @@ export const projectArray: Projs[] = [
         external: true,
         description: "CRUD application for adding information about games and the gaming industry. Developed with TypeScript, Next.js, React and SASS. Uses Supabase Postgres as a database and Prisma ORM to interact with the database.",
         stack: ["typescript", "next.js", "react", "node.js", "postgresql", "prisma", "mongodb", "supabase", "mongoose", "vercel", "framer motion", "sass"],
-        repo: "https://github.com/cossieB/internet-games-database"
+        repo: "https://github.com/cossieB/internet-games-database",
+        type: 'large'
     },{
         title: "2048",
         img: "/screenshots/2048.png",
@@ -73,7 +77,8 @@ export const projectArray: Projs[] = [
         path: "/2048",
         description: "Clone of the 2048 puzzle/strategy game. Features mobile swipe controls. High scores stored in Firestore and local storage. This game has complex logic, so it was quite challenging to develop.",
         stack: ["typescript", "react", "firebase", "framer motion", "firestore", "sass"],
-        repo: "https://github.com/cossieB/cossieb.github.io/tree/main/src/components/2048"
+        repo: "https://github.com/cossieB/cossieb.github.io/tree/main/src/components/2048",
+        type: "game"
     }, {
         title: "Microservices",
         img: "/screenshots/microservices.png",
@@ -82,7 +87,8 @@ export const projectArray: Projs[] = [
         external: true,
         description: "Various REST APIs including header parser, file metadata, timestamp microservices, issue and exercise trackers and translator services. Deployed on Netlify and uses serverless Netlify functions.",
         stack: ["typescript", "node.js", "mongodb", "mongoose", "netlify"],
-        repo: 'https://github.com/cossieB/serverless'
+        repo: 'https://github.com/cossieB/serverless',
+        type: 'api'
     }, {
         title: "GraphQL API",
         img: "/screenshots/graphql.png",
@@ -90,7 +96,8 @@ export const projectArray: Projs[] = [
         external: true,
         description: "GraphQL API to get data from my Internet Games Database project. The project is deployed on Vercel and it uses Apollo Server. The data is stored in Supabase Postgres.",
         stack: ['typescript', 'node.js', 'next.js', 'postgresql', 'prisma', 'apollo', 'supabase', 'graphql', 'vercel'],
-        repo: "https://github.com/cossieB/internet-games-database/tree/main/graphql"
+        repo: "https://github.com/cossieB/internet-games-database/tree/main/graphql",
+        type: 'api'
     }, {
         title: "Wordle",
         img: "/screenshots/wordle.png",
@@ -98,7 +105,8 @@ export const projectArray: Projs[] = [
         path: "/wordle",
         description: "My recreation of the popular game Wordle",
         stack: ["typescript", "react", "firebase", "framer motion"],
-        repo: "https://github.com/cossieB/cossieb.github.io/tree/main/src/components/Wordle"
+        repo: "https://github.com/cossieB/cossieb.github.io/tree/main/src/components/Wordle",
+        type: "game"
     }, {
         title: 'Memory Game',
         path: '/memory',
@@ -106,7 +114,8 @@ export const projectArray: Projs[] = [
         imgMobile: "/screenshots/memory_mobile.png",
         description: "Quiz that tests your memory. Features customizable game size. High scores stored in Firestore and local storage.",
         stack: ["typescript", "react", "firebase", "framer motion", "firestore"],
-        repo: "https://github.com/cossieB/cossieb.github.io/tree/main/src/components/Memory"
+        repo: "https://github.com/cossieB/cossieb.github.io/tree/main/src/components/Memory",
+        type: "game"
     }, {
         title: "Sudoku",
         img: '/screenshots/sudoku.png',
@@ -114,7 +123,8 @@ export const projectArray: Projs[] = [
         path: "/sudoku",
         description: "Play sudoku. Features clash highlighting and custom puzzle creator. It can also solve most puzzles using the backtracking algorithm.",
         stack: ["typescript", "react", "firebase", "framer motion"],
-        repo: "https://github.com/cossieB/cossieb.github.io/tree/main/src/components/Sudoku"
+        repo: "https://github.com/cossieB/cossieb.github.io/tree/main/src/components/Sudoku",
+        type: "game"
     }, {
         title: "Pomodoro",
         img: "/screenshots/pomodoro.png",
@@ -122,7 +132,8 @@ export const projectArray: Projs[] = [
         path: "/pomodoro",
         description: "Timer for the pomodoro technique. You can change the session and the break lengths.",
         stack: ["typescript", "react", "firebase", "framer motion"],
-        repo: "https://github.com/cossieB/cossieb.github.io/tree/main/src/components/Pomodoro"
+        repo: "https://github.com/cossieB/cossieb.github.io/tree/main/src/components/Pomodoro",
+        type: "interactive"
     }, {
         title: "Calculator",
         img: "/screenshots/calculator.png",
@@ -130,14 +141,16 @@ export const projectArray: Projs[] = [
         path: "/calculator",
         description: "Non-scientific calculator.",
         stack: ["typescript", "react", "firebase", "framer motion"],
-        repo: "https://github.com/cossieB/cossieb.github.io/tree/main/src/components/Calculator"
+        repo: "https://github.com/cossieB/cossieb.github.io/tree/main/src/components/Calculator",
+        type: "interactive"
     }, {
         title: "Random Quote Machine",
         path: "/quotes",
         img: "/screenshots/quotes.png",
         imgMobile: "/screenshots/quotes_mobile.png",
-        description: "Some lighthearted quotes from across the ages.",
+        description: "Random quotes from across the ages. Features filters and Twitter and Tumblr share buttons",
         stack: ["typescript", "react", "firebase", "framer motion"],
-        repo: "https://github.com/cossieB/cossieb.github.io/tree/main/src/components/Quotes"
+        repo: "https://github.com/cossieB/cossieb.github.io/tree/main/src/components/Quotes",
+        type: "interactive"
     }
 ]
