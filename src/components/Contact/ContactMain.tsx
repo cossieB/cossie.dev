@@ -2,13 +2,13 @@ import { FormInput, FormTextarea } from "./FormInput";
 import styles from "./Contact.module.scss"
 import { Match, Show, Switch } from "solid-js";
 import Loader from "../shared/Loader/Loader";
-import { Presence } from "@motionone/solid";
 import { createStore } from "solid-js/store";
 import Popup from "../shared/Popup";
 import { useNavigate } from "solid-start";
 import { Checkmark } from "~/svgs";
 import server$ from "solid-start/server";
 import { sendMail } from "~/nodemailer";
+import { Transition } from "solid-transition-group";
 
 export default function ContactMain() {
     const [state, setState] = createStore({
@@ -81,7 +81,7 @@ export default function ContactMain() {
                     </button>
                 </form>
             </div>
-            <Presence>
+            <Transition>
                 <Show when={state.message.length > 0}>
                     <Popup
                         close={() => {
@@ -93,7 +93,7 @@ export default function ContactMain() {
                         text={state.message}
                     />
                 </Show>
-            </Presence>
+            </Transition>
         </main>
     )
 }

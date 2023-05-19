@@ -1,5 +1,5 @@
-import { Show, createSignal, onCleanup } from "solid-js"
-import { Projs, projectArray } from "../Projects/projectArray"
+import { Show, createSignal } from "solid-js"
+import { projectArray } from "../Projects/projectArray"
 import styles from "./navigator.module.scss"
 import { Transition } from "solid-transition-group"
 import clickOutside from "~/lib/clickOutside"

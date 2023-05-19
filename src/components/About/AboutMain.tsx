@@ -4,12 +4,13 @@ import { aboutNavBtns } from "./utils"
 import { langs, frontend, backend, misc } from "./vars";
 import styles from './about.module.scss'
 import { For, Match, Switch, createSignal } from "solid-js";
+import { Transition } from "solid-transition-group";
 
 export default function AboutMain() {
     const [page, setPage] = createSignal<typeof aboutNavBtns[number][0]>(aboutNavBtns[0][0])
     return (
         <div id={styles.aboutMain}>
-            <div id={styles.aboutNav}>
+            {/* <div id={styles.aboutNav}>
                 <For each={aboutNavBtns}>
                     {item =>
                         <button
@@ -26,25 +27,13 @@ export default function AboutMain() {
                         </button>
                     }
                 </For>
-            </div>
+            </div> */}
             <div id={styles.aboutContent}>
-                <Switch>
-                    <Match when={page() == 'About'}>
-                        <AboutMe />
-                    </Match>
-                    <Match when={page() == 'Languages'}>
-                        <Languages arr={langs} />
-                    </Match>
-                    <Match when={page() == 'Front-End'}>
-                        <Languages arr={frontend} />
-                    </Match>
-                    <Match when={page() == 'Back-End'}>
-                        <Languages arr={backend} />
-                    </Match>
-                    <Match when={page() == 'Misc'}>
-                        <Languages arr={misc} />
-                    </Match>
-                </Switch>
+                <AboutMe />
+                <Languages arr={langs} />
+                <Languages arr={frontend} />
+                <Languages arr={backend} />
+                <Languages arr={misc} />
             </div>
         </div>
     )

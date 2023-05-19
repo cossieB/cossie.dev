@@ -3,6 +3,7 @@
 #container {
     @include flexCenter(column);
     background-color: #8d008d88;
+    height: 100vh;
 }
 
 #sudoku {

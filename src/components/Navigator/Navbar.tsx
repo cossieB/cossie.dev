@@ -4,7 +4,6 @@ import { LeftArrowSvg } from "~/svgs";
 import { Transition } from "solid-transition-group";
 import { Category } from "./Category";
 import { List } from "./List";
-import styles from "./navigator.module.scss"
 import { NavLink } from "./NavLink";
 
 export const map: { [k in Projs['type']]: string } = {
@@ -14,20 +13,19 @@ export const map: { [k in Projs['type']]: string } = {
     large: "Larger Scale Projects"
 }
 
-const paths = [
-    {
-        title: "Home",
-        path: '/'
-    },
-    {
-        title: "About Me",
-        path: '/about'
-    },
-    {
-        title: "Contact Me",
-        path: '/contact'
-    }
-]
+const paths = [{
+    title: "Home",
+    path: '/'
+}, {
+    title: "About Me",
+    path: '/about'
+}, {
+    title: "Contact Me",
+    path: '/contact'
+}, {
+    title: "Projects",
+    path: "/projects"
+}]
 
 
 type Props = {
@@ -66,7 +64,7 @@ export function Navbar(props: Props) {
                             <LeftArrowSvg />{" "}
                             <span>{map[props.expanded()!]}</span>
                         </header>
-                        <List array={projectArray.filter(x => x.type == props.expanded())} />
+                        <List array={projectArray.filter(x => x.type === props.expanded())} />
                     </ul>
                 </Match>
                 <Match when={props.isOpen()}>

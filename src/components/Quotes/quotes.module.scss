@@ -154,11 +154,12 @@
     #quoteContainer {
         min-height: 100%;
         > div {
-            padding-top: 5rem;
+            padding-top: 2.5rem;
+            overflow-x: hidden;
         }
     }
     #quote-box {
-        width: 90%;
+        width: 98%;
         background-color: white;
         margin: 0 auto;
     }

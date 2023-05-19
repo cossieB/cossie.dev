@@ -966,7 +966,7 @@ export const quotes: Quote[] = [
         author: "Daenerys Targaryen",
         tags: new Set(["anti-hero", "tv series", "game of thrones", "fiction"])
     }, {
-        quote: "Get some rest dear, you look apalling",
+        quote: "Get some rest dear, you look appalling",
         author: "Lady Olenna Tyrell",
         tags: new Set(["fiction", "tv series", "game of thrones", "humorous", "insult"])
     }, {

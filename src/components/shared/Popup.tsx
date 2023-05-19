@@ -1,4 +1,3 @@
-import { Motion } from "@motionone/solid";
 import { onCleanup, onMount } from "solid-js";
 
 type Props = {
@@ -17,15 +16,12 @@ export default function Popup(props: Props) {
         clearTimeout(t)
     })
     return (
-        <Motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
+        <div
             class="popup"
         >
             <div>
                 {props.text}
             </div>
-        </Motion.div>
+        </div>
     )
 }

@@ -1,4 +1,3 @@
-import { Motion } from '@motionone/solid'
 import styles from '~/components/Home/Home.module.scss'
 import { PuzzleSvg, QuestionMarkSvg, PhoneSvg, GithubSvg, LinkedInSvg, DockerSvg, FreeCCSvg } from '~/svgs'
 import ExternalLink from '../shared/ExternalLink'
@@ -27,9 +26,9 @@ export default function HomeMain() {
                 />
             </nav>
             <div id={styles.welcome}>
-                <Motion.h1 initial={{ y: 100, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 1 }} id={styles.name}>Cossie</Motion.h1>
-                <Motion.hr initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ duration: 1 }} class={styles.line} />
-                <Motion.h2 initial={{ y: -100, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 1 }} id={styles.title}>Full-Stack Developer</Motion.h2>
+                <h1 id={styles.name}>Cossie</h1>
+                <hr class={styles.line} />
+                <h2 id={styles.title}>Full-Stack Developer</h2>
             </div>
             <div class={styles.socials}>
                 <ExternalLink href='https://github.com/cossieB' title="GitHub">

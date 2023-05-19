@@ -1,4 +1,3 @@
-import { Motion } from "@motionone/solid"
 import { onMount } from "solid-js"
 
 type Props = {
@@ -14,15 +13,12 @@ export default function Tooltip(props: Props) {
         ref.style.left = `${props.x}px`
     })
     return (
-        <Motion.span
+        <span
             ref={ref} 
             class="tooltip"
             role="tooltip"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
         >
             {props.text}
-        </Motion.span>
+        </span>
     )
 }

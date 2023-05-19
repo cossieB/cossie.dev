@@ -10,3 +10,15 @@
 .slide-enter {
   transform: translateX(-100px);
 }
+
+.fade-enter-active,
+.fade-exit-active {
+  transition: opacity 250ms;
+}
+.fade-enter,
+.fade-exit-to {
+  opacity: 0;
+}
+.fade-enter {
+  opacity: 1;
+}

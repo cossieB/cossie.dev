@@ -1,11 +1,11 @@
-import { Motion, Presence } from "@motionone/solid";
 import { A } from "@solidjs/router";
-import { Accessor } from "solid-js";
-import { Projs } from "~/components/Projects/projectArray";
+import { type Projs } from "~/components/Projects/projectArray";
 import styles from "~/components/Projects/Projects.module.scss"
 import { External } from "~/svgs";
 import ExternalLink from "../shared/ExternalLink";
 import { Links } from "./Links";
+import { Transition } from "solid-transition-group";
+import { Accessor } from "solid-js";
 
 export type Props = {
     proj: Projs,
@@ -14,13 +14,25 @@ export type Props = {
 
 export default function ProjectTile(props: Props) {
     return (
-        <Presence exitBeforeEnter>
-            <Motion.div
+        <Transition
+            appear
+            onBeforeEnter={(el) => {
+                (el as HTMLDivElement).style.opacity = "0"
+            }}
+            onEnter={(el, done) => {
+                const a = el.animate([{ transform: `translateY(50px)`, opacity: 0 }, { transform: `translateY(0px)`, opacity: 1 }], {
+                    duration: 250,
+                    delay: props.i() * 50,
+                    easing: 'ease'
+                });
+                a.finished.then(done);
+            }}
+            onAfterEnter={el => {
+                (el as HTMLDivElement).style.opacity = "1"
+            }}
+        >
+            <div
                 class={styles.tile}
-                initial={{ opacity: 0, y: 100 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -100 }}
-                transition={{delay: props.i() * 0.05}}
             >
                 <img src={props.proj.img} alt={props.proj.path} />
                 {props.proj.external ?
@@ -38,12 +50,11 @@ export default function ProjectTile(props: Props) {
                             <span >
                                 {props.proj.title}
                             </span>
-
                         }
                     </>
                 }
                 {<Links {...props} />}
-            </Motion.div>
-        </Presence>
+            </div>
+        </Transition>
     )
 }

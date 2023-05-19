@@ -16,11 +16,13 @@ export function Links(props: Props) {
                 onClick={() => {
                     setSelected(props.proj);
                 }}
+                role="button"
+                aria-label="Information button"
                 xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="blue" class={styles.info} viewBox="0 0 16 16">
                 <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z" />
             </svg>
         }
-        <a href={props.proj.repo} target="_blank">
+        <a href={props.proj.repo} target="_blank" aria-label="Link to GitHub Repo">
             <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#1f80ff" class={styles.code} viewBox="0 0 16 16">
                 <path d="M10.478 1.647a.5.5 0 1 0-.956-.294l-4 13a.5.5 0 0 0 .956.294l4-13zM4.854 4.146a.5.5 0 0 1 0 .708L1.707 8l3.147 3.146a.5.5 0 0 1-.708.708l-3.5-3.5a.5.5 0 0 1 0-.708l3.5-3.5a.5.5 0 0 1 .708 0zm6.292 0a.5.5 0 0 0 0 .708L14.293 8l-3.147 3.146a.5.5 0 0 0 .708.708l3.5-3.5a.5.5 0 0 0 0-.708l-3.5-3.5a.5.5 0 0 0-.708 0z" />
             </svg>
@@ -40,7 +42,7 @@ export function Links(props: Props) {
             </A>
         }
         {selected() &&
-            <svg onClick={() => setSelected(null)} xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="red" class={styles.close} viewBox="0 0 16 16">
+            <svg onClick={() => setSelected(null)} xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="red" class={styles.close} viewBox="0 0 16 16" role="button" aria-label="close button">
                 <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
                 <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
             </svg>

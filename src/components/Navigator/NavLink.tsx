@@ -1,5 +1,6 @@
 import { JSXElement } from "solid-js";
 import { A } from "solid-start";
+import styles from "./navigator.module.scss";
 
 type Props = {
     href: string;
@@ -8,7 +9,7 @@ type Props = {
 export function NavLink(props: Props) {
     return (
         <li>
-            <A href={props.href}>
+            <A activeClass={styles.active} end href={props.href}>
                 {props.children}
             </A>
         </li>

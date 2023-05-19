@@ -5,7 +5,7 @@ import { ClickEvent } from "~/lib/solidTypes";
 export default function CalculatorMain() {
     const [display, setDisplay]  = createSignal("0")
     const [calc, setCalc] = createSignal("")
-    console.count("Renders")
+
     function numPress(e: ClickEvent<HTMLButtonElement>) {
         if (display() !== "0") {
             setDisplay(prev => prev + e.currentTarget.value)
