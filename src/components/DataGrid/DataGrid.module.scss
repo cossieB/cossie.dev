@@ -1,0 +1,70 @@
+@use '~/mixins';
+.grid {
+    
+    background-color: var(--clrForm);
+    margin-left: 10rem;
+    th {
+        background-color: black;
+    }
+    tr {
+        &:is(:nth-child(2n)) {
+            background-color: #222;
+        }
+        &:is(:nth-child(2n + 1)) {
+            background-color: #464646;
+        }
+        &:hover {
+            background-color: gray;
+        }
+        &.active {
+            background-color: hsl(0, 71%, 37%);
+        }
+    }
+}
+.th {
+    text-transform: uppercase;
+    font-weight: bold;
+    i {
+        color: var(--clrActive);
+    }
+    >form {
+        position: absolute;
+    }
+    input {
+        background-color: white;
+        color: black
+    }
+}
+.tc {
+    
+    padding: 0.25rem;
+}
+.td {
+    padding-right: 0.5rem;
+}
+.check {
+    border-radius: 50%;
+    height: 2rem;
+    width: 2rem;
+    border: var(--clrActive) 1px solid;
+    @include mixins.flexCenter;
+    &.selected {
+        &::after {
+            content: "";
+            display: block;
+            border-radius: 50%;
+            height: 1.5rem;
+            width: 1.5rem;
+            background-color: var(--clrActive);
+        }
+    }
+}
+.ul {
+    width: 10rem;
+    top: 2.5rem;
+    position: fixed;
+    li {
+        display: flex;
+        align-items: center;
+    }
+}
