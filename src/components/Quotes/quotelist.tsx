@@ -822,7 +822,7 @@ export const quotes: Quote[] = [
         author: "Jamie Zawinski",
         tags: new Set(["humorous", "non-fiction", "nerdy", "programming"])
     }, {
-        quote: "C makes it easy to shoot yourself in the foot; C++ makes it harder, but wheen you do it blows your whole leg off",
+        quote: "C makes it easy to shoot yourself in the foot; C++ makes it harder, but when you do it blows your whole leg off",
         author: "Bjarne Stroustrup",
         tags: new Set(["humorous", "non-fiction", "nerdy", "programming"])
     }, {
@@ -1049,5 +1049,9 @@ export const quotes: Quote[] = [
         quote: "What is a man but the sum of his memories? We are the stories we live! The tales we tell ourselves!",
         author: "Clay Kaczmarek",
         tags: new Set(["fiction", "video game", "philosophical"])
+    }, {
+        quote: "They say ambition is an unattractive trait in a woman.You know what I find really unattractive? Waiting around for something to happen. Staring out a window, thinking the life you should be living is out there somewhere but not being willing to open the door and go get it. Even if someone tells you you can't. Being a coward is only cute in the Wizard of Oz.",
+        author: "Miriam 'Midge' Maisel",
+        tags: new Set(['fiction', 'tv series', 'inspiring', 'motivational'])
     }
 ]
