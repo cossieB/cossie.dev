@@ -1,4 +1,4 @@
-import { Accessor, For, Match, Setter, Switch } from "solid-js";
+import { type Accessor, For, Match, type Setter, Switch } from "solid-js";
 import { type Projs, projectArray } from "../Projects/projectArray";
 import { LeftArrowSvg } from "~/svgs";
 import { Transition } from "solid-transition-group";
@@ -43,7 +43,7 @@ export function Navbar(props: Props) {
                 const factor = props.expanded() ? 1 : -1
                 const dir = factor * 100
                 const a = el.animate([{ transform: `translateX(${dir}%)` }, { transform: `translateX(0%)` }], {
-                    duration: parseInt(getComputedStyle(props.div).getPropertyValue('--duration'))
+                    duration: 250
                 });
                 props.setHeight(el.clientHeight);
                 a.finished.then(done);
@@ -52,7 +52,7 @@ export function Navbar(props: Props) {
                 const factor = props.expanded() ? -1 : 1
                 const dir = factor * 100
                 const a = el.animate([{ transform: `translateX(0%)` }, { transform: `translateX(${dir}%)` }], {
-                    duration: parseInt(getComputedStyle(props.div).getPropertyValue('--duration'))
+                    duration: 250
                 });
                 a.finished.then(done);
             }}

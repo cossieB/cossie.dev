@@ -35,7 +35,7 @@ export default function Navigator() {
                 }}
                 onExit={(el, done) => {
                     const a = el.animate([{opacity: 1}, {opacity: 0}], {
-                        duration: parseInt(getComputedStyle(ref).getPropertyValue('--duration'))
+                        duration: 250
                     })
                     setHeight(0);
                     a.finished.then(done)
