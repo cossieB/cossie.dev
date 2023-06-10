@@ -21,7 +21,6 @@ export function ControlElem(props: {item: Elem}) {
     let ref: HTMLDivElement;
     const windowWidth = useResize()
     onMount(() => {
-        ref.style.opacity = "0"
         setTimeout(() => {
             ref.style.opacity = "1"
         }, 250)

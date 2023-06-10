@@ -1,4 +1,4 @@
-import { Accessor, Setter, onCleanup, onMount } from "solid-js";
+import { type Accessor, type Setter, onCleanup, onMount } from "solid-js";
 import styles from "~/components/Projects/Projects.module.scss";
 import { paginatedProjects } from "./ProjectList";
 import { flipPage } from "../../lib/flipPage";

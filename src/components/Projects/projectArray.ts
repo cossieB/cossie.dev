@@ -1,4 +1,4 @@
-import { langs, frontend, backend, misc, Lang } from './vars'
+import { langs, frontend, backend, misc, type Lang } from './vars'
 
 export const stack: { [key: string]: string } = {
     "framer motion": "https://pagepro.co/blog/wp-content/uploads/2020/03/framer-motion.png",
@@ -77,7 +77,7 @@ export const projectArray: Projs[] = [
         path: "/2048",
         description: "Clone of the 2048 puzzle/strategy game. Features mobile swipe controls. High scores stored in Firestore and local storage. This game has complex logic, so it was quite challenging to develop.",
         stack: ["typescript", "react", "firebase", "framer motion", "firestore", "sass"],
-        repo: "https://github.com/cossieB/cossieb.github.io/tree/main/src/components/2048",
+        repo: "https://github.com/cossieB/cossie.dev/tree/main/src/components/2048",
         type: "game"
     }, {
         title: "Microservices",
@@ -105,7 +105,7 @@ export const projectArray: Projs[] = [
         path: "/wordle",
         description: "My recreation of the popular game Wordle",
         stack: ["typescript", "react", "firebase", "framer motion"],
-        repo: "https://github.com/cossieB/cossieb.github.io/tree/main/src/components/Wordle",
+        repo: "https://github.com/cossieB/cossie.dev/tree/main/src/components/Wordle",
         type: "game"
     }, {
         title: 'Memory Game',
@@ -114,7 +114,7 @@ export const projectArray: Projs[] = [
         imgMobile: "/screenshots/memory_mobile.png",
         description: "Quiz that tests your memory. Features customizable game size. High scores stored in Firestore and local storage.",
         stack: ["typescript", "react", "firebase", "framer motion", "firestore"],
-        repo: "https://github.com/cossieB/cossieb.github.io/tree/main/src/components/Memory",
+        repo: "https://github.com/cossieB/cossie.dev/tree/main/src/components/Memory",
         type: "game"
     }, {
         title: "Sudoku",
@@ -123,7 +123,7 @@ export const projectArray: Projs[] = [
         path: "/sudoku",
         description: "Play sudoku. Features clash highlighting and custom puzzle creator. It can also solve most puzzles using the backtracking algorithm.",
         stack: ["typescript", "react", "firebase", "framer motion"],
-        repo: "https://github.com/cossieB/cossieb.github.io/tree/main/src/components/Sudoku",
+        repo: "https://github.com/cossieB/cossie.dev/tree/main/src/components/Sudoku",
         type: "game"
     }, {
         title: "Pomodoro",
@@ -132,7 +132,7 @@ export const projectArray: Projs[] = [
         path: "/pomodoro",
         description: "Timer for the pomodoro technique. You can change the session and the break lengths.",
         stack: ["typescript", "react", "firebase", "framer motion"],
-        repo: "https://github.com/cossieB/cossieb.github.io/tree/main/src/components/Pomodoro",
+        repo: "https://github.com/cossieB/cossie.dev/tree/main/src/components/Pomodoro",
         type: "interactive"
     }, {
         title: "Calculator",
@@ -141,7 +141,7 @@ export const projectArray: Projs[] = [
         path: "/calculator",
         description: "Non-scientific calculator.",
         stack: ["typescript", "react", "firebase", "framer motion"],
-        repo: "https://github.com/cossieB/cossieb.github.io/tree/main/src/components/Calculator",
+        repo: "https://github.com/cossieB/cossie.dev/tree/main/src/components/Calculator",
         type: "interactive"
     }, {
         title: "Random Quote Machine",
@@ -150,7 +150,7 @@ export const projectArray: Projs[] = [
         imgMobile: "/screenshots/quotes_mobile.png",
         description: "Random quotes from across the ages. Features filters and Twitter and Tumblr share buttons",
         stack: ["typescript", "react", "firebase", "framer motion"],
-        repo: "https://github.com/cossieB/cossieb.github.io/tree/main/src/components/Quotes",
+        repo: "https://github.com/cossieB/cossie.dev/tree/main/src/components/Quotes",
         type: "interactive"
     }
 ]

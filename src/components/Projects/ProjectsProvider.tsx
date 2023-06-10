@@ -1,5 +1,5 @@
-import { Accessor, JSX, Setter, createContext, createSignal } from "solid-js";
-import { Projs } from "./projectArray";
+import { type Accessor, type JSX, type Setter, createContext, createSignal } from "solid-js";
+import { type Projs } from "./projectArray";
 
 type Ctx = {
     selected: Accessor<Projs | null>

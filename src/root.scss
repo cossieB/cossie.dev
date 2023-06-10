@@ -46,10 +46,12 @@ input {
     border-radius: 0.5rem;
     color: black;
     >div {
-        max-width: 25vw;
+        --popClr: 120;
+        max-width: 21rem;
         padding: 1rem;
         border-radius: 0.5rem;
-        background: linear-gradient(hsl(108, 2%, 85%), hsl(108, 2%, 56%));
+        background: linear-gradient(hsl(var(--popClr), 100%, 50%), hsl(var(--popClr), 100%, 17%));
+        box-shadow: 0 0 5px black;
     }
 }
 

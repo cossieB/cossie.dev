@@ -20,9 +20,6 @@
     width: 100%;
     right: 0;
     transition: right 250ms ease;
-    &.hide {
-        right: 100vw
-    }
 }
 
 .prevBtn {

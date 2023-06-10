@@ -2,16 +2,23 @@
 
 .details {
     width: 100vw;
-    position: relative;
-    right: 100vw;
+    position: fixed;
+    top: 25vh;
     z-index: 50;
-    transition: right 250ms ease;
+    opacity: 0;
+    scale: 0.5;
+    transition: top 250ms ease-out, opacity 250ms ease-out, scale 250ms ease-out;
+    backdrop-filter: blur(15px) saturate(0.25);
+    pointer-events: none;
     article {
         margin-left: 0.5rem;
         margin-right: 0.5rem;
     }
     &.show {
-        right: 0;
+        top: 0;
+        opacity: 1;
+        pointer-events: all;
+        scale: 1;
     }
     img {
         max-height: 300px;   

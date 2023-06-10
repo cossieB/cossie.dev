@@ -38,10 +38,10 @@ export async function sendMail(name: string, company: string, msg: string, email
         html: `<div style="text-align: center"><h1>${company}</h1><h2>${name}</h2><h2>${email}</h2><p>${msg}</p></div>`
     }
     try {
-        const result = await transport.sendMail(options);
-        console.log(result)
+        await transport.sendMail(options);
         transport.close()
     } catch (error) {
         console.log(error)
+        throw error
     }
 }

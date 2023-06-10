@@ -3,6 +3,7 @@ import { PuzzleSvg, QuestionMarkSvg, PhoneSvg, GithubSvg, LinkedInSvg, DockerSvg
 import ExternalLink from '../shared/ExternalLink'
 import MySiteTitle from '../shared/MySiteTitle'
 import NavItem from './NavItem'
+import FCCLogo from './fcc.svg'
 
 export default function HomeMain() {
     return (

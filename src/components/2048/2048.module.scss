@@ -36,6 +36,7 @@ $boardColor: #c8dd0f;
     position: absolute;
     @include radius;
     transition: all 250ms ease;
+    opacity: 0;
 }
 
 .score {

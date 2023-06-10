@@ -1,5 +1,5 @@
 import styles from "~/components/Projects/Projects.module.scss";
-import { Projs } from "./projectArray";
+import { type Projs } from "./projectArray";
 import { A } from "solid-start";
 import { useContext } from "solid-js";
 import { ProjectsContext } from "./ProjectsProvider";

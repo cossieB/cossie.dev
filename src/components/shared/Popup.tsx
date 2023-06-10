@@ -2,16 +2,15 @@ import { onCleanup, onMount } from "solid-js";
 
 type Props = {
     text: string,
-    close: () => void
+    close: () => void,
+    colorDeg?: string
 }
 
 export default function Popup(props: Props) {
-    let t: NodeJS.Timeout
-    onMount(() => {
-        t = setTimeout(() => {
-            props.close()
-        }, 5000)
-    })
+    const t = setTimeout(() => {
+        props.close()
+    }, 5000)
+
     onCleanup(() => {
         clearTimeout(t)
     })
@@ -19,7 +18,9 @@ export default function Popup(props: Props) {
         <div
             class="popup"
         >
-            <div>
+            <div
+                style={{"--popClr": props.colorDeg ?? 50}}
+            >
                 {props.text}
             </div>
         </div>

@@ -5,7 +5,7 @@ import { External } from "~/svgs";
 import ExternalLink from "../shared/ExternalLink";
 import { Links } from "./Links";
 import { Transition } from "solid-transition-group";
-import { Accessor } from "solid-js";
+import { type Accessor } from "solid-js";
 
 export type Props = {
     proj: Projs,
