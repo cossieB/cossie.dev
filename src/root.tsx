@@ -16,10 +16,13 @@ import "./root.scss";
 import { UserProvider } from "./components/shared/Signup/UserProvider";
 import { useRegisterSW } from "virtual:pwa-register/solid";
 import { pwaInfo } from "virtual:pwa-info";
+import { onMount } from "solid-js";
 
 export default function Root() {
     // Register the service worker
-    useRegisterSW({ immediate: true });
+    onMount(() => {
+        useRegisterSW({ immediate: true });
+    })
     return (
         <Html lang="en">
             <Head>

@@ -1,5 +1,4 @@
 import styles from './about.module.scss'
-import { useResize } from '~/hooks/useResize'
 
 export default function AboutMe() {
     return (
