@@ -3,8 +3,7 @@ import Languages from "./Languages"
 import { aboutNavBtns } from "./utils"
 import { langs, frontend, backend, misc } from "./vars";
 import styles from './about.module.scss'
-import { For, Match, Switch, createSignal } from "solid-js";
-import { Transition } from "solid-transition-group";
+import { createSignal } from "solid-js";
 
 export default function AboutMain() {
     const [page, setPage] = createSignal<typeof aboutNavBtns[number][0]>(aboutNavBtns[0][0])

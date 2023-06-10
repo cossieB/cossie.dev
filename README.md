@@ -1,30 +1,5 @@
-# SolidStart
+# cossie.dev
 
-Everything you need to build a Solid project, powered by [`solid-start`](https://start.solidjs.com);
+Source code for my personal website built with [`solid-start`](https://start.solidjs.com) and TypeScript; Ported from my [React portfolio](https://github.com/cossieB/portfolio). The final product can be viewed at https://cossie.dev
 
-## Creating a project
-
-```bash
-# create a new project in the current directory
-npm init solid@latest
-
-# create a new project in my-app
-npm init solid@latest my-app
-```
-
-## Developing
-
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
-
-```bash
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
-
-## Building
-
-Solid apps are built with _adapters_, which optimise your project for deployment to different environments.
-
-By default, `npm run build` will generate a Node app that you can run with `npm start`. To use a different adapter, add it to the `devDependencies` in `package.json` and specify in your `vite.config.js`.
+<img src="https://cossie.dev/logos/typescript.png" width=50><img src="https://cossie.dev/logos/solid.png" width=50><img src="https://cossie.dev/logos/sass.png" width=50><img src="https://cossie.dev/logos/node.png" width=50><img src="https://logowik.com/content/uploads/images/vercel1868.jpg" width=50><img src="https://i0.wp.com/community.nodemailer.com/wp-content/uploads/2015/10/n2-2.png?fit=422%2C360&ssl=1" width=50>

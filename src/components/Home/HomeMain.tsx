@@ -44,8 +44,6 @@ export default function HomeMain() {
                 <ExternalLink href="https://www.freecodecamp.org/cossie" title="freeCodeCamp">
                     {<FreeCCSvg />}
                 </ExternalLink>
-                <a href="https://www.freecodecamp.org/cossie" target="_blank" rel="noreferrer" title="freeCodeCamp">
-                </a>
                 <div class={styles.lineV} />
             </div>
         </main>
