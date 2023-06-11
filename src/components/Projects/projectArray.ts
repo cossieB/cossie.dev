@@ -83,7 +83,7 @@ export const projectArray: Projs[] = [
         title: "Microservices",
         img: "/screenshots/microservices.png",
         imgMobile: "/screenshots/microservices_mobile.png",
-        path: "https://cossie.netlify.app/",
+        path: "https://api.cossie.dev/",
         external: true,
         description: "Various REST APIs including header parser, file metadata, timestamp microservices, issue and exercise trackers and translator services. Deployed on Netlify and uses serverless Netlify functions.",
         stack: ["typescript", "node.js", "mongodb", "mongoose", "netlify"],
