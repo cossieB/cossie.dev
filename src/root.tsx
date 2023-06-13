@@ -17,11 +17,14 @@ import { UserProvider } from "./components/shared/Signup/UserProvider";
 import { useRegisterSW } from "virtual:pwa-register/solid";
 import { pwaInfo } from "virtual:pwa-info";
 import { onMount } from "solid-js";
+import { inject } from '@vercel/analytics';
+
+inject();
 
 export default function Root() {
     // Register the service worker
     onMount(() => {
-        useRegisterSW({ immediate: true });
+        useRegisterSW();
     })
     return (
         <Html lang="en">
@@ -34,6 +37,8 @@ export default function Root() {
                 <Meta name="keywords"
                     content="solid.js,portfolio,project,full-stack developer,html,sass,single-page application,progressive web app,typescript,web developer,web development" />
                 <Meta name="color-scheme" content="dark" />
+                <Link rel="mask-icon" href="/favicon.ico" color="#FFFFFF" />
+                <Meta name="theme-color" content="#ffffff" />
                 <Meta name="creator" content="Buntu Cossie" />
                 <Meta name="robots" content="index, follow" />
                 <Meta name="googlebot" content="index, follow" />

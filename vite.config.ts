@@ -4,9 +4,40 @@ import vercel from "solid-start-vercel"
 import { VitePWA, type ManifestOptions, type VitePWAOptions } from 'vite-plugin-pwa'
 
 const pwaOptions: Partial<VitePWAOptions> = {
-    mode: "development",
     base: "/",
     includeAssets: ["favicon.ico"],
+    strategies: 'generateSW',
+    workbox: {
+        navigateFallback: "/",
+        globPatterns: ['**/*.{png,jpg,svg,ico}'],
+        runtimeCaching: [{
+            urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
+            handler: 'CacheFirst',
+            options: {
+                cacheName: 'google-fonts-cache',
+                expiration: {
+                    maxEntries: 10,
+                    maxAgeSeconds: 60 * 60 * 24 * 365 // <== 365 days
+                },
+                cacheableResponse: {
+                    statuses: [0, 200]
+                }
+            }
+        }, {
+            urlPattern: /^https:\/\/fonts\.gstatic\.com\/.*/i,
+            handler: 'CacheFirst',
+            options: {
+                cacheName: 'gstatic-fonts-cache',
+                expiration: {
+                    maxEntries: 10,
+                    maxAgeSeconds: 60 * 60 * 24 * 365 // <== 365 days
+                },
+                cacheableResponse: {
+                    statuses: [0, 200]
+                },
+            }
+        }]
+    },
     manifest: {
         name: "Buntu Cossie's Portfolio App",
         short_name: "cossie.dev",
@@ -28,14 +59,14 @@ const pwaOptions: Partial<VitePWAOptions> = {
         }, {
             src: "logo512.png",
             type: "image/png",
-            sizes: "512x512"
+            sizes: "512x512",
+            purpose: "any maskable"
         }],
     },
     devOptions: {
         enabled: true,
         /* when using generateSW the PWA plugin will switch to classic */
         type: 'module',
-        navigateFallback: 'index.html',
     },
 }
 
@@ -66,9 +97,11 @@ if (selfDestroying)
 export default defineConfig({
     plugins: [
         solid({
-            adapter: vercel({prerender: {
-                expiration: false,
-            }})
+            adapter: vercel({
+                prerender: {
+                    expiration: 60*60*24,
+                }
+            })
         }),
         VitePWA(pwaOptions),
     ],
