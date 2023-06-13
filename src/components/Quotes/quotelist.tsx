@@ -940,11 +940,11 @@ export const quotes: Quote[] = [
     }, {
         quote: "I am altering the deal. Pray I don't alter it further",
         author: "Darth Vader",
-        tags: new Set(["fiction", "movie", "villain", "vader"])
+        tags: new Set(["fiction", "movie", "villain", "vader", "star wars"])
     }, {
         quote: "He's clumsy as he is stupid",
         author: "Darth Vader",
-        tags: new Set(["fiction", "movie", "villain", "humorous", "vader"])
+        tags: new Set(["fiction", "movie", "villain", "humorous", "vader", "star wars"])
     }, {
         quote: "Be careful not to choke on your aspirations",
         author: "Darth Vader",
