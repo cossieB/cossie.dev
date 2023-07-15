@@ -9,6 +9,7 @@ const pwaOptions: Partial<VitePWAOptions> = {
     strategies: 'generateSW',
     workbox: {
         navigateFallback: "/",
+        navigateFallbackDenylist: [/\/admin\/*/],
         globPatterns: ['**/*.{png,jpg,svg,ico}'],
         runtimeCaching: [{
             urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
@@ -34,6 +35,22 @@ const pwaOptions: Partial<VitePWAOptions> = {
                 },
                 cacheableResponse: {
                     statuses: [0, 200]
+                },
+            }
+        }, {
+            urlPattern: (t) => t.request.destination === "document" && t.sameOrigin,
+            handler: 'NetworkFirst',
+            method: "GET",
+            options: {
+                cacheName: "pages",
+                expiration: {
+                    maxEntries: 10
+                },
+                cacheableResponse: {
+                    statuses: [0, 200]
+                },
+                matchOptions: {
+                    ignoreSearch: true
                 },
             }
         }]

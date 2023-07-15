@@ -1,15 +1,13 @@
-import { type Resource, createSignal } from "solid-js";
+import { type Resource, Suspense, Show, createSignal } from "solid-js";
 import { useRouteData } from "solid-start";
-import FormProvider from "~/components/admin/FormProvider";
-import { DataGrid } from "~/components/DataGrid/DataGrid";
-import Settings from "~/components/DataGrid/Settings";
-import { StoreProvider } from "~/components/DataGrid/StoreProvider";
-import { type Header } from "~/components/DataGrid/types";
 import { db } from "~/db";
 import { developer, game, publisher } from "~/drizzle/schema";
 import styles from "../admin.module.scss"
 import { eq } from "drizzle-orm"
 import { createServerData$ } from "solid-start/server";
+import { createSolidTable, type ColumnDef, type SortingState, getSortedRowModel, getPaginationRowModel } from "@tanstack/solid-table";
+import { getCoreRowModel } from "@tanstack/solid-table";
+import { Table } from "../../../components/Table";
 
 export function routeData() {
     return createServerData$(async () => db
@@ -22,30 +20,56 @@ export function routeData() {
 
 type UnwrapResource<T> = T extends Resource<infer x | undefined> ? x : never
 type X = NonNullable<UnwrapResource<ReturnType<typeof routeData>>>
-type Y = X[number]
-const t: Header<Y['Game']>[] = [{
-    property: 'title',
-    isSelected: true,
-    sortable: true,
-}, {
-    property: 'banner',
-    isSelected: true
-}, {
-    property: 'cover',
-    isSelected: true,
-    sortable: true,
-}]
-export default function GamesPage() {
-    const data = useRouteData<typeof routeData>();
-    const [selectedGame, setSelectedGame] = createSignal<typeof game | null>(null)
+
+export default function GamesAdminPage() {
+    const data = useRouteData<typeof routeData>()
+    const [sorting, setSorting] = createSignal<SortingState>([])
+
+    const defaultColumns: ColumnDef<X[number]>[] = [{
+        accessorFn: props => props.Game.gameId,
+        header: 'gameId',
+        enableSorting: false,
+    },{
+        accessorFn: props => props.Game.title,
+        header: 'Title'
+    }, {
+        accessorFn: props => props.Developer.name,
+        header: 'Developer'
+    },{
+        accessorFn: props => props.Publisher.name,
+        header: 'Publisher'
+    },{
+        accessorFn: props => props.Game.releaseDate,
+        header: 'Release Date',
+        cell: info => new Date(info.getValue() as string).toLocaleDateString('en-za', {day: '2-digit', month: 'long', year: 'numeric'})
+    } ]
+    const table = createSolidTable({
+        get data() {
+            return data() ?? []
+        },
+        state: {
+            get sorting() {
+                return sorting()
+            },
+            pagination: {
+                pageIndex: 0,
+                pageSize: 10
+            }
+        },
+        columns: defaultColumns,
+        getCoreRowModel: getCoreRowModel(),
+        onSortingChange: setSorting,
+        getSortedRowModel: getSortedRowModel(),
+        getPaginationRowModel: getPaginationRowModel(),
+    })
     return (
-        <StoreProvider arr={t} >
-            <FormProvider setSelected={setSelectedGame} selected={selectedGame}>
-                <div class={styles.main}>
-                    <Settings />
-                    <DataGrid data={data() ?? []} />
-                </div>
-            </FormProvider>
-        </StoreProvider>
+        <main class={styles.main}>
+            <Suspense fallback={<span>loading...</span>}>
+                <Show when={data()}>
+                    <Table table={table} sorting={sorting}/>
+                </Show>
+            </Suspense>
+        </main>
     )
 }
+
