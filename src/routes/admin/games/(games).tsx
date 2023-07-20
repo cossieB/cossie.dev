@@ -1,14 +1,18 @@
-import { type Resource, Suspense, Show, createSignal } from "solid-js";
-import { useRouteData } from "solid-start";
+import { type Resource, Suspense, Show, createSignal, createEffect } from "solid-js";
+import { unstable_clientOnly, useRouteData } from "solid-start";
 import { db } from "~/db";
 import { developer, game, publisher } from "~/drizzle/schema";
 import styles from "../admin.module.scss"
 import { eq } from "drizzle-orm"
 import { createServerData$ } from "solid-start/server";
-import { createSolidTable, type ColumnDef, type SortingState, getSortedRowModel, getPaginationRowModel } from "@tanstack/solid-table";
-import { getCoreRowModel } from "@tanstack/solid-table";
-import { Table } from "../../../components/Table";
+import { type SortingState, type PaginationState } from "@tanstack/solid-table";
+import { ColDef, GridOptions, ICellEditor, ICellEditorParams } from "ag-grid-community";
+import 'ag-grid-community/styles/ag-grid.css'; // grid core CSS
+import "ag-grid-community/styles/ag-theme-alpine.css"; // optional theme
+import { AgGridSolidRef } from "ag-grid-solid";
+import { ChangeEvent } from "~/lib/solidTypes";
 
+const AgGridSolid = unstable_clientOnly(() => import("ag-grid-solid"));
 export function routeData() {
     return createServerData$(async () => db
         .select()
@@ -21,55 +25,85 @@ export function routeData() {
 type UnwrapResource<T> = T extends Resource<infer x | undefined> ? x : never
 type X = NonNullable<UnwrapResource<ReturnType<typeof routeData>>>
 
+type Cols = ColDef<X[number]>
+
+const columnDefaults: Cols = {
+    sortable: true
+}
+
+const columnDefs: Cols[] = [{
+    field: 'Game.title',
+    editable: true,
+    cellEditor: DataEditor,
+}, {
+    field: 'Developer.name',
+}, {
+    field: 'Publisher.name',
+}, {
+    field: 'Game.releaseDate',
+}]
+
 export default function GamesAdminPage() {
     const data = useRouteData<typeof routeData>()
-    const [sorting, setSorting] = createSignal<SortingState>([])
-
-    const defaultColumns: ColumnDef<X[number]>[] = [{
-        accessorFn: props => props.Game.gameId,
-        header: 'gameId',
-        enableSorting: false,
-    },{
-        accessorFn: props => props.Game.title,
-        header: 'Title'
-    }, {
-        accessorFn: props => props.Developer.name,
-        header: 'Developer'
-    },{
-        accessorFn: props => props.Publisher.name,
-        header: 'Publisher'
-    },{
-        accessorFn: props => props.Game.releaseDate,
-        header: 'Release Date',
-        cell: info => new Date(info.getValue() as string).toLocaleDateString('en-za', {day: '2-digit', month: 'long', year: 'numeric'})
-    } ]
-    const table = createSolidTable({
-        get data() {
-            return data() ?? []
-        },
-        state: {
-            get sorting() {
-                return sorting()
-            },
-            pagination: {
-                pageIndex: 0,
-                pageSize: 10
-            }
-        },
-        columns: defaultColumns,
-        getCoreRowModel: getCoreRowModel(),
-        onSortingChange: setSorting,
-        getSortedRowModel: getSortedRowModel(),
-        getPaginationRowModel: getPaginationRowModel(),
-    })
+    
     return (
-        <main class={styles.main}>
+        <main class={`${styles.main} ag-theme-alpine-dark`} style={{ width: '100%', height: '100vh' }}>
             <Suspense fallback={<span>loading...</span>}>
                 <Show when={data()}>
-                    <Table table={table} sorting={sorting}/>
+                    <GridTable
+                        data={data()}
+                        columnDefs={columnDefs}
+                    />
                 </Show>
             </Suspense>
         </main>
     )
 }
 
+type P<T = any> = {
+    data: GridOptions<T>['rowData']
+    columnDefs: GridOptions<T>['columnDefs']
+}
+
+function GridTable(props: P) {
+    let ref: AgGridSolidRef
+    return (
+        <AgGridSolid
+            rowData={props.data}
+            columnDefs={props.columnDefs}
+            class="ag-theme-alpine-dark"
+            ref={ref!}
+            defaultColDef={columnDefaults}
+            animateRows
+        />
+    )
+}
+
+function DataEditor(props: ICellEditorParams) {
+    let value = props.value
+    let inputRef!: HTMLInputElement
+    const api: ICellEditor = {
+        getValue: () => value,
+
+    }
+    console.log(props.ref)
+    // props.ref(api)
+    const onValueChanged = (event: ChangeEvent<HTMLInputElement>) => {
+        console.log("value now is " + value)
+        event.target!.value;
+    };
+
+    createEffect(() => {
+        inputRef.focus();
+    });
+
+    return (
+        <input
+            type="number"
+            class="my-editor"
+            ref={inputRef}
+            value={value}
+            onChange={onValueChanged}
+        />
+    );
+}

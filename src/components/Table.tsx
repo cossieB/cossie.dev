@@ -63,7 +63,7 @@ export function Table(props: Props) {
             <div>
                 <button>Prev</button>
                 <button onclick={props.table.nextPage}>Next</button>
-                <button onclick={() => console.log(unwrap(props.table.getPaginationRowModel().rows))} >PRINT</button>
+                <button onclick={() => console.log(unwrap(props.table.getPaginationRowModel()))} >PRINT</button>
             </div>
         </>
     );
