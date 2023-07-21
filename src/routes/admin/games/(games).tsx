@@ -3,7 +3,7 @@ import { A, unstable_clientOnly, useRouteData } from "solid-start";
 import { db } from "~/db";
 import { developer, game, genresOfGames, publisher } from "~/drizzle/schema";
 import styles from "../admin.module.scss"
-import { eq } from "drizzle-orm"
+import { eq, sql } from "drizzle-orm"
 import { createServerData$ } from "solid-start/server";
 import { ColDef, GridOptions, ICellEditor, ICellEditorParams, ICellRendererParams } from "ag-grid-community";
 import 'ag-grid-community/styles/ag-grid.css'; // grid core CSS
@@ -12,15 +12,23 @@ import { AgGridSolidRef } from "ag-grid-solid";
 import { ChangeEvent } from "~/lib/solidTypes";
 
 const AgGridSolid = unstable_clientOnly(() => import("ag-grid-solid"));
+
 export function routeData() {
     return createServerData$(async () => {
-        const result = await db
+        const subQuery = db.$with('t').as(db.select({
+            gameId: genresOfGames.gameId,
+            tags: sql<string[]>`array_agg(genre)`.as('tags')
+        })
+        .from(genresOfGames)
+        .groupBy(genresOfGames.gameId)
+        )
+        return await db
+            .with(subQuery)
             .select()
             .from(game)
             .innerJoin(developer, eq(game.developerId, developer.developerId))
             .innerJoin(publisher, eq(game.publisherId, publisher.publisherId))
-            .innerJoin(genresOfGames, eq(game.gameId, genresOfGames.gameId))
-            .orderBy(game.gameId)
+            .innerJoin(subQuery, eq(game.gameId, subQuery.gameId))
         
     })
 }
@@ -52,23 +60,22 @@ const columnDefs: Cols[] = [{
         <AdminLink
             {...params}
         />,
-    cellRendererParams: {
-        value: "dkfsjlkd"
-    },
 }, {
-    field: 'GenresOfGames.genre'
+    headerName: "Genres",
+    field: 't.tags',
+    valueFormatter: (val) => val.data?.t.tags.join("; ") ?? ""
 }]
 
-function AdminLink(props: ICellRendererParams) {
+function AdminLink(props: ICellRendererParams<X[number]>) {
     // console.log(unwrap(props))
     return (
-        <A href={"/tes"}>Edit {props.value}</A>
+        <A href={"/tes"}>Edit {props.data?.Game.gameId}</A>
     )
 }
 
 export default function GamesAdminPage() {
     const data = useRouteData<typeof routeData>()
-
+console.log(data())
     return (
         <main class={`${styles.main} ag-theme-alpine-dark`} style={{ width: '100%', height: '100vh' }}>
             <Suspense fallback={<span>loading...</span>}>
@@ -110,7 +117,7 @@ function DataEditor(props: ICellEditorParams) {
 
     }
     console.log(props.ref)
-    // props.ref(api)
+    props.ref(api)
     const onValueChanged = (event: ChangeEvent<HTMLInputElement>) => {
         console.log("value now is " + value)
         event.target!.value;
