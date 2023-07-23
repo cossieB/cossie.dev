@@ -3,10 +3,13 @@
 .nav {
     left: 0;
     top: 0;
-    position: sticky;
-    background-color: var(--clrRed);
+    width: 100vw;
+    // position: fixed;
+    background: linear-gradient(45deg, darkslategray, hsl(180, 25%, 5%));
     font-size: large;
     z-index: 99;
+    box-shadow: 0 -100px 50px black;
+
     ul {
         display: flex;
         align-items: center;
@@ -18,12 +21,11 @@
     }
 
     li {
-        min-width: 5rem;
+        width: 10rem;
         transition: all 250ms ease;
         height: 100%;
-        padding: 0 1.5rem;
         &:hover {
-            background-color: black;
+            background-color: hsl(180, 25%, 5%);
             color: var(--clrRed);
         }
 
@@ -35,4 +37,8 @@
             @include mixins.flexCenter;
         }
     }
+}
+.active {
+    background-color: green;
+    border-radius: 0 0 0.5rem 0.5rem;
 }
