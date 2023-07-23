@@ -9,6 +9,7 @@
   "devDependencies": {
     "@types/node": "^18.11.18",
     "@types/nodemailer": "^6.4.8",
+    "drizzle-kit": "^0.19.10",
     "esbuild": "^0.18.13",
     "postcss": "^8.4.21",
     "sass": "^1.62.1",
@@ -29,7 +30,7 @@
     "@vercel/analytics": "^1.0.1",
     "ag-grid-community": "^30.0.5",
     "ag-grid-solid": "^30.0.5",
-    "drizzle-orm": "^0.26.5",
+    "drizzle-orm": "^0.27.2",
     "firebase": "^10.0.0",
     "googleapis": "^118.0.0",
     "graphql": "^16.6.0",
