@@ -1,7 +1,7 @@
 import { onCleanup, onMount } from "solid-js";
 import { Outlet } from "solid-start";
 import AdminNav from "~/components/admin/AdminNav";
-
+import styles from './admin.module.scss'
 
 export default function Layout() {
     onMount(() => {
@@ -11,7 +11,7 @@ export default function Layout() {
         document.body.style.overflow = 'unset'
     })
     return (
-        <div class="container">
+        <div class={styles.container}>
             <AdminNav />
             <Outlet />
         </div>

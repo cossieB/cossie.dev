@@ -9,7 +9,7 @@ import { db } from "~/db";
 import { genresOfGames, game, developer, publisher } from "~/drizzle/schema";
 import NotFound from "~/routes/[...404]";
 
-export function routeData({params: {gameId}}: RouteDataArgs) {
+export function routeData({ params: { gameId } }: RouteDataArgs) {
     return createServerData$(async ([_, gameId]) => {
         try {
             const subQuery = db.$with('t').as(db.select({
@@ -29,33 +29,32 @@ export function routeData({params: {gameId}}: RouteDataArgs) {
                 .innerJoin(subQuery, eq(game.gameId, subQuery.gameId))
                 .where(eq(game.gameId, gameId))
 
-            if (result.length == 0) 
-                throw new ServerError("Not Found", {status: 404})
+            if (result.length == 0)
+                throw new ServerError("Not Found", { status: 404 })
             return result[0]
-        } 
+        }
         catch (error: any) {
-            if (error.message.includes("invalid input syntax for type uuid")) 
-                throw new ServerError("Not Found", {status: 404})
+            if (error.message.includes("invalid input syntax for type uuid"))
+                throw new ServerError("Not Found", { status: 404 })
             if (error instanceof ServerError)
                 throw error
             else
-                throw new ServerError("Internal Server Error", {status: 500})
+                throw new ServerError("Internal Server Error", { status: 500 })
         }
     }, {
-        key: () => ['games', gameId ]
+        key: () => ['games', gameId]
     })
 }
 
 export default function AdminGameId() {
     const data = useRouteData<typeof routeData>()
-    const t = data()
     return (
-        <ErrorBoundary fallback={(e) => e.status == 404 ? <NotFound />: <p> Something went wrong. Please try again later </p>}>
-        <main>
-            <Show when={data()}>
-                <GameForm obj={data()} />
-            </Show>
-        </main>
+        <ErrorBoundary fallback={(e) => e.status == 404 ? <NotFound /> : <p> Something went wrong. Please try again later </p>}>
+            <main>
+                <Show when={data()}>
+                    <GameForm obj={data()} />
+                </Show>
+            </main>
         </ErrorBoundary>
     )
 }

@@ -3,6 +3,8 @@ import { FormInput } from "~/components/admin/forms/FormInput";
 import type { Developer, Game, Publisher } from "~/drizzle/types";
 import styles from "~/components/admin/forms/forms.module.scss"
 import { createStore } from "solid-js/store";
+import { createSignal } from "solid-js";
+import { formatDateForInputElement } from "~/lib/formatDate";
 
 type Obj = {
     t: {
@@ -17,24 +19,48 @@ type Props = {
     obj?: Obj
 }
 export default function GameForm(props: Props) {
-    const [store, setStore] = createStore(props.obj)
+    const [cover, setCover] = createSignal(props.obj?.Game.cover)
+    const [banner, setBanner] = createSignal(props.obj?.Game.banner)
     return (
         <Form id="gameForm" class={styles.form}>
             <FormInput
                 name="title"
-                value={store?.Game.title}
+                value={props.obj?.Game.title}
                 required
             />
             <FormInput
                 name="cover"
-                value={store?.Game.cover}
+                value={cover()}
+                onchange={e => setCover(e.target.value)}
             />
             <FormInput
                 name="banner"
-                value={store?.Game.banner}
+                value={banner()}
+                onchange={e => setBanner(e.target.value)}
             />
-            <img src={store?.Game.cover} alt={`${store?.Game.title} cover`} />
-            <img src={store?.Game.banner} alt={`${store?.Game.title} banner`} />
+            <FormInput
+                name="summary"
+                value={props.obj?.Game.summary}
+                required
+            />
+            <FormInput
+                name="trailer"
+                value={props.obj?.Game.trailer}
+                required
+            />
+            <FormInput
+                name="releaseDate"
+                value={formatDateForInputElement(new Date(props.obj?.Game.releaseDate ?? ""))}
+                required
+                type="date"
+            />
+            <FormInput
+                name="title"
+                value={props.obj?.Game.title}
+                required
+            />
+            <img src={cover()} alt={`${props.obj?.Game.title} cover`} />
+            <img src={banner()} alt={`${props.obj?.Game.title} banner`} />
         </Form>
     )
 }

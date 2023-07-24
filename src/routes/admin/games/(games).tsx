@@ -2,7 +2,6 @@ import { type Resource, Suspense, Show } from "solid-js";
 import { useRouteData } from "solid-start";
 import { db } from "~/db";
 import { developer, game, genresOfGames, publisher } from "~/drizzle/schema";
-import styles from "../admin.module.scss"
 import { eq, sql } from "drizzle-orm"
 import { createServerData$ } from "solid-start/server";
 import { ColDef, ICellEditorParams, ICellRendererParams } from "ag-grid-community";
@@ -63,7 +62,7 @@ const columnDefs: Cols[] = [{
 export default function GamesAdminPage() {
     const data = useRouteData<typeof routeData>()
     return (
-        <main class={`${styles.main} ag-theme-alpine-dark`} style={{ width: '100%', height: '100vh' }}>
+        <main class={`ag-theme-alpine-dark`} style={{ width: '100%', height: '100vh' }}>
             <Suspense fallback={<span>loading...</span>}>
                 <Show when={data()}>
                     <GridTable

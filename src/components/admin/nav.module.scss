@@ -3,7 +3,8 @@
 .nav {
     left: 0;
     top: 0;
-    width: 100vw;
+    height: 100vh;
+    width: 10rem;
     // position: fixed;
     background: linear-gradient(45deg, darkslategray, hsl(180, 25%, 5%));
     font-size: large;
@@ -11,19 +12,17 @@
     box-shadow: 0 -100px 50px black;
 
     ul {
-        display: flex;
-        align-items: center;
         list-style: none;
         margin: 0;
         padding: 0;
         width: 100%;
-        height: 2.5rem;
+        height: 100%;
     }
 
     li {
-        width: 10rem;
         transition: all 250ms ease;
-        height: 100%;
+        height: 2.5rem;
+        width: 100%;
         &:hover {
             background-color: hsl(180, 25%, 5%);
             color: var(--clrRed);
@@ -34,7 +33,8 @@
             color: inherit;
             width: 100%;
             height: 100%;
-            @include mixins.flexCenter;
+            display: flex;
+            align-items: center;
         }
     }
 }
