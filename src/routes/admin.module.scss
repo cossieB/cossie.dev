@@ -2,5 +2,16 @@
     display: flex;
     form {
         overflow: auto;
+        flex: 2;
+    }
+    .mainImgs {
+        display: flex;
+        flex: 1;
+    }
+    .preview {
+        flex: 1;
+        img {
+            object-fit: contain;
+        }
     }
 }

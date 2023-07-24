@@ -19,8 +19,6 @@ type Props = {
     obj?: Obj
 }
 export default function GameForm(props: Props) {
-    const [cover, setCover] = createSignal(props.obj?.Game.cover)
-    const [banner, setBanner] = createSignal(props.obj?.Game.banner)
     return (
         <Form id="gameForm" class={styles.form}>
             <FormInput
@@ -30,13 +28,13 @@ export default function GameForm(props: Props) {
             />
             <FormInput
                 name="cover"
-                value={cover()}
-                onchange={e => setCover(e.target.value)}
+                value={props.cover()}
+                onchange={e => props.setCover(e.target.value)}
             />
             <FormInput
                 name="banner"
-                value={banner()}
-                onchange={e => setBanner(e.target.value)}
+                value={props.banner()}
+                onchange={e => props.setBanner(e.target.value)}
             />
             <FormInput
                 name="summary"
@@ -59,8 +57,6 @@ export default function GameForm(props: Props) {
                 value={props.obj?.Game.title}
                 required
             />
-            <img src={cover()} alt={`${props.obj?.Game.title} cover`} />
-            <img src={banner()} alt={`${props.obj?.Game.title} banner`} />
         </Form>
     )
 }
