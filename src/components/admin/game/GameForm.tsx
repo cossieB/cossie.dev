@@ -1,5 +1,5 @@
 import { Form } from "solid-start/data/Form";
-import { FormInput } from "~/components/admin/forms/FormInput";
+import { FormInput, FormTextarea } from "~/components/admin/forms/FormInput";
 import type { Developer, Game, Publisher } from "~/drizzle/types";
 import styles from "~/components/admin/forms/forms.module.scss"
 import { createStore } from "solid-js/store";
@@ -36,7 +36,7 @@ export default function GameForm(props: Props) {
                 value={props.banner()}
                 onchange={e => props.setBanner(e.target.value)}
             />
-            <FormInput
+            <FormTextarea
                 name="summary"
                 value={props.obj?.Game.summary}
                 required
@@ -51,11 +51,6 @@ export default function GameForm(props: Props) {
                 value={formatDateForInputElement(new Date(props.obj?.Game.releaseDate ?? ""))}
                 required
                 type="date"
-            />
-            <FormInput
-                name="title"
-                value={props.obj?.Game.title}
-                required
             />
         </Form>
     )

@@ -10,6 +10,7 @@ import "ag-grid-community/styles/ag-theme-alpine.css"; // optional theme
 import DataEditor from "~/components/Datagrid/DataEditor";
 import AdminLink from "~/components/Datagrid/AdminLink";
 import GridTable from "~/components/Datagrid/GridTable";
+import styles from "../../admin.module.scss"
 
 export function routeData() {
     return createServerData$(async () => {
@@ -62,7 +63,7 @@ const columnDefs: Cols[] = [{
 export default function GamesAdminPage() {
     const data = useRouteData<typeof routeData>()
     return (
-        <main class={`ag-theme-alpine-dark`} style={{ width: '100%', height: '100vh' }}>
+        <main class={`${styles.main} ag-theme-alpine-dark`} style={{ width: '100%', height: '100vh' }}>
             <Suspense fallback={<span>loading...</span>}>
                 <Show when={data()}>
                     <GridTable

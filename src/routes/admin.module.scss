@@ -1,17 +1,27 @@
-.container {
-    display: flex;
-    form {
-        overflow: auto;
-        flex: 2;
-    }
+.main {
+    width: calc(100vw - var(--adminNavWdth));
+    margin-left: var(--adminNavWdth);
     .mainImgs {
         display: flex;
-        flex: 1;
     }
     .preview {
-        flex: 1;
+        display: flex;
+        flex-wrap: wrap;
         img {
             object-fit: contain;
+            &:first-child {
+                width: 25%;
+            }
+            &:last-child {
+                width: 75%;
+            }
         }
     }
+    form {
+        min-width: 500px;
+    }
+}
+
+.formContainer {
+    display: flex;
 }

@@ -17,7 +17,7 @@ export function FormInput(props: Require<T, 'name'>) {
 
 type U = JSX.InputHTMLAttributes<HTMLTextAreaElement>
 
-export function FormTextarea(props: U & { label: string }) {
+export function FormTextarea(props: Require<U, 'name'>) {
     const merged = mergeProps({ label: props.name, required: true }, props)
     return (
         <div class={styles.formControl}>

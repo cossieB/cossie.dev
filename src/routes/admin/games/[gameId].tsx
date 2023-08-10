@@ -1,6 +1,6 @@
 import { useRouteData } from "@solidjs/router";
 import { sql, eq } from "drizzle-orm";
-import { Show, createSignal } from "solid-js";
+import { Show, createEffect, createSignal } from "solid-js";
 import { ErrorBoundary, RouteDataArgs } from "solid-start";
 import { ServerError, createServerData$ } from "solid-start/server";
 import GameForm from "~/components/admin/game/GameForm";
@@ -50,9 +50,13 @@ export default function AdminGameId() {
     const data = useRouteData<typeof routeData>()
     const [cover, setCover] = createSignal(data()?.Game.cover)
     const [banner, setBanner] = createSignal(data()?.Game.banner)
+    createEffect(() => {
+        setCover(data()?.Game.cover)
+        setBanner(data()?.Game.banner)
+    })
     return (
         <ErrorBoundary fallback={(e) => e.status == 404 ? <NotFound /> : <p> Something went wrong. Please try again later </p>}>
-            <main class={styles.container}>
+            <main class={`${styles.main} ${styles.formContainer}`}>
                 <Show when={data()}>
                     <GameForm
                         obj={data()}

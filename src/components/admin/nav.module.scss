@@ -4,8 +4,8 @@
     left: 0;
     top: 0;
     height: 100vh;
-    width: 10rem;
-    // position: fixed;
+    width: var(--adminNavWdth);
+    position: fixed;
     background: linear-gradient(45deg, darkslategray, hsl(180, 25%, 5%));
     font-size: large;
     z-index: 99;
