@@ -7,54 +7,54 @@ const pwaOptions: Partial<VitePWAOptions> = {
     base: "/",
     includeAssets: ["favicon.ico"],
     strategies: 'generateSW',
-    workbox: {
-        navigateFallback: "/",
-        navigateFallbackDenylist: [/\/admin\/*/],
-        globPatterns: ['**/*.{png,jpg,svg,ico}'],
-        runtimeCaching: [{
-            urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
-            handler: 'CacheFirst',
-            options: {
-                cacheName: 'google-fonts-cache',
-                expiration: {
-                    maxEntries: 10,
-                    maxAgeSeconds: 60 * 60 * 24 * 365 // <== 365 days
-                },
-                cacheableResponse: {
-                    statuses: [0, 200]
-                }
-            }
-        }, {
-            urlPattern: /^https:\/\/fonts\.gstatic\.com\/.*/i,
-            handler: 'CacheFirst',
-            options: {
-                cacheName: 'gstatic-fonts-cache',
-                expiration: {
-                    maxEntries: 10,
-                    maxAgeSeconds: 60 * 60 * 24 * 365 // <== 365 days
-                },
-                cacheableResponse: {
-                    statuses: [0, 200]
-                },
-            }
-        }, {
-            urlPattern: (t) => t.request.destination === "document" && t.sameOrigin,
-            handler: 'NetworkFirst',
-            method: "GET",
-            options: {
-                cacheName: "pages",
-                expiration: {
-                    maxEntries: 10
-                },
-                cacheableResponse: {
-                    statuses: [0, 200]
-                },
-                matchOptions: {
-                    ignoreSearch: true
-                },
-            }
-        }]
-    },
+    // workbox: {
+    //     navigateFallback: "/",
+    //     navigateFallbackDenylist: [/\/admin\/*/],
+    //     globPatterns: ['**/*.{png,jpg,svg,ico}'],
+    //     runtimeCaching: [{
+    //         urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
+    //         handler: 'CacheFirst',
+    //         options: {
+    //             cacheName: 'google-fonts-cache',
+    //             expiration: {
+    //                 maxEntries: 10,
+    //                 maxAgeSeconds: 60 * 60 * 24 * 365 // <== 365 days
+    //             },
+    //             cacheableResponse: {
+    //                 statuses: [0, 200]
+    //             }
+    //         }
+    //     }, {
+    //         urlPattern: /^https:\/\/fonts\.gstatic\.com\/.*/i,
+    //         handler: 'CacheFirst',
+    //         options: {
+    //             cacheName: 'gstatic-fonts-cache',
+    //             expiration: {
+    //                 maxEntries: 10,
+    //                 maxAgeSeconds: 60 * 60 * 24 * 365 // <== 365 days
+    //             },
+    //             cacheableResponse: {
+    //                 statuses: [0, 200]
+    //             },
+    //         }
+    //     }, {
+    //         urlPattern: (t) => t.request.destination === "document" && t.sameOrigin,
+    //         handler: 'NetworkFirst',
+    //         method: "GET",
+    //         options: {
+    //             cacheName: "pages",
+    //             expiration: {
+    //                 maxEntries: 10
+    //             },
+    //             cacheableResponse: {
+    //                 statuses: [0, 200]
+    //             },
+    //             matchOptions: {
+    //                 ignoreSearch: true
+    //             },
+    //         }
+    //     }]
+    // },
     manifest: {
         name: "Buntu Cossie's Portfolio App",
         short_name: "cossie.dev",
@@ -112,6 +112,9 @@ if (selfDestroying)
     pwaOptions.selfDestroying = selfDestroying
 
 export default defineConfig({
+    ssr: {
+        external: ['ag-grid-solid'],
+    },
     plugins: [
         solid({
             adapter: vercel({

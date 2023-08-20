@@ -20,11 +20,14 @@ $clrForm: hsl(0, 0%, 15%);
 }
 .form {
     padding-top: 0.5rem;
+    width: 90%;
+    max-width: 850px;
     height: fit-content;
-    background-color: $clrForm;
+    background-color: var(--clrForm);
     display: flex;
     flex-direction: column;
     align-items: center;
+    margin: 0 auto ;
     textarea,
     input,
     button {
@@ -41,11 +44,10 @@ $clrForm: hsl(0, 0%, 15%);
         &:focus,
         &:not(:placeholder-shown) {
             outline: none;
-
             +label {
                 top: -15px;
                 font-size: 12px;
-                color: $clrRed;
+                color: --var(--clrRed);
                 opacity: 1;
             }
         }
@@ -63,7 +65,7 @@ $clrForm: hsl(0, 0%, 15%);
         font-size: large;
         height: 3rem;
         background: none;
-        background-color: $clrRed;
+        background-color: var(--clrRed);
         transition: all 250ms ease;
         display: flex;
         justify-content: center;
@@ -108,6 +110,14 @@ $clrForm: hsl(0, 0%, 15%);
     transform: scale(1.5);
     &:hover {
         color: $clrRed
+    }
+}
+
+.heroImgs {
+    display: flex;
+    height: 250px;
+    >div {
+        flex: 1
     }
 }
 

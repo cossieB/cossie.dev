@@ -1,24 +1,100 @@
+@use '~/mixins';
+
+$width: 25px;
+
 .main {
     width: calc(100vw - var(--adminNavWdth));
     margin-left: var(--adminNavWdth);
     .mainImgs {
         display: flex;
     }
-    .preview {
-        display: flex;
-        flex-wrap: wrap;
-        img {
-            object-fit: contain;
-            &:first-child {
-                width: 25%;
-            }
-            &:last-child {
-                width: 75%;
+    // .preview {
+    //     display: flex;
+    //     flex-wrap: wrap;
+    //     overflow-y: auto;
+    //     height: 100vh;
+    //     img {
+    //         object-fit: contain;
+    //         &:first-child {
+    //             width: 25%;
+    //         }
+    //         &:last-child {
+    //             width: 75%;
+    //         }
+    //     }
+    // }
+}
+@include mixins.hideScrollbar('.preview');
+
+.form {
+    padding-top: 0.5rem;
+    width: 90%;
+    max-width: 850px;
+    height: fit-content;
+    background-color: var(--clrForm);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 auto ;
+    textarea,
+    input,
+    button {
+        position: relative;
+        color: white;
+        border: none;
+        background: #00000050;
+    }
+
+    textarea,
+    input {
+        padding: 0.25rem;
+        width: 100%;
+        &:focus,
+        &:not(:placeholder-shown) {
+            outline: none;
+
+            +label {
+                top: -15px;
+                font-size: 12px;
+                color: --var(--clrRed);
+                opacity: 1;
             }
         }
     }
-    form {
-        min-width: 500px;
+
+    >div {
+        width: 90%;
+    }
+    
+    textarea {
+        height: 12rem;
+    }
+    button[type="submit"] {
+        margin-bottom: 1rem;
+        font-size: large;
+        height: 3rem;
+        background: none;
+        background-color: var(--clrRed);
+        transition: all 250ms ease;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 1rem 5rem;
+        &:hover:not(:disabled) {
+            border: none;
+            border-radius: .5rem;
+        }
+    }
+
+    label {
+        position: absolute;
+        top: 5px;
+        transition: all 250ms ease-in-out;
+        opacity: 0.5;
+    }
+
+    input {
+        height: $width;
     }
 }
 

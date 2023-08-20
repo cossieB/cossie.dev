@@ -8,6 +8,13 @@
       "when": 1686230821290,
       "tag": "0000_perfect_millenium_guard",
       "breakpoints": false
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1692107593086,
+      "tag": "0001_whole_chat",
+      "breakpoints": true
     }
   ]
 }

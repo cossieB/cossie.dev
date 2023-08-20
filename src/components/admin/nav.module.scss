@@ -6,7 +6,7 @@
     height: 100vh;
     width: var(--adminNavWdth);
     position: fixed;
-    background: linear-gradient(45deg, darkslategray, hsl(180, 25%, 5%));
+    background: var(--clrForm);
     font-size: large;
     z-index: 99;
     box-shadow: 0 0 50px black;
@@ -39,6 +39,6 @@
     }
 }
 .active {
-    background-color: green;
+    background-color: #222;
     border-radius: 0 0 0.5rem 0.5rem;
 }
