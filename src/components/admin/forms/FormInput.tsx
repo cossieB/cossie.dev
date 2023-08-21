@@ -2,45 +2,39 @@ import { For, JSX, mergeProps } from "solid-js";
 import styles from "./forms.module.scss"
 import titleCase from "~/lib/titleCase";
 import {type  Require } from "~/lib/utilityTypes";
+import { ChangeEvent } from "~/lib/solidTypes";
+import { SetStoreFunction } from "solid-js/store";
 
-type T = JSX.InputHTMLAttributes<HTMLInputElement>
-
-export function FormInput(props: Require<T, 'name'>) {
+function getOnChange<X extends INPUTS>(props: Pick<Props<X>, 'name' | 'setter'>) {
+    return function onchange(e: ChangeEvent<X>) {
+        props.setter(props.name, e.target.value);
+    }
+}
+export function FormInput(props: Props) {
     const merged = mergeProps({ label: props.name, required: true }, props)
     return (
         <div class={styles.formControl}>
-            <input {...props} type={props.type ?? 'text'} autocomplete="off" name={merged.name} id={merged.name} required={merged.required} placeholder=" " />
+            <input {...props} onchange={getOnChange(props)} type={props.type ?? 'text'} autocomplete="off" name={merged.name} id={merged.name} required={merged.required} placeholder=" " />
             <label for={merged.name}>{titleCase(merged.label)}</label>
         </div>
     )
 }
 
-type U = JSX.InputHTMLAttributes<HTMLTextAreaElement>
-
-export function FormTextarea(props: Require<U, 'name'>) {
+export function FormTextarea(props: Props<HTMLTextAreaElement>) {
     const merged = mergeProps({ label: props.name, required: true }, props)
     return (
         <div class={styles.formControl}>
-            <textarea {...props} name={merged.name} id={merged.name} required={merged.required} placeholder=" " />
+            <textarea {...props} name={merged.name} onchange={getOnChange(props)} id={merged.name} required={merged.required} placeholder=" " />
             <label for={merged.name}>{titleCase(merged.label)}</label>
         </div>
     )
 }
-type P = Require<T, 'name'> & {
-    default?: string
-    label: string
-    arr:
-    | string[]
-    | {
-        value: string,
-        label: string
-    }[]
-}
+
 export function SelectInput(props: P) {
     const merged = mergeProps({ label: props.name, required: true }, props)
     return (
         <div class={styles.formControl}>
-            <select name={merged.name} id={merged.name}>
+            <select name={merged.name} id={merged.name} onchange={getOnChange(props)}>
                 <option value="" disabled selected={!!!props.default}>{titleCase(props.label)}</option>
                 <For each={props.arr}>
                     {item =>
@@ -55,10 +49,7 @@ export function SelectInput(props: P) {
     )
 }
 
-type P1 = {
-    item: P['arr'][number]
-    default?: string
-}
+
 function SelectOption(props: P1) {
     const value = typeof props.item == 'string' ? props.item : props.item.value
     const label = typeof props.item == 'string' ? props.item : props.item.label
@@ -71,4 +62,24 @@ function SelectOption(props: P1) {
             {label}
         </option>
     )
+}
+type P = Require<InputProps<HTMLSelectElement>, 'name'> & {
+    setter: SetStoreFunction<any>
+    default?: string
+    label: string
+    arr:
+    | string[]
+    | {
+        value: string,
+        label: string
+    }[]
+}
+type P1 = {
+    item: P['arr'][number]
+    default?: string
+}
+type INPUTS =  HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+type InputProps<X extends INPUTS > = JSX.InputHTMLAttributes<X>
+type Props<X extends INPUTS = HTMLInputElement> = Require<InputProps<X>, 'name'> & {
+    setter: SetStoreFunction<any>
 }

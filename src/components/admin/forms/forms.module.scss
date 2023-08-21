@@ -4,6 +4,7 @@ $width: 25px;
 $clrRed: hsl(0, 75%, 50%);
 $clrInpt: rgba(0, 0, 0, 0.314);
 $clrForm: hsl(0, 0%, 15%);
+
 .formControl {
     display: flex;
     position: relative;
@@ -86,6 +87,10 @@ $clrForm: hsl(0, 0%, 15%);
 
     input {
         height: $width;
+    }
+    iframe {
+        width: 100%;
+        aspect-ratio: 16/9;
     }
 }
 

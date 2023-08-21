@@ -1,5 +1,6 @@
 import { ColDef, GridOptions } from "ag-grid-community"
 import { AgGridSolidRef } from "ag-grid-solid"
+import { createEffect } from "solid-js";
 import { unstable_clientOnly } from "solid-start";
 const AgGridSolid = unstable_clientOnly(() => import("ag-grid-solid"));
 
@@ -14,6 +15,7 @@ const columnDefaults: ColDef = {
 
 export default function GridTable(props: P) {
     let ref: AgGridSolidRef
+
     return (
         <AgGridSolid
             rowData={props.data}

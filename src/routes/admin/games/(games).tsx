@@ -63,7 +63,6 @@ const columnDefs: Cols[] = [{
 
 export default function GamesAdminPage() {
     const data = useRouteData<typeof routeData>()
-    const t = useContext(AdminContext); console.log(t?.developers())
     return (
         <main class={`${styles.main} ag-theme-alpine-dark`} style={{ width: '100%', height: '100vh' }}>
             <Suspense fallback={<span>loading...</span>}>

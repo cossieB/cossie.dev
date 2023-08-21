@@ -1,15 +1,17 @@
 import { Accessor, For, Setter, createSignal } from "solid-js"
 import styles from "./forms.module.scss";
+import { SetStoreFunction } from "solid-js/store";
 
 type P = {
-    images: Accessor<string[]>
-    setImages: Setter<string[]>
+    images: string[]
+    setImages: (arr: string[]) => void
 }
 export function ImagePreview(props: P) {
     const [lastDragIndex, setLastDragIndex] = createSignal(-1)
+
     return (
         <div class={styles.previews}>
-            <For each={props.images()}>
+            <For each={props.images}>
                 {(image, i) =>
                     <div
                         draggable
@@ -18,15 +20,15 @@ export function ImagePreview(props: P) {
                             const newArr: string[] = []
                             let currIdx = 0
 
-                            for (let j = 0; j < props.images().length; j++) {
+                            for (let j = 0; j < props.images.length; j++) {
                                 if (j === i()) continue;
                                 if (currIdx == lastDragIndex()) {
                                     newArr.push(image);
                                 }
-                                newArr.push(props.images()[j])
+                                newArr.push(props.images[j])
                                 currIdx++
                             }
-                            if (newArr.length < props.images().length)
+                            if (newArr.length < props.images.length)
                                 newArr.push(image);
                             props.setImages(newArr)
                             setLastDragIndex(-1)
@@ -36,7 +38,9 @@ export function ImagePreview(props: P) {
                             setLastDragIndex(Number(element.dataset.i))
                         }}
                     >
-                        <i class={`bi bi-dash-lg ${styles.delBtn}`} onclick={() => props.setImages(prev => prev.filter((_, j) => i() != j))} />
+                        <svg onclick={() => props.setImages(props.images.filter((_, j) => i() != j))} xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-dash-lg" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M2 8a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11A.5.5 0 0 1 2 8Z" />
+                        </svg>
                         <img data-i={i()} src={image} />
                     </div>
                 }
