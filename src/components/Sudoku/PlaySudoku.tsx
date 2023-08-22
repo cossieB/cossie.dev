@@ -1,7 +1,7 @@
 import Block from "./Block"
-import Solver, { Cell } from "./Solver"
+import Solver, { type Cell } from "./Solver"
 import styles from "./sudoku.module.scss";
-import { createRenderEffect, createSignal, For, onCleanup, onMount, Setter } from "solid-js";
+import { createRenderEffect, createSignal, For, onCleanup, onMount, type Setter } from "solid-js";
 import { createMutable } from "solid-js/store";
 
 interface Props {
@@ -14,7 +14,7 @@ export default function PlaySudoku(props: Props) {
     let ref: HTMLDivElement;
     const puzzle = createMutable(new Solver(props.puzzleString))
     const [selected, setSelected] = createSignal<Cell>()
-    const [clashes, setClashes] = createSignal<{ [key in 'row' | 'column' | 'region']: Set<Cell> }>()
+    const [clashes, setClashes] = createSignal<{ [key in 'row' | 'column' | 'region']: Set<Cell> } | null>(null)
     const [hasWon, setHasWon] = createSignal(false)
     const [error, setError] = createSignal(false)
     
@@ -28,17 +28,17 @@ export default function PlaySudoku(props: Props) {
             block.style.height = `${width}px`
         })
     })
-
+    
     onMount(() => {
         document.addEventListener('keydown', handleKeypress)
-    })
-    onCleanup(() => {
-        document.removeEventListener('keydown', handleKeypress)
+        onCleanup(() => {
+            document.removeEventListener('keydown', handleKeypress)
+        })
     })
 
     function handleKeypress(e: KeyboardEvent) {
         setError(false);
-        setClashes(undefined)
+        setClashes(null)
         if (!selected() || hasWon()) return
 
         const increment = (num: number) => {
@@ -64,14 +64,14 @@ export default function PlaySudoku(props: Props) {
         }
     }
     function reset() {
-        setClashes(undefined)
+        setClashes(null)
         puzzle.reset();
         setError(false);
         setHasWon(false)
     }
     function solve() {
         setError(false);
-        setClashes(undefined)
+        setClashes(null)
         const result = puzzle.solve()
         if (!result) {
             setError(true)
@@ -89,7 +89,7 @@ export default function PlaySudoku(props: Props) {
         }
     }
     function increment(num: number) {
-        setClashes(undefined)
+        setClashes(null)
         if (!selected() || selected()!.frozen) return;
         let old = Number(selected()!.value) || 0;
         let sum: number;
@@ -99,7 +99,7 @@ export default function PlaySudoku(props: Props) {
         selected()!.value = String(sum)
     }
     function clear() {
-        setClashes(undefined)
+        setClashes(null)
         if (!selected()! || selected()!.frozen) return;
         selected()!.value = '.'
     }

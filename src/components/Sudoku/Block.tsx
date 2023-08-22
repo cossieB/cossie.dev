@@ -7,7 +7,7 @@ interface P34534 {
     cell: Cell,
     selected: Cell | undefined,
     setSelected: Setter<Cell | undefined>,
-    clashes?: { [key in 'row' | 'column' | 'region']: Set<Cell> } | undefined,
+    clashes?: { [key in 'row' | 'column' | 'region']: Set<Cell> } | null,
     hasWon?: boolean
 }
 

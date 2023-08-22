@@ -1,4 +1,4 @@
-import { createRenderEffect, createSignal, onCleanup, onMount, Setter } from "solid-js"
+import { createRenderEffect, createSignal, onCleanup, onMount, type Setter } from "solid-js"
 import Block from "./Block"
 import Solver, {type Cell } from "./Solver"
 import styles from "./sudoku.module.scss";
@@ -9,7 +9,7 @@ interface Props {
     setPuzzleString: Setter<string>
 }
 
-export default function ({setPuzzleString, setMode}: Props) {
+export default function CreateSudoku({setPuzzleString, setMode}: Props) {
     const puzzle = createMutable(new Solver('.................................................................................'))
     const [selected, setSelected] = createSignal<Cell>()
     const [clashes, setClashes] = createSignal<{[key in 'row' | 'column' | 'region']: Set<Cell>}>({
@@ -91,7 +91,7 @@ export default function ({setPuzzleString, setMode}: Props) {
     }
 
     return (
-        <div  class={`${styles.sudoGame} ${styles.container} ${styles.flexCenter} ${styles.flexColumn}`} onAuxClick={() => setSelected(undefined)}>
+        <div id={styles.container} class={`${styles.sudoGame} ${styles.container} ${styles.flexCenter} ${styles.flexColumn}`} onAuxClick={() => setSelected(undefined)}>
             <div style={{'margin-bottom': '1rem'}} >
                 <button class={styles.sudoBtn} onClick={validate}  >
                     Validate

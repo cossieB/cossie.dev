@@ -1053,5 +1053,13 @@ export const quotes: Quote[] = [
         quote: "They say ambition is an unattractive trait in a woman.You know what I find really unattractive? Waiting around for something to happen. Staring out a window, thinking the life you should be living is out there somewhere but not being willing to open the door and go get it. Even if someone tells you you can't. Being a coward is only cute in the Wizard of Oz.",
         author: "Miriam 'Midge' Maisel",
         tags: new Set(['fiction', 'tv series', 'inspiring', 'motivational'])
+    }, {
+        quote: "Never half-ass 2 things. Whole-ass 1 thing",
+        author: "Ron Swanson",
+        tags: new Set(["fiction", "tv series", "humorous"])
+    }, {
+        quote: "Debugging is like being the detective in a crime movie where you are also the murderer",
+        author: "Filipe Fortes",
+        tags: new Set(["humorous", "non-fiction", "nerdy", "programming"])
     }
 ]
