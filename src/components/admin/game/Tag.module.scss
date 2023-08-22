@@ -1,0 +1,18 @@
+.tagList {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+.tag {
+    border: 1px solid var(--clrRed);
+    background-color: black;
+    padding-left: 0.25rem;
+    display: flex;
+    align-items: center;
+    svg {
+        height: 100%;
+        width: 25px;
+        background-color: var(--clrRed);
+        margin-left: 0.5rem;
+    }
+}

@@ -1,4 +1,4 @@
-import { type Resource, Suspense, Show, useContext } from "solid-js";
+import { type Resource, Suspense, Show } from "solid-js";
 import { useRouteData } from "solid-start";
 import { db } from "~/db";
 import { developer, game, genresOfGames, publisher } from "~/drizzle/schema";
@@ -11,7 +11,6 @@ import DataEditor from "~/components/Datagrid/DataEditor";
 import AdminLink from "~/components/Datagrid/AdminLink";
 import GridTable from "~/components/Datagrid/GridTable";
 import styles from "../../admin.module.scss"
-import { AdminContext } from "~/routes/admin";
 
 export function routeData() {
     return createServerData$(async () => {

@@ -1,15 +1,16 @@
 import { Form } from "solid-start/data/Form";
 import { FormInput, FormTextarea, SelectInput } from "~/components/admin/forms/FormInput";
 import type { Developer, Game, Publisher } from "~/drizzle/types";
-import styles from "~/components/admin/forms/forms.module.scss"
-import { useContext, type Setter, Switch, ErrorBoundary, Match, Show } from "solid-js";
+import styles from "~/components/admin/forms/forms.module.scss";
+import { useContext, Show } from "solid-js";
 import { formatDateForInputElement } from "~/lib/formatDate";
 import { DropZoneWithPreview, DropZone } from "../forms/DropZone";
 import { AdminContext } from "~/routes/admin";
 import { SetStoreFunction } from "solid-js/store";
 import { ImagePreview } from "../forms/FilePreview";
 import { YouTubeIframe } from "./YouTubeIframe";
-import { validateUrl } from "~/lib/validateUrl";
+import { Tags } from "./Tags";
+import { InputWithAddButton } from "../forms/InputWithAddButton";
 
 type Props = {
     data?: Game & { tags: string[] };
@@ -82,6 +83,13 @@ export default function GameForm(props: Props) {
                 default={(publishers() ?? [])?.find(x => x.publisherId === props.game.publisherId)?.publisherId}
                 setter={props.setGame}
             />
+            <InputWithAddButton name="tags" disabled={false} addItem={item => props.setGame({ tags: [...props.game.tags, item] })} />
+            <Tags
+                tags={props.game.tags}
+                removeItem={item => props.setGame({ 
+                    tags: props.game.tags.filter(tag => tag !== item) 
+                })}
+            />
             <FormInput
                 name="trailer"
                 value={props.game.trailer}
@@ -93,10 +101,6 @@ export default function GameForm(props: Props) {
             </Show>
         </Form>
     )
-}
-
-function Tags() {
-
 }
 
 function getYoutubeURL(iframe: string) {
