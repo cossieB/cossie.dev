@@ -1,19 +1,58 @@
 import { createUploadthing } from "uploadthing/next";
 import type { FileRouter } from "uploadthing/next";
+import { z } from "zod";
 
 const f = createUploadthing();
 
 export const uploadRouter = {
+    cover: f({
+        image: {
+            maxFileSize: "1024B"
+        }
+    })
+    .input(z.string())
+    .onUploadComplete(data => {
+        
+    }),
+    banner: f({
+        image: {
+            maxFileSize: "1024B"
+        }
+    })
+    .input(z.string())
+    .onUploadComplete(data => {
+        
+    }),
+    screenshots: f({
+        image: {
+            maxFileSize: "1024B",
+            maxFileCount: 8
+        }
+    })
+    .input(z.string())
+    .onUploadComplete(data => {
+        
+    }),
+    test: f({
+        image: {
+            maxFileCount: 10,
+            maxFileSize: "4MB"
+        }
+    })
+    .input(z.object({
+        game: z.string()
+    }))
+    .onUploadComplete(data => {
+        console.log("test done", data);
+    }),
     videoAndImage: f({
         image: {
             maxFileSize: "4MB",
             maxFileCount: 10,
         },
-    })
-        .onUploadComplete((data) => {
-            console.log("upload completed", data);
-        }),
-
+    }).onUploadComplete((data) => {
+        console.log("upload completed", data);
+    }),
     withMdwr: f({
         image: {
             maxFileCount: 2,

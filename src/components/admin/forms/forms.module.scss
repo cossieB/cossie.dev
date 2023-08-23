@@ -125,6 +125,10 @@ $clrForm: hsl(0, 0%, 15%);
         flex: 1
     }
 }
+.addBtn {
+    background-color: var(--clrRed) !important;
+    @include mixins.flexCenter;
+}
 
 @media (max-width: 768px) {
     .form {

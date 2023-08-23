@@ -27,7 +27,7 @@ export function InputWithAddButton(props: Props) {
             <label for={`${merged.name}`}>{titleCase(merged.label)}</label>
             <button
                 type="button"
-                style={{ "background-color": "var(--clrRed)" }}
+                class={styles.addBtn}
                 onclick={() => {
                     props.addItem(ref.value);
                     ref.value = ""

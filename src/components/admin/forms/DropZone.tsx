@@ -7,6 +7,7 @@ export type Props = {
     text?: string
     fileLimit?: number
     currentNum?: number
+    setFiles: (files: File[]) => void
 }
 
 export function DropZone(props: Props) {
@@ -23,21 +24,26 @@ export function DropZone(props: Props) {
             onDrop={e => {
                 e.preventDefault()
                 if (!e.dataTransfer) return;
-                if (e.dataTransfer.getData("URL"))
+                if (e.dataTransfer.getData("URL")) {
+                    props.setFiles(Array.from(e.dataTransfer.files))
                     props.onAdd(e.dataTransfer.getData("URL"))
+                }
+
                 else {
                     const limit = merged.fileLimit - merged.currentNum;
-                    Array.from(e.dataTransfer.files).slice(0, limit).forEach(file => {
-                        if (file.type.startsWith("image/"))
-                            readFile(props.onAdd, file)
-                    })
+                    const files = Array.from(e.dataTransfer.files)
+                        .slice(0, limit)
+                        .filter(file => file.type.startsWith("image/"))
+
+                    files.forEach(file => readFile(props.onAdd, file))
+                    props.setFiles(files)
                 }
                 setEntered(false)
             }}
             onDragLeave={() => setEntered(false)}
         >
             {props.text}
-        </div>
+        </div >
     )
 }
 

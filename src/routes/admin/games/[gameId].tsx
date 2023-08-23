@@ -50,7 +50,6 @@ export function routeData({ params }: RouteDataArgs) {
 
 export default function AdminGameId() {
     const data = useRouteData<typeof routeData>()
-    const t = useContext(AdminContext)
     const [game, setGame] = createStore(data() ?? {
         tags: [],
         gameId: "",

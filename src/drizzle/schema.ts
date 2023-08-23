@@ -1,7 +1,7 @@
-import { pgTable, pgEnum, pgSchema, AnyPgColumn, uuid, text, foreignKey, varchar, timestamp, primaryKey } from "drizzle-orm/pg-core"
-
+import { pgTable, uuid, text, foreignKey, varchar, timestamp, primaryKey } from "drizzle-orm/pg-core"
 
 import { sql } from "drizzle-orm"
+
 
 export const actor = pgTable("Actor", {
 	actorId: uuid("actorId").defaultRandom().primaryKey().notNull(),
