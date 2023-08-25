@@ -23,29 +23,56 @@ export type Props = {
     developers?: Developer[]
     publishers?: Publisher[]
 }
-
-function uploadToUT(files: File[]) {
-    const uploader = genUploader()
-}
+const uploader = genUploader<OurFileRouter>();
 
 export default function GameForm(props: Props) {
-    const uploader = genUploader<OurFileRouter>();
     const [files, setFiles] = createStore<GameImages>({ cover: null, banner: null, screens: [] })
+    function upload(field: OurFileRouter['upload']['_def']['_input']['field'], files: File[]) {
+        return uploader({
+            input: {
+                field,
+                title: props.game.title
+            },
+            endpoint: 'upload',
+            files,
+            onUploadProgress({ file, progress, }) {
+                console.log(file, progress)
+            },
+        })
+    }
     async function handleSubmit(e: SubmitEvent) {
         e.preventDefault();
         const f: File[] = []
         files.cover && f.push(files.cover)
         files.banner && f.push(files.banner)
         f.push(...files.screens)
-        const res = await uploader({
-            endpoint: 'test',
+        // files.cover && const uploadCover = upload('cover', files.cover);
+        const uploadBanner = uploader({
+            input: {
+                field: 'banner',
+                title: props.game.title
+            },
+            endpoint: 'upload',
             files: f,
             onUploadProgress({ file, progress, }) {
                 console.log(file, progress)
             },
             
         });
-        console.log(res)
+        const uploadScreens = uploader({
+            input: {
+                field: 'screenshots',
+                title: props.game.title
+            },
+            endpoint: 'upload',
+            files: f,
+            onUploadProgress({ file, progress, }) {
+                console.log(file, progress)
+            },
+            
+        });
+        
+        const res = await Promise.all[uploadCover, uploadBanner, uploadScreens]
     }
     const { developers, publishers } = useContext(AdminContext)!
     return (
@@ -66,7 +93,7 @@ export default function GameForm(props: Props) {
             />
             <ImagePreview
                 images={props.game.images}
-                setImages={(arr: string[]) => props.setGame('images', arr)}
+                setImages={arr => props.setGame('images', arr)}
             />
             <FormTextarea
                 name="summary"
