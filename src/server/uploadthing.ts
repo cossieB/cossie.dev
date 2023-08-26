@@ -4,70 +4,42 @@ import { z } from "zod";
 
 const f = createUploadthing();
 
-function upsert(data: {_middleware: {name: string}}) {
-    
-}
-
 export const uploadRouter = {
-    upload: f({
+    game: f({
         image: {
-            maxFileSize: "1024B"
+            maxFileSize: "4MB",
+            maxFileCount: 10
         }
     })
-    .input(z.object({
-        title: z.string(),
-        field: z.enum(['cover', 'banner', 'screenshots'])
-    }))
-    .middleware(opts => {
-        return {
-            name: opts.input
-        }
-    })
-    .onUploadComplete(data => {
-        
-    }),
-    banner: f({
+        .input(z.object({
+            title: z.string(),
+            field: z.enum(['cover', 'banner', 'images'])
+        }))
+        .middleware(opts => {
+            return {
+                name: opts.input
+            }
+        })
+        .onUploadComplete(data => {
+            console.log(data)
+        }),
+    dev: f({
         image: {
-            maxFileSize: "1024B"
-        }
-    })
-    .input(z.string())
-    .middleware(opts => {
-        return {
-            name: opts.input
-        }
-    })
-    .onUploadComplete(data => {
-        
-    }),
-    screenshots: f({
-        image: {
-            maxFileSize: "1024B",
-            maxFileCount: 8
-        }
-    })
-    .input(z.string())
-    .middleware(opts => {
-        return {
-            name: opts.input
-        }
-    })
-    .onUploadComplete(data => {
-        console.log(data)
-    }),
-    test: f({
-        image: {
-            maxFileCount: 10,
             maxFileSize: "4MB"
         }
     })
-    .input(z.string())
-    .middleware(({input}) => {
-        return {input, num: Math.random()}
-    })
-    .onUploadComplete(data => {
-        console.log("test done", data);
-    }),
+        .input(z.object({
+            title: z.string(),
+            field: z.enum(['logo'])
+        }))
+        .middleware(opts => {
+            return {
+                name: opts.input
+            }
+        })
+        .onUploadComplete(data => {
+            console.log(data)
+        }),
     // videoAndImage: f({
     //     image: {
     //         maxFileSize: "4MB",

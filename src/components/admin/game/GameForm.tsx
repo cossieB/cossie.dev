@@ -25,54 +25,59 @@ export type Props = {
 }
 const uploader = genUploader<OurFileRouter>();
 
+async function upload<T extends keyof OurFileRouter>(
+    endpoint: T,
+    title: string,
+    field: OurFileRouter[T]['_def']['_input']['field'],
+    setField: (list: string[]) => void,
+    files: File[]) {
+    //@ts-expect-error
+    const res = await uploader({
+        endpoint,
+        files,
+        input: {
+            title,
+            field
+        }
+    })
+    setField(res.map(x => x.url))
+}
 export default function GameForm(props: Props) {
     const [files, setFiles] = createStore<GameImages>({ cover: null, banner: null, screens: [] })
-    function upload(field: OurFileRouter['upload']['_def']['_input']['field'], files: File[]) {
-        return uploader({
-            input: {
-                field,
-                title: props.game.title
-            },
-            endpoint: 'upload',
-            files,
-            onUploadProgress({ file, progress, }) {
-                console.log(file, progress)
-            },
-        })
-    }
+
     async function handleSubmit(e: SubmitEvent) {
         e.preventDefault();
-        const f: File[] = []
-        files.cover && f.push(files.cover)
-        files.banner && f.push(files.banner)
-        f.push(...files.screens)
-        // files.cover && const uploadCover = upload('cover', files.cover);
-        const uploadBanner = uploader({
-            input: {
-                field: 'banner',
-                title: props.game.title
-            },
-            endpoint: 'upload',
-            files: f,
-            onUploadProgress({ file, progress, }) {
-                console.log(file, progress)
-            },
-            
-        });
-        const uploadScreens = uploader({
-            input: {
-                field: 'screenshots',
-                title: props.game.title
-            },
-            endpoint: 'upload',
-            files: f,
-            onUploadProgress({ file, progress, }) {
-                console.log(file, progress)
-            },
-            
-        });
-        
-        const res = await Promise.all[uploadCover, uploadBanner, uploadScreens]
+        const promises: Promise<any>[] = []
+        if (files.cover && props.game.cover != props.data?.cover) {
+            promises.push(upload(
+                'game',
+                props.game.title,
+                'cover',
+                list => props.setGame('cover', list[0]),
+                [files.cover]
+            ))
+        }
+
+        if (files.banner && props.game.banner != props.data?.banner) {
+            promises.push(upload(
+                'game',
+                props.game.title,
+                'banner',
+                list => props.setGame('banner', list[0]),
+                [files.banner]
+            ))
+        }
+
+        if (files.screens.length > 0 && props.game.images != props.data?.images) {
+            promises.push(upload(
+                'game',
+                props.game.title,
+                'images',
+                list => props.setGame('images', list),
+                files.screens
+            ))
+        }
+        await Promise.all(promises)
     }
     const { developers, publishers } = useContext(AdminContext)!
     return (
@@ -89,7 +94,7 @@ export default function GameForm(props: Props) {
                 text="Drop Screenshots Here"
                 fileLimit={8}
                 currentNum={props.game.images.length}
-                setFiles={files => setFiles('screens', prev => [...prev, ...files]) }
+                setFiles={files => setFiles('screens', prev => [...prev, ...files])}
             />
             <ImagePreview
                 images={props.game.images}
