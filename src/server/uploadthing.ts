@@ -17,7 +17,7 @@ export const uploadRouter = {
         }))
         .middleware(opts => {
             return {
-                name: opts.input
+                input: opts.input
             }
         })
         .onUploadComplete(data => {

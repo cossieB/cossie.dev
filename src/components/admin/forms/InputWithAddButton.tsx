@@ -8,6 +8,7 @@ type Props = {
     required?: boolean;
     addItem(item: string): void
     disabled: boolean;
+    value: string | string[]
 };
 
 export function InputWithAddButton(props: Props) {
@@ -23,7 +24,9 @@ export function InputWithAddButton(props: Props) {
                 required={merged.required}
                 placeholder=" "
                 disabled={props.disabled}
-                autocomplete="off" />
+                autocomplete="off" 
+                value={merged.value}
+                />
             <label for={`${merged.name}`}>{titleCase(merged.label)}</label>
             <button
                 type="button"
