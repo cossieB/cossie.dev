@@ -76,6 +76,9 @@ $clrForm: hsl(0, 0%, 15%);
             border: none;
             border-radius: .5rem;
         }
+        &:disabled {
+            background-color: gray;
+        }
     }
 
     label {
