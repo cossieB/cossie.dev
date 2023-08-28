@@ -15,27 +15,28 @@ export async function uploadGameImages(
     props: Props,
     setState: SetStoreFunction<State>,
     game: Game,
+    setGame: SetStoreFunction<Game>,
     data?: Game & { tags: string[] }
 ) {
     setState({ isUploading: true })
     try {
         const promises: Promise<any>[] = [];
-        if (files.cover && props.game.cover != props.data?.cover) {
+        if (files.cover && game.cover != props.data?.cover) {
             promises.push(upload(
                 'game',
-                props.game.title,
+                game.title,
                 'cover',
-                list => props.setGame('cover', list[0]),
+                list => setGame('cover', list[0]),
                 [files.cover]
             ));
         }
 
-        if (files.banner && props.game.banner != props.data?.banner) {
+        if (files.banner && game.banner != props.data?.banner) {
             promises.push(upload(
                 'game',
-                props.game.title,
+                game.title,
                 'banner',
-                list => props.setGame('banner', list[0]),
+                list => setGame('banner', list[0]),
                 [files.banner]
             ));
         }
@@ -44,13 +45,13 @@ export async function uploadGameImages(
             if (!data)
                 promises.push(upload(
                     'game',
-                    props.game.title,
+                    game.title,
                     'images',
-                    list => props.setGame('images', list),
+                    list => setGame('images', list),
                     files.screens
                 ));
             else {
-                uploadScreenshots(game, files, data, files => props.setGame('images', files));
+                uploadScreenshots(game, files, data, files => setGame('images', files));
 
             }
         }

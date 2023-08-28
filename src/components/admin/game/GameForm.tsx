@@ -1,11 +1,11 @@
 import { FormInput, FormTextarea, SelectInput } from "~/components/admin/forms/FormInput";
 import type { Game } from "~/drizzle/types";
 import styles from "~/components/admin/forms/forms.module.scss";
-import { useContext, Switch, Match, createMemo, Show } from "solid-js";
+import { useContext, Switch, Match, createMemo, Show, createEffect } from "solid-js";
 import { formatDateForInputElement } from "~/lib/formatDate";
 import { DropZone } from "../forms/DropZone";
 import { AdminContext } from "~/routes/admin";
-import { SetStoreFunction, createStore } from "solid-js/store";
+import { SetStoreFunction, createStore, unwrap } from "solid-js/store";
 import { ImagePreview } from "../forms/FilePreview";
 import { YouTubeIframe } from "./YouTubeIframe";
 import { Tags } from "./Tags";
@@ -17,15 +17,31 @@ import { createServerAction$ } from "solid-start/server";
 import HiddenInput from "../forms/HiddenInput";
 import { uploadGameImages } from "./uploadGameImages";
 import SubmitButton from "../SubmitButton";
+import { updateGamesOnDB } from "./updateGamesOnDB";
 
 export type Props = {
     data?: Game & { tags: string[] };
-    game: NonNullable<Props['data']>
-    setGame: SetStoreFunction<Props['game']>
 }
 
 export default function GameForm(props: Props) {
     let form!: HTMLFormElement
+    
+    const [game, setGame] = createStore({
+        tags: [...(props.data?.tags) ?? []],
+        gameId: props.data?.gameId ?? "",
+        summary: props.data?.summary ?? "",
+        title: props.data?.title ?? "",
+        cover: props.data?.cover ?? "",
+        developerId: props.data?.developerId ?? "",
+        publisherId: props.data?.publisherId ?? "",
+        releaseDate: props.data?.releaseDate ?? "",
+        images: [...(props.data?.images ?? [])],
+        banner: props.data?.banner ?? "",
+        trailer: props.data?.trailer ?? "",
+    })
+    createEffect(() => {
+        console.log(unwrap(game))
+    })
     const { developers, publishers } = useContext(AdminContext)!
     const [state, setState] = createStore({
         isUploading: false,
@@ -33,45 +49,45 @@ export default function GameForm(props: Props) {
         uploadError: false
     })
     const [files, setFiles] = createStore<GameImages>({ cover: null, banner: null, screens: [] })
-    
+
     const imagesChanged = createMemo(() => {
-        if (props.game.cover != (props.data?.cover ?? "") || props.game.banner != (props.data?.banner ?? ""))
+        if (game.images.length == 0)
+            return false
+        if (!props.data)
             return true
-        if (props.game.images.length != (props.data?.images.length ?? 0))
+        if (game.cover !== props.data.cover || game.banner !== props.data.banner)
             return true
-        const imagesSorted = [...props.game.images].sort()
-        const dataImagesSorted = [...(props.data?.images ?? [])].sort()
-        for (let i = 0; i < imagesSorted.length; i++) {
-            if (imagesSorted[i] != dataImagesSorted[i])
+        const ogSet = new Set(props.data.images)
+        const newSet = new Set(game.images); console.log(ogSet, newSet)
+        for (const img of game.images) {
+            if (!ogSet.has(img)) 
                 return true
         }
         return false;
     })
-    const [submitting, { Form }] = createServerAction$(async (fd: FormData) => {
-        fd.forEach((val, key) => {
-            console.log(key, val)
-        })
+    const [submitting, { Form }] = createServerAction$(updateGamesOnDB, {
+        invalidate: () => ['games']
     })
 
     return (
         <Form id="gameForm" class={styles.form} ref={form} >
             <FormInput
                 name="title"
-                value={props.game.title}
+                value={game.title}
                 required
-                setter={props.setGame}
+                setter={setGame}
             />
-            <HeroImages {...props} setFiles={setFiles} />
+            <HeroImages setGame={setGame} game={game} setFiles={setFiles} />
             <DropZone
-                onAdd={(url) => { props.setGame({ images: [...props.game.images, url] }) }}
+                onAdd={(url) => { setGame({ images: [...game.images, url] }) }}
                 text="Drop Screenshots Here"
                 fileLimit={8}
-                currentNum={props.game.images.length}
+                currentNum={game.images.length}
                 setFiles={files => setFiles('screens', prev => [...prev, ...files])}
             />
             <ImagePreview
-                images={props.game.images}
-                setImages={arr => props.setGame('images', arr)}
+                images={game.images}
+                setImages={arr => setGame('images', arr)}
             />
             <Show when={imagesChanged()}>
                 <SubmitButton
@@ -80,67 +96,68 @@ export default function GameForm(props: Props) {
                     loading={submitting.pending || state.isUploading}
                     text="Upload"
                     type="button"
-                    onclick={() => uploadGameImages(files, props, setState, props.game, props.data)}
+                    onclick={() => uploadGameImages(files, props, setState, game, setGame, props.data)}
                 />
             </Show>
             <FormTextarea
                 name="summary"
-                innerHTML={props.game.summary}
+                innerHTML={game.summary}
                 required
-                setter={props.setGame}
+                setter={setGame}
             />
             <FormInput
                 name="releaseDate"
-                value={props.game.releaseDate ? formatDateForInputElement(new Date(props.game.releaseDate)) : undefined}
+                value={game.releaseDate ? formatDateForInputElement(new Date(game.releaseDate)) : undefined}
                 required
                 type="date"
-                setter={props.setGame}
+                setter={setGame}
             />
             <SelectInput
                 arr={(developers() ?? []).map(dev => ({ label: dev.name, value: dev.developerId }))}
                 name="developerId"
                 label="Developer"
-                default={(developers() ?? []).find(x => x.developerId === props.game.developerId)?.developerId}
-                setter={props.setGame}
+                default={(developers() ?? []).find(x => x.developerId === game.developerId)?.developerId}
+                setter={setGame}
             />
             <SelectInput
                 arr={(publishers() ?? []).map(pub => ({ label: pub.name, value: pub.publisherId })) ?? []}
                 name="publisherId"
                 label="Publisher"
-                default={(publishers() ?? [])?.find(x => x.publisherId === props.game.publisherId)?.publisherId}
-                setter={props.setGame}
+                default={(publishers() ?? [])?.find(x => x.publisherId === game.publisherId)?.publisherId}
+                setter={setGame}
             />
             <InputWithAddButton
                 name="tags"
                 disabled={false}
-                addItem={item => props.setGame({ tags: [...props.game.tags, item] })}
+                addItem={item => setGame({ tags: [...game.tags, item] })}
             />
             <Tags
-                tags={props.game.tags}
-                removeItem={item => props.setGame({
-                    tags: props.game.tags.filter(tag => tag !== item)
+                tags={game.tags}
+                removeItem={item => setGame({
+                    tags: game.tags.filter(tag => tag !== item)
                 })}
             />
             <FormInput
                 name="trailer"
-                value={props.game.trailer}
+                value={game.trailer}
                 required
-                setter={props.setGame}
+                setter={setGame}
             />
             <Switch>
-                <Match when={getYoutubeURL(props.game.trailer)} >
-                    <YouTubeIframe link={getYoutubeURL(props.game.trailer)!} />
+                <Match when={getYoutubeURL(game.trailer)} >
+                    <YouTubeIframe link={getYoutubeURL(game.trailer)!} />
                 </Match>
-                <Match when={props.game.trailer}>
-                    <YouTubeIframe link={props.game.trailer} />
+                <Match when={game.trailer}>
+                    <YouTubeIframe link={game.trailer} />
                 </Match>
             </Switch>
             <button class={styles.submitBtn} disabled={submitting.pending} type="submit">Submit</button>
-            <HiddenInput name="cover" value={props.game.cover} />
-            <HiddenInput name="banner" value={props.game.banner} />
-            <HiddenInput name="images" value={props.game.images} />
-            <HiddenInput name="tags" value={props.game.tags} /> 
+            <HiddenInput name="cover" value={game.cover} />
+            <HiddenInput name="banner" value={game.banner} />
+            <HiddenInput name="images" value={game.images} />
+            <HiddenInput name="tags" value={game.tags} />
+            <HiddenInput name="gameId" value={game.gameId} />
+            <HiddenInput name="tagsHaveChanged" value={1} />
         </Form>
     )
 }
-

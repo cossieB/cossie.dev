@@ -27,7 +27,7 @@ export function routeData() {
             .from(game)
             .innerJoin(developer, eq(game.developerId, developer.developerId))
             .innerJoin(publisher, eq(game.publisherId, publisher.publisherId))
-            .innerJoin(subQuery, eq(game.gameId, subQuery.gameId))
+            .leftJoin(subQuery, eq(game.gameId, subQuery.gameId))
     })
 }
 
@@ -51,7 +51,7 @@ const columnDefs: Cols[] = [{
 }, {
     headerName: "Genres",
     field: 't.tags',
-    valueFormatter: (val) => val.data?.t.tags.join("; ") ?? "",
+    valueFormatter: (val) => val.data?.t?.tags.join("; ") ?? "",
     filter: true,
     sortable: false
 }, {

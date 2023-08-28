@@ -1,6 +1,8 @@
+import { JSX } from "solid-js"
+
 type Props = {
     name: string,
-    value: string[] | string
+    value: JSX.InputHTMLAttributes<HTMLInputElement>['value']
 }
 
 export default function HiddenInput(props: Props) {

@@ -26,12 +26,12 @@ export function routeData({ params }: RouteDataArgs) {
                 .with(subQuery)
                 .select()
                 .from(game)
-                .innerJoin(subQuery, eq(game.gameId, subQuery.gameId))
+                .leftJoin(subQuery, eq(game.gameId, subQuery.gameId))
                 .where(eq(game.gameId, gameId))
 
             if (result.length == 0)
                 throw new ServerError("Not Found", { status: 404 })
-            return { ...result[0].Game, tags: result[0].t.tags }
+            return { ...result[0].Game, tags: result[0].t?.tags ?? [] }
         }
         catch (error: any) {
             if (error instanceof ServerError)
@@ -50,35 +50,16 @@ export function routeData({ params }: RouteDataArgs) {
 
 export default function AdminGameId() {
     const data = useRouteData<typeof routeData>()
-    const [game, setGame] = createStore(data() ?? {
-        tags: [],
-        gameId: "",
-        summary: "",
-        title: "",
-        cover: "",
-        developerId: "",
-        publisherId: "",
-        releaseDate: "",
-        images: [],
-        banner: "",
-        trailer: "",
-    })
-    createEffect(() => {
-        if (data())
-            setGame(data()!)
-    })
 
     return (
-        <ErrorBoundary fallback={(e) => e.status == 404 ? <NotFound /> : <p> Something went wrong. Please try again later </p>}>
+        // <ErrorBoundary fallback={(e) => e.status == 404 ? <NotFound /> : <p> Something went wrong. Please try again later </p>}>
             <main class={`${styles.main} ${styles.formContainer}`}>
                 <Suspense fallback={<p>Loading...</p>}>
                     <GameForm
                         data={data()}
-                        game={game}
-                        setGame={setGame}
                     />
                 </Suspense>
             </main>
-        </ErrorBoundary>
+        // </ErrorBoundary> 
     )
 }

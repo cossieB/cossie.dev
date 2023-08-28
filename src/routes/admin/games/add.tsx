@@ -16,9 +16,6 @@ export default function AddGamePage() {
         trailer: "",
     })
     return (
-        <GameForm
-            game={game}
-            setGame={setGame}
-        />
+        <GameForm />
     )
 }
