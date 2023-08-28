@@ -1,15 +1,13 @@
 import { useRouteData } from "@solidjs/router";
 import { sql, eq } from "drizzle-orm";
-import { ErrorBoundary, Suspense, createEffect, useContext } from "solid-js";
+import { Suspense, createEffect } from "solid-js";
 import { type RouteDataArgs } from "solid-start";
 import { ServerError, createServerData$ } from "solid-start/server";
 import GameForm from "~/components/admin/game/GameForm";
 import { db } from "~/db";
 import { genresOfGames, game } from "~/drizzle/schema";
 import styles from "../../admin.module.scss"
-import { createStore } from "solid-js/store";
-import { AdminContext } from "~/routes/admin";
-import NotFound from "~/routes/[...404]";
+import { unwrap } from "solid-js/store";
 
 export function routeData({ params }: RouteDataArgs) {
     return createServerData$(async ([_, gameId]) => {

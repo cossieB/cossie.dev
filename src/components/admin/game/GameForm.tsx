@@ -5,7 +5,7 @@ import { useContext, Switch, Match, createMemo, Show, createEffect } from "solid
 import { formatDateForInputElement } from "~/lib/formatDate";
 import { DropZone } from "../forms/DropZone";
 import { AdminContext } from "~/routes/admin";
-import { SetStoreFunction, createStore, unwrap } from "solid-js/store";
+import { createStore, unwrap } from "solid-js/store";
 import { ImagePreview } from "../forms/FilePreview";
 import { YouTubeIframe } from "./YouTubeIframe";
 import { Tags } from "./Tags";
@@ -25,7 +25,7 @@ export type Props = {
 
 export default function GameForm(props: Props) {
     let form!: HTMLFormElement
-    
+console.log(props.data)
     const [game, setGame] = createStore({
         tags: [...(props.data?.tags) ?? []],
         gameId: props.data?.gameId ?? "",
@@ -40,7 +40,19 @@ export default function GameForm(props: Props) {
         trailer: props.data?.trailer ?? "",
     })
     createEffect(() => {
-        console.log(unwrap(game))
+        setGame({
+            tags: [...(props.data?.tags) ?? []],
+            gameId: props.data?.gameId ?? "",
+            summary: props.data?.summary ?? "",
+            title: props.data?.title ?? "",
+            cover: props.data?.cover ?? "",
+            developerId: props.data?.developerId ?? "",
+            publisherId: props.data?.publisherId ?? "",
+            releaseDate: props.data?.releaseDate ?? "",
+            images: [...(props.data?.images ?? [])],
+            banner: props.data?.banner ?? "",
+            trailer: props.data?.trailer ?? "",
+        })
     })
     const { developers, publishers } = useContext(AdminContext)!
     const [state, setState] = createStore({
@@ -58,15 +70,15 @@ export default function GameForm(props: Props) {
         if (game.cover !== props.data.cover || game.banner !== props.data.banner)
             return true
         const ogSet = new Set(props.data.images)
-        const newSet = new Set(game.images); console.log(ogSet, newSet)
-        for (const img of game.images) {
+        const newSet = new Set(game.images); 
+        for (const img of newSet) {
             if (!ogSet.has(img)) 
                 return true
         }
         return false;
     })
     const [submitting, { Form }] = createServerAction$(updateGamesOnDB, {
-        invalidate: () => ['games']
+        invalidate: () => ['games', game.gameId]
     })
 
     return (
