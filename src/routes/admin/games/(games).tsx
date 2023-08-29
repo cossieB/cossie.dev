@@ -1,4 +1,4 @@
-import { type Resource, Suspense, Show } from "solid-js";
+import { type Resource } from "solid-js";
 import { useRouteData } from "solid-start";
 import { db } from "~/db";
 import { developer, game, gamesOnPlatforms, genresOfGames, platform, publisher } from "~/drizzle/schema";
@@ -9,8 +9,7 @@ import 'ag-grid-community/styles/ag-grid.css'; // grid core CSS
 import "ag-grid-community/styles/ag-theme-alpine.css"; // optional theme
 import DataEditor from "~/components/Datagrid/DataEditor";
 import AdminLink from "~/components/Datagrid/AdminLink";
-import GridTable from "~/components/Datagrid/GridTable";
-import styles from "../../admin.module.scss"
+import { AdminTable } from "../../../components/admin/AdminTable";
 
 export function routeData() {
     return createServerData$(async () => {
@@ -45,7 +44,7 @@ type X = NonNullable<UnwrapResource<ReturnType<typeof routeData>>>
 
 type Cols = ColDef<X[number]>
 
-const columnDefs: Cols[] = [{
+export const columnDefs: Cols[] = [{
     field: 'Game.title',
     editable: true,
     cellEditor: (params: ICellEditorParams) => <DataEditor {...params} />
@@ -69,24 +68,16 @@ const columnDefs: Cols[] = [{
     valueFormatter: (val) => val.data?.v?.platforms.join("; ") ?? "",
     filter: true,
     sortable: false
-},{
+}, {
     headerName: '',
     sortable: false,
-    cellRenderer: (params: ICellRendererParams) => <AdminLink {...params} />,
+    cellRenderer: (params: ICellRendererParams<X[number]>) => <AdminLink {...params} category="games" param={params.data?.Game.gameId ?? ""} />,
 },]
 
 export default function GamesAdminPage() {
     const data = useRouteData<typeof routeData>()
     return (
-        <main class={`${styles.main} ag-theme-alpine-dark`} style={{ width: '100%', height: '100vh' }}>
-            <Suspense fallback={<span>loading...</span>}>
-                <Show when={data()}>
-                    <GridTable
-                        data={data()}
-                        columnDefs={columnDefs}
-                    />
-                </Show>
-            </Suspense>
-        </main>
+        <AdminTable data={data} columnDefs={columnDefs} />
     )
 }
+

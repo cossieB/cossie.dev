@@ -1,7 +1,7 @@
 import { FormInput, FormTextarea, SelectInput } from "~/components/admin/forms/FormInput";
-import type { Game, Platform } from "~/drizzle/types";
+import type { Game } from "~/drizzle/types";
 import styles from "~/components/admin/forms/forms.module.scss";
-import { useContext, Switch, Match, Show, createEffect, For } from "solid-js";
+import { useContext, Switch, Match, Show, createEffect } from "solid-js";
 import { formatDateForInputElement } from "~/lib/formatDate";
 import { DropZone } from "../forms/DropZone";
 import { AdminContext } from "~/routes/admin";

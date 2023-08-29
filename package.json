@@ -26,7 +26,6 @@
     "@solid-primitives/set": "^0.4.6",
     "@solidjs/meta": "^0.28.5",
     "@solidjs/router": "^0.8.2",
-    "@tanstack/solid-table": "^8.9.2",
     "@uploadthing/solid": "^5.1.2",
     "@vercel/analytics": "^1.0.1",
     "ag-grid-community": "^30.0.5",
