@@ -7,7 +7,7 @@ import { SetStoreFunction } from "solid-js/store";
 
 function getOnChange<X extends INPUTS>(props: Pick<Props<X>, 'name' | 'setter'>) {
     return function onchange(e: ChangeEvent<X>) {
-        props.setter(props.name, e.target.value);
+        props.setter(props.name, e.target.value.trim());
     }
 }
 export function FormInput(props: Props) {

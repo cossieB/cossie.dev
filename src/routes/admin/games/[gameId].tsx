@@ -1,18 +1,17 @@
 import { useRouteData } from "@solidjs/router";
 import { sql, eq } from "drizzle-orm";
-import { Suspense, createEffect } from "solid-js";
+import { Suspense } from "solid-js";
 import { type RouteDataArgs } from "solid-start";
 import { ServerError, createServerData$ } from "solid-start/server";
 import GameForm from "~/components/admin/game/GameForm";
 import { db } from "~/db";
-import { genresOfGames, game } from "~/drizzle/schema";
+import { genresOfGames, game, gamesOnPlatforms, platform } from "~/drizzle/schema";
 import styles from "../../admin.module.scss"
-import { unwrap } from "solid-js/store";
 
 export function routeData({ params }: RouteDataArgs) {
     return createServerData$(async ([_, gameId]) => {
         try {
-            const subQuery = db.$with('t').as(db.select({
+            const genreQuery = db.$with('t').as(db.select({
                 gameId: genresOfGames.gameId,
                 tags: sql<string[]>`array_agg(genre)`.as('tags')
             })
@@ -20,16 +19,26 @@ export function routeData({ params }: RouteDataArgs) {
                 .where(eq(genresOfGames.gameId, gameId))
                 .groupBy(genresOfGames.gameId)
             )
+            const platformQuery = db.$with('v').as(db.select({
+                gameId: gamesOnPlatforms.gameId,
+                platforms: sql<string[]>`array_agg("GamesOnPlatforms"."platformId")`.as('platforms')
+            })
+                .from(gamesOnPlatforms)
+                .innerJoin(platform, eq(gamesOnPlatforms.platformId, platform.platformId))
+                .where(eq(gamesOnPlatforms.gameId, gameId))
+                .groupBy(gamesOnPlatforms.gameId)
+            )
             const result = await db
-                .with(subQuery)
+                .with(genreQuery, platformQuery)
                 .select()
                 .from(game)
-                .leftJoin(subQuery, eq(game.gameId, subQuery.gameId))
+                .leftJoin(genreQuery, eq(game.gameId, genreQuery.gameId))
+                .leftJoin(platformQuery, eq(game.gameId, platformQuery.gameId))
                 .where(eq(game.gameId, gameId))
 
             if (result.length == 0)
                 throw new ServerError("Not Found", { status: 404 })
-            return { ...result[0].Game, tags: result[0].t?.tags ?? [] }
+            return { ...result[0].Game, tags: result[0].t?.tags ?? [], platforms: result[0].v?.platforms ?? [] }
         }
         catch (error: any) {
             if (error instanceof ServerError)

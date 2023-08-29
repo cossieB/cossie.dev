@@ -7,7 +7,7 @@ import { Game } from "~/drizzle/types";
 type State = {
     isUploading: boolean;
     uploadOk: boolean;
-    uploadError: boolean;
+    uploadErrored: boolean;
 }
 
 export async function uploadGameImages(
@@ -54,7 +54,7 @@ export async function uploadGameImages(
         setState({ uploadOk: true });
     } catch (error) {
         console.error(error);
-        setState({ uploadError: true })
+        setState({ uploadErrored: true })
     }
     finally {
         setState({ isUploading: false })

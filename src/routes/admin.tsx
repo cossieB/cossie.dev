@@ -6,13 +6,19 @@ import { createServerData$ } from "solid-start/server";
 import { db } from "~/db";
 
 export function routeData() {
-    const developers = createServerData$(async () => db.query.developer.findMany() )
-    const publishers = createServerData$(async () => db.query.publisher.findMany() )
-    return {developers, publishers}
+    const developers = createServerData$(async () => db.query.developer.findMany(), {
+        key: 'developers'
+    } )
+    const publishers = createServerData$(async () => db.query.publisher.findMany(), {
+        key: 'publishers'
+    } )
+    const platforms = createServerData$(async () => db.query.platform.findMany(), {
+        key: 'platforms'
+    } )
+    return {developers, publishers, platforms}
 }
 
 export default function Layout() {
-    
     onMount(() => {
         document.body.style.background = "black"
         onCleanup(() => {

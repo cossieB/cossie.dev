@@ -1,7 +1,7 @@
 import { type Resource, Suspense, Show } from "solid-js";
 import { useRouteData } from "solid-start";
 import { db } from "~/db";
-import { developer, game, genresOfGames, publisher } from "~/drizzle/schema";
+import { developer, game, gamesOnPlatforms, genresOfGames, platform, publisher } from "~/drizzle/schema";
 import { eq, sql } from "drizzle-orm"
 import { createServerData$ } from "solid-start/server";
 import { ColDef, ICellEditorParams, ICellRendererParams } from "ag-grid-community";
@@ -14,20 +14,29 @@ import styles from "../../admin.module.scss"
 
 export function routeData() {
     return createServerData$(async () => {
-        const subQuery = db.$with('t').as(db.select({
+        const genreQuery = db.$with('t').as(db.select({
             gameId: genresOfGames.gameId,
             tags: sql<string[]>`array_agg(genre)`.as('tags')
         })
             .from(genresOfGames)
             .groupBy(genresOfGames.gameId)
         )
+        const platformQuery = db.$with('v').as(db.select({
+            gameId: gamesOnPlatforms.gameId,
+            platforms: sql<string[]>`array_agg(name)`.as('platforms')
+        })
+            .from(gamesOnPlatforms)
+            .innerJoin(platform, eq(gamesOnPlatforms.platformId, platform.platformId))
+            .groupBy(gamesOnPlatforms.gameId)
+        )
         return await db
-            .with(subQuery)
+            .with(genreQuery, platformQuery)
             .select()
             .from(game)
             .innerJoin(developer, eq(game.developerId, developer.developerId))
             .innerJoin(publisher, eq(game.publisherId, publisher.publisherId))
-            .leftJoin(subQuery, eq(game.gameId, subQuery.gameId))
+            .leftJoin(genreQuery, eq(game.gameId, genreQuery.gameId))
+            .leftJoin(platformQuery, eq(game.gameId, platformQuery.gameId))
     })
 }
 
@@ -55,6 +64,12 @@ const columnDefs: Cols[] = [{
     filter: true,
     sortable: false
 }, {
+    headerName: "Platforms",
+    field: 'v.platforms',
+    valueFormatter: (val) => val.data?.v?.platforms.join("; ") ?? "",
+    filter: true,
+    sortable: false
+},{
     headerName: '',
     sortable: false,
     cellRenderer: (params: ICellRendererParams) => <AdminLink {...params} />,

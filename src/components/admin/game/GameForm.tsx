@@ -1,11 +1,11 @@
 import { FormInput, FormTextarea, SelectInput } from "~/components/admin/forms/FormInput";
-import type { Game } from "~/drizzle/types";
+import type { Game, Platform } from "~/drizzle/types";
 import styles from "~/components/admin/forms/forms.module.scss";
-import { useContext, Switch, Match, createMemo, Show, createEffect } from "solid-js";
+import { useContext, Switch, Match, Show, createEffect, For } from "solid-js";
 import { formatDateForInputElement } from "~/lib/formatDate";
 import { DropZone } from "../forms/DropZone";
 import { AdminContext } from "~/routes/admin";
-import { createStore, unwrap } from "solid-js/store";
+import { createStore } from "solid-js/store";
 import { ImagePreview } from "../forms/FilePreview";
 import { YouTubeIframe } from "./YouTubeIframe";
 import { Tags } from "./Tags";
@@ -18,65 +18,54 @@ import HiddenInput from "../forms/HiddenInput";
 import { uploadGameImages } from "./uploadGameImages";
 import SubmitButton from "../SubmitButton";
 import { updateGamesOnDB } from "./updateGamesOnDB";
+import { arrayChanged as arrayHasChanged, itemsAddedToArray } from "../../../utils/arrayChanged";
+import { Checklist } from "../forms/Checklist";
 
 export type Props = {
-    data?: Game & { tags: string[] };
+    data?: Game & { tags: string[], platforms: string[] };
 }
-
+function copyData(data: Props['data']) {
+    return {
+        tags: [...(data?.tags) ?? []],
+        platforms: [...(data?.platforms) ?? []],
+        gameId: data?.gameId ?? "",
+        summary: data?.summary ?? "",
+        title: data?.title ?? "",
+        cover: data?.cover ?? "",
+        developerId: data?.developerId ?? "",
+        publisherId: data?.publisherId ?? "",
+        releaseDate: data?.releaseDate ?? "",
+        images: [...(data?.images ?? [])],
+        banner: data?.banner ?? "",
+        trailer: data?.trailer ?? "",
+    }
+}
 export default function GameForm(props: Props) {
     let form!: HTMLFormElement
-console.log(props.data)
-    const [game, setGame] = createStore({
-        tags: [...(props.data?.tags) ?? []],
-        gameId: props.data?.gameId ?? "",
-        summary: props.data?.summary ?? "",
-        title: props.data?.title ?? "",
-        cover: props.data?.cover ?? "",
-        developerId: props.data?.developerId ?? "",
-        publisherId: props.data?.publisherId ?? "",
-        releaseDate: props.data?.releaseDate ?? "",
-        images: [...(props.data?.images ?? [])],
-        banner: props.data?.banner ?? "",
-        trailer: props.data?.trailer ?? "",
-    })
+    const { developers, publishers, platforms } = useContext(AdminContext)!
+    const [game, setGame] = createStore(copyData(props.data))
+
     createEffect(() => {
-        setGame({
-            tags: [...(props.data?.tags) ?? []],
-            gameId: props.data?.gameId ?? "",
-            summary: props.data?.summary ?? "",
-            title: props.data?.title ?? "",
-            cover: props.data?.cover ?? "",
-            developerId: props.data?.developerId ?? "",
-            publisherId: props.data?.publisherId ?? "",
-            releaseDate: props.data?.releaseDate ?? "",
-            images: [...(props.data?.images ?? [])],
-            banner: props.data?.banner ?? "",
-            trailer: props.data?.trailer ?? "",
-        })
+        setGame(copyData(props.data))
     })
-    const { developers, publishers } = useContext(AdminContext)!
     const [state, setState] = createStore({
         isUploading: false,
         uploadOk: false,
-        uploadError: false
+        uploadErrored: false,
+        imagesChanged: () => {
+            if (game.images.length == 0)
+                return false
+            if (!props.data)
+                return true
+            if (game.cover !== props.data.cover || game.banner !== props.data.banner)
+                return true
+            return itemsAddedToArray(props.data.images, game.images)
+        },
+        tagsHaveChanged: () => arrayHasChanged(props.data?.tags ?? [], game.tags),
+        pformsHaveChanged: () => arrayHasChanged(props.data?.platforms ?? [], game.platforms)
     })
     const [files, setFiles] = createStore<GameImages>({ cover: null, banner: null, screens: [] })
 
-    const imagesChanged = createMemo(() => {
-        if (game.images.length == 0)
-            return false
-        if (!props.data)
-            return true
-        if (game.cover !== props.data.cover || game.banner !== props.data.banner)
-            return true
-        const ogSet = new Set(props.data.images)
-        const newSet = new Set(game.images); 
-        for (const img of newSet) {
-            if (!ogSet.has(img)) 
-                return true
-        }
-        return false;
-    })
     const [submitting, { Form }] = createServerAction$(updateGamesOnDB, {
         invalidate: () => ['games', game.gameId]
     })
@@ -101,7 +90,7 @@ console.log(props.data)
                 images={game.images}
                 setImages={arr => setGame('images', arr)}
             />
-            <Show when={imagesChanged()}>
+            <Show when={state.imagesChanged()}>
                 <SubmitButton
                     disabled={!!submitting.result}
                     finished={state.uploadOk}
@@ -149,6 +138,13 @@ console.log(props.data)
                     tags: game.tags.filter(tag => tag !== item)
                 })}
             />
+            <Checklist
+                items={platforms() ?? []}
+                idField="platformId"
+                valueField="name"
+                arr={game.platforms}
+                setArray={val => setGame('platforms', val)}
+            />
             <FormInput
                 name="trailer"
                 value={game.trailer}
@@ -163,13 +159,31 @@ console.log(props.data)
                     <YouTubeIframe link={game.trailer} />
                 </Match>
             </Switch>
-            <button class={styles.submitBtn} disabled={submitting.pending} type="submit">Submit</button>
+            <SubmitButton
+                loading={submitting.pending}
+                disabled={
+                    state.isUploading ||
+                    !game.title ||
+                    !game.cover ||
+                    !game.banner ||
+                    !game.summary ||
+                    !game.developerId ||
+                    !game.publisherId ||
+                    game.platforms.length == 0 ||
+                    !game.releaseDate ||
+                    !game.trailer
+                }
+                finished={!!submitting.result}
+                text="Submit"
+            />
             <HiddenInput name="cover" value={game.cover} />
             <HiddenInput name="banner" value={game.banner} />
             <HiddenInput name="images" value={game.images} />
             <HiddenInput name="tags" value={game.tags} />
             <HiddenInput name="gameId" value={game.gameId} />
-            <HiddenInput name="tagsHaveChanged" value={1} />
+            <HiddenInput name="pforms" value={game.platforms} />
+            <HiddenInput name="pformsHaveChanged" value={state.pformsHaveChanged() ? 1 : 0} />
+            <HiddenInput name="tagsHaveChanged" value={state.tagsHaveChanged() ? 1 : 0} />
         </Form>
     )
 }
