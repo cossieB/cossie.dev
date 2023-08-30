@@ -24,7 +24,7 @@ const columnDefs: Cols[] = [{
 }, {
     headerName: '',
     sortable: false,
-    cellRenderer: (params: ICellRendererParams<X[number]>) => <AdminLink {...params} category="developer" param={params.data?.developerId ?? ""} />,
+    cellRenderer: (params: ICellRendererParams<X[number]>) => <AdminLink {...params} category="developers" param={params.data?.developerId ?? ""} />,
 }]
 
 type UnwrapResource<T> = T extends Resource<infer x | undefined> ? x : never

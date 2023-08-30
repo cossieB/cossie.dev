@@ -28,7 +28,6 @@ export function DropZone(props: Props) {
                     props.setFiles(Array.from(e.dataTransfer.files))
                     props.onAdd(e.dataTransfer.getData("URL"))
                 }
-
                 else {
                     const limit = merged.fileLimit - merged.currentNum;
                     const files = Array.from(e.dataTransfer.files)

@@ -23,14 +23,14 @@ export const uploadRouter = {
         .onUploadComplete(data => {
             console.log(data)
         }),
-    dev: f({
+    logo: f({
         image: {
             maxFileSize: "4MB"
         }
     })
         .input(z.object({
-            title: z.string(),
-            field: z.enum(['logo'])
+            name: z.string(),
+            field: z.enum(['developer', 'publisher', 'platform'])
         }))
         .middleware(opts => {
             return {

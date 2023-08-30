@@ -1,5 +1,5 @@
 import { GameImages } from "./types";
-import { upload, uploadMultiple } from "~/utils/uploadToUploadThing";
+import { upload, uploadAndUpdateUrl } from "~/utils/uploadToUploadThing";
 import { Props } from "./GameForm";
 import { SetStoreFunction } from "solid-js/store";
 import { Game } from "~/drizzle/types";
@@ -21,27 +21,25 @@ export async function uploadGameImages(
     setState({ isUploading: true }); 
     
     try {
-        const promises: Promise<any>[] = [];
+        const promises: Promise<unknown>[] = [];
         if (files.cover && game.cover != props.data?.cover) {
-            promises.push(upload(
+            promises.push(uploadAndUpdateUrl(
                 'game',
+                files.cover,
                 game.title,
                 'cover',
                 list => setGame('cover', list[0]),
-                [files.cover]
             ));
         }
-
         if (files.banner && game.banner != props.data?.banner) {
-            promises.push(upload(
+            promises.push(uploadAndUpdateUrl(
                 'game',
+                files.banner,
                 game.title,
                 'banner',
                 list => setGame('banner', list[0]),
-                [files.banner]
             ));
         }
-
         if (files.screens.length > 0) {
             promises.push(uploadScreenshots(
                 game,
@@ -68,7 +66,7 @@ async function uploadScreenshots(
     setImages: (files: string[]) => void
 ) {
     const newFiles = filterNew(oldImages, game.images, files)
-    const res = await uploadMultiple('game', game.title, 'images', newFiles.map(x => x.file))
+    const res = await upload('game', game.title, 'images', newFiles.map(x => x.file))
     const arrCopy = [...game.images];
     newFiles.forEach((val, i) => {
         arrCopy[val.i] = res[i].url;

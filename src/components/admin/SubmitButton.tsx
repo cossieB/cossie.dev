@@ -3,7 +3,7 @@ import Loader from "../shared/Loader/Loader"
 import styles from "~/components/admin/forms/forms.module.scss"
 
 type Props = {
-    text: string
+    text?: string
     loading: boolean
     disabled: boolean
     finished: boolean
@@ -17,7 +17,7 @@ export default function SubmitButton(props: Props) {
             class={styles.submitBtn}
             disabled={props.disabled || props.loading || props.finished}
         >
-            <Switch fallback={props.text} >
+            <Switch fallback={props.text || "Submit"} >
                 <Match when={props.loading}>
                     <Loader />
                 </Match>
