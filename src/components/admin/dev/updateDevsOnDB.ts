@@ -10,7 +10,7 @@ export async function updateDevOnDB(fd: FormData) {
         if (typeof val != "string")
             throw new ServerError('Invalid Format', { status: 400 })
         obj[key] = val;
-    });console.log(obj)
+    })
     const {developerId, ...d} = obj;
     if (developerId) {
         await db.update(developer).set(d).where(eq(developer.developerId, developerId))
