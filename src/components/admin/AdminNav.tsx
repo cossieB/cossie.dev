@@ -14,6 +14,9 @@ export default function AdminNav() {
                 <AdminNavLink href="/admin/publishers">
                     Publishers
                 </AdminNavLink>
+                <AdminNavLink href="/admin/platforms">
+                    Platforms
+                </AdminNavLink>
             </ul>
         </nav>
     )

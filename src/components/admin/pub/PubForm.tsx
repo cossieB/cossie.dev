@@ -25,17 +25,17 @@ function copyData(data: Props['data']): Publisher {
     }
 }
 export function PubForm(props: Props) {
-    const [dev, setDev] = createStore(copyData(props.data))
+    const [pub, setPub] = createStore(copyData(props.data))
 
     const [file, setFile] = createSignal<File[]>([])
     const [state, setState] = createStore({
         isUploading: false,
         uploadOk: false,
         uploadErrored: false,
-        logoHasChanged: () => dev.logo && dev.logo !== props.data?.logo
+        logoHasChanged: () => pub.logo && pub.logo !== props.data?.logo
     })
     createEffect(() => {
-        setDev(copyData(props.data))
+        setPub(copyData(props.data))
     })
     const [submitting, { Form }] = createServerAction$(updatePubOnDB, {
         invalidate: () => ['publishers', props.data?.publisherId]
@@ -44,13 +44,13 @@ export function PubForm(props: Props) {
         <Form id="pubForm" class={styles.form}>
             <div class={styles.heroImgs}>
                 <DropZoneWithPreview
-                    onAdd={url => setDev('logo', url)}
+                    onAdd={url => setPub('logo', url)}
                     setFiles={file => setFile(file)}
                     text="Logo"
-                    img={dev.logo}
+                    img={pub.logo}
                 />
             </div>
-            <Show when={state.logoHasChanged() && file().length > 0 && !!dev.name}>
+            <Show when={state.logoHasChanged() && file().length > 0 && !!pub.name}>
                 <SubmitButton
                     disabled={submitting.pending}
                     loading={state.isUploading}
@@ -59,49 +59,49 @@ export function PubForm(props: Props) {
                     onclick={() => uploadLogo(
                         file()[0]!,
                         setState,
-                        dev.name,
+                        pub.name,
                         'publisher',
-                        url => setDev('logo', url[0])
+                        url => setPub('logo', url[0])
                     )}
                 />
             </Show>
             <FormInput
                 name="name"
-                value={dev.name}
-                setter={setDev}
+                value={pub.name}
+                setter={setPub}
             />
             <FormInput
                 name="headquarters"
-                value={dev.headquarters}
-                setter={setDev}
+                value={pub.headquarters}
+                setter={setPub}
             />
             <SelectInput
                 arr={countryList}
                 label="Country"
                 name="country"
-                value={dev.country}
-                setter={setDev}
-                default={countryList.find(x => x === dev.country)}
+                value={pub.country}
+                setter={setPub}
+                default={countryList.find(x => x === pub.country)}
             />
             <FormTextarea
                 name="summary"
-                value={dev.summary}
-                setter={setDev}
+                value={pub.summary}
+                setter={setPub}
             />
             <SubmitButton
                 finished={!!submitting.result}
                 loading={submitting.pending}
                 disabled={
-                    !dev.country ||
+                    !pub.country ||
                     state.isUploading ||
-                    !dev.name ||
-                    !dev.logo ||
-                    !dev.headquarters ||
-                    !dev.summary
+                    !pub.name ||
+                    !pub.logo ||
+                    !pub.headquarters ||
+                    !pub.summary
                 }
             />
-            <HiddenInput name="logo" value={dev.logo} />
-            <HiddenInput name="publisherId" value={dev.publisherId} />
+            <HiddenInput name="logo" value={pub.logo} />
+            <HiddenInput name="publisherId" value={pub.publisherId} />
         </Form>
     )
 }
