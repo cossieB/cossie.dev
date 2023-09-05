@@ -59,6 +59,7 @@ input {
     padding: 1rem;
     border-radius: 0.5rem;
     color: black;
+    z-index: 999;
 
     >div {
         --popClr: 120;
