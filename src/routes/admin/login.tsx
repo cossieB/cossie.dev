@@ -1,37 +1,16 @@
 import { createHash } from "crypto";
 import { createStore } from "solid-js/store";
-import { RouteDataArgs, createSessionStorage, useRouteData } from "solid-start";
+import { RouteDataArgs, useRouteData } from "solid-start";
 import { ServerError, createServerAction$, createServerData$, redirect } from "solid-start/server";
 import SubmitButton from "~/components/admin/SubmitButton";
 import { FormInput } from "~/components/admin/forms/FormInput";
 import styles from "~/components/admin/forms/forms.module.scss";
 import { Popup } from "~/components/shared/Popup";
-import MongoConnection from "~/mongo/mongo";
-import { authenticate } from "../../utils/authenticate";
+import { authenticate, storage } from "../../utils/authenticate";
 
-const mongo = new MongoConnection
-
-export const storage = createSessionStorage({
-    async createData(data, expires) {
-        const now = new Date();
-        now.setMinutes(now.getMinutes() + 1);
-        return mongo.addSession(data, expires ?? now)
-    },
-    async deleteData(id) {
-        return mongo.deleteSession(id)
-    },
-    async readData(id) {
-        return await mongo.getSession(id)
-    },
-    async updateData(id, data, expires) {
-        const now = new Date();
-        now.setMinutes(now.getMinutes() + 15);
-        return mongo.updateSession(id, data, expires ?? now)
-    },
-});
 export function routeData(args: RouteDataArgs) {
     return createServerData$(async (_, event) => {
-        const user = await authenticate(event);
+        const user = await authenticate(event.request);
         if (user == process.env.ADMIN_USERNAME)
             throw redirect('/admin/games')
     }, { key: 'auth' })
@@ -44,28 +23,30 @@ export default function AdminLogin() {
     })
     const [submitting, { Form }] = createServerAction$(loginAction, { invalidate: ['auth'] })
     return (
-        <Form class={styles.form}>
-            <FormInput
-                name="username"
-                setter={setUser}
-            />
-            <FormInput
-                name="password"
-                type="password"
-                setter={setUser}
-            />
-            <SubmitButton
-                loading={submitting.pending}
-                disabled={false}
-                finished={false}
-                text="Login"
-            />
+        <>
+            <Form class={styles.form}>
+                <FormInput
+                    name="username"
+                    setter={setUser}
+                />
+                <FormInput
+                    name="password"
+                    type="password"
+                    setter={setUser}
+                />
+                <SubmitButton
+                    loading={submitting.pending}
+                    disabled={false}
+                    finished={false}
+                    text="Login"
+                />
+            </Form>
             <Popup
-                close={() => submitting.clear()}
+                close={() => {submitting.clear() }}
                 text={submitting.error.message}
                 when={submitting.error}
             />
-        </Form>
+        </>
     )
 }
 async function loginAction(fd: FormData, { request }: { request: Request }) {

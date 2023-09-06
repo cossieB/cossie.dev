@@ -1,6 +1,5 @@
-import { Show, onCleanup, onMount } from "solid-js";
+import { Show, onCleanup } from "solid-js";
 import { Transition } from "solid-transition-group";
-import { state } from "../Wordle/store";
 
 type Props = {
     text: string,
@@ -13,9 +12,7 @@ export function Popup(props: Props) {
     return (
         <Transition name="fade" >
             <Show when={props.when}>
-                <Alert
-                    {...props}
-                />
+                <Alert {...props} />
             </Show>
         </Transition>
     )
@@ -30,12 +27,8 @@ function Alert(props: Props) {
         clearTimeout(t)
     })
     return (
-        <div
-            class="popup"
-        >
-            <div
-                style={{ "--popClr": props.colorDeg ?? 50 }}
-            >
+        <div class="popup">
+            <div style={{ "--popClr": props.colorDeg ?? 50 }}>
                 {props.text}
             </div>
         </div>
