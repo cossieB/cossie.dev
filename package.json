@@ -28,6 +28,7 @@
     "@solidjs/router": "^0.8.2",
     "@uploadthing/solid": "^5.1.2",
     "@vercel/analytics": "^1.0.1",
+    "@vercel/postgres": "^0.4.1",
     "ag-grid-community": "^30.0.5",
     "ag-grid-solid": "^30.0.5",
     "drizzle-orm": "^0.28.2",
