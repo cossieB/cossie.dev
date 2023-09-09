@@ -32,7 +32,7 @@ export function DevForm(props: Props) {
     const [state, setState] = createStore({
         isUploading: false,
         uploadOk: false,
-        uploadErrored: false,
+        uploadError: null as null | string,
         logoHasChanged: () => dev.logo && dev.logo !== props.data?.logo
     })
     createEffect(() => {
@@ -106,9 +106,12 @@ export function DevForm(props: Props) {
                 <HiddenInput name="developerId" value={dev.developerId} />
             </Form>
             <Popup
-                when={state.uploadErrored}
-                text="Unauthorized"
-                close={() => setState('uploadErrored', false)}
+                when={!!state.uploadError || submitting.error}
+                text={state.uploadError! || submitting.error}
+                close={() => {
+                    setState('uploadError', null);
+                    submitting.clear()
+                }}
             />
         </>
     )

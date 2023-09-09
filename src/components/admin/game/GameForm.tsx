@@ -192,9 +192,12 @@ export default function GameForm(props: Props) {
                 <HiddenInput name="tagsHaveChanged" value={state.tagsHaveChanged() ? 1 : 0} />
             </Form>
             <Popup
-                when={!!state.uploadError}
-                text={state.uploadError!}
-                close={() => setState('uploadError', null)}
+                when={!!state.uploadError || submitting.error}
+                text={state.uploadError! || submitting.error.message}
+                close={() => {
+                    setState('uploadError', null);
+                    submitting.clear()
+                }}
             />
         </>
     )

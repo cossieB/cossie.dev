@@ -5,7 +5,7 @@ import { uploadAndUpdateUrl } from "~/utils/uploadToUploadThing";
 type State = {
     isUploading: boolean,
     uploadOk: boolean,
-    uploadErrored: boolean,
+    uploadError: null | string,
 }
 
 export async function uploadLogo<T extends keyof OurFileRouter>(
@@ -27,8 +27,8 @@ export async function uploadLogo<T extends keyof OurFileRouter>(
         )
         setState({ uploadOk: true }); 
     }
-    catch (error) {
-        setState({ uploadErrored: true });
+    catch (error: any) {
+        setState({ uploadError: error.message });
     }
     finally {
         setState({ isUploading: false });

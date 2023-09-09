@@ -31,7 +31,7 @@ export function PlatForm(props: Props) {
     const [state, setState] = createStore({
         isUploading: false,
         uploadOk: false,
-        uploadErrored: false,
+        uploadError: null as null | string,
         logoHasChanged: () => platform.logo && platform.logo !== props.data?.logo
     })
     createEffect(() => {
@@ -96,9 +96,12 @@ export function PlatForm(props: Props) {
                 <HiddenInput name="platformId" value={platform.platformId} />
             </Form>
             <Popup
-                when={state.uploadErrored}
+                when={state.uploadError || submitting.error}
                 text="Unauthorized"
-                close={() => setState('uploadErrored', false)}
+                close={() => {
+                    setState('uploadError', null);
+                    submitting.clear()
+                }}
             />
         </>
     )

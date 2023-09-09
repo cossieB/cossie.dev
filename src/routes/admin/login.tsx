@@ -1,7 +1,7 @@
 import { createHash } from "crypto";
 import { createStore } from "solid-js/store";
 import { RouteDataArgs, useRouteData } from "solid-start";
-import { ServerError, createServerAction$, createServerData$, redirect } from "solid-start/server";
+import { ServerError, ServerFunctionEvent, createServerAction$, createServerData$, redirect } from "solid-start/server";
 import SubmitButton from "~/components/admin/SubmitButton";
 import { FormInput } from "~/components/admin/forms/FormInput";
 import styles from "~/components/admin/forms/forms.module.scss";
@@ -49,7 +49,7 @@ export default function AdminLogin() {
         </>
     )
 }
-async function loginAction(fd: FormData, { request }: { request: Request }) {
+async function loginAction(fd: FormData, { request }: ServerFunctionEvent) {
 
     const cookie = request.headers.get("Cookie");
 

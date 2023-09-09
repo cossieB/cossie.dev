@@ -1,17 +1,22 @@
 import type { Game } from "~/drizzle/types";
 import { db } from "~/db";
 import { game, gamesOnPlatforms, genresOfGames } from "~/drizzle/schema";
-import { ServerError } from "solid-start";
+import { ServerError, ServerFunctionEvent } from "solid-start";
 import { eq } from "drizzle-orm";
+import { authenticate } from "~/utils/authenticate";
 
-export const updateGamesOnDB = async (fd: FormData) => {
+export async function updateGamesOnDB(fd: FormData, event: ServerFunctionEvent) {
+    const user = await authenticate(event.request);
+    if (!user || user != process.env.ADMIN_USERNAME)
+        throw new ServerError('Unauthorized', {status: 401})
     const obj: { [key: string]: string | string[]; } = {};
     fd.forEach((val, key) => {
         if (typeof val != "string")
-            throw new ServerError('Invalid Format', { status: 400 })
+            throw new ServerError('Invalid Format', { status: 400 });
         if (key == 'gameId' && val.length == 0) { }
         else if (key == 'images' || key == 'tags' || key == 'pforms')
-            obj[key] = val == "" ? [] : val.split(',') ;
+            obj[key] = val == "" ? [] : val.split(',');
+
         else
             obj[key] = val;
 
@@ -21,19 +26,19 @@ export const updateGamesOnDB = async (fd: FormData) => {
     if (obj.gameId) {
         const { gameId, tags, pforms, tagsHaveChanged, pformsHaveChanged, ...g } = obj;
 
-        await db.transaction(async tx => {
+        await db.transaction(async (tx) => {
             if (tagsHaveChanged === "1") {
-                await tx.delete(genresOfGames).where(eq(genresOfGames.gameId, obj.gameId as string))
+                await tx.delete(genresOfGames).where(eq(genresOfGames.gameId, obj.gameId as string));
                 if (tags.length > 0)
                     await tx.insert(genresOfGames).values((obj.tags as string[]).map(genre => ({ gameId: obj.gameId as string, genre: genre.toLowerCase() })));
             }
             if (pformsHaveChanged === "1") {
-                await tx.delete(gamesOnPlatforms).where(eq(gamesOnPlatforms.gameId, obj.gameId as string))
+                await tx.delete(gamesOnPlatforms).where(eq(gamesOnPlatforms.gameId, obj.gameId as string));
                 if (pforms.length > 0)
-                    await tx.insert(gamesOnPlatforms).values((obj.pforms as string[]).map(platformId => ({ gameId: gameId as string, platformId: platformId })))
+                    await tx.insert(gamesOnPlatforms).values((obj.pforms as string[]).map(platformId => ({ gameId: gameId as string, platformId: platformId })));
             }
-            await tx.update(game).set(g).where(eq(game.gameId, obj.gameId as string))
-        })
+            await tx.update(game).set(g).where(eq(game.gameId, obj.gameId as string));
+        });
         return obj.gameId as string;
     }
     else {
@@ -43,4 +48,4 @@ export const updateGamesOnDB = async (fd: FormData) => {
             return rows[0].gameId;
         });
     }
-};
+}
