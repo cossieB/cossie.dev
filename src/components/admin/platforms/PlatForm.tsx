@@ -10,6 +10,7 @@ import { uploadLogo } from "../uploadLogo"
 import styles from "~/components/admin/forms/forms.module.scss";
 import { updatePlatformOnDB } from "./updatePlatformOnDB"
 import { formatDateForInputElement } from "~/lib/formatDate"
+import { Popup } from "~/components/shared/Popup"
 
 type Props = {
     data?: Platform
@@ -40,58 +41,65 @@ export function PlatForm(props: Props) {
         invalidate: () => ['platforms', props.data?.platformId]
     })
     return (
-        <Form id="platForm" class={styles.form}>
-            <div class={styles.heroImgs}>
-                <DropZoneWithPreview
-                    onAdd={url => setPlatform('logo', url)}
-                    setFiles={file => setFile(file)}
-                    text="Logo"
-                    img={platform.logo}
+        <>
+            <Form id="platForm" class={styles.form}>
+                <div class={styles.heroImgs}>
+                    <DropZoneWithPreview
+                        onAdd={url => setPlatform('logo', url)}
+                        setFiles={file => setFile(file)}
+                        text="Logo"
+                        img={platform.logo}
+                    />
+                </div>
+                <Show when={state.logoHasChanged() && file().length > 0 && !!platform.name}>
+                    <SubmitButton
+                        disabled={submitting.pending}
+                        loading={state.isUploading}
+                        finished={state.uploadOk}
+                        text="Upload"
+                        onclick={() => uploadLogo(
+                            file()[0]!,
+                            setState,
+                            platform.name,
+                            'platform',
+                            url => setPlatform('logo', url[0])
+                        )}
+                    />
+                </Show>
+                <FormInput
+                    name="name"
+                    value={platform.name}
+                    setter={setPlatform}
                 />
-            </div>
-            <Show when={state.logoHasChanged() && file().length > 0 && !!platform.name}>
+                <FormInput
+                    name="release"
+                    value={formatDateForInputElement(new Date(platform.release))}
+                    setter={setPlatform}
+                    type="date"
+                />
+                <FormTextarea
+                    name="summary"
+                    value={platform.summary}
+                    setter={setPlatform}
+                />
                 <SubmitButton
-                    disabled={submitting.pending}
-                    loading={state.isUploading}
-                    finished={state.uploadOk}
-                    text="Upload"
-                    onclick={() => uploadLogo(
-                        file()[0]!,
-                        setState,
-                        platform.name,
-                        'platform',
-                        url => setPlatform('logo', url[0])
-                    )}
+                    finished={!!submitting.result}
+                    loading={submitting.pending}
+                    disabled={
+                        state.isUploading ||
+                        !platform.name ||
+                        !platform.logo ||
+                        !platform.summary
+                    }
                 />
-            </Show>
-            <FormInput
-                name="name"
-                value={platform.name}
-                setter={setPlatform}
+                <HiddenInput name="logo" value={platform.logo} />
+                <HiddenInput name="platformId" value={platform.platformId} />
+            </Form>
+            <Popup
+                when={state.uploadErrored}
+                text="Unauthorized"
+                close={() => setState('uploadErrored', false)}
             />
-            <FormInput
-                name="release"
-                value={formatDateForInputElement(new Date(platform.release))}
-                setter={setPlatform}
-                type="date"
-            />
-            <FormTextarea
-                name="summary"
-                value={platform.summary}
-                setter={setPlatform}
-            />
-            <SubmitButton
-                finished={!!submitting.result}
-                loading={submitting.pending}
-                disabled={
-                    state.isUploading ||
-                    !platform.name ||
-                    !platform.logo ||
-                    !platform.summary
-                }
-            />
-            <HiddenInput name="logo" value={platform.logo} />
-            <HiddenInput name="platformId" value={platform.platformId} />
-        </Form>
+        </>
     )
 }

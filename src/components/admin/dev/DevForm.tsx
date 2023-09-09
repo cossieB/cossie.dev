@@ -10,6 +10,7 @@ import { DropZoneWithPreview } from "../forms/DropZone"
 import { uploadLogo } from "../uploadLogo"
 import { updateDevOnDB as updateDevsOnDB } from "./updateDevsOnDB"
 import HiddenInput from "../forms/HiddenInput"
+import { Popup } from "~/components/shared/Popup"
 
 type Props = {
     data?: Developer
@@ -41,67 +42,74 @@ export function DevForm(props: Props) {
         invalidate: () => ['developers', props.data?.developerId]
     })
     return (
-        <Form id="devForm" class={styles.form}>
-            <div class={styles.heroImgs}>
-                <DropZoneWithPreview
-                    onAdd={url => setDev('logo', url)}
-                    setFiles={file => setFile(file)}
-                    text="Logo"
-                    img={dev.logo}
+        <>
+            <Form id="devForm" class={styles.form}>
+                <div class={styles.heroImgs}>
+                    <DropZoneWithPreview
+                        onAdd={url => setDev('logo', url)}
+                        setFiles={file => setFile(file)}
+                        text="Logo"
+                        img={dev.logo}
+                    />
+                </div>
+                <Show when={state.logoHasChanged() && file().length > 0 && !!dev.name}>
+                    <SubmitButton
+                        disabled={submitting.pending}
+                        loading={state.isUploading}
+                        finished={state.uploadOk}
+                        text="Upload"
+                        onclick={() => uploadLogo(
+                            file()[0]!,
+                            setState,
+                            dev.name,
+                            'developer',
+                            url => setDev('logo', url[0])
+                        )}
+                    />
+                </Show>
+                <FormInput
+                    name="name"
+                    value={dev.name}
+                    setter={setDev}
                 />
-            </div>
-            <Show when={state.logoHasChanged() && file().length > 0 && !!dev.name}>
+                <FormInput
+                    name="location"
+                    value={dev.location}
+                    setter={setDev}
+                />
+                <SelectInput
+                    arr={countryList}
+                    label="Country"
+                    name="country"
+                    value={dev.country}
+                    setter={setDev}
+                    default={countryList.find(x => x === dev.country)}
+                />
+                <FormTextarea
+                    name="summary"
+                    value={dev.summary}
+                    setter={setDev}
+                />
                 <SubmitButton
-                    disabled={submitting.pending}
-                    loading={state.isUploading}
-                    finished={state.uploadOk}
-                    text="Upload"
-                    onclick={() => uploadLogo(
-                        file()[0]!,
-                        setState,
-                        dev.name,
-                        'developer',
-                        url => setDev('logo', url[0])
-                    )}
+                    finished={!!submitting.result}
+                    loading={submitting.pending}
+                    disabled={
+                        !dev.country ||
+                        state.isUploading ||
+                        !dev.name ||
+                        !dev.logo ||
+                        !dev.location ||
+                        !dev.summary
+                    }
                 />
-            </Show>
-            <FormInput
-                name="name"
-                value={dev.name}
-                setter={setDev}
+                <HiddenInput name="logo" value={dev.logo} />
+                <HiddenInput name="developerId" value={dev.developerId} />
+            </Form>
+            <Popup
+                when={state.uploadErrored}
+                text="Unauthorized"
+                close={() => setState('uploadErrored', false)}
             />
-            <FormInput
-                name="location"
-                value={dev.location}
-                setter={setDev}
-            />
-            <SelectInput
-                arr={countryList}
-                label="Country"
-                name="country"
-                value={dev.country}
-                setter={setDev}
-                default={countryList.find(x => x === dev.country)}
-            />
-            <FormTextarea
-                name="summary"
-                value={dev.summary}
-                setter={setDev}
-            />
-            <SubmitButton
-                finished={!!submitting.result}
-                loading={submitting.pending}
-                disabled={
-                    !dev.country ||
-                    state.isUploading ||
-                    !dev.name ||
-                    !dev.logo ||
-                    !dev.location ||
-                    !dev.summary
-                }
-            />
-            <HiddenInput name="logo" value={dev.logo} />
-            <HiddenInput name="developerId" value={dev.developerId} />
-        </Form>
+        </>
     )
 }

@@ -8,14 +8,14 @@ import { db } from "~/db";
 export function routeData() {
     const developers = createServerData$(async () => db.query.developer.findMany(), {
         key: 'developers'
-    } )
+    })
     const publishers = createServerData$(async () => db.query.publisher.findMany(), {
         key: 'publishers'
-    } )
+    })
     const platforms = createServerData$(async () => db.query.platform.findMany(), {
         key: 'platforms'
-    } )
-    return {developers, publishers, platforms}
+    })
+    return { developers, publishers, platforms }
 }
 
 export default function Layout() {
@@ -29,13 +29,15 @@ export default function Layout() {
         <AdminContextProvider>
             <div class={styles.container}>
                 <AdminNav />
-                <Outlet />
+                <section class={styles.main}>
+                    <Outlet />
+                </section>
             </div>
         </AdminContextProvider>
     )
 }
 
-export const AdminContext = createContext<ReturnType<typeof routeData>> ()
+export const AdminContext = createContext<ReturnType<typeof routeData>>()
 
 function AdminContextProvider(props: { children: JSXElement }) {
     const data = useRouteData<typeof routeData>()

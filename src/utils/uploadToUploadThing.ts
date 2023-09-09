@@ -1,7 +1,7 @@
 import { genUploader } from "uploadthing/client";
 import { OurFileRouter } from "~/server/uploadthing";
 
-const uploader = genUploader<OurFileRouter>();
+const uploader = genUploader();
 
 export async function uploadAndUpdateUrl<T extends keyof OurFileRouter>(
     endpoint: T,
@@ -23,10 +23,11 @@ export async function upload<T extends keyof OurFileRouter>(
     return await uploader({
         endpoint,
         files,
-        //@ts-expect-error
+
         input: {
             name,
             field
-        }
+        },
+        
     })
 }

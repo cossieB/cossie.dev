@@ -1,8 +1,17 @@
+import { ServerError } from "solid-start";
 import { createUploadthing } from "uploadthing/next";
-import type { FileRouter } from "uploadthing/next";
+import { FileRouter } from "uploadthing/server";
 import { z } from "zod";
+import { authenticate } from "~/utils/authenticate";
 
-const f = createUploadthing();
+const f = createUploadthing({
+    errorFormatter: (err) => {
+      return {
+        message: err.cause instanceof ServerError ? err.cause.message : "Something Went Wrong",
+        zodError: err.cause instanceof z.ZodError ? err.cause.flatten() : null,
+      };
+    },
+  });
 
 export const uploadRouter = {
     game: f({
@@ -15,7 +24,10 @@ export const uploadRouter = {
             title: z.string(),
             field: z.enum(['cover', 'banner', 'images'])
         }))
-        .middleware(opts => {
+        .middleware(async opts => {
+            const user = await authenticate(opts.req)
+            if (!user || user != process.env.ADMIN_USERNAME)
+                throw new ServerError('Unauthorized', {status: 401})
             return {
                 input: opts.input
             }
@@ -32,9 +44,12 @@ export const uploadRouter = {
             name: z.string(),
             field: z.enum(['developer', 'publisher', 'platform'])
         }))
-        .middleware(opts => {
+        .middleware(async opts => {
+            const user = await authenticate(opts.req)
+            if (!user || user != process.env.ADMIN_USERNAME)
+                throw new ServerError('Unauthorized', {status: 401})
             return {
-                name: opts.input
+                input: opts.input
             }
         })
         .onUploadComplete(data => {

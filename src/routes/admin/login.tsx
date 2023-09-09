@@ -10,7 +10,7 @@ import { authenticate, storage } from "../../utils/authenticate";
 
 export function routeData(args: RouteDataArgs) {
     return createServerData$(async (_, event) => {
-        const user = await authenticate(event.request);
+        const user = await authenticate(event.request);console.log(user)
         if (user == process.env.ADMIN_USERNAME)
             throw redirect('/admin/games')
     }, { key: 'auth' })

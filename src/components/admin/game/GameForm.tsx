@@ -20,6 +20,11 @@ import SubmitButton from "../SubmitButton";
 import { updateGamesOnDB } from "./updateGamesOnDB";
 import { arrayChanged as arrayHasChanged, itemsAddedToArray } from "../../../utils/arrayChanged";
 import { Checklist } from "../forms/Checklist";
+import { generateSolidHelpers } from "@uploadthing/solid";
+import { OurFileRouter } from "~/server/uploadthing";
+import { Popup } from "~/components/shared/Popup";
+
+// const {useUploadThing, uploadFiles} = generateSolidHelpers<OurFileRouter>();
 
 export type Props = {
     data?: Game & { tags: string[], platforms: string[] };
@@ -51,7 +56,7 @@ export default function GameForm(props: Props) {
     const [state, setState] = createStore({
         isUploading: false,
         uploadOk: false,
-        uploadErrored: false,
+        uploadError: null as null | string,
         imagesChanged: () => {
             if (game.images.length == 0)
                 return false
@@ -71,119 +76,126 @@ export default function GameForm(props: Props) {
     })
 
     return (
-        <Form id="gameForm" class={styles.form} ref={form} >
-            <FormInput
-                name="title"
-                value={game.title}
-                required
-                setter={setGame}
-            />
-            <HeroImages setGame={setGame} game={game} setFiles={setFiles} />
-            <DropZone
-                onAdd={(url) => { setGame({ images: [...game.images, url] }) }}
-                text="Drop Screenshots Here"
-                fileLimit={8}
-                currentNum={game.images.length}
-                setFiles={files => setFiles('screens', prev => [...prev, ...files])}
-            />
-            <ImagePreview
-                images={game.images}
-                setImages={arr => setGame('images', arr)}
-            />
-            <Show when={state.imagesChanged()}>
-                <SubmitButton
-                    disabled={!!submitting.result}
-                    finished={state.uploadOk}
-                    loading={submitting.pending || state.isUploading}
-                    text="Upload"
-                    type="button"
-                    onclick={() => uploadGameImages(files, props, setState, game, setGame, props.data)}
+        <>
+            <Form id="gameForm" class={styles.form} ref={form} >
+                <FormInput
+                    name="title"
+                    value={game.title}
+                    required
+                    setter={setGame}
                 />
-            </Show>
-            <FormTextarea
-                name="summary"
-                innerHTML={game.summary}
-                required
-                setter={setGame}
+                <HeroImages setGame={setGame} game={game} setFiles={setFiles} />
+                <DropZone
+                    onAdd={(url) => { setGame({ images: [...game.images, url] }) }}
+                    text="Drop Screenshots Here"
+                    fileLimit={8}
+                    currentNum={game.images.length}
+                    setFiles={files => setFiles('screens', prev => [...prev, ...files])}
+                />
+                <ImagePreview
+                    images={game.images}
+                    setImages={arr => setGame('images', arr)}
+                />
+                <Show when={state.imagesChanged()}>
+                    <SubmitButton
+                        disabled={!!submitting.result}
+                        finished={state.uploadOk}
+                        loading={submitting.pending || state.isUploading}
+                        text="Upload"
+                        type="button"
+                        onclick={() => uploadGameImages(files, props, setState, game, setGame, props.data)}
+                    />
+                </Show>
+                <FormTextarea
+                    name="summary"
+                    innerHTML={game.summary}
+                    required
+                    setter={setGame}
+                />
+                <FormInput
+                    name="releaseDate"
+                    value={game.releaseDate ? formatDateForInputElement(new Date(game.releaseDate)) : undefined}
+                    required
+                    type="date"
+                    setter={setGame}
+                />
+                <SelectInput
+                    arr={(developers() ?? []).map(dev => ({ label: dev.name, value: dev.developerId }))}
+                    name="developerId"
+                    label="Developer"
+                    default={(developers() ?? []).find(x => x.developerId === game.developerId)?.developerId}
+                    setter={setGame}
+                />
+                <SelectInput
+                    arr={(publishers() ?? []).map(pub => ({ label: pub.name, value: pub.publisherId })) ?? []}
+                    name="publisherId"
+                    label="Publisher"
+                    default={(publishers() ?? [])?.find(x => x.publisherId === game.publisherId)?.publisherId}
+                    setter={setGame}
+                />
+                <InputWithAddButton
+                    name="tags"
+                    disabled={false}
+                    addItem={item => setGame({ tags: [...game.tags, item] })}
+                />
+                <Tags
+                    tags={game.tags}
+                    removeItem={item => setGame({
+                        tags: game.tags.filter(tag => tag !== item)
+                    })}
+                />
+                <Checklist
+                    items={platforms() ?? []}
+                    idField="platformId"
+                    valueField="name"
+                    arr={game.platforms}
+                    setArray={val => setGame('platforms', val)}
+                />
+                <FormInput
+                    name="trailer"
+                    value={game.trailer}
+                    required
+                    setter={setGame}
+                />
+                <Switch>
+                    <Match when={getYoutubeURL(game.trailer)} >
+                        <YouTubeIframe link={getYoutubeURL(game.trailer)!} />
+                    </Match>
+                    <Match when={game.trailer}>
+                        <YouTubeIframe link={game.trailer} />
+                    </Match>
+                </Switch>
+                <SubmitButton
+                    loading={submitting.pending}
+                    disabled={
+                        state.isUploading ||
+                        !game.title ||
+                        !game.cover ||
+                        !game.banner ||
+                        !game.summary ||
+                        !game.developerId ||
+                        !game.publisherId ||
+                        game.platforms.length == 0 ||
+                        !game.releaseDate ||
+                        !game.trailer
+                    }
+                    finished={!!submitting.result}
+                    text="Submit"
+                />
+                <HiddenInput name="cover" value={game.cover} />
+                <HiddenInput name="banner" value={game.banner} />
+                <HiddenInput name="images" value={game.images} />
+                <HiddenInput name="tags" value={game.tags} />
+                <HiddenInput name="gameId" value={game.gameId} />
+                <HiddenInput name="pforms" value={game.platforms} />
+                <HiddenInput name="pformsHaveChanged" value={state.pformsHaveChanged() ? 1 : 0} />
+                <HiddenInput name="tagsHaveChanged" value={state.tagsHaveChanged() ? 1 : 0} />
+            </Form>
+            <Popup
+                when={!!state.uploadError}
+                text={state.uploadError!}
+                close={() => setState('uploadError', null)}
             />
-            <FormInput
-                name="releaseDate"
-                value={game.releaseDate ? formatDateForInputElement(new Date(game.releaseDate)) : undefined}
-                required
-                type="date"
-                setter={setGame}
-            />
-            <SelectInput
-                arr={(developers() ?? []).map(dev => ({ label: dev.name, value: dev.developerId }))}
-                name="developerId"
-                label="Developer"
-                default={(developers() ?? []).find(x => x.developerId === game.developerId)?.developerId}
-                setter={setGame}
-            />
-            <SelectInput
-                arr={(publishers() ?? []).map(pub => ({ label: pub.name, value: pub.publisherId })) ?? []}
-                name="publisherId"
-                label="Publisher"
-                default={(publishers() ?? [])?.find(x => x.publisherId === game.publisherId)?.publisherId}
-                setter={setGame}
-            />
-            <InputWithAddButton
-                name="tags"
-                disabled={false}
-                addItem={item => setGame({ tags: [...game.tags, item] })}
-            />
-            <Tags
-                tags={game.tags}
-                removeItem={item => setGame({
-                    tags: game.tags.filter(tag => tag !== item)
-                })}
-            />
-            <Checklist
-                items={platforms() ?? []}
-                idField="platformId"
-                valueField="name"
-                arr={game.platforms}
-                setArray={val => setGame('platforms', val)}
-            />
-            <FormInput
-                name="trailer"
-                value={game.trailer}
-                required
-                setter={setGame}
-            />
-            <Switch>
-                <Match when={getYoutubeURL(game.trailer)} >
-                    <YouTubeIframe link={getYoutubeURL(game.trailer)!} />
-                </Match>
-                <Match when={game.trailer}>
-                    <YouTubeIframe link={game.trailer} />
-                </Match>
-            </Switch>
-            <SubmitButton
-                loading={submitting.pending}
-                disabled={
-                    state.isUploading ||
-                    !game.title ||
-                    !game.cover ||
-                    !game.banner ||
-                    !game.summary ||
-                    !game.developerId ||
-                    !game.publisherId ||
-                    game.platforms.length == 0 ||
-                    !game.releaseDate ||
-                    !game.trailer
-                }
-                finished={!!submitting.result}
-                text="Submit"
-            />
-            <HiddenInput name="cover" value={game.cover} />
-            <HiddenInput name="banner" value={game.banner} />
-            <HiddenInput name="images" value={game.images} />
-            <HiddenInput name="tags" value={game.tags} />
-            <HiddenInput name="gameId" value={game.gameId} />
-            <HiddenInput name="pforms" value={game.platforms} />
-            <HiddenInput name="pformsHaveChanged" value={state.pformsHaveChanged() ? 1 : 0} />
-            <HiddenInput name="tagsHaveChanged" value={state.tagsHaveChanged() ? 1 : 0} />
-        </Form>
+        </>
     )
 }

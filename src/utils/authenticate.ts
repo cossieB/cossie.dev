@@ -24,6 +24,5 @@ export const storage = createSessionStorage({
 export async function authenticate(request: Request) {
     const cookie = request.headers.get('cookie');
     const session = await storage.getSession(cookie);
-    const user = session.data.username;
-    return user;
+    return session.data.username as string | undefined;
 }
