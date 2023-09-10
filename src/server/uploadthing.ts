@@ -2,7 +2,7 @@ import { ServerError } from "solid-start";
 import { createUploadthing } from "uploadthing/next";
 import { FileRouter } from "uploadthing/server";
 import { z } from "zod";
-import { authenticate } from "~/utils/authenticate";
+import { authenticateOrThrowUnauthorized } from "~/utils/authenticate";
 
 const f = createUploadthing({
     errorFormatter: (err) => {
@@ -25,9 +25,7 @@ export const uploadRouter = {
             field: z.enum(['cover', 'banner', 'images'])
         }))
         .middleware(async opts => {
-            const user = await authenticate(opts.req)
-            if (!user || user != process.env.ADMIN_USERNAME)
-                throw new ServerError('Unauthorized', {status: 401})
+            await authenticateOrThrowUnauthorized(opts.req);
             return {
                 input: opts.input
             }
@@ -45,9 +43,7 @@ export const uploadRouter = {
             field: z.enum(['developer', 'publisher', 'platform'])
         }))
         .middleware(async opts => {
-            const user = await authenticate(opts.req)
-            if (!user || user != process.env.ADMIN_USERNAME)
-                throw new ServerError('Unauthorized', {status: 401})
+            await authenticateOrThrowUnauthorized(opts.req);
             return {
                 input: opts.input
             }

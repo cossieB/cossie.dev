@@ -11,7 +11,7 @@ import { authenticate, storage } from "../../utils/authenticate";
 export function routeData(args: RouteDataArgs) {
     return createServerData$(async (_, event) => {
         const user = await authenticate(event.request);console.log(user)
-        if (user == process.env.ADMIN_USERNAME)
+        if (user?.username === process.env.ADMIN_USERNAME)
             throw redirect('/admin/games')
     }, { key: 'auth' })
 }
@@ -63,6 +63,7 @@ async function loginAction(fd: FormData, { request }: ServerFunctionEvent) {
     if (hash != process.env.ADMIN_PASSWORD || username != process.env.ADMIN_USERNAME)
         throw new ServerError("Invalid Credentials", { status: 401 })
     session.set("username", username);
+    session.set('image', '/favicon.ico')
     throw redirect('/admin/games', {
         headers: {
             'Set-Cookie': await storage.commitSession(session)

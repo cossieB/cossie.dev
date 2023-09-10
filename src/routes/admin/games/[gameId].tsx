@@ -60,13 +60,9 @@ export default function AdminGameId() {
 
     return (
         // <ErrorBoundary fallback={(e) => e.status == 404 ? <NotFound /> : <p> Something went wrong. Please try again later </p>}>
-            <main class={`${styles.main} ${styles.formContainer}`}>
-                <Suspense fallback={<p>Loading...</p>}>
-                    <GameForm
-                        data={data()}
-                    />
-                </Suspense>
-            </main>
+        <Suspense fallback={<p>Loading...</p>}>
+            <GameForm data={data()} />
+        </Suspense>
         // </ErrorBoundary> 
     )
 }

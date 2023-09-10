@@ -3,13 +3,11 @@ import { ServerError, ServerFunctionEvent } from "solid-start";
 import { db } from "~/db";
 import { platform } from "~/drizzle/schema";
 import { Platform } from "~/drizzle/types";
-import { authenticate } from "~/utils/authenticate";
+import { authenticateOrThrowUnauthorized } from "~/utils/authenticate";
 
 
 export async function updatePlatformOnDB(fd: FormData, event: ServerFunctionEvent) {
-    const user = await authenticate(event.request);
-    if (!user || user != process.env.ADMIN_USERNAME)
-        throw new ServerError('Unauthorized', {status: 401})
+    await authenticateOrThrowUnauthorized(event.request);
     const obj: { [key: string]: string; } = {};
     fd.forEach((val, key) => {
         if (typeof val != "string")
