@@ -1,23 +1,24 @@
-import { AdminNavLink } from "./AdminNavLink";
+import { AdminLi, AdminNavLink } from "./AdminNavLink";
 import styles from "./nav.module.scss";
 
 export default function AdminNav() {
     return (
         <nav class={styles.nav}>
             <ul>
-                <AdminNavLink href="/admin/games">
+                <AdminLi href="/admin/games">
                     Games
-                </AdminNavLink>
-                <AdminNavLink href="/admin/developers">
+                </AdminLi>
+                <AdminLi href="/admin/developers">
                     Developers
-                </AdminNavLink>
-                <AdminNavLink href="/admin/publishers">
+                </AdminLi>
+                <AdminLi href="/admin/publishers">
                     Publishers
-                </AdminNavLink>
-                <AdminNavLink href="/admin/platforms">
+                </AdminLi>
+                <AdminLi href="/admin/platforms">
                     Platforms
-                </AdminNavLink>
+                </AdminLi>
             </ul>
         </nav>
     )
 }
+
