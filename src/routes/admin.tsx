@@ -4,6 +4,7 @@ import AdminNav from "~/components/admin/AdminNav";
 import styles from './admin.module.scss'
 import { createServerData$ } from "solid-start/server";
 import { db } from "~/db";
+import { authenticate } from "~/utils/authenticate";
 
 export function routeData() {
     const developers = createServerData$(async () => db.query.developer.findMany(), {
@@ -15,7 +16,10 @@ export function routeData() {
     const platforms = createServerData$(async () => db.query.platform.findMany(), {
         key: 'platforms'
     })
-    return { developers, publishers, platforms }
+    const user = createServerData$(async (_, {request}) => authenticate(request), {
+        key: 'auth'
+    })
+    return { developers, publishers, platforms, user }
 }
 
 export default function Layout() {

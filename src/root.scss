@@ -38,9 +38,14 @@ li {
     margin: 0;
     list-style: none;
 }
-
+.centerV {
+    align-self: center;
+}
 input {
     height: 1.5rem;
+}
+button {
+    border: none;
 }
 
 .tooltip {
