@@ -80,6 +80,7 @@
         .lockIcon {
             @include mixins.flexCenter;
             @extend .addBtn;
+            cursor: pointer;
             &:disabled {
                 background-color: hsl(0, 100%, 20%);
                 background-color: color-mix(in srgb, red 20%, gray);

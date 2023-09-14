@@ -33,7 +33,7 @@ function copyData(data: Props['data']) {
     return {
         tags: [...(data?.tags) ?? []],
         platforms: [...(data?.platforms) ?? []],
-        gameId: data?.gameId ?? "",
+        gameId: data?.gameId ?? crypto.randomUUID(),
         summary: data?.summary ?? "",
         title: data?.title ?? "",
         cover: data?.cover ?? "",
@@ -58,11 +58,11 @@ export default function GameForm(props: Props) {
         uploadOk: false,
         uploadError: null as null | string,
         imagesChanged: () => {
+            if (game.cover !== (props.data?.cover ?? "") || game.banner !== (props.data?.banner ?? ""))
+                return true
             if (game.images.length == 0)
                 return false
             if (!props.data)
-                return true
-            if (game.cover !== props.data.cover || game.banner !== props.data.banner)
                 return true
             return itemsAddedToArray(props.data.images, game.images)
         },
@@ -96,7 +96,7 @@ export default function GameForm(props: Props) {
                     images={game.images}
                     setImages={arr => setGame('images', arr)}
                 />
-                <Show when={state.imagesChanged()}>
+                <Show when={game.title && state.imagesChanged()}>
                     <SubmitButton
                         disabled={!!submitting.result}
                         finished={state.uploadOk}

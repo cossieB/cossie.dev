@@ -1,8 +1,5 @@
 import { ServerError } from "solid-start";
-import { createCookieSessionStorage, createSessionStorage } from "solid-start/session";
-import MongoConnection from "~/mongo/mongo";
-
-const mongo = new MongoConnection
+import { createCookieSessionStorage } from "solid-start/session";
 
 export const storage = createCookieSessionStorage({
     cookie: {
@@ -10,7 +7,7 @@ export const storage = createCookieSessionStorage({
         secrets: [process.env.SESSION_SECRET!],
         sameSite: "strict",
         path: "/",
-        maxAge: 60 * 15, // 30 days
+        maxAge: 60 * 15,
         httpOnly: true
     }
 })

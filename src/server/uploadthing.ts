@@ -2,12 +2,15 @@ import { ServerError } from "solid-start";
 import { createUploadthing } from "uploadthing/next";
 import { FileRouter } from "uploadthing/server";
 import { z } from "zod";
+import MongoConnection from "~/mongo/mongo";
 import { authenticateOrThrowUnauthorized } from "~/utils/authenticate";
+
+const mongo = new MongoConnection;
 
 const f = createUploadthing({
     errorFormatter: (err) => {
       return {
-        message: err.cause instanceof ServerError ? err.cause.message : "Something Went Wrong",
+        message: err.cause instanceof ServerError ? err.cause.message : err.message,
         zodError: err.cause instanceof z.ZodError ? err.cause.flatten() : null,
       };
     },
@@ -21,7 +24,7 @@ export const uploadRouter = {
         }
     })
         .input(z.object({
-            title: z.string(),
+            entity: z.string(),
             field: z.enum(['cover', 'banner', 'images'])
         }))
         .middleware(async opts => {
@@ -30,8 +33,9 @@ export const uploadRouter = {
                 input: opts.input
             }
         })
-        .onUploadComplete(data => {
-            console.log(data)
+        .onUploadComplete(async data => {
+            const doc = {...data.metadata.input, ... data.file}
+            await mongo.addImages(doc)
         }),
     logo: f({
         image: {
@@ -39,7 +43,7 @@ export const uploadRouter = {
         }
     })
         .input(z.object({
-            name: z.string(),
+            entity: z.string(),
             field: z.enum(['developer', 'publisher', 'platform'])
         }))
         .middleware(async opts => {
@@ -48,51 +52,10 @@ export const uploadRouter = {
                 input: opts.input
             }
         })
-        .onUploadComplete(data => {
-            console.log(data)
+        .onUploadComplete(async data => {
+            const doc = {...data.metadata.input, ... data.file}
+            await mongo.addImages(doc)
         }),
-    // videoAndImage: f({
-    //     image: {
-    //         maxFileSize: "4MB",
-    //         maxFileCount: 10,
-    //     },
-    // }).onUploadComplete((data) => {
-    //     console.log("upload completed", data);
-    // }),
-    // withMdwr: f({
-    //     image: {
-    //         maxFileCount: 2,
-    //         maxFileSize: "1MB",
-    //     },
-    // })
-    //     .middleware((opts) => {
-    //         const h = opts.req.headers.get("someProperty");
-
-    //         if (!h) throw new Error("someProperty is required");
-
-    //         return {
-    //             someProperty: h,
-    //             otherProperty: "hello" as const,
-    //         };
-    //     })
-    //     .onUploadComplete(({ metadata, file }) => {
-    //         console.log("uploaded with the following metadata:", metadata);
-    //         console.log("files successfully uploaded:", file);
-    //     }),
-
-    // withoutMdwr: f({
-    //     image: {
-    //         maxFileCount: 2,
-    //         maxFileSize: "16MB",
-    //     },
-    // })
-    //     .middleware(() => {
-    //         return { testMetadata: "lol" };
-    //     })
-    //     .onUploadComplete(({ metadata, file }) => {
-    //         console.log("uploaded with the following metadata:", metadata);
-    //         console.log("files successfully uploaded:", file);
-    //     }),
 } satisfies FileRouter;
 
 export type OurFileRouter = typeof uploadRouter;

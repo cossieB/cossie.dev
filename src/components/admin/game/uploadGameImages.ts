@@ -19,7 +19,7 @@ export async function uploadGameImages(
     data?: Game & { tags: string[] }
 ) {
     setState({ isUploading: true }); 
-    
+    console.log(game.title)
     try {
         const promises: Promise<unknown>[] = [];
         if (files.cover && game.cover != props.data?.cover) {

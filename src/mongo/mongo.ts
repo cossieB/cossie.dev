@@ -31,9 +31,8 @@ export default class MongoConnection {
     deleteSession = async (sessionId: string) => {
         await this.sessionCollection.deleteOne({_id: new ObjectId(sessionId)})
     }
-    addImages = async (name: string, field: string, res: object[]) => {
-        const arr = res.map(x => ({...x, name: name, field: field,}))
-        await this.imageCollection.insertMany(arr)
+    addImages = async (obj: {}) => {
+        this.imageCollection.insertOne(obj)
     }
 
 }

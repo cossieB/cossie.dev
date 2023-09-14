@@ -10,14 +10,14 @@ import { authenticate, storage } from "../../utils/authenticate";
 
 export function routeData(args: RouteDataArgs) {
     return createServerData$(async (_, event) => {
-        const user = await authenticate(event.request);console.log(user)
+        const user = await authenticate(event.request);
         if (user?.username === process.env.ADMIN_USERNAME)
             throw redirect('/admin/games')
     }, { key: 'auth' })
 }
 export default function AdminLogin() {
     const data = useRouteData(); data()
-    const [user, setUser] = createStore({
+    const [, setUser] = createStore({
         username: "",
         password: ""
     })
