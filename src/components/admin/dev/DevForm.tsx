@@ -18,7 +18,7 @@ type Props = {
 function copyData(data: Props['data']): Developer {
     return {
         country: data?.country ?? "",
-        developerId: data?.developerId ?? "",
+        developerId: data?.developerId ?? crypto.randomUUID(),
         location: data?.location ?? "",
         logo: data?.logo ?? "",
         name: data?.name ?? "",
@@ -37,6 +37,15 @@ export function DevForm(props: Props) {
     })
     createEffect(() => {
         setDev(copyData(props.data))
+    })
+    createEffect(() => {
+        if (!file()[0]) return;
+        uploadLogo(
+            file()[0]!,
+            setState,
+            { reference: dev.developerId, table: 'developer' },
+            url => setDev('logo', url[0])
+        )
     })
     const [submitting, { Form }] = createServerAction$(updateDevsOnDB, {
         invalidate: () => ['developers', props.data?.developerId]
@@ -61,8 +70,7 @@ export function DevForm(props: Props) {
                         onclick={() => uploadLogo(
                             file()[0]!,
                             setState,
-                            dev.name,
-                            'developer',
+                            { reference: dev.developerId, table: 'developer' },
                             url => setDev('logo', url[0])
                         )}
                     />

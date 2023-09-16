@@ -11,16 +11,14 @@ export async function updateGamesOnDB(fd: FormData, event: ServerFunctionEvent) 
     fd.forEach((val, key) => {
         if (typeof val != "string")
             throw new ServerError('Invalid Format', { status: 400 });
-        if (key == 'gameId' && val.length == 0) { }
         else if (key == 'images' || key == 'tags' || key == 'pforms')
             obj[key] = val == "" ? [] : val.split(',');
-
         else
             obj[key] = val;
-
     });
 
-    delete obj.tagsInput;
+    delete obj.tagsInput;console.log(event)
+    return new Response()
     if (obj.gameId) {
         const { gameId, tags, pforms, tagsHaveChanged, pformsHaveChanged, ...g } = obj;
 

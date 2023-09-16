@@ -24,13 +24,16 @@ export const uploadRouter = {
         }
     })
         .input(z.object({
-            entity: z.string(),
+            reference: z.string().uuid(),
             field: z.enum(['cover', 'banner', 'images'])
         }))
         .middleware(async opts => {
             await authenticateOrThrowUnauthorized(opts.req);
             return {
-                input: opts.input
+                input: {
+                    ...opts.input,
+                    table: 'game' as const
+                },
             }
         })
         .onUploadComplete(async data => {
@@ -43,13 +46,16 @@ export const uploadRouter = {
         }
     })
         .input(z.object({
-            entity: z.string(),
-            field: z.enum(['developer', 'publisher', 'platform'])
+            reference: z.string().uuid(),
+            table: z.enum(['developer', 'publisher', 'platform']),
         }))
         .middleware(async opts => {
             await authenticateOrThrowUnauthorized(opts.req);
             return {
-                input: opts.input
+                input: {
+                    ...opts.input,
+                    field: 'logo'
+                },
             }
         })
         .onUploadComplete(async data => {

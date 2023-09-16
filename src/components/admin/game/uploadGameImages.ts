@@ -19,15 +19,13 @@ export async function uploadGameImages(
     data?: Game & { tags: string[] }
 ) {
     setState({ isUploading: true }); 
-    console.log(game.title)
     try {
         const promises: Promise<unknown>[] = [];
         if (files.cover && game.cover != props.data?.cover) {
             promises.push(uploadAndUpdateUrl(
                 'game',
                 files.cover,
-                game.title,
-                'cover',
+                {field: 'cover', reference: game.gameId},
                 list => setGame('cover', list[0]),
             ));
         }
@@ -35,8 +33,7 @@ export async function uploadGameImages(
             promises.push(uploadAndUpdateUrl(
                 'game',
                 files.banner,
-                game.title,
-                'banner',
+                {field: 'banner', reference: game.gameId},
                 list => setGame('banner', list[0]),
             ));
         }
@@ -67,7 +64,7 @@ async function uploadScreenshots(
     setImages: (files: string[]) => void
 ) {
     const newFiles = filterNew(oldImages, game.images, files)
-    const res = await upload('game', game.title, 'images', newFiles.map(x => x.file))
+    const res = await upload('game', {reference: game.gameId, field: 'images'}, newFiles.map(x => x.file))
     const arrCopy = [...game.images];
     newFiles.forEach((val, i) => {
         arrCopy[val.i] = res[i].url;

@@ -1,16 +1,21 @@
 import { MongoClient, ObjectId } from "mongodb";
 import { SessionData } from "solid-start/session/sessions";
 
-type Session = {
-    data: SessionData;
-    expires: Date
+type ImgMetadata = {
+    field: string;
+    name: string;
+    key: string;
+    url: string;
+    size: number;
+    reference: string;
+    table: "developer" | "publisher" | "platform" | "game";
 }
 
 export default class MongoConnection {
     private client = new MongoClient(process.env.MONGO_URI!);
     private database = this.client.db("cossiedev")
     private sessionCollection = this.database.collection("sessions")
-    private imageCollection = this.database.collection("images")
+    private imageCollection = this.database.collection<ImgMetadata>("images")
     
     close = async () => {
         await this.client.close();
@@ -31,7 +36,7 @@ export default class MongoConnection {
     deleteSession = async (sessionId: string) => {
         await this.sessionCollection.deleteOne({_id: new ObjectId(sessionId)})
     }
-    addImages = async (obj: {}) => {
+    addImages = async (obj: ImgMetadata) => {
         this.imageCollection.insertOne(obj)
     }
 

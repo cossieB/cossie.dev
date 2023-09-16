@@ -8,11 +8,10 @@ type State = {
     uploadError: null | string,
 }
 
-export async function uploadLogo<T extends keyof OurFileRouter>(
+export async function uploadLogo(
     file: File,
     setState: SetStoreFunction<State>,
-    name: string,
-    field: OurFileRouter[T]['_def']['_input']['field'],
+    input: OurFileRouter['logo']['_def']['_input'],
     setter: (file: string[]) => void,
 ) {
     setState({ isUploading: true });
@@ -20,9 +19,7 @@ export async function uploadLogo<T extends keyof OurFileRouter>(
         await uploadAndUpdateUrl(
             'logo',
             file,
-            name,
-            // @ts-expect-error
-            field,
+            input,
             file => setter(file)
         )
         setState({ uploadOk: true }); 

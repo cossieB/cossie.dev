@@ -18,7 +18,7 @@ type Props = {
 function copyData(data: Props['data']): Publisher {
     return {
         country: data?.country ?? "",
-        publisherId: data?.publisherId ?? "",
+        publisherId: data?.publisherId ?? crypto.randomUUID(),
         headquarters: data?.headquarters ?? "",
         logo: data?.logo ?? "",
         name: data?.name ?? "",
@@ -37,6 +37,15 @@ export function PubForm(props: Props) {
     })
     createEffect(() => {
         setPub(copyData(props.data))
+    })
+    createEffect(() => {
+        if (!file()[0]) return;
+        uploadLogo(
+            file()[0]!,
+            setState,
+            { reference: pub.publisherId, table: 'publisher' },
+            url => setPub('logo', url[0])
+        )
     })
     const [submitting, { Form }] = createServerAction$(updatePubOnDB, {
         invalidate: () => ['publishers', props.data?.publisherId]
@@ -61,8 +70,7 @@ export function PubForm(props: Props) {
                         onclick={() => uploadLogo(
                             file()[0]!,
                             setState,
-                            pub.name,
-                            'publisher',
+                            { reference: pub.publisherId, table: 'publisher' },
                             url => setPub('logo', url[0])
                         )}
                     />

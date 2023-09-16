@@ -17,7 +17,7 @@ type Props = {
 }
 function copyData(data: Props['data']): Platform {
     return {
-        platformId: data?.platformId ?? "",
+        platformId: data?.platformId ?? crypto.randomUUID(),
         logo: data?.logo ?? "",
         name: data?.name ?? "",
         summary: data?.summary ?? "",
@@ -36,6 +36,15 @@ export function PlatForm(props: Props) {
     })
     createEffect(() => {
         setPlatform(copyData(props.data))
+    })
+    createEffect(() => {
+        if (!file()[0]) return;
+        uploadLogo(
+            file()[0]!,
+            setState,
+            { reference: platform.platformId, table: 'platform' },
+            url => setPlatform('logo', url[0])
+        )
     })
     const [submitting, { Form }] = createServerAction$(updatePlatformOnDB, {
         invalidate: () => ['platforms', props.data?.platformId]
@@ -60,8 +69,7 @@ export function PlatForm(props: Props) {
                         onclick={() => uploadLogo(
                             file()[0]!,
                             setState,
-                            platform.name,
-                            'platform',
+                            { reference: platform.platformId, table: 'platform' },
                             url => setPlatform('logo', url[0])
                         )}
                     />

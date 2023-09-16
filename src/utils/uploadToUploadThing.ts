@@ -3,31 +3,25 @@ import { OurFileRouter } from "~/server/uploadthing";
 
 const uploader = genUploader();
 
-export async function uploadAndUpdateUrl(
-    endpoint: keyof OurFileRouter,
+export async function uploadAndUpdateUrl<T extends keyof OurFileRouter>(
+    endpoint: T,
     file: File,
-    entity: string,
-    field: OurFileRouter[keyof OurFileRouter]['_def']['_input']['field'],
+    input: OurFileRouter[T]['_def']['_input'],
     setImage: (files: string[]) => void
 ) {
-    const res = await upload(endpoint, entity, field, [file])
+    const res = await upload(endpoint, input, [file])
     setImage(res.map(x => x.url))
 }
 
 export async function upload<T extends keyof OurFileRouter>(
     endpoint: T,
-    entity: string,
-    field: OurFileRouter[T]['_def']['_input']['field'],
+    input: OurFileRouter[T]['_def']['_input'],
     files: File[]) {
 
     return await uploader({
         endpoint,
         files,
-
-        input: {
-            entity,
-            field
-        },
+        input,
         
     })
 }

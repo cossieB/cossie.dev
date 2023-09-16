@@ -74,7 +74,9 @@ export default function GameForm(props: Props) {
     const [submitting, { Form }] = createServerAction$(updateGamesOnDB, {
         invalidate: () => ['games', game.gameId]
     })
-
+    createEffect(() => {
+        uploadGameImages(files, props, setState, game, setGame, props.data)
+    })
     return (
         <>
             <Form id="gameForm" class={styles.form} ref={form} >
@@ -96,16 +98,6 @@ export default function GameForm(props: Props) {
                     images={game.images}
                     setImages={arr => setGame('images', arr)}
                 />
-                <Show when={game.title && state.imagesChanged()}>
-                    <SubmitButton
-                        disabled={!!submitting.result}
-                        finished={state.uploadOk}
-                        loading={submitting.pending || state.isUploading}
-                        text="Upload"
-                        type="button"
-                        onclick={() => uploadGameImages(files, props, setState, game, setGame, props.data)}
-                    />
-                </Show>
                 <FormTextarea
                     name="summary"
                     innerHTML={game.summary}
