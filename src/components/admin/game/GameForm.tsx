@@ -3,7 +3,6 @@ import type { Game } from "~/drizzle/types";
 import styles from "~/components/admin/forms/forms.module.scss";
 import { useContext, Switch, Match, Show, createEffect } from "solid-js";
 import { formatDateForInputElement } from "~/lib/formatDate";
-import { DropZone } from "../forms/DropZone";
 import { AdminContext } from "~/routes/admin";
 import { createStore } from "solid-js/store";
 import { ImagePreview } from "../forms/FilePreview";
@@ -23,6 +22,7 @@ import { Checklist } from "../forms/Checklist";
 import { generateSolidHelpers } from "@uploadthing/solid";
 import { OurFileRouter } from "~/server/uploadthing";
 import { Popup } from "~/components/shared/Popup";
+import { UploadZone } from "../forms/DropZone";
 
 // const {useUploadThing, uploadFiles} = generateSolidHelpers<OurFileRouter>();
 
@@ -69,14 +69,12 @@ export default function GameForm(props: Props) {
         tagsHaveChanged: () => arrayHasChanged(props.data?.tags ?? [], game.tags),
         pformsHaveChanged: () => arrayHasChanged(props.data?.platforms ?? [], game.platforms)
     })
-    const [files, setFiles] = createStore<GameImages>({ cover: null, banner: null, screens: [] })
+    // const [files, setFiles] = createStore<GameImages>({ cover: null, banner: null, screens: [] })
 
     const [submitting, { Form }] = createServerAction$(updateGamesOnDB, {
         invalidate: () => ['games', game.gameId]
     })
-    createEffect(() => {
-        uploadGameImages(files, props, setState, game, setGame, props.data)
-    })
+
     return (
         <>
             <Form id="gameForm" class={styles.form} ref={form} >
@@ -86,13 +84,20 @@ export default function GameForm(props: Props) {
                     required
                     setter={setGame}
                 />
-                <HeroImages setGame={setGame} game={game} setFiles={setFiles} />
-                <DropZone
-                    onAdd={(url) => { setGame({ images: [...game.images, url] }) }}
+                <HeroImages setGame={setGame} game={game} onError={err => setState({uploadError: err})} />
+                <UploadZone
+                    endpoint="game"
                     text="Drop Screenshots Here"
                     fileLimit={8}
                     currentNum={game.images.length}
-                    setFiles={files => setFiles('screens', prev => [...prev, ...files])}
+                    input={{
+                        field: 'images',
+                        reference: game.gameId
+                    }}
+                    onError={(err) => setState({uploadError: err})}
+                    onSuccess={res => setGame({
+                        images: [...game.images, ...res.map(x => x.url)]
+                    })}
                 />
                 <ImagePreview
                     images={game.images}

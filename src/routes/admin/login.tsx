@@ -1,6 +1,6 @@
 import { createHash } from "crypto";
 import { createStore } from "solid-js/store";
-import { RouteDataArgs, useRouteData } from "solid-start";
+import { useRouteData } from "solid-start";
 import { ServerError, ServerFunctionEvent, createServerAction$, createServerData$, redirect } from "solid-start/server";
 import SubmitButton from "~/components/admin/SubmitButton";
 import { FormInput } from "~/components/admin/forms/FormInput";
@@ -8,7 +8,7 @@ import styles from "~/components/admin/forms/forms.module.scss";
 import { Popup } from "~/components/shared/Popup";
 import { authenticate, storage } from "../../utils/authenticate";
 
-export function routeData(args: RouteDataArgs) {
+export function routeData() {
     return createServerData$(async (_, event) => {
         const user = await authenticate(event.request);
         if (user?.username === process.env.ADMIN_USERNAME)

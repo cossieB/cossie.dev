@@ -1,26 +1,38 @@
 import styles from "~/components/admin/forms/forms.module.scss";
-import { DropZoneWithPreview } from "../forms/DropZone";
-import { SetStoreFunction } from "solid-js/store";
-import { GameImages } from "./types";
-import { Game } from "~/drizzle/types";
-// import { Props } from "./GameForm";
+import { UploadZoneWithPreview } from "../forms/DropZone";
+import { type SetStoreFunction } from "solid-js/store";
+import { type Game } from "~/drizzle/types";
+// import { type Props } from "./GameForm";
 
 type Props = {
-    setGame: SetStoreFunction<Game & {tags: string[]}>
-    game: Game & {tags: string[]}
+    setGame: SetStoreFunction<Game & { tags: string[] }>
+    game: Game & { tags: string[] }
+    onError: (err: any) => void
 }
 
-export function HeroImages(props: Props & { setFiles: SetStoreFunction<GameImages>; }) {
+export function HeroImages(props: Props) {
     return <div class={styles.heroImgs}>
-        <DropZoneWithPreview
+        <UploadZoneWithPreview
             text="Cover"
-            onAdd={(url) => props.setGame('cover', url)}
+            onSuccess={(res) => props.setGame('cover', res[0].url)}
             img={props.game.cover}
-            setFiles={files => props.setFiles('cover', files[0])} />
-        <DropZoneWithPreview
+            endpoint="game"
+            input={{
+                field: 'cover',
+                reference: props.game.gameId
+            }}
+            onError={props.onError}
+        />
+        <UploadZoneWithPreview
             text="Banner"
-            onAdd={(url) => props.setGame('banner', url)}
+            onSuccess={(res) => props.setGame('banner', res[0].url)}
             img={props.game.banner}
-            setFiles={files => props.setFiles('banner', files[0])} />
+            endpoint="game"
+            input={{
+                field: 'banner',
+                reference: props.game.gameId
+            }}
+            onError={props.onError}
+        />
     </div>;
 }

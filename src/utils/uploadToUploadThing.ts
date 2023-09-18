@@ -16,12 +16,11 @@ export async function uploadAndUpdateUrl<T extends keyof OurFileRouter>(
 export async function upload<T extends keyof OurFileRouter>(
     endpoint: T,
     input: OurFileRouter[T]['_def']['_input'],
-    files: File[]) {
-
+    files: File[]
+) {
     return await uploader({
         endpoint,
         files,
         input,
-        
     })
 }

@@ -1,12 +1,13 @@
 import type { Game } from "~/drizzle/types";
 import { db } from "~/db";
 import { game, gamesOnPlatforms, genresOfGames } from "~/drizzle/schema";
-import { ServerError, ServerFunctionEvent } from "solid-start";
+import { ServerError, ServerFunctionEvent, redirect } from "solid-start";
 import { eq } from "drizzle-orm";
 import { authenticateOrThrowUnauthorized } from "~/utils/authenticate";
+import {z} from 'zod'
 
 export async function updateGamesOnDB(fd: FormData, event: ServerFunctionEvent) {
-    await authenticateOrThrowUnauthorized(event.request);
+    // await authenticateOrThrowUnauthorized(event.request);
     const obj: { [key: string]: string | string[]; } = {};
     fd.forEach((val, key) => {
         if (typeof val != "string")
@@ -17,11 +18,11 @@ export async function updateGamesOnDB(fd: FormData, event: ServerFunctionEvent) 
             obj[key] = val;
     });
 
-    delete obj.tagsInput;console.log(event)
-    return new Response()
-    if (obj.gameId) {
-        const { gameId, tags, pforms, tagsHaveChanged, pformsHaveChanged, ...g } = obj;
-
+    delete obj.tagsInput; 
+    const { tags, pforms, tagsHaveChanged, pformsHaveChanged, newGame, ...xyz } = obj;
+    
+    if (newGame === "0") {
+        delete xyz.gameId
         await db.transaction(async (tx) => {
             if (tagsHaveChanged === "1") {
                 await tx.delete(genresOfGames).where(eq(genresOfGames.gameId, obj.gameId as string));
@@ -31,17 +32,18 @@ export async function updateGamesOnDB(fd: FormData, event: ServerFunctionEvent) 
             if (pformsHaveChanged === "1") {
                 await tx.delete(gamesOnPlatforms).where(eq(gamesOnPlatforms.gameId, obj.gameId as string));
                 if (pforms.length > 0)
-                    await tx.insert(gamesOnPlatforms).values((obj.pforms as string[]).map(platformId => ({ gameId: gameId as string, platformId: platformId })));
+                    await tx.insert(gamesOnPlatforms).values((obj.pforms as string[]).map(platformId => ({ gameId: obj.gameId as string, platformId: platformId })));
             }
-            await tx.update(game).set(g).where(eq(game.gameId, obj.gameId as string));
+            await tx.update(game).set(xyz).where(eq(game.gameId, obj.gameId as string));
         });
         return obj.gameId as string;
     }
     else {
-        return await db.transaction(async (tx) => {
+        await db.transaction(async (tx) => {
             const rows = await tx.insert(game).values(obj as Game).returning({ gameId: game.gameId });
             await tx.insert(genresOfGames).values((obj.tags as string[]).map(genre => ({ gameId: rows[0].gameId, genre: genre.toLowerCase() })));
             return rows[0].gameId;
         });
+        throw redirect(`/admin/games/${obj.gameId}`, {status: 201})
     }
 }
