@@ -2,9 +2,10 @@
 
 .z {
     width: 100%;
-    height: 100px;
+    min-height: 250px;
     border: dashed 1px var(--clrRed);
-    @include mixins.flexCenter;
+    display: flex;
+    flex-wrap: wrap;
     position: relative;
     &.enter {
         &::after {
@@ -15,31 +16,38 @@
             z-index: 3;
         }
     }
-}
-
-
-.preview {
-    height: 100%;
-    position: relative;
-    @include mixins.flexCenter;
-    img {
-        max-height: 100%;
-        max-width: 100%;
-        position: absolute;
-
-    }
     &:first-child {
         flex: 1;
     }
     &:last-child:not(&:first-child) {
         flex: 2;
-        .z {
-            border-left: none;
-        }
+        border-left: none;
     }
-    .z {
-        z-index: 5;
-        height: 100%;
+    img {
+        pointer-events: none;
+    }
+}
+
+.preview {
+    height: 100%;
+    position: relative;
+    pointer-events: none;
+    --prog: 0;
+    &.multi {
+        width: 33.33333333333333333%;
+    }
+    img {display: block;
+        max-height: 100%;
         width: 100%;
+    }
+    &::after {
+        content: "";
+        position: absolute;
+        transition: width 500ms ease;
+        width: calc(var(--prog) / 100 * 100%);
+        height: 5px;
+        background-color: red;
+        bottom: 0;
+        left: 0;
     }
 }

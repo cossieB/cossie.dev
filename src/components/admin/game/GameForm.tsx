@@ -1,7 +1,7 @@
 import { FormInput, FormTextarea, SelectInput } from "~/components/admin/forms/FormInput";
 import type { Game } from "~/drizzle/types";
 import styles from "~/components/admin/forms/forms.module.scss";
-import { useContext, Switch, Match, Show, createEffect } from "solid-js";
+import { useContext, Switch, Match, createEffect, createMemo } from "solid-js";
 import { formatDateForInputElement } from "~/lib/formatDate";
 import { AdminContext } from "~/routes/admin";
 import { createStore } from "solid-js/store";
@@ -9,20 +9,15 @@ import { ImagePreview } from "../forms/FilePreview";
 import { YouTubeIframe } from "./YouTubeIframe";
 import { Tags } from "./Tags";
 import { InputWithAddButton } from "../forms/InputWithAddButton";
-import { GameImages } from "./types";
-import { HeroImages } from "./HeroImages";
 import { getYoutubeURL } from "../../../utils/getYoutubeURL";
 import { createServerAction$ } from "solid-start/server";
 import HiddenInput from "../forms/HiddenInput";
-import { uploadGameImages } from "./uploadGameImages";
 import SubmitButton from "../SubmitButton";
 import { updateGamesOnDB } from "./updateGamesOnDB";
 import { arrayChanged as arrayHasChanged, itemsAddedToArray } from "../../../utils/arrayChanged";
 import { Checklist } from "../forms/Checklist";
-import { generateSolidHelpers } from "@uploadthing/solid";
-import { OurFileRouter } from "~/server/uploadthing";
 import { Popup } from "~/components/shared/Popup";
-import { UploadZone } from "../forms/DropZone";
+import { DropZone } from "../forms/DropZone";
 
 // const {useUploadThing, uploadFiles} = generateSolidHelpers<OurFileRouter>();
 
@@ -57,19 +52,9 @@ export default function GameForm(props: Props) {
         isUploading: false,
         uploadOk: false,
         uploadError: null as null | string,
-        imagesChanged: () => {
-            if (game.cover !== (props.data?.cover ?? "") || game.banner !== (props.data?.banner ?? ""))
-                return true
-            if (game.images.length == 0)
-                return false
-            if (!props.data)
-                return true
-            return itemsAddedToArray(props.data.images, game.images)
-        },
         tagsHaveChanged: () => arrayHasChanged(props.data?.tags ?? [], game.tags),
         pformsHaveChanged: () => arrayHasChanged(props.data?.platforms ?? [], game.platforms)
     })
-    // const [files, setFiles] = createStore<GameImages>({ cover: null, banner: null, screens: [] })
 
     const [submitting, { Form }] = createServerAction$(updateGamesOnDB, {
         invalidate: () => ['games', game.gameId]
@@ -84,20 +69,61 @@ export default function GameForm(props: Props) {
                     required
                     setter={setGame}
                 />
-                <HeroImages setGame={setGame} game={game} onError={err => setState({uploadError: err})} />
-                <UploadZone
+                <div class={styles.heroImgs}>
+                    <DropZone
+                        text="Cover"
+                        optimisticUpdate={url => setGame('cover', url)}
+                        onSuccess={(res) => setGame('cover', res[0].url)}
+                        images={[game.cover]}
+                        endpoint="game"
+                        input={{
+                            field: 'cover',
+                            reference: game.gameId
+                        }}
+                        onError={err => {
+                            setState({ uploadError: err });
+                            // rollback optimistic update
+                            setGame({ cover: props.data?.cover ?? "" })
+                        }}
+                        single={true}
+                    />
+                    <DropZone
+                        text="Banner"
+                        onSuccess={(res) => setGame('banner', res[0].url)}
+                        optimisticUpdate={url => setGame('banner', url)}
+                        images={[game.banner]}
+                        endpoint="game"
+                        input={{
+                            field: 'banner',
+                            reference: game.gameId
+                        }}
+                        onError={err => {
+                            setState({ uploadError: err });
+                            // rollback optimistic update
+                            setGame({ banner: props.data?.banner ?? "" })
+                        }}
+                        single={true}
+                    />
+                </div>
+                <DropZone
                     endpoint="game"
                     text="Drop Screenshots Here"
                     fileLimit={8}
                     currentNum={game.images.length}
+                    images={game.images}
                     input={{
                         field: 'images',
                         reference: game.gameId
                     }}
-                    onError={(err) => setState({uploadError: err})}
+                    onError={(err) => {
+                        setState({ uploadError: err });
+                        setGame({ images: props.data?.images ?? [] })
+                    }}
                     onSuccess={res => setGame({
                         images: [...game.images, ...res.map(x => x.url)]
                     })}
+                    optimisticUpdate={url => setGame(prev => ({ images: [...prev.images, url] }))}
+                    single={false}
                 />
                 <ImagePreview
                     images={game.images}
@@ -199,3 +225,4 @@ export default function GameForm(props: Props) {
         </>
     )
 }
+

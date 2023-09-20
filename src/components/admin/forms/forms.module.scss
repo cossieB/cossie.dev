@@ -123,9 +123,8 @@ $clrForm: hsl(0, 0%, 15%);
 
 .heroImgs {
     display: flex;
-    height: 250px;
-    >div {
-        flex: 1
+    img {
+        width: 100% !important;
     }
 }
 .addBtn {

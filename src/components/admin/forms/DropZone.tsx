@@ -1,11 +1,13 @@
-import { createSignal, mergeProps } from "solid-js";
+import { For, Match, Switch, createEffect, createSignal, mergeProps } from "solid-js";
 import styles from "./DropZone.module.scss";
 import { readFile } from "../../../lib/readFile";
 import { generateSolidHelpers } from "@uploadthing/solid";
 import { OurFileRouter } from "~/server/uploadthing";
 import { UploadFileResponse } from "uploadthing/client";
+import { createStore } from "solid-js/store";
 
 export type Props<T extends keyof OurFileRouter> = {
+    images: string[]
     text?: string
     fileLimit?: number
     currentNum?: number
@@ -13,86 +15,105 @@ export type Props<T extends keyof OurFileRouter> = {
     input: OurFileRouter[T]['_def']['_input']
     onError: (err: any) => void
     onSuccess: (res: UploadFileResponse[]) => void
+    optimisticUpdate?: (url: string) => void
+    single: boolean
 }
 
-const { uploadFiles } = generateSolidHelpers<OurFileRouter>();
+const { useUploadThing } = generateSolidHelpers<OurFileRouter>();
 
-export function UploadZoneWithPreview<T extends keyof OurFileRouter>(props: Props<T> & {img?: string}) {
-    return (
-        <div class={styles.preview}>
-              <img src={props.img ?? "https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Question_mark_%28black%29.svg/800px-Question_mark_%28black%29.svg.png"} alt="" />
-              <UploadZone {...props} />
-        </div>
-    )
-}
-
-export function UploadZone<T extends keyof OurFileRouter>(props: Props<T>) {
-    const [entered, setEntered] = createSignal(false)
+export function DropZone<T extends keyof OurFileRouter>(props: Props<T>) {
+    const { isUploading, startUpload } = useUploadThing(props.endpoint, {
+        onClientUploadComplete(res) {
+            props.onSuccess(res ?? [])
+        },
+        onUploadProgress(p) {
+            setProgress(p)
+        },
+        onUploadError(e) {
+            props.onError(e.message);
+            setPreviewImgs([])
+        },
+    })
+    const [entered, setEntered] = createSignal(false);
+    const [progress, setProgress] = createSignal(0)
     const merged = mergeProps({ text: "Drop Image Here", fileLimit: 1, currentNum: 0 }, props);
+    const [previewImgs, setPreviewImgs] = createStore<string[]>([]);
 
     return (
         <div
-            class={styles.z}
+            class={`${styles.z}`}
             classList={{ [styles.enter]: entered() }}
             onDragOver={e => {
                 e.preventDefault()
                 setEntered(true)
             }}
-            onDrop={e => {
+            onDrop={async e => {
                 e.preventDefault()
                 if (!e.dataTransfer) return;
                 let files: File[]
                 if (e.dataTransfer.getData("URL")) {
                     files = Array.from(e.dataTransfer.files)
                         .filter(file => file.type.startsWith("image/"))
-                    props.onAdd(e.dataTransfer.getData("URL"))
+                    setPreviewImgs(e.dataTransfer.getData("URL"))
                 }
                 else {
                     const limit = merged.fileLimit - merged.currentNum;
                     files = Array.from(e.dataTransfer.files)
                         .slice(0, limit)
                         .filter(file => file.type.startsWith("image/"))
-
-                    files.forEach(file => readFile(props.onAdd, file))
+                    files.forEach(file => readFile(src => setPreviewImgs(prev => [...prev, src]), file))
                 }
                 setEntered(false)
-
-                upd({
-                    endpoint: props.endpoint,
-                    files,
-                    input: props.input as any,
-                    onUploadProgress: file => console.log(file),
-                },
-                    props.onError,
-                    props.onSuccess
-                )
+                startUpload(files, props.input as any)
             }}
             onDragLeave={() => setEntered(false)}
         >
-            {props.text}
-        </div >
+            <Switch>
+                <Match when={isUploading() && props.single}>
+                    <UploadState
+                        img={previewImgs[0]}
+                        progress={progress()}
+                        single
+                    />
+                </Match>
+                <Match when={isUploading()}>
+                    <For each={previewImgs}>
+                        {image =>
+                            <UploadState
+                                img={image}
+                                progress={progress()}
+                                single={props.single}
+                            />
+                        }
+                    </For>
+                </Match>
+                <Match when={!isUploading() && props.single}>
+                    <div class={styles.preview}>
+                        <img src={props.images[0]} alt="" />
+                    </div>
+                </Match>
+            </Switch>
+            <label >{props.text}</label>
+        </div>
     )
 }
 
-async function upd(
-    obj: Parameters<typeof uploadFiles>[0],
-    onErr: (err: any) => void,
-    onSuccess: (res: UploadFileResponse[]) => void
-) {
-    try {
-        const res = await uploadFiles(obj)
-        onSuccess(res)
-    }
-    catch (error: any) {
-        console.log(error)
-        onErr(error.message)
-    }
+type UpState = {
+    img: string
+    progress: number
+    single: boolean
+}
+type P2 = {
+    preview: UpState
 }
 
-function UploadProgress(props: {url: string, progress: number}) {
+function UploadState(props: UpState) {
     return (
-        <div>
-            <img src={props.url}/>
+        <div
+            class={`${styles.preview} ${props.single ? "" : styles.multi}`}
+            style={{ '--prog': props.progress }}
+        >
+            <img src={props.img} alt="" />
         </div>
     )
 }
