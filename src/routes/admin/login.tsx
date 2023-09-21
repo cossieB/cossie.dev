@@ -1,6 +1,5 @@
 import { createHash } from "crypto";
 import { createStore } from "solid-js/store";
-import { useRouteData } from "solid-start";
 import { ServerError, ServerFunctionEvent, createServerAction$, createServerData$, redirect } from "solid-start/server";
 import SubmitButton from "~/components/admin/SubmitButton";
 import { FormInput } from "~/components/admin/forms/FormInput";
@@ -16,7 +15,6 @@ export function routeData() {
     }, { key: 'auth' })
 }
 export default function AdminLogin() {
-    const data = useRouteData(); data()
     const [, setUser] = createStore({
         username: "",
         password: ""

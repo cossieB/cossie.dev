@@ -7,7 +7,7 @@ import { authenticateOrThrowUnauthorized } from "~/utils/authenticate";
 import {z} from 'zod'
 
 export async function updateGamesOnDB(fd: FormData, event: ServerFunctionEvent) {
-    // await authenticateOrThrowUnauthorized(event.request);
+    await authenticateOrThrowUnauthorized(event.request);
     const obj: { [key: string]: string | string[]; } = {};
     fd.forEach((val, key) => {
         if (typeof val != "string")

@@ -36,6 +36,9 @@
     &.multi {
         width: 33.33333333333333333%;
     }
+    &:not(.multi) {
+        @include mixins.flexCenter;
+    }
     img {display: block;
         max-height: 100%;
         width: 100%;
