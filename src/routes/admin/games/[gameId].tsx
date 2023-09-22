@@ -1,12 +1,12 @@
 import { useRouteData } from "@solidjs/router";
 import { sql, eq } from "drizzle-orm";
-import { Suspense } from "solid-js";
+import { ErrorBoundary, Suspense } from "solid-js";
 import { type RouteDataArgs } from "solid-start";
 import { ServerError, createServerData$ } from "solid-start/server";
 import GameForm from "~/components/admin/game/GameForm";
 import { db } from "~/db";
 import { genresOfGames, game, gamesOnPlatforms, platform } from "~/drizzle/schema";
-import styles from "../../admin.module.scss"
+import NotFound from "~/routes/[...404]";
 
 export function routeData({ params }: RouteDataArgs) {
     return createServerData$(async ([_, gameId]) => {
@@ -56,13 +56,12 @@ export function routeData({ params }: RouteDataArgs) {
 }
 
 export default function AdminGameId() {
-    const data = useRouteData<typeof routeData>()
-
+    const data = useRouteData<typeof routeData>(); 
     return (
-        // <ErrorBoundary fallback={(e) => e.status == 404 ? <NotFound /> : <p> Something went wrong. Please try again later </p>}>
-        <Suspense fallback={<p>Loading...</p>}>
-            <GameForm data={data()} />
-        </Suspense>
-        // </ErrorBoundary> 
+        <ErrorBoundary fallback={(e) => e.status == 404 ? <NotFound /> : <p> Something went wrong. Please try again later </p>}>
+            <Suspense fallback={<p>Loading...</p>}>
+                <GameForm data={data()} />
+            </Suspense>
+        </ErrorBoundary>
     )
 }

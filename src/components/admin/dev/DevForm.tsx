@@ -6,11 +6,11 @@ import { createStore } from "solid-js/store"
 import styles from "~/components/admin/forms/forms.module.scss";
 import { countryList } from "../forms/countryList"
 import SubmitButton from "../SubmitButton"
-import { DropZoneWithPreview } from "../forms/DropZone"
 import { uploadLogo } from "../uploadLogo"
 import { updateDevOnDB as updateDevsOnDB } from "./updateDevsOnDB"
 import HiddenInput from "../forms/HiddenInput"
 import { Popup } from "~/components/shared/Popup"
+import { DropZone } from "../forms/DropZone"
 
 type Props = {
     data?: Developer
@@ -28,7 +28,7 @@ function copyData(data: Props['data']): Developer {
 export function DevForm(props: Props) {
     const [dev, setDev] = createStore(copyData(props.data))
 
-    const [file, setFile] = createSignal<File[]>([])
+
     const [state, setState] = createStore({
         isUploading: false,
         uploadOk: false,
@@ -38,43 +38,24 @@ export function DevForm(props: Props) {
     createEffect(() => {
         setDev(copyData(props.data))
     })
-    createEffect(() => {
-        if (!file()[0]) return;
-        uploadLogo(
-            file()[0]!,
-            setState,
-            { reference: dev.developerId, table: 'developer' },
-            url => setDev('logo', url[0])
-        )
-    })
     const [submitting, { Form }] = createServerAction$(updateDevsOnDB, {
         invalidate: () => ['developers', props.data?.developerId]
     })
     return (
         <>
             <Form id="devForm" class={styles.form}>
-                <div class={styles.heroImgs}>
-                    <DropZoneWithPreview
-                        onAdd={url => setDev('logo', url)}
-                        setFiles={file => setFile(file)}
-                        text="Logo"
-                        img={dev.logo}
-                    />
-                </div>
-                <Show when={state.logoHasChanged() && file().length > 0 && !!dev.name}>
-                    <SubmitButton
-                        disabled={submitting.pending}
-                        loading={state.isUploading}
-                        finished={state.uploadOk}
-                        text="Upload"
-                        onclick={() => uploadLogo(
-                            file()[0]!,
-                            setState,
-                            { reference: dev.developerId, table: 'developer' },
-                            url => setDev('logo', url[0])
-                        )}
-                    />
-                </Show>
+                <DropZone
+                    endpoint="logo"
+                    onSuccess={res => setDev('logo', res[0].url)}
+                    images={[dev.logo]}
+                    input={{
+                        reference: dev.developerId,
+                        table: 'developer'
+                    }}
+                    onError={e => setState('uploadError', e)}
+                    single
+                    text="Logo"
+                />
                 <FormInput
                     name="name"
                     value={dev.name}
@@ -112,10 +93,12 @@ export function DevForm(props: Props) {
                 />
                 <HiddenInput name="logo" value={dev.logo} />
                 <HiddenInput name="developerId" value={dev.developerId} />
+                <HiddenInput name="newDev" value={props.data ? 0 : 1} />
             </Form>
             <Popup
-                when={!!state.uploadError || submitting.error}
-                text={state.uploadError! || submitting.error}
+                when={!!state.uploadError || submitting.error || submitting.result}
+                text={state.uploadError! || submitting.error?.message || submitting.result}
+                colorDeg={submitting.result ? "125" : undefined}
                 close={() => {
                     setState('uploadError', null);
                     submitting.clear()

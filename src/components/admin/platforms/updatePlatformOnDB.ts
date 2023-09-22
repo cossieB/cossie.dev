@@ -5,7 +5,6 @@ import { platform } from "~/drizzle/schema";
 import { Platform } from "~/drizzle/types";
 import { authenticateOrThrowUnauthorized } from "~/utils/authenticate";
 
-
 export async function updatePlatformOnDB(fd: FormData, event: ServerFunctionEvent) {
     await authenticateOrThrowUnauthorized(event.request);
     const obj: { [key: string]: string; } = {};
@@ -14,13 +13,13 @@ export async function updatePlatformOnDB(fd: FormData, event: ServerFunctionEven
             throw new ServerError('Invalid Format', { status: 400 })
         obj[key] = val;
     })
-    const {platformId, ...d} = obj;
-    if (platformId) {
+    const {platformId, newItem, ...d} = obj;
+    if (newItem === "0") {
         await db.update(platform).set(d).where(eq(platform.platformId, platformId))
-        return platformId
+        return `Successfully edited platform, ${obj.name}, with ID ${obj.platformId}`
     }
     else {
-        const rows = await db.insert(platform).values(d as Platform).returning({platformId: platform.platformId})
-        return rows[0]
+        await db.insert(platform).values(d as Platform).returning({platformId: platform.platformId})
+        return `Successfully added platform, ${obj.name}, with ID ${obj.platformId}`
     }
 }

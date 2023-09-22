@@ -1,7 +1,7 @@
 import { FormInput, FormTextarea, SelectInput } from "~/components/admin/forms/FormInput";
 import type { Game } from "~/drizzle/types";
 import styles from "~/components/admin/forms/forms.module.scss";
-import { useContext, Switch, Match, createEffect, createMemo } from "solid-js";
+import { useContext, Switch, Match, createEffect } from "solid-js";
 import { formatDateForInputElement } from "~/lib/formatDate";
 import { AdminContext } from "~/routes/admin";
 import { createStore } from "solid-js/store";
@@ -14,12 +14,10 @@ import { createServerAction$ } from "solid-start/server";
 import HiddenInput from "../forms/HiddenInput";
 import SubmitButton from "../SubmitButton";
 import { updateGamesOnDB } from "./updateGamesOnDB";
-import { arrayChanged as arrayHasChanged, itemsAddedToArray } from "../../../utils/arrayChanged";
+import { arrayChanged as arrayHasChanged } from "../../../utils/arrayChanged";
 import { Checklist } from "../forms/Checklist";
 import { Popup } from "~/components/shared/Popup";
 import { DropZone } from "../forms/DropZone";
-
-// const {useUploadThing, uploadFiles} = generateSolidHelpers<OurFileRouter>();
 
 export type Props = {
     data?: Game & { tags: string[], platforms: string[] };
@@ -213,10 +211,12 @@ export default function GameForm(props: Props) {
                 <HiddenInput name="pforms" value={game.platforms} />
                 <HiddenInput name="pformsHaveChanged" value={state.pformsHaveChanged() ? 1 : 0} />
                 <HiddenInput name="tagsHaveChanged" value={state.tagsHaveChanged() ? 1 : 0} />
+                <HiddenInput name="newGame" value={props.data ? 0 : 1} />
             </Form>
             <Popup
-                when={!!state.uploadError || submitting.error}
-                text={state.uploadError! || submitting.error.message}
+                when={!!state.uploadError || submitting.error || submitting.result}
+                text={state.uploadError! || submitting.error?.message || submitting.result}
+                colorDeg={submitting.result ? "125" : undefined}
                 close={() => {
                     setState('uploadError', null);
                     submitting.clear()
@@ -225,4 +225,3 @@ export default function GameForm(props: Props) {
         </>
     )
 }
-

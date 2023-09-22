@@ -1,10 +1,9 @@
 import type { Game } from "~/drizzle/types";
 import { db } from "~/db";
 import { game, gamesOnPlatforms, genresOfGames } from "~/drizzle/schema";
-import { ServerError, ServerFunctionEvent, redirect } from "solid-start";
+import { ServerError, ServerFunctionEvent } from "solid-start";
 import { eq } from "drizzle-orm";
 import { authenticateOrThrowUnauthorized } from "~/utils/authenticate";
-import {z} from 'zod'
 
 export async function updateGamesOnDB(fd: FormData, event: ServerFunctionEvent) {
     await authenticateOrThrowUnauthorized(event.request);
@@ -18,9 +17,9 @@ export async function updateGamesOnDB(fd: FormData, event: ServerFunctionEvent) 
             obj[key] = val;
     });
 
-    delete obj.tagsInput; 
+    delete obj.tagsInput;
     const { tags, pforms, tagsHaveChanged, pformsHaveChanged, newGame, ...xyz } = obj;
-    
+        
     if (newGame === "0") {
         delete xyz.gameId
         await db.transaction(async (tx) => {
@@ -36,14 +35,16 @@ export async function updateGamesOnDB(fd: FormData, event: ServerFunctionEvent) 
             }
             await tx.update(game).set(xyz).where(eq(game.gameId, obj.gameId as string));
         });
-        return obj.gameId as string;
+        return `Successfully edited game, ${obj.title}, with ID ${obj.gameId}`
     }
     else {
         await db.transaction(async (tx) => {
-            const rows = await tx.insert(game).values(obj as Game).returning({ gameId: game.gameId });
-            await tx.insert(genresOfGames).values((obj.tags as string[]).map(genre => ({ gameId: rows[0].gameId, genre: genre.toLowerCase() })));
+            const rows = await tx.insert(game).values(xyz as Game).returning({ gameId: game.gameId });
+            if (tags.length > 0)
+                await tx.insert(genresOfGames).values((tags as string[]).map(genre => ({ gameId: rows[0].gameId, genre: genre.toLowerCase() })));
+            await tx.insert(gamesOnPlatforms).values((pforms as string[]).map(platformId => ({ gameId: obj.gameId as string, platformId: platformId })))
             return rows[0].gameId;
         });
-        throw redirect(`/admin/games/${obj.gameId}`, {status: 201})
+        return `Successfully added game, ${obj.title}, with ID ${obj.gameId}`
     }
 }

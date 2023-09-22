@@ -13,13 +13,14 @@ export async function updateDevOnDB(fd: FormData, event: ServerFunctionEvent) {
             throw new ServerError('Invalid Format', { status: 400 })
         obj[key] = val;
     })
-    const {developerId, ...d} = obj;
-    if (developerId) {
+    const {developerId, newDev, ...d} = obj;
+
+    if (newDev === "0") {
         await db.update(developer).set(d).where(eq(developer.developerId, developerId))
-        return developerId
+        return `Successfully edited developer, ${obj.name}, with ID ${obj.developerId}`
     }
     else {
         const rows = await db.insert(developer).values(d as Developer).returning({developerId: developer.developerId})
-        return rows[0]
+        return `Successfully added developer, ${obj.name}, with ID ${obj.developerId}`
     }
 }

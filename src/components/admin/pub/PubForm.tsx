@@ -6,7 +6,7 @@ import { createStore } from "solid-js/store"
 import styles from "~/components/admin/forms/forms.module.scss";
 import { countryList } from "../forms/countryList"
 import SubmitButton from "../SubmitButton"
-import { DropZoneWithPreview } from "../forms/DropZone"
+import { DropZone } from "../forms/DropZone"
 import { uploadLogo } from "../uploadLogo"
 import { updatePubOnDB } from "./updatePubOnDB"
 import HiddenInput from "../forms/HiddenInput"
@@ -27,25 +27,13 @@ function copyData(data: Props['data']): Publisher {
 }
 export function PubForm(props: Props) {
     const [pub, setPub] = createStore(copyData(props.data))
-
-    const [file, setFile] = createSignal<File[]>([])
+    
     const [state, setState] = createStore({
         isUploading: false,
-        uploadOk: false,
         uploadError: null as null | string,
-        logoHasChanged: () => pub.logo && pub.logo !== props.data?.logo
     })
     createEffect(() => {
         setPub(copyData(props.data))
-    })
-    createEffect(() => {
-        if (!file()[0]) return;
-        uploadLogo(
-            file()[0]!,
-            setState,
-            { reference: pub.publisherId, table: 'publisher' },
-            url => setPub('logo', url[0])
-        )
     })
     const [submitting, { Form }] = createServerAction$(updatePubOnDB, {
         invalidate: () => ['publishers', props.data?.publisherId]
@@ -54,27 +42,19 @@ export function PubForm(props: Props) {
         <>
             <Form id="pubForm" class={styles.form}>
                 <div class={styles.heroImgs}>
-                    <DropZoneWithPreview
-                        onAdd={url => setPub('logo', url)}
-                        setFiles={file => setFile(file)}
-                        text="Logo"
-                        img={pub.logo}
-                    />
+                <DropZone
+                    endpoint="logo"
+                    onSuccess={res => setPub('logo', res[0].url)}
+                    images={[pub.logo]}
+                    input={{
+                        reference: pub.publisherId,
+                        table: 'developer'
+                    }}
+                    onError={e => setState('uploadError', e)}
+                    single
+                    text="Logo"
+                />
                 </div>
-                <Show when={state.logoHasChanged() && file().length > 0 && pub.name}>
-                    <SubmitButton
-                        disabled={submitting.pending}
-                        loading={state.isUploading}
-                        finished={state.uploadOk}
-                        text="Upload"
-                        onclick={() => uploadLogo(
-                            file()[0]!,
-                            setState,
-                            { reference: pub.publisherId, table: 'publisher' },
-                            url => setPub('logo', url[0])
-                        )}
-                    />
-                </Show>
                 <FormInput
                     name="name"
                     value={pub.name}
@@ -112,10 +92,12 @@ export function PubForm(props: Props) {
                 />
                 <HiddenInput name="logo" value={pub.logo} />
                 <HiddenInput name="publisherId" value={pub.publisherId} />
+                <HiddenInput name="newItem" value={props.data ? 0 : 1} />
             </Form>
             <Popup
-                when={state.uploadError || submitting.error}
-                text={state.uploadError! || submitting.error.message}
+                when={!!state.uploadError || submitting.error || submitting.result}
+                text={state.uploadError! || submitting.error?.message || submitting.result}
+                colorDeg={submitting.result ? "125" : undefined}
                 close={() => {
                     setState('uploadError', null);
                     submitting.clear()

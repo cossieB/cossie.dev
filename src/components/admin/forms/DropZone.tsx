@@ -64,7 +64,9 @@ export function DropZone<T extends keyof OurFileRouter>(props: Props<T>) {
                     files.forEach(file => readFile(src => setPreviewImgs(prev => [...prev, src]), file))
                 }
                 setEntered(false)
-                startUpload(files, props.input as any)
+                await startUpload(files, props.input as any)
+                setPreviewImgs([])
+                setProgress(0)
             }}
             onDragLeave={() => setEntered(false)}
         >

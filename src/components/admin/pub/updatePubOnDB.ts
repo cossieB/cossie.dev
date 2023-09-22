@@ -13,13 +13,13 @@ export async function updatePubOnDB(fd: FormData, event: ServerFunctionEvent) {
             throw new ServerError('Invalid Format', { status: 400 })
         obj[key] = val;
     })
-    const {publisherId, ...d} = obj;
-    if (publisherId) {
+    const {publisherId, newItem, ...d} = obj;
+    if (newItem === "0") {
         await db.update(publisher).set(d).where(eq(publisher.publisherId, publisherId))
-        return publisherId
+        return `Successfully edited developer, ${obj.name}, with ID ${obj.publisherId}`
     }
     else {
         const rows = await db.insert(publisher).values(d as Publisher).returning({publisherId: publisher.publisherId})
-        return rows[0]
+        return `Successfully added publisher, ${obj.name}, with ID ${obj.publisherId}`
     }
 }

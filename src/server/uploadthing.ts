@@ -2,6 +2,7 @@ import { ServerError } from "solid-start";
 import { createUploadthing } from "uploadthing/next";
 import { FileRouter } from "uploadthing/server";
 import { z } from "zod";
+import { sleep } from "~/lib/sleep";
 import MongoConnection from "~/mongo/mongo";
 import { authenticateOrThrowUnauthorized } from "~/utils/authenticate";
 
@@ -27,7 +28,7 @@ export const uploadRouter = {
             reference: z.string().uuid(),
             field: z.enum(['cover', 'banner', 'images'])
         }))
-        .middleware(async opts => {
+        .middleware(async opts => {await sleep(5000)
             await authenticateOrThrowUnauthorized(opts.req);
             return {
                 input: {
@@ -49,7 +50,7 @@ export const uploadRouter = {
             reference: z.string().uuid(),
             table: z.enum(['developer', 'publisher', 'platform']),
         }))
-        .middleware(async opts => {
+        .middleware(async opts => {await sleep(5000)
             await authenticateOrThrowUnauthorized(opts.req);
             return {
                 input: {

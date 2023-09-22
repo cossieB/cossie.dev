@@ -3,7 +3,7 @@ import { createStore } from "solid-js/store"
 import { createServerAction$ } from "solid-start/server"
 import { Platform } from "~/drizzle/types"
 import SubmitButton from "../SubmitButton"
-import { DropZoneWithPreview } from "../forms/DropZone"
+import { DropZone } from "../forms/DropZone"
 import { FormInput, FormTextarea } from "../forms/FormInput"
 import HiddenInput from "../forms/HiddenInput"
 import { uploadLogo } from "../uploadLogo"
@@ -27,25 +27,14 @@ function copyData(data: Props['data']): Platform {
 export function PlatForm(props: Props) {
     const [platform, setPlatform] = createStore(copyData(props.data))
 
-    const [file, setFile] = createSignal<File[]>([])
     const [state, setState] = createStore({
         isUploading: false,
-        uploadOk: false,
         uploadError: null as null | string,
-        logoHasChanged: () => platform.logo && platform.logo !== props.data?.logo
     })
     createEffect(() => {
         setPlatform(copyData(props.data))
     })
-    createEffect(() => {
-        if (!file()[0]) return;
-        uploadLogo(
-            file()[0]!,
-            setState,
-            { reference: platform.platformId, table: 'platform' },
-            url => setPlatform('logo', url[0])
-        )
-    })
+
     const [submitting, { Form }] = createServerAction$(updatePlatformOnDB, {
         invalidate: () => ['platforms', props.data?.platformId]
     })
@@ -53,27 +42,19 @@ export function PlatForm(props: Props) {
         <>
             <Form id="platForm" class={styles.form}>
                 <div class={styles.heroImgs}>
-                    <DropZoneWithPreview
-                        onAdd={url => setPlatform('logo', url)}
-                        setFiles={file => setFile(file)}
-                        text="Logo"
-                        img={platform.logo}
-                    />
+                <DropZone
+                    endpoint="logo"
+                    onSuccess={res => setPlatform('logo', res[0].url)}
+                    images={[platform.logo]}
+                    input={{
+                        reference: platform.platformId,
+                        table: 'developer'
+                    }}
+                    onError={e => setState('uploadError', e)}
+                    single
+                    text="Logo"
+                />
                 </div>
-                <Show when={state.logoHasChanged() && file().length > 0 && !!platform.name}>
-                    <SubmitButton
-                        disabled={submitting.pending}
-                        loading={state.isUploading}
-                        finished={state.uploadOk}
-                        text="Upload"
-                        onclick={() => uploadLogo(
-                            file()[0]!,
-                            setState,
-                            { reference: platform.platformId, table: 'platform' },
-                            url => setPlatform('logo', url[0])
-                        )}
-                    />
-                </Show>
                 <FormInput
                     name="name"
                     value={platform.name}
@@ -102,10 +83,12 @@ export function PlatForm(props: Props) {
                 />
                 <HiddenInput name="logo" value={platform.logo} />
                 <HiddenInput name="platformId" value={platform.platformId} />
+                <HiddenInput name="newItem" value={props.data ? 0 : 1} />
             </Form>
             <Popup
-                when={state.uploadError || submitting.error}
-                text="Unauthorized"
+                when={!!state.uploadError || submitting.error || submitting.result}
+                text={state.uploadError! || submitting.error?.message || submitting.result}
+                colorDeg={submitting.result ? "125" : undefined}
                 close={() => {
                     setState('uploadError', null);
                     submitting.clear()
