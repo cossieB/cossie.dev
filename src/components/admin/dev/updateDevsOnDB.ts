@@ -1,5 +1,5 @@
 import { eq } from "drizzle-orm";
-import { ServerError, ServerFunctionEvent } from "solid-start";
+import { ServerError, type ServerFunctionEvent } from "solid-start";
 import { db } from "~/db";
 import { developer } from "~/drizzle/schema";
 import { Developer } from "~/drizzle/types";
@@ -20,7 +20,7 @@ export async function updateDevOnDB(fd: FormData, event: ServerFunctionEvent) {
         return `Successfully edited developer, ${obj.name}, with ID ${obj.developerId}`
     }
     else {
-        const rows = await db.insert(developer).values(d as Developer).returning({developerId: developer.developerId})
+        await db.insert(developer).values(d as Developer)
         return `Successfully added developer, ${obj.name}, with ID ${obj.developerId}`
     }
 }
