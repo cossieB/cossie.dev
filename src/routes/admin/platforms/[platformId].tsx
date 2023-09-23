@@ -1,9 +1,12 @@
 import { eq } from "drizzle-orm"
-import { RouteDataArgs, ServerError, useRouteData } from "solid-start"
+import { Suspense } from "solid-js"
+import ErrorBoundary, { RouteDataArgs, ServerError, useRouteData } from "solid-start"
 import { createServerData$ } from "solid-start/server"
 import { PlatForm } from "~/components/admin/platforms/PlatForm"
+import Page from "~/components/shared/Page"
 import { db } from "~/db"
 import { platform } from "~/drizzle/schema"
+import NotFound from "~/routes/[...404]"
 
 export function routeData({ params }: RouteDataArgs) {
     return createServerData$(async ([_, platformId]) => {
@@ -34,5 +37,13 @@ export function routeData({ params }: RouteDataArgs) {
 
 export default function platformPage() {
     const data = useRouteData<typeof routeData>()
-    return <PlatForm data={data()} />
+    return (
+        <ErrorBoundary fallback={(e) => e.status == 404 ? <NotFound /> : <p> Something went wrong. Please try again later </p>}>
+            <Suspense fallback={<p>Loading...</p>}>
+                <Page title={data()?.name ?? "Platform"}>
+                    <PlatForm data={data()} />
+                </Page>
+            </Suspense>
+        </ErrorBoundary>
+    )
 }

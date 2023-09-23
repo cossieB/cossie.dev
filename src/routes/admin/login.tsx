@@ -6,6 +6,7 @@ import { FormInput } from "~/components/admin/forms/FormInput";
 import styles from "~/components/admin/forms/forms.module.scss";
 import { Popup } from "~/components/shared/Popup";
 import { authenticate, storage } from "../../utils/authenticate";
+import Page from "~/components/shared/Page";
 
 export function routeData() {
     return createServerData$(async (_, event) => {
@@ -21,7 +22,7 @@ export default function AdminLogin() {
     })
     const [submitting, { Form }] = createServerAction$(loginAction, { invalidate: ['auth'] })
     return (
-        <>
+        <Page title="Login">
             <Form class={styles.form}>
                 <FormInput
                     name="username"
@@ -44,7 +45,7 @@ export default function AdminLogin() {
                 text={submitting.error.message}
                 when={submitting.error}
             />
-        </>
+        </Page>
     )
 }
 async function loginAction(fd: FormData, { request }: ServerFunctionEvent) {

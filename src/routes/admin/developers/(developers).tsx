@@ -6,6 +6,7 @@ import { db } from "~/db";
 import { developer } from "~/drizzle/schema";
 import AdminLink from "~/components/Datagrid/AdminLink";
 import { AdminTable } from "~/components/admin/AdminTable";
+import Page from "~/components/shared/Page";
 
 export function routeData() {
     return createServerData$(async () => db
@@ -35,9 +36,11 @@ type Cols = ColDef<X[number]>
 export default function DevelopersAdminPage() {
     const data = useRouteData<typeof routeData>()
     return (
-        <AdminTable
-            columnDefs={columnDefs}
-            data={data}
-        />
+        <Page title="Developers">
+            <AdminTable
+                columnDefs={columnDefs}
+                data={data}
+            />
+        </Page>
     )
 }

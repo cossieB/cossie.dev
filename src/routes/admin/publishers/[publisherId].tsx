@@ -1,10 +1,12 @@
 import { eq } from "drizzle-orm"
-import { RouteDataArgs, ServerError, useRouteData } from "solid-start"
+import { Suspense } from "solid-js"
+import ErrorBoundary, { RouteDataArgs, ServerError, useRouteData } from "solid-start"
 import { createServerData$ } from "solid-start/server"
-import { DevForm } from "~/components/admin/dev/DevForm"
 import { PubForm } from "~/components/admin/pub/PubForm"
+import Page from "~/components/shared/Page"
 import { db } from "~/db"
 import { publisher } from "~/drizzle/schema"
+import NotFound from "~/routes/[...404]"
 
 export function routeData({ params }: RouteDataArgs) {
     return createServerData$(async ([_, publisherId]) => {
@@ -35,5 +37,13 @@ export function routeData({ params }: RouteDataArgs) {
 
 export default function publisherPage() {
     const data = useRouteData<typeof routeData>()
-    return <PubForm data={data()} />
+    return (
+        <ErrorBoundary fallback={(e) => e.status == 404 ? <NotFound /> : <p> Something went wrong. Please try again later </p>}>
+            <Suspense fallback={<p>Loading...</p>}>
+                <Page title={data()?.name ?? "Publisher"}>
+                    <PubForm data={data()} />
+                </Page>
+            </Suspense>
+        </ErrorBoundary>
+    )
 }

@@ -1,10 +1,12 @@
 import { eq } from "drizzle-orm";
-import { RouteDataArgs, useRouteData } from "solid-start";
+import { Suspense } from "solid-js";
+import ErrorBoundary, { RouteDataArgs, useRouteData } from "solid-start";
 import { ServerError, createServerData$ } from "solid-start/server";
 import { AdminTable } from "~/components/admin/AdminTable";
 import { DevForm } from "~/components/admin/dev/DevForm";
 import { db } from "~/db";
 import { developer } from "~/drizzle/schema";
+import NotFound from "~/routes/[...404]";
 
 export function routeData({ params }: RouteDataArgs) {
     return createServerData$(async ([_, developerId]) => {
@@ -35,5 +37,11 @@ export function routeData({ params }: RouteDataArgs) {
 
 export default function DeveloperPage() {
     const data = useRouteData<typeof routeData>()
-    return <DevForm data={data()} />
+    return (
+        <ErrorBoundary fallback={(e) => e.status == 404 ? <NotFound /> : <p> Something went wrong. Please try again later </p>}>
+            <Suspense fallback={<p>Loading...</p>}>
+                <DevForm data={data()} />
+            </Suspense>
+        </ErrorBoundary>
+    )
 }

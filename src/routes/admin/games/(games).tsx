@@ -10,6 +10,7 @@ import "ag-grid-community/styles/ag-theme-alpine.css"; // optional theme
 import DataEditor from "~/components/Datagrid/DataEditor";
 import AdminLink from "~/components/Datagrid/AdminLink";
 import { AdminTable } from "../../../components/admin/AdminTable";
+import Page from "~/components/shared/Page";
 
 export function routeData() {
     return createServerData$(async () => {
@@ -77,7 +78,9 @@ export const columnDefs: Cols[] = [{
 export default function GamesAdminPage() {
     const data = useRouteData<typeof routeData>()
     return (
-        <AdminTable data={data} columnDefs={columnDefs} />
+        <Page title="Games">
+            <AdminTable data={data} columnDefs={columnDefs} />
+        </Page>
     )
 }
 
