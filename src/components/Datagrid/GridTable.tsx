@@ -1,7 +1,8 @@
-import { ColDef, GridOptions } from "ag-grid-community"
+import type { ColDef, GridOptions } from "ag-grid-community"
 import { AgGridSolidRef } from "ag-grid-solid"
-import { createEffect } from "solid-js";
 import { unstable_clientOnly } from "solid-start";
+import 'ag-grid-community/styles/ag-grid.css'; // grid core CSS
+import "ag-grid-community/styles/ag-theme-alpine.css"; // optional theme
 const AgGridSolid = unstable_clientOnly(() => import("ag-grid-solid"));
 
 type P<T = any> = {

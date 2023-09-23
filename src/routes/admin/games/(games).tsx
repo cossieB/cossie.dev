@@ -5,8 +5,6 @@ import { developer, game, gamesOnPlatforms, genresOfGames, platform, publisher }
 import { eq, sql } from "drizzle-orm"
 import { createServerData$ } from "solid-start/server";
 import { ColDef, ICellEditorParams, ICellRendererParams } from "ag-grid-community";
-import 'ag-grid-community/styles/ag-grid.css'; // grid core CSS
-import "ag-grid-community/styles/ag-theme-alpine.css"; // optional theme
 import DataEditor from "~/components/Datagrid/DataEditor";
 import AdminLink from "~/components/Datagrid/AdminLink";
 import { AdminTable } from "../../../components/admin/AdminTable";

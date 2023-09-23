@@ -33,9 +33,9 @@ export default function CreateSudoku({setPuzzleString, setMode}: Props) {
 
     onMount(() => {
         document.addEventListener('keydown', handleKeypress)
-    })
-    onCleanup(() => {
-        document.removeEventListener('keydown', handleKeypress)
+        onCleanup(() => {
+            document.removeEventListener('keydown', handleKeypress)
+        })
     })
 
     function handleKeypress(e: KeyboardEvent) {
