@@ -17,7 +17,6 @@ export function Checklist<T>(props: P<T>) {
                 {item =>
                     <div class={styles.checkGroup}>
                         <input onchange={(e) => {
-                            console.log(props.arr)
                             if (e.target.checked)
                                 props.setArray([...props.arr, e.target.value])
                             else

@@ -1,5 +1,5 @@
 import type { ColDef, GridOptions } from "ag-grid-community"
-import { AgGridSolidRef } from "ag-grid-solid"
+import  { AgGridSolidRef } from "ag-grid-solid"
 import { unstable_clientOnly } from "solid-start";
 import 'ag-grid-community/styles/ag-grid.css'; // grid core CSS
 import "ag-grid-community/styles/ag-theme-alpine.css"; // optional theme

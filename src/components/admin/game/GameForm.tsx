@@ -80,8 +80,6 @@ export default function GameForm(props: Props) {
                         }}
                         onError={err => {
                             setState({ uploadError: err });
-                            // rollback optimistic update
-                            setGame({ cover: props.data?.cover ?? "" })
                         }}
                         single={true}
                     />
@@ -97,8 +95,6 @@ export default function GameForm(props: Props) {
                         }}
                         onError={err => {
                             setState({ uploadError: err });
-                            // rollback optimistic update
-                            setGame({ banner: props.data?.banner ?? "" })
                         }}
                         single={true}
                     />
@@ -141,17 +137,17 @@ export default function GameForm(props: Props) {
                     setter={setGame}
                 />
                 <SelectInput
-                    arr={(developers() ?? []).map(dev => ({ label: dev.name, value: dev.developerId }))}
+                    arr={(developers).map(dev => ({ label: dev.name, value: dev.developerId }))}
                     name="developerId"
                     label="Developer"
-                    default={(developers() ?? []).find(x => x.developerId === game.developerId)?.developerId}
+                    default={(developers).find(x => x.developerId === game.developerId)?.developerId}
                     setter={setGame}
                 />
                 <SelectInput
-                    arr={(publishers() ?? []).map(pub => ({ label: pub.name, value: pub.publisherId })) ?? []}
+                    arr={(publishers).map(pub => ({ label: pub.name, value: pub.publisherId })) ?? []}
                     name="publisherId"
                     label="Publisher"
-                    default={(publishers() ?? [])?.find(x => x.publisherId === game.publisherId)?.publisherId}
+                    default={(publishers).find(x => x.publisherId === game.publisherId)?.publisherId}
                     setter={setGame}
                 />
                 <InputWithAddButton
@@ -166,7 +162,7 @@ export default function GameForm(props: Props) {
                     })}
                 />
                 <Checklist
-                    items={platforms() ?? []}
+                    items={platforms}
                     idField="platformId"
                     valueField="name"
                     arr={game.platforms}

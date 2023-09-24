@@ -3,7 +3,7 @@ import { AdminLi } from "./AdminNavLink";
 import styles from "./nav.module.scss";
 import { AdminContext } from "~/routes/admin";
 import { A } from "@solidjs/router";
-import server$, { createServerAction$ } from "solid-start/server";
+import { createServerAction$ } from "solid-start/server";
 import { storage } from "~/utils/authenticate";
 
 export default function AdminNav() {

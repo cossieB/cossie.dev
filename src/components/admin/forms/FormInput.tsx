@@ -3,10 +3,10 @@ import styles from "./forms.module.scss"
 import titleCase from "~/lib/titleCase";
 import {type  Require } from "~/lib/utilityTypes";
 import { ChangeEvent } from "~/lib/solidTypes";
-import { SetStoreFunction } from "solid-js/store";
+import { SetStoreFunction, unwrap } from "solid-js/store";
 
-function getOnChange<X extends INPUTS>(props: Pick<Props<X>, 'name' | 'setter'>) {
-    return function onchange(e: ChangeEvent<X>) {
+function getOnChange<UserInputElement extends INPUTS>(props: Pick<Props<UserInputElement>, 'name' | 'setter'>) {
+    return function onchange(e: ChangeEvent<UserInputElement>) {
         props.setter(props.name, e.target.value.trim());
     }
 }
@@ -31,16 +31,16 @@ export function FormTextarea(props: Props<HTMLTextAreaElement>) {
 }
 
 export function SelectInput(props: P) {
-    const merged = mergeProps({ label: props.name, required: true }, props)
+    const merged = mergeProps({ label: props.name, required: true }, props);
     return (
         <div class={styles.formControl}>
             <select name={merged.name} id={merged.name} onchange={getOnChange(props)}>
                 <option value="" disabled selected={!!!props.default}>{titleCase(props.label)}</option>
-                <For each={props.arr}>
+                <For each={merged.arr}>
                     {item =>
                         <SelectOption
                             item={item}
-                            default={props.default}
+                            default={merged.default}
                         />
                     }
                 </For>
