@@ -18,6 +18,7 @@ import { arrayChanged as arrayHasChanged } from "../../../utils/arrayChanged";
 import { Checklist } from "../forms/Checklist";
 import { Popup } from "~/components/shared/Popup";
 import { DropZone } from "../forms/DropZone";
+import AdminForm from "../AdminForm";
 
 export type Props = {
     data?: Game & { tags: string[], platforms: string[] };
@@ -47,8 +48,8 @@ export default function GameForm(props: Props) {
         setGame(copyData(props.data))
     })
     const [state, setState] = createStore({
+        complete: false,
         isUploading: false,
-        uploadOk: false,
         uploadError: null as null | string,
         tagsHaveChanged: () => arrayHasChanged(props.data?.tags ?? [], game.tags),
         pformsHaveChanged: () => arrayHasChanged(props.data?.platforms ?? [], game.platforms)
@@ -59,165 +60,152 @@ export default function GameForm(props: Props) {
     })
 
     return (
-        <>
-            <Form id="gameForm" class={styles.form} ref={form} >
-                <FormInput
-                    name="title"
-                    value={game.title}
-                    required
-                    setter={setGame}
-                />
-                <div class={styles.heroImgs}>
-                    <DropZone
-                        text="Cover"
-                        optimisticUpdate={url => setGame('cover', url)}
-                        onSuccess={(res) => setGame('cover', res[0].url)}
-                        images={[game.cover]}
-                        endpoint="game"
-                        input={{
-                            field: 'cover',
-                            reference: game.gameId
-                        }}
-                        onError={err => {
-                            setState({ uploadError: err });
-                        }}
-                        single={true}
-                    />
-                    <DropZone
-                        text="Banner"
-                        onSuccess={(res) => setGame('banner', res[0].url)}
-                        optimisticUpdate={url => setGame('banner', url)}
-                        images={[game.banner]}
-                        endpoint="game"
-                        input={{
-                            field: 'banner',
-                            reference: game.gameId
-                        }}
-                        onError={err => {
-                            setState({ uploadError: err });
-                        }}
-                        single={true}
-                    />
-                </div>
+        <AdminForm
+            id="gameForm" class={styles.form}
+            ref={form}
+            Form={Form}
+            submitting={submitting}
+            state={state}
+            setState={setState}
+            submitDisabled={
+                !game.title ||
+                !game.cover ||
+                !game.banner ||
+                !game.summary ||
+                !game.developerId ||
+                !game.publisherId ||
+                game.platforms.length == 0 ||
+                !game.releaseDate ||
+                !game.trailer
+            }
+        >
+            <FormInput
+                name="title"
+                value={game.title}
+                required
+                setter={setGame}
+            />
+            <div class={styles.heroImgs}>
                 <DropZone
+                    text="Cover"
+                    onSuccess={(res) => setGame('cover', res[0].url)}
+                    images={[game.cover]}
                     endpoint="game"
-                    text="Drop Screenshots Here"
-                    fileLimit={8}
-                    currentNum={game.images.length}
-                    images={game.images}
                     input={{
-                        field: 'images',
+                        field: 'cover',
                         reference: game.gameId
                     }}
-                    onError={(err) => {
+                    onError={err => {
                         setState({ uploadError: err });
-                        setGame({ images: props.data?.images ?? [] })
                     }}
-                    onSuccess={res => setGame({
-                        images: [...game.images, ...res.map(x => x.url)]
-                    })}
-                    optimisticUpdate={url => setGame(prev => ({ images: [...prev.images, url] }))}
-                    single={false}
+                    single={true}
                 />
-                <ImagePreview
-                    images={game.images}
-                    setImages={arr => setGame('images', arr)}
+                <DropZone
+                    text="Banner"
+                    onSuccess={(res) => setGame('banner', res[0].url)}
+                    images={[game.banner]}
+                    endpoint="game"
+                    input={{
+                        field: 'banner',
+                        reference: game.gameId
+                    }}
+                    onError={err => {
+                        setState({ uploadError: err });
+                    }}
+                    single={true}
                 />
-                <FormTextarea
-                    name="summary"
-                    innerHTML={game.summary}
-                    required
-                    setter={setGame}
-                />
-                <FormInput
-                    name="releaseDate"
-                    value={game.releaseDate ? formatDateForInputElement(new Date(game.releaseDate)) : undefined}
-                    required
-                    type="date"
-                    setter={setGame}
-                />
-                <SelectInput
-                    arr={(developers).map(dev => ({ label: dev.name, value: dev.developerId }))}
-                    name="developerId"
-                    label="Developer"
-                    default={(developers).find(x => x.developerId === game.developerId)?.developerId}
-                    setter={setGame}
-                />
-                <SelectInput
-                    arr={(publishers).map(pub => ({ label: pub.name, value: pub.publisherId })) ?? []}
-                    name="publisherId"
-                    label="Publisher"
-                    default={(publishers).find(x => x.publisherId === game.publisherId)?.publisherId}
-                    setter={setGame}
-                />
-                <InputWithAddButton
-                    name="tags"
-                    disabled={false}
-                    addItem={item => setGame({ tags: [...game.tags, item] })}
-                />
-                <Tags
-                    tags={game.tags}
-                    removeItem={item => setGame({
-                        tags: game.tags.filter(tag => tag !== item)
-                    })}
-                />
-                <Checklist
-                    items={platforms}
-                    idField="platformId"
-                    valueField="name"
-                    arr={game.platforms}
-                    setArray={val => setGame('platforms', val)}
-                />
-                <FormInput
-                    name="trailer"
-                    value={game.trailer}
-                    required
-                    setter={setGame}
-                />
-                <Switch>
-                    <Match when={getYoutubeURL(game.trailer)} >
-                        <YouTubeIframe link={getYoutubeURL(game.trailer)!} />
-                    </Match>
-                    <Match when={game.trailer}>
-                        <YouTubeIframe link={game.trailer} />
-                    </Match>
-                </Switch>
-                <SubmitButton
-                    loading={submitting.pending}
-                    disabled={
-                        state.isUploading ||
-                        !game.title ||
-                        !game.cover ||
-                        !game.banner ||
-                        !game.summary ||
-                        !game.developerId ||
-                        !game.publisherId ||
-                        game.platforms.length == 0 ||
-                        !game.releaseDate ||
-                        !game.trailer
-                    }
-                    finished={!!submitting.result}
-                    text="Submit"
-                />
-                <HiddenInput name="cover" value={game.cover} />
-                <HiddenInput name="banner" value={game.banner} />
-                <HiddenInput name="images" value={game.images} />
-                <HiddenInput name="tags" value={game.tags} />
-                <HiddenInput name="gameId" value={game.gameId} />
-                <HiddenInput name="pforms" value={game.platforms} />
-                <HiddenInput name="pformsHaveChanged" value={state.pformsHaveChanged() ? 1 : 0} />
-                <HiddenInput name="tagsHaveChanged" value={state.tagsHaveChanged() ? 1 : 0} />
-                <HiddenInput name="newGame" value={props.data ? 0 : 1} />
-            </Form>
-            <Popup
-                when={!!state.uploadError || submitting.error || submitting.result}
-                text={state.uploadError! || submitting.error?.message || submitting.result}
-                colorDeg={submitting.result ? "125" : undefined}
-                close={() => {
-                    setState('uploadError', null);
-                    submitting.clear()
+            </div>
+            <DropZone
+                endpoint="game"
+                text="Drop Screenshots Here"
+                fileLimit={8}
+                currentNum={game.images.length}
+                images={game.images}
+                input={{
+                    field: 'images',
+                    reference: game.gameId
                 }}
+                onError={(err) => {
+                    setState({ uploadError: err });
+                    setGame({ images: props.data?.images ?? [] })
+                }}
+                onSuccess={res => setGame({
+                    images: [...game.images, ...res.map(x => x.url)]
+                })}
+                single={false}
             />
-        </>
+            <ImagePreview
+                images={game.images}
+                setImages={arr => setGame('images', arr)}
+            />
+            <FormTextarea
+                name="summary"
+                innerHTML={game.summary}
+                required
+                setter={setGame}
+            />
+            <FormInput
+                name="releaseDate"
+                value={game.releaseDate ? formatDateForInputElement(new Date(game.releaseDate)) : undefined}
+                required
+                type="date"
+                setter={setGame}
+            />
+            <SelectInput
+                arr={(developers).map(dev => ({ label: dev.name, value: dev.developerId }))}
+                name="developerId"
+                label="Developer"
+                default={(developers).find(x => x.developerId === game.developerId)?.developerId}
+                setter={setGame}
+            />
+            <SelectInput
+                arr={(publishers).map(pub => ({ label: pub.name, value: pub.publisherId })) ?? []}
+                name="publisherId"
+                label="Publisher"
+                default={(publishers).find(x => x.publisherId === game.publisherId)?.publisherId}
+                setter={setGame}
+            />
+            <InputWithAddButton
+                name="tags"
+                disabled={false}
+                addItem={item => setGame({ tags: Array.from(new Set([...game.tags, item.toLowerCase()])) })}
+            />
+            <Tags
+                tags={game.tags}
+                removeItem={item => setGame({
+                    tags: game.tags.filter(tag => tag !== item)
+                })}
+            />
+            <Checklist
+                items={platforms}
+                idField="platformId"
+                valueField="name"
+                arr={game.platforms}
+                setArray={val => setGame('platforms', val)}
+            />
+            <FormInput
+                name="trailer"
+                value={game.trailer}
+                required
+                setter={setGame}
+            />
+            <Switch>
+                <Match when={getYoutubeURL(game.trailer)} >
+                    <YouTubeIframe link={getYoutubeURL(game.trailer)!} />
+                </Match>
+                <Match when={game.trailer}>
+                    <YouTubeIframe link={game.trailer} />
+                </Match>
+            </Switch>
+            <HiddenInput name="cover" value={game.cover} />
+            <HiddenInput name="banner" value={game.banner} />
+            <HiddenInput name="images" value={game.images} />
+            <HiddenInput name="tags" value={game.tags} />
+            <HiddenInput name="gameId" value={game.gameId} />
+            <HiddenInput name="pforms" value={game.platforms} />
+            <HiddenInput name="pformsHaveChanged" value={state.pformsHaveChanged() ? 1 : 0} />
+            <HiddenInput name="tagsHaveChanged" value={state.tagsHaveChanged() ? 1 : 0} />
+            <HiddenInput name="newGame" value={props.data ? 0 : 1} />
+        </AdminForm>
     )
 }

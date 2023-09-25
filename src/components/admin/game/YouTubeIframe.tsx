@@ -2,7 +2,7 @@ import { Show, createSignal } from "solid-js";
 import { validateUrl } from "../../../lib/validateUrl";
 
 export function YouTubeIframe(props: { link: string | URL; }) {
-    const [errorMsg, setErrorMsg] = createSignal("")
+    const [errorMsg, setErrorMsg] = createSignal("Failed to load YouTube")
     const url = () => props.link instanceof URL ? props.link : validateUrl(props.link);
     const params = () => {
         if (!url() ) {

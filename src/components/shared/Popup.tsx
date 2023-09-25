@@ -23,7 +23,6 @@ function Alert(props: Props) {
     const timer = () => {
         if (time() < 5)
             setTime(p => p + 1);
-
         else
             props.close();
     };

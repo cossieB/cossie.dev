@@ -10,6 +10,7 @@ import { DropZone } from "../forms/DropZone"
 import { updatePubOnDB } from "./updatePubOnDB"
 import HiddenInput from "../forms/HiddenInput"
 import { Popup } from "~/components/shared/Popup"
+import AdminForm from "../AdminForm"
 
 type Props = {
     data?: Publisher
@@ -26,8 +27,9 @@ function copyData(data: Props['data']): Publisher {
 }
 export function PubForm(props: Props) {
     const [pub, setPub] = createStore(copyData(props.data))
-    
+
     const [state, setState] = createStore({
+        complete: false,
         isUploading: false,
         uploadError: null as null | string,
     })
@@ -39,20 +41,34 @@ export function PubForm(props: Props) {
     })
     return (
         <>
-            <Form id="pubForm" class={styles.form}>
+            <AdminForm
+                id="pubForm"
+                class={styles.form}
+                Form={Form}
+                state={state}
+                setState={setState}
+                submitting={submitting}
+                submitDisabled={
+                    !pub.country ||
+                    !pub.name ||
+                    !pub.logo ||
+                    !pub.headquarters ||
+                    !pub.summary
+                }
+            >
                 <div class={styles.heroImgs}>
-                <DropZone
-                    endpoint="logo"
-                    onSuccess={res => setPub('logo', res[0].url)}
-                    images={[pub.logo]}
-                    input={{
-                        reference: pub.publisherId,
-                        table: 'developer'
-                    }}
-                    onError={e => setState('uploadError', e)}
-                    single
-                    text="Logo"
-                />
+                    <DropZone
+                        endpoint="logo"
+                        onSuccess={res => setPub('logo', res[0].url)}
+                        images={[pub.logo]}
+                        input={{
+                            reference: pub.publisherId,
+                            table: 'developer'
+                        }}
+                        onError={e => setState('uploadError', e)}
+                        single
+                        text="Logo"
+                    />
                 </div>
                 <FormInput
                     name="name"
@@ -77,31 +93,10 @@ export function PubForm(props: Props) {
                     value={pub.summary}
                     setter={setPub}
                 />
-                <SubmitButton
-                    finished={!!submitting.result}
-                    loading={submitting.pending}
-                    disabled={
-                        !pub.country ||
-                        state.isUploading ||
-                        !pub.name ||
-                        !pub.logo ||
-                        !pub.headquarters ||
-                        !pub.summary
-                    }
-                />
                 <HiddenInput name="logo" value={pub.logo} />
                 <HiddenInput name="publisherId" value={pub.publisherId} />
                 <HiddenInput name="newItem" value={props.data ? 0 : 1} />
-            </Form>
-            <Popup
-                when={!!state.uploadError || submitting.error || submitting.result}
-                text={state.uploadError! || submitting.error?.message || submitting.result}
-                colorDeg={submitting.result ? "125" : undefined}
-                close={() => {
-                    setState('uploadError', null);
-                    submitting.clear()
-                }}
-            />
+            </AdminForm>
         </>
     )
 }

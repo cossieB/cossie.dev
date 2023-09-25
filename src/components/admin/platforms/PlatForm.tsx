@@ -10,6 +10,7 @@ import styles from "~/components/admin/forms/forms.module.scss";
 import { updatePlatformOnDB } from "./updatePlatformOnDB"
 import { formatDateForInputElement } from "~/lib/formatDate"
 import { Popup } from "~/components/shared/Popup"
+import AdminForm from "../AdminForm"
 
 type Props = {
     data?: Platform
@@ -29,6 +30,7 @@ export function PlatForm(props: Props) {
     const [state, setState] = createStore({
         isUploading: false,
         uploadError: null as null | string,
+        complete: false
     })
     createEffect(() => {
         setPlatform(copyData(props.data))
@@ -38,9 +40,19 @@ export function PlatForm(props: Props) {
         invalidate: () => ['platforms', props.data?.platformId]
     })
     return (
-        <>
-            <Form id="platForm" class={styles.form}>
-                <div class={styles.heroImgs}>
+        <AdminForm
+            Form={Form}
+            state={state}
+            setState={setState}
+            submitDisabled={
+                !platform.name ||
+                !platform.logo ||
+                !platform.summary
+            }
+            submitting={submitting}
+            id="platForm"
+        >
+            <div class={styles.heroImgs}>
                 <DropZone
                     endpoint="logo"
                     onSuccess={res => setPlatform('logo', res[0].url)}
@@ -53,46 +65,26 @@ export function PlatForm(props: Props) {
                     single
                     text="Logo"
                 />
-                </div>
-                <FormInput
-                    name="name"
-                    value={platform.name}
-                    setter={setPlatform}
-                />
-                <FormInput
-                    name="release"
-                    value={formatDateForInputElement(new Date(platform.release))}
-                    setter={setPlatform}
-                    type="date"
-                />
-                <FormTextarea
-                    name="summary"
-                    value={platform.summary}
-                    setter={setPlatform}
-                />
-                <SubmitButton
-                    finished={!!submitting.result}
-                    loading={submitting.pending}
-                    disabled={
-                        state.isUploading ||
-                        !platform.name ||
-                        !platform.logo ||
-                        !platform.summary
-                    }
-                />
-                <HiddenInput name="logo" value={platform.logo} />
-                <HiddenInput name="platformId" value={platform.platformId} />
-                <HiddenInput name="newItem" value={props.data ? 0 : 1} />
-            </Form>
-            <Popup
-                when={!!state.uploadError || submitting.error || submitting.result}
-                text={state.uploadError! || submitting.error?.message || submitting.result}
-                colorDeg={submitting.result ? "125" : undefined}
-                close={() => {
-                    setState('uploadError', null);
-                    submitting.clear()
-                }}
+            </div>
+            <FormInput
+                name="name"
+                value={platform.name}
+                setter={setPlatform}
             />
-        </>
+            <FormInput
+                name="release"
+                value={formatDateForInputElement(new Date(platform.release))}
+                setter={setPlatform}
+                type="date"
+            />
+            <FormTextarea
+                name="summary"
+                value={platform.summary}
+                setter={setPlatform}
+            />
+            <HiddenInput name="logo" value={platform.logo} />
+            <HiddenInput name="platformId" value={platform.platformId} />
+            <HiddenInput name="newItem" value={props.data ? 0 : 1} />
+        </AdminForm>
     )
 }
