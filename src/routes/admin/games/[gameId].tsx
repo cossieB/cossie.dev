@@ -61,11 +61,11 @@ export default function AdminGameId() {
     const data = useRouteData<typeof routeData>();
     return (
         <ErrorBoundary fallback={(e) => e.status == 404 ? <NotFound /> : <p> Something went wrong. Please try again later </p>}>
-            {/* <Suspense fallback={<Loader />}> */}
+            <Suspense fallback={<Loader />}>
                 <Page title={data()?.title ?? "Game"}>
                     <GameForm data={data()} />
                 </Page>
-            {/* </Suspense> */}
+            </Suspense>
         </ErrorBoundary>
     )
 }

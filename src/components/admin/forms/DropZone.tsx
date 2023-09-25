@@ -15,13 +15,13 @@ export type Props<T extends keyof OurFileRouter> = {
     input: OurFileRouter[T]['_def']['_input']
     onError: (err: any) => void
     onSuccess: (res: UploadFileResponse[]) => void
-    optimisticUpdate?: (url: string) => void
     single: boolean
 }
 
 const { useUploadThing } = generateSolidHelpers<OurFileRouter>();
 
 export function DropZone<T extends keyof OurFileRouter>(props: Props<T>) {
+    let input!: HTMLInputElement
     const { isUploading, startUpload } = useUploadThing(props.endpoint, {
         onClientUploadComplete(res) {
             props.onSuccess(res ?? [])
@@ -38,6 +38,7 @@ export function DropZone<T extends keyof OurFileRouter>(props: Props<T>) {
     const [progress, setProgress] = createSignal(0)
     const merged = mergeProps({ text: "Drop Image Here", fileLimit: 1, currentNum: 0 }, props);
     const [previewImgs, setPreviewImgs] = createStore<string[]>([]);
+    const limit = merged.fileLimit - merged.currentNum;
 
     return (
         <div
@@ -57,18 +58,18 @@ export function DropZone<T extends keyof OurFileRouter>(props: Props<T>) {
                     setPreviewImgs(e.dataTransfer.getData("URL"))
                 }
                 else {
-                    const limit = merged.fileLimit - merged.currentNum;
                     files = Array.from(e.dataTransfer.files)
                         .slice(0, limit)
                         .filter(file => file.type.startsWith("image/"))
                     files.forEach(file => readFile(src => setPreviewImgs(prev => [...prev, src]), file))
                 }
                 setEntered(false)
-                await startUpload(files, props.input as any)
-                setPreviewImgs([])
-                setProgress(0)
+                await upload(files);
             }}
             onDragLeave={() => setEntered(false)}
+            onclick={() => {
+                input.click();
+            }}
         >
             <Switch>
                 <Match when={isUploading() && props.single}>
@@ -96,8 +97,28 @@ export function DropZone<T extends keyof OurFileRouter>(props: Props<T>) {
                 </Match>
             </Switch>
             <label >{props.text}</label>
+            <input
+                type="file"
+                accept="image/*"
+                hidden
+                ref={input}
+                multiple
+                onchange={e => {
+                    const files = Array.from(e.target.files ?? [])
+                        .slice(0, limit)
+                        .filter(file => file.type.startsWith("image/"))
+                    files.forEach(file => readFile(src => setPreviewImgs(prev => [...prev, src]), file));
+                    upload(files)
+                }}
+            />
         </div>
     )
+
+    async function upload(files: File[]) {
+        await startUpload(files, props.input as any);
+        setPreviewImgs([]);
+        setProgress(0);
+    }
 }
 
 type UpState = {
