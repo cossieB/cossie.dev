@@ -1,4 +1,4 @@
-import { Accessor, createMemo } from "solid-js";
+import { type Accessor, createMemo } from "solid-js";
 import styles from "./quotes.module.scss";
 import { ReactiveSet } from "@solid-primitives/set";
 import { quotes } from "./quotelist";

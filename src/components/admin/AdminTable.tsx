@@ -1,5 +1,5 @@
 import { type Resource, Suspense, Show } from "solid-js";
-import { ColDef, ColGroupDef } from "ag-grid-community";
+import type { ColDef, ColGroupDef } from "ag-grid-community";
 import GridTable from "~/components/Datagrid/GridTable";
 
 type Props<T> = {

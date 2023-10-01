@@ -1,8 +1,8 @@
 import { eq } from "drizzle-orm";
-import { ServerError, ServerFunctionEvent } from "solid-start";
+import { ServerError, type ServerFunctionEvent } from "solid-start";
 import { db } from "~/db";
 import { publisher } from "~/drizzle/schema";
-import { Publisher } from "~/drizzle/types";
+import { type Publisher } from "~/drizzle/types";
 import { authenticateOrThrowUnauthorized } from "~/utils/authenticate";
 
 export async function updatePubOnDB(fd: FormData, event: ServerFunctionEvent) {

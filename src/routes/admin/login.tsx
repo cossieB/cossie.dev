@@ -1,6 +1,6 @@
 import { createHash } from "crypto";
 import { createStore } from "solid-js/store";
-import { ServerError, ServerFunctionEvent, createServerAction$, createServerData$, redirect } from "solid-start/server";
+import { ServerError, type ServerFunctionEvent, createServerAction$, createServerData$, redirect } from "solid-start/server";
 import SubmitButton from "~/components/admin/SubmitButton";
 import { FormInput } from "~/components/admin/forms/FormInput";
 import styles from "~/components/admin/forms/forms.module.scss";

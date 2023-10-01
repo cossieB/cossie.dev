@@ -1,6 +1,6 @@
-import { SetStoreFunction, createStore } from "solid-js/store";
+import type { SetStoreFunction } from "solid-js/store";
 import { convert } from "./convert";
-import { ClickEvent } from "~/lib/solidTypes";
+import type { ClickEvent } from "~/lib/solidTypes";
 
 export const initialState = {
     breakMin: 5,

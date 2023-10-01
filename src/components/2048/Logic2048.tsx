@@ -1,4 +1,4 @@
-import { onCleanup, onMount, Setter } from 'solid-js';
+import { onCleanup, onMount, type Setter } from 'solid-js';
 import { Board } from './Board';
 import type { Elem } from './ControlElem';
 import createBlock from './createBlock';

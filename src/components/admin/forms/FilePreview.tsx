@@ -1,6 +1,5 @@
-import { Accessor, For, Setter, createSignal } from "solid-js"
+import { For, createSignal } from "solid-js"
 import styles from "./forms.module.scss";
-import { SetStoreFunction } from "solid-js/store";
 
 type P = {
     images: string[]

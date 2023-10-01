@@ -1,6 +1,6 @@
 import { LocalScores, GlobalScores } from "./memoryScores";
 import styles from './memory.module.scss';
-import { Setter, useContext } from "solid-js";
+import { type Setter, useContext } from "solid-js";
 import { UserContext } from "../shared/Signup/UserProvider";
 import { MemoryContext } from "./MemoryProvider";
 

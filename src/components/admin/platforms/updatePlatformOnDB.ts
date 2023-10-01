@@ -1,8 +1,8 @@
 import { eq } from "drizzle-orm";
-import { ServerError, ServerFunctionEvent } from "solid-start";
+import { ServerError, type ServerFunctionEvent } from "solid-start";
 import { db } from "~/db";
 import { platform } from "~/drizzle/schema";
-import { Platform } from "~/drizzle/types";
+import { type Platform } from "~/drizzle/types";
 import { authenticateOrThrowUnauthorized } from "~/utils/authenticate";
 
 export async function updatePlatformOnDB(fd: FormData, event: ServerFunctionEvent) {

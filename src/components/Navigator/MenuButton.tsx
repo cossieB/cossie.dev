@@ -1,4 +1,4 @@
-import { Accessor, Setter, Show } from "solid-js";
+import { type Accessor, type Setter, Show } from "solid-js";
 import { CloseSvg, MenuSvg } from "~/svgs";
 
 type Props = {

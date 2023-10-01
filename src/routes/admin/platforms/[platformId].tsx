@@ -1,6 +1,6 @@
 import { eq } from "drizzle-orm"
 import { Suspense } from "solid-js"
-import ErrorBoundary, { RouteDataArgs, ServerError, useRouteData } from "solid-start"
+import ErrorBoundary, { type RouteDataArgs, ServerError, useRouteData } from "solid-start"
 import { createServerData$ } from "solid-start/server"
 import { PlatForm } from "~/components/admin/platforms/PlatForm"
 import Loader from "~/components/shared/Loader/Loader"

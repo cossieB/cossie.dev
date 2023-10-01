@@ -1,9 +1,9 @@
-import { For, JSX, mergeProps } from "solid-js";
+import { For, type JSX, mergeProps } from "solid-js";
 import styles from "./forms.module.scss"
 import titleCase from "~/lib/titleCase";
 import {type  Require } from "~/lib/utilityTypes";
-import { ChangeEvent } from "~/lib/solidTypes";
-import { SetStoreFunction, unwrap } from "solid-js/store";
+import { type ChangeEvent } from "~/lib/solidTypes";
+import { type SetStoreFunction } from "solid-js/store";
 
 function getOnChange<UserInputElement extends INPUTS>(props: Pick<Props<UserInputElement>, 'name' | 'setter'>) {
     return function onchange(e: ChangeEvent<UserInputElement>) {

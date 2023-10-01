@@ -1,5 +1,5 @@
-import { ICellRendererParams, ColDef } from "ag-grid-community"
-import { Resource } from "solid-js"
+import type { ICellRendererParams, ColDef } from "ag-grid-community"
+import type { Resource } from "solid-js"
 import { useRouteData } from "solid-start"
 import { createServerData$ } from "solid-start/server"
 import AdminLink from "~/components/Datagrid/AdminLink"

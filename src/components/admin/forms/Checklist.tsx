@@ -1,6 +1,6 @@
 import styles from "~/components/admin/forms/forms.module.scss";
 import { For } from "solid-js";
-import { KeysWithValuesOfType } from "~/lib/utilityTypes";
+import { type KeysWithValuesOfType } from "~/lib/utilityTypes";
 
 type P<T> = {
     items: T[]

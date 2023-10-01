@@ -1,4 +1,4 @@
-import { JSX, createContext } from "solid-js";
+import { type JSX, createContext } from "solid-js";
 import { createStore } from "solid-js/store";
 import { MemoryWrapper, initialState } from "./store";
 

@@ -1,6 +1,6 @@
 import { ServerError } from "solid-start";
 import { createUploadthing } from "uploadthing/next";
-import { FileRouter } from "uploadthing/server";
+import type { FileRouter } from "uploadthing/server";
 import { z } from "zod";
 import MongoConnection from "~/mongo/mongo";
 import { authenticateOrThrowUnauthorized } from "~/utils/authenticate";

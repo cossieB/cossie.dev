@@ -1,15 +1,13 @@
 import { createEffect } from "solid-js"
 import { createStore } from "solid-js/store"
 import { createServerAction$ } from "solid-start/server"
-import { Platform } from "~/drizzle/types"
-import SubmitButton from "../SubmitButton"
+import type { Platform } from "~/drizzle/types"
 import { DropZone } from "../forms/DropZone"
-import { FormInput, FormTextarea } from "../forms/FormInput"
+import { FormInput } from "../forms/FormInput"
 import HiddenInput from "../forms/HiddenInput"
 import styles from "~/components/admin/forms/forms.module.scss";
 import { updatePlatformOnDB } from "./updatePlatformOnDB"
 import { formatDateForInputElement } from "~/lib/formatDate"
-import { Popup } from "~/components/shared/Popup"
 import AdminForm from "../AdminForm"
 import CustomTextarea from "../CustomTextarea"
 

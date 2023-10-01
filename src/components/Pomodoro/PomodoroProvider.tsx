@@ -1,7 +1,6 @@
-import { JSX, createContext } from "solid-js";
+import { type JSX, createContext } from "solid-js";
 import { PomodoroWrapper, initialState } from "./store";
 import { createStore } from "solid-js/store";
-import { useAudio, useAudios } from "~/hooks/useAudio";
 import { convert } from "./convert";
 
 export const PomodoroContext = createContext<PomodoroWrapper>()

@@ -1,8 +1,7 @@
 import { eq } from "drizzle-orm";
 import { Suspense } from "solid-js";
-import ErrorBoundary, { RouteDataArgs, useRouteData } from "solid-start";
+import ErrorBoundary, { type RouteDataArgs, useRouteData } from "solid-start";
 import { ServerError, createServerData$ } from "solid-start/server";
-import { AdminTable } from "~/components/admin/AdminTable";
 import { DevForm } from "~/components/admin/dev/DevForm";
 import Loader from "~/components/shared/Loader/Loader";
 import { db } from "~/db";

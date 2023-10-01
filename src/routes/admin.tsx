@@ -1,12 +1,12 @@
-import { JSXElement, Resource, createContext, createEffect, onCleanup, onMount } from "solid-js";
+import { type JSXElement, type Resource, createContext, createEffect, onCleanup, onMount } from "solid-js";
 import { Outlet, createRouteAction, useRouteData } from "solid-start";
 import AdminNav from "~/components/admin/AdminNav";
 import styles from './admin.module.scss'
 import { createServerData$ } from "solid-start/server";
 import { db } from "~/db";
 import { authenticate } from "~/utils/authenticate";
-import { Developer, Platform, Publisher } from "~/drizzle/types";
-import { SessionData } from "solid-start/session/sessions";
+import type { Developer, Platform, Publisher } from "~/drizzle/types";
+import type { SessionData } from "solid-start/session/sessions";
 
 export function routeData() {
     const developers = createServerData$(async () => db.query.developer.findMany(), {

@@ -1,6 +1,6 @@
-import { ICellEditorParams, ICellEditor } from "ag-grid-community"
+import type { ICellEditorParams, ICellEditor } from "ag-grid-community"
 import { createEffect } from "solid-js"
-import { ChangeEvent } from "~/lib/solidTypes"
+import type { ChangeEvent } from "~/lib/solidTypes"
 import styles from "./DataEditor.module.scss"
 
 export default function DataEditor(props: ICellEditorParams) {

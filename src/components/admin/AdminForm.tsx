@@ -1,7 +1,7 @@
-import { JSXElement, ParentComponent, createEffect } from "solid-js";
-import { FormProps } from "solid-start/data/Form";
+import { type JSXElement, type ParentComponent, createEffect } from "solid-js";
+import type { FormProps } from "solid-start/data/Form";
 import { Popup } from "../shared/Popup";
-import { SetStoreFunction } from "solid-js/store";
+import type { SetStoreFunction } from "solid-js/store";
 import SubmitButton from "./SubmitButton";
 import styles from "~/components/admin/forms/forms.module.scss";
 

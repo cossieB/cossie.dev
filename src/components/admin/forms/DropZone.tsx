@@ -1,9 +1,9 @@
-import { For, Match, Switch, createEffect, createSignal, mergeProps } from "solid-js";
+import { For, Match, Switch, createSignal, mergeProps } from "solid-js";
 import styles from "./DropZone.module.scss";
 import { readFile } from "../../../lib/readFile";
 import { generateSolidHelpers } from "@uploadthing/solid";
-import { OurFileRouter } from "~/server/uploadthing";
-import { UploadFileResponse } from "uploadthing/client";
+import type { OurFileRouter } from "~/server/uploadthing";
+import type { UploadFileResponse } from "uploadthing/client";
 import { createStore } from "solid-js/store";
 
 export type Props<T extends keyof OurFileRouter> = {

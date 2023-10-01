@@ -1,8 +1,8 @@
 import { skillsMap } from "./skillsMap";
 import Tooltip from "../shared/Tooltip";
-import { Lang } from "./vars";
+import type { Lang } from "./vars";
 import styles from './about.module.scss'
-import { Accessor, For, Show, createSignal } from "solid-js";
+import { type Accessor, For, Show, createSignal } from "solid-js";
 
 export default function Languages({ arr }: { arr: Lang[] }) {
     return (

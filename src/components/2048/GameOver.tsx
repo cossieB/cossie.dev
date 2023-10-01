@@ -1,6 +1,6 @@
 import styles from "./2048.module.scss"
 import { Board } from "./Board";
-import { onMount, Setter, useContext } from "solid-js";
+import { onMount, type Setter, useContext } from "solid-js";
 import type { Elem } from "./ControlElem";
 import type { Scores } from "./types";
 import createBlock from "./createBlock";

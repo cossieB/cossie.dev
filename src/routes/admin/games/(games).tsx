@@ -4,7 +4,7 @@ import { db } from "~/db";
 import { developer, game, gamesOnPlatforms, genresOfGames, platform, publisher } from "~/drizzle/schema";
 import { eq, sql } from "drizzle-orm"
 import { createServerData$ } from "solid-start/server";
-import { ColDef, ICellEditorParams, ICellRendererParams } from "ag-grid-community";
+import type { ColDef, ICellEditorParams, ICellRendererParams } from "ag-grid-community";
 import DataEditor from "~/components/Datagrid/DataEditor";
 import AdminLink from "~/components/Datagrid/AdminLink";
 import { AdminTable } from "../../../components/admin/AdminTable";

@@ -1,4 +1,4 @@
-import { ICellRendererParams } from "ag-grid-community";
+import type { ICellRendererParams } from "ag-grid-community";
 import { A } from "solid-start";
 import styles from './AdminLink.module.scss'
 

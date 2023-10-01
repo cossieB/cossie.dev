@@ -1,6 +1,6 @@
 import Card from "./Card";
 import styles from "./memory.module.scss";
-import { ISvg, svgs } from "./svgs";
+import { type ISvg, svgs } from "./svgs";
 import { createEffect, createSignal, For, Index, useContext } from "solid-js";
 import shuffleArray from "../../lib/shuffleArray";
 import { createStore } from "solid-js/store";

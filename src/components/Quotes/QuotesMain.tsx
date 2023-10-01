@@ -1,5 +1,5 @@
 import { ErrorBoundary, For, createEffect, createSignal } from "solid-js";
-import { quotes as quotesList, Quote as QuoteType } from "./quotelist";
+import { quotes as quotesList, type Quote as QuoteType } from "./quotelist";
 import styles from "./quotes.module.scss"
 import { createStore } from "solid-js/store";
 import { setDifference } from "~/lib/setDifference";

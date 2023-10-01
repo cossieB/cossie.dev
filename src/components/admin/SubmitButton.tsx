@@ -1,4 +1,4 @@
-import { JSX, Match, Switch } from "solid-js"
+import { type JSX, Match, Switch } from "solid-js"
 import Loader from "../shared/Loader/Loader"
 import styles from "~/components/admin/forms/forms.module.scss"
 

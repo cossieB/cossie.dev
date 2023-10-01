@@ -1,4 +1,4 @@
-import { JSXElement } from "solid-js";
+import type { JSXElement } from "solid-js";
 import { A } from "solid-start";
 import styles from "./nav.module.scss"
 type Props = {

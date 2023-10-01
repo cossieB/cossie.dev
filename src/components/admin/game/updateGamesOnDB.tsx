@@ -1,7 +1,7 @@
 import type { Game } from "~/drizzle/types";
 import { db } from "~/db";
 import { game, gamesOnPlatforms, genresOfGames } from "~/drizzle/schema";
-import { ServerError, ServerFunctionEvent } from "solid-start";
+import { ServerError, type ServerFunctionEvent } from "solid-start";
 import { eq } from "drizzle-orm";
 import { authenticateOrThrowUnauthorized } from "~/utils/authenticate";
 

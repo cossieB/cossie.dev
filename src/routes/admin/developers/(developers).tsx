@@ -1,4 +1,4 @@
-import { ColDef, ICellRendererParams } from "ag-grid-community";
+import type { ColDef, ICellRendererParams } from "ag-grid-community";
 import { type Resource } from "solid-js";
 import { useRouteData } from "solid-start";
 import { createServerData$ } from "solid-start/server";

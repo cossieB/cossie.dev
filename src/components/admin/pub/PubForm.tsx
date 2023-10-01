@@ -1,15 +1,13 @@
 import { createEffect } from "solid-js"
 import { createServerAction$ } from "solid-start/server"
-import { Publisher } from "~/drizzle/types"
-import { FormInput, FormTextarea, SelectInput } from "../forms/FormInput"
+import type { Publisher } from "~/drizzle/types"
+import { FormInput, SelectInput } from "../forms/FormInput"
 import { createStore } from "solid-js/store"
 import styles from "~/components/admin/forms/forms.module.scss";
 import { countryList } from "../forms/countryList"
-import SubmitButton from "../SubmitButton"
 import { DropZone } from "../forms/DropZone"
 import { updatePubOnDB } from "./updatePubOnDB"
 import HiddenInput from "../forms/HiddenInput"
-import { Popup } from "~/components/shared/Popup"
 import AdminForm from "../AdminForm"
 import CustomTextarea from "../CustomTextarea"
 

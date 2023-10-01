@@ -1,4 +1,3 @@
-import { SetStoreFunction } from "solid-js/store";
 import styles from "~/components/admin/forms/forms.module.scss";
 import HiddenInput from "./forms/HiddenInput";
 
