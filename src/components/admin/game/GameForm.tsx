@@ -16,6 +16,7 @@ import { arrayChanged as arrayHasChanged } from "../../../utils/arrayChanged";
 import { Checklist } from "../forms/Checklist";
 import { DropZone } from "../forms/DropZone";
 import AdminForm from "../AdminForm";
+import CustomTextarea from "../CustomTextarea";
 
 export type Props = {
     data?: Game & { tags: string[], platforms: string[] };
@@ -135,11 +136,10 @@ export default function GameForm(props: Props) {
                 images={game.images}
                 setImages={arr => setGame('images', arr)}
             />
-            <div
-                contentEditable
-                innerHTML={game.summary}
-                onblur={e => { setGame('summary', e.target.innerHTML) }}
-                class={styles.editable}
+            <CustomTextarea
+                setter={val => setGame('summary', val)}
+                name="summary"
+                value={game.summary}
             />
             <FormInput
                 name="releaseDate"
@@ -191,7 +191,6 @@ export default function GameForm(props: Props) {
             <HiddenInput name="banner" value={game.banner} />
             <HiddenInput name="images" value={game.images} />
             <HiddenInput name="tags" value={game.tags} />
-            <HiddenInput name="summary" value={game.summary} />
             <HiddenInput name="gameId" value={game.gameId} />
             <HiddenInput name="pforms" value={game.platforms} />
             <HiddenInput name="pformsHaveChanged" value={state.pformsHaveChanged() ? 1 : 0} />
@@ -200,3 +199,5 @@ export default function GameForm(props: Props) {
         </AdminForm>
     )
 }
+
+

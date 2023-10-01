@@ -11,6 +11,7 @@ import { updatePlatformOnDB } from "./updatePlatformOnDB"
 import { formatDateForInputElement } from "~/lib/formatDate"
 import { Popup } from "~/components/shared/Popup"
 import AdminForm from "../AdminForm"
+import CustomTextarea from "../CustomTextarea"
 
 type Props = {
     data?: Platform
@@ -77,10 +78,10 @@ export function PlatForm(props: Props) {
                 setter={setPlatform}
                 type="date"
             />
-            <FormTextarea
+            <CustomTextarea
+                setter={val => setPlatform('summary', val)}
                 name="summary"
                 value={platform.summary}
-                setter={setPlatform}
             />
             <HiddenInput name="logo" value={platform.logo} />
             <HiddenInput name="platformId" value={platform.platformId} />

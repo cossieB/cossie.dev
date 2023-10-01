@@ -11,6 +11,7 @@ import HiddenInput from "../forms/HiddenInput"
 import { Popup } from "~/components/shared/Popup"
 import { DropZone } from "../forms/DropZone"
 import AdminForm from "../AdminForm"
+import CustomTextarea from "../CustomTextarea"
 
 type Props = {
     data?: Developer
@@ -87,10 +88,10 @@ export function DevForm(props: Props) {
                 setter={setDev}
                 default={countryList.find(x => x === dev.country)}
             />
-            <FormTextarea
+            <CustomTextarea
+                setter={val => setDev('summary', val)}
                 name="summary"
                 value={dev.summary}
-                setter={setDev}
             />
             <HiddenInput name="logo" value={dev.logo} />
             <HiddenInput name="developerId" value={dev.developerId} />

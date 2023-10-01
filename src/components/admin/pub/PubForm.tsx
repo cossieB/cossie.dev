@@ -11,6 +11,7 @@ import { updatePubOnDB } from "./updatePubOnDB"
 import HiddenInput from "../forms/HiddenInput"
 import { Popup } from "~/components/shared/Popup"
 import AdminForm from "../AdminForm"
+import CustomTextarea from "../CustomTextarea"
 
 type Props = {
     data?: Publisher
@@ -88,10 +89,10 @@ export function PubForm(props: Props) {
                     setter={setPub}
                     default={countryList.find(x => x === pub.country)}
                 />
-                <FormTextarea
+                <CustomTextarea
+                    setter={val => setPub('summary', val)}
                     name="summary"
                     value={pub.summary}
-                    setter={setPub}
                 />
                 <HiddenInput name="logo" value={pub.logo} />
                 <HiddenInput name="publisherId" value={pub.publisherId} />
