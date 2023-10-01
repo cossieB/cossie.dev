@@ -1,7 +1,7 @@
-import { FormInput, FormTextarea, SelectInput } from "~/components/admin/forms/FormInput";
+import { FormInput, SelectInput } from "~/components/admin/forms/FormInput";
 import type { Game } from "~/drizzle/types";
 import styles from "~/components/admin/forms/forms.module.scss";
-import { useContext, Switch, Match, createEffect } from "solid-js";
+import { useContext, createEffect } from "solid-js";
 import { formatDateForInputElement } from "~/lib/formatDate";
 import { AdminContext } from "~/routes/admin";
 import { createStore } from "solid-js/store";
@@ -9,14 +9,11 @@ import { ImagePreview } from "../forms/FilePreview";
 import { YouTubeIframe } from "./YouTubeIframe";
 import { Tags } from "./Tags";
 import { InputWithAddButton } from "../forms/InputWithAddButton";
-import { getYoutubeURL } from "../../../utils/getYoutubeURL";
 import { createServerAction$ } from "solid-start/server";
 import HiddenInput from "../forms/HiddenInput";
-import SubmitButton from "../SubmitButton";
 import { updateGamesOnDB } from "./updateGamesOnDB";
 import { arrayChanged as arrayHasChanged } from "../../../utils/arrayChanged";
 import { Checklist } from "../forms/Checklist";
-import { Popup } from "~/components/shared/Popup";
 import { DropZone } from "../forms/DropZone";
 import AdminForm from "../AdminForm";
 
@@ -138,11 +135,11 @@ export default function GameForm(props: Props) {
                 images={game.images}
                 setImages={arr => setGame('images', arr)}
             />
-            <FormTextarea
-                name="summary"
+            <div
+                contentEditable
                 innerHTML={game.summary}
-                required
-                setter={setGame}
+                onblur={e => { setGame('summary', e.target.innerHTML) }}
+                class={styles.editable}
             />
             <FormInput
                 name="releaseDate"
@@ -189,18 +186,12 @@ export default function GameForm(props: Props) {
                 required
                 setter={setGame}
             />
-            <Switch>
-                <Match when={getYoutubeURL(game.trailer)} >
-                    <YouTubeIframe link={getYoutubeURL(game.trailer)!} />
-                </Match>
-                <Match when={game.trailer}>
-                    <YouTubeIframe link={game.trailer} />
-                </Match>
-            </Switch>
+            <YouTubeIframe link={game.trailer} />
             <HiddenInput name="cover" value={game.cover} />
             <HiddenInput name="banner" value={game.banner} />
             <HiddenInput name="images" value={game.images} />
             <HiddenInput name="tags" value={game.tags} />
+            <HiddenInput name="summary" value={game.summary} />
             <HiddenInput name="gameId" value={game.gameId} />
             <HiddenInput name="pforms" value={game.platforms} />
             <HiddenInput name="pformsHaveChanged" value={state.pformsHaveChanged() ? 1 : 0} />

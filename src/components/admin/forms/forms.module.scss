@@ -147,7 +147,21 @@ $clrForm: hsl(0, 0%, 15%);
         top: unset;
     }
 }
-
+.editable {
+    margin: 1rem 0;
+    padding: 0.5rem;
+    background-color: whitesmoke;
+    color: black;
+    position: relative;
+    &::before {
+        content: "Summary";
+        position: absolute;
+        top: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        opacity: 0.5;
+    }
+}
 @media (max-width: 768px) {
     .form {
         width: 90%;
