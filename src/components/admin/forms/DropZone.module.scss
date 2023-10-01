@@ -36,7 +36,6 @@
     pointer-events: none;
     --prog: 0;
     height: 350px;
-    width: 100%;
     @include mixins.flexCenter;
     &.multi {
         width: 33.33333333333333333%;

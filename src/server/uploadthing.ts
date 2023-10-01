@@ -5,8 +5,6 @@ import { z } from "zod";
 import MongoConnection from "~/mongo/mongo";
 import { authenticateOrThrowUnauthorized } from "~/utils/authenticate";
 
-const mongo = new MongoConnection;
-
 const f = createUploadthing({
     errorFormatter: (err) => {
         return {
@@ -37,8 +35,10 @@ export const uploadRouter = {
             }
         })
         .onUploadComplete(async data => {
-            const doc = { ...data.metadata.input, ...data.file }; console.log(doc)
-            await mongo.addImages(doc)
+            const doc = { ...data.metadata.input, ...data.file };
+            const mongo = new MongoConnection;
+            await mongo.addImages(doc);
+            await mongo.close()
         }),
     logo: f({
         image: {
@@ -59,8 +59,10 @@ export const uploadRouter = {
             }
         })
         .onUploadComplete(async data => {
-            const doc = { ...data.metadata.input, ...data.file }; console.log(doc)
-            await mongo.addImages(doc)
+            const doc = { ...data.metadata.input, ...data.file };
+            const mongo = new MongoConnection;
+            await mongo.addImages(doc);
+            await mongo.close()
         }),
 } satisfies FileRouter;
 
