@@ -1,6 +1,6 @@
 import { MemoryContext } from './MemoryProvider';
 import styles from './memory.module.scss';
-import { Setter, useContext } from "solid-js";
+import { type Setter, useContext } from "solid-js";
 
 type P = {
     setReadInstructions: Setter<boolean>

@@ -1,0 +1,169 @@
+@use "~/mixins";
+
+$width: 25px;
+$clrRed: hsl(0, 75%, 50%);
+$clrInpt: rgba(0, 0, 0, 0.314);
+$clrForm: hsl(0, 0%, 15%);
+
+.formControl {
+    display: flex;
+    position: relative;
+    margin-top: 1.55rem;
+}
+.previews {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, auto));
+    img {
+        width: 100%;
+        height: 150px;
+        object-fit: contain;
+    }
+}
+.form {
+    padding-top: 0.5rem;
+    width: 90%;
+    max-width: 850px;
+    height: fit-content;
+    background-color: var(--clrForm);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 auto ;
+    textarea,
+    input,
+    button {
+        position: relative;
+        color: white;
+        border: none;
+        background: #00000050;
+    }
+
+    textarea,
+    input {
+        padding: 0.25rem;
+        width: 100%;
+        &:focus,
+        &:not(:placeholder-shown) {
+            outline: none;
+            +label {
+                top: -15px;
+                font-size: 12px;
+                color: --var(--clrRed);
+                opacity: 1;
+            }
+        }
+    }
+
+    >div {
+        width: 90%;
+    }
+    
+    textarea {
+        height: 12rem;
+    }
+    .submitBtn {
+        margin-bottom: 1rem;
+        font-size: large;
+        height: 3rem;
+        background: none;
+        background-color: var(--clrRed);
+        transition: all 250ms ease;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 1rem 5rem;
+        &:hover:not(:disabled) {
+            border: none;
+            border-radius: .5rem;
+        }
+        &:disabled {
+            background-color: gray;
+        }
+    }
+
+    label {
+        position: absolute;
+        top: 5px;
+        transition: all 250ms ease-in-out;
+        opacity: 0.5;
+    }
+
+    input {
+        height: $width;
+    }
+    iframe {
+        width: 100%;
+        aspect-ratio: 16/9;
+    }
+}
+
+.social {
+    display: flex;
+    height: $width;
+    width: $width;
+    @include mixins.truncate;
+    align-items: center;
+    > img {
+        height: $width;
+        width: $width;
+        object-fit: contain;
+        margin-right: 0.5rem;
+    }
+    i {
+        margin-left: auto;
+    }
+}
+.delBtn {
+    transition: color 250ms ease;
+    transform: scale(1.5);
+    &:hover {
+        color: $clrRed
+    }
+}
+
+.heroImgs {
+    display: flex;
+    img {
+        width: 100% !important;
+    }
+}
+.addBtn {
+    background-color: var(--clrRed) !important;
+    @include mixins.flexCenter;
+}
+
+.checklist {
+    display: flex;
+    flex-wrap: wrap;
+    >div {
+        margin-right: 1rem;
+        @include mixins.flexCenter;
+    }
+    input {
+        width: unset;
+    }
+    label {
+        position: unset;
+        top: unset;
+    }
+}
+.editable {
+    margin: 1rem 0;
+    padding: 0.5rem;
+    background-color: whitesmoke;
+    color: black;
+    position: relative;
+    &::before {
+        content: "Summary";
+        position: absolute;
+        top: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        opacity: 0.5;
+    }
+}
+@media (max-width: 768px) {
+    .form {
+        width: 90%;
+    }
+}

@@ -3,8 +3,13 @@
 * {
     box-sizing: border-box;
 }
+
 :root {
     --clrActive: springgreen;
+    --adminNavWdth: 10rem;
+    --clrRed: hsl(0, 75%, 50%);
+    --clrInpt: rgba(0, 0, 0, 0.314);
+    --clrForm: hsl(0, 0%, 15%);
 }
 
 body {
@@ -15,19 +20,32 @@ body {
     background: linear-gradient(90deg, $bgClr, darkslategray, $bgClr);
     font-family: 'Nunito', sans-serif;
 }
+
 .container {
     min-height: 100%;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,h2,h3,h4,h5,h6 {
     text-align: center;
     font-family: "Stick No Bills", sans-serif;
     // padding: 0;
     // margin: 0;
 }
 
+li {
+    text-decoration: none;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+.centerV {
+    align-self: center;
+}
 input {
     height: 1.5rem;
+}
+button {
+    border: none;
 }
 
 .tooltip {
@@ -38,47 +56,62 @@ input {
     pointer-events: none;
     z-index: 99999;
 }
+
 .popup {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     padding: 1rem;
     border-radius: 0.5rem;
     color: black;
+    z-index: 999;
+    --time: 0;
+    backdrop-filter: blur(15px);
     >div {
+        position: relative;
         --popClr: 120;
         max-width: 21rem;
         padding: 1rem;
         border-radius: 0.5rem;
         background: linear-gradient(hsl(var(--popClr), 100%, 50%), hsl(var(--popClr), 100%, 17%));
         box-shadow: 0 0 5px black;
+        overflow: hidden;
+        &::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: calc(var(--time) / 5 * 100%);
+            height: 3px;
+            background-color: red;
+            transition: width 1000ms linear;
+        }
     }
 }
 
 @media (min-width: 768px) {
+
     /* width */
     ::-webkit-scrollbar {
         width: 10px;
     }
-    
+
     /* Track */
     ::-webkit-scrollbar-track {
         background: #2c3e50;
     }
-    
+
     /* Handle */
     ::-webkit-scrollbar-thumb {
         background: #888;
         border-radius: 10px;
     }
-    
+
     /* Handle on hover */
     ::-webkit-scrollbar-thumb:hover {
         background: #555;
     }
-    
+
 }
 
-@media (max-width: 768px) {
-    
-}
+@media (max-width: 768px) {}

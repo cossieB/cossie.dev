@@ -1,26 +1,46 @@
-import { onCleanup, onMount } from "solid-js";
+import { Show, createSignal, onCleanup } from "solid-js";
+import { Transition } from "solid-transition-group";
 
 type Props = {
     text: string,
     close: () => void,
-    colorDeg?: string
+    colorDeg?: string,
+    when: boolean
 }
 
-export default function Popup(props: Props) {
-    const t = setTimeout(() => {
-        props.close()
-    }, 5000)
+export function Popup(props: Props) {
+    return (
+        <Transition name="fade" >
+            <Show when={props.when}>
+                <Alert {...props} />
+            </Show>
+        </Transition>
+    )
+}
+
+function Alert(props: Props) {
+    const [time, setTime] = createSignal(0)
+    const timer = () => {
+        if (time() < 5)
+            setTime(p => p + 1);
+        else
+            props.close();
+    };
+    let t = setInterval(timer, 1000)
 
     onCleanup(() => {
-        clearTimeout(t)
+        clearInterval(t)
     })
     return (
         <div
             class="popup"
+            style={{ '--time': time() }}
+            onMouseOver={() => clearInterval(t)}
+            onMouseLeave={() => {
+                t = setInterval(timer, 1000)
+            }}
         >
-            <div
-                style={{"--popClr": props.colorDeg ?? 50}}
-            >
+            <div style={{ "--popClr": props.colorDeg ?? 50 }}>
                 {props.text}
             </div>
         </div>

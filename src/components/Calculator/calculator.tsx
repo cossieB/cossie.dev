@@ -1,6 +1,6 @@
 import { createSignal } from "solid-js";
 import styles from "./calculator.module.scss"
-import { ClickEvent } from "~/lib/solidTypes";
+import type { ClickEvent } from "~/lib/solidTypes";
 
 export default function CalculatorMain() {
     const [display, setDisplay]  = createSignal("0")

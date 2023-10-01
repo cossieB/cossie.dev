@@ -1,14 +1,13 @@
 import { FormInput, FormTextarea } from "./FormInput";
 import styles from "./Contact.module.scss"
-import { Match, Show, Switch } from "solid-js";
+import { Match, Switch } from "solid-js";
 import Loader from "../shared/Loader/Loader";
-import Popup from "../shared/Popup";
 import { useNavigate } from "solid-start";
 import { Checkmark } from "~/svgs";
 import server$ from "solid-start/server";
 import { sendMail } from "~/nodemailer";
-import { Transition } from "solid-transition-group";
 import { createStore } from "solid-js/store";
+import { Popup } from "../shared/Popup";
 
 export default function ContactMain() {
     const [state, setState] = createStore({
@@ -18,7 +17,7 @@ export default function ContactMain() {
         success: false
     })
     const navigate = useNavigate()
-    
+
     const send = server$(async (name: string, email: string, company: string, message: string) => {
         await sendMail(name, company, message, email)
     })
@@ -37,9 +36,9 @@ export default function ContactMain() {
                 body[key] = val
         })
         try {
-            await send(fd.get('name') as string,fd.get('email') as string, fd.get('organization') as string, fd.get('message') as string)
+            await send(fd.get('name') as string, fd.get('email') as string, fd.get('organization') as string, fd.get('message') as string)
             setState({ message: "Your message has been sent. Thank you for reaching out to me. I will come back to you as soon as possible. Redirecting in 5 seconds", success: true });
-        } 
+        }
         catch (error) {
             setState({ errored: true })
             setState({ message: "Something went wrong. Please try again later" })
@@ -81,24 +80,21 @@ export default function ContactMain() {
                     </button>
                 </form>
             </div>
-            <Transition name="fade" >
-                <Show when={state.message.length > 0}>
-                    <Popup
-                        close={() => {
-                            setState({ message: ""});
-                            if (state.errored) {
-                                setState({errored: false, sending: false, success: false })
-                            }
-                            else {
-                                setState({errored: false, sending: false, success: false })
-                                navigate("/projects");
-                            }
-                        }}
-                        text={state.message}
-                        colorDeg={state.success ? "120" : "0"}
-                    />
-                </Show>
-            </Transition>
+            <Popup
+                when={state.message.length > 0}
+                close={() => {
+                    setState({ message: "" });
+                    if (state.errored) {
+                        setState({ errored: false, sending: false, success: false })
+                    }
+                    else {
+                        setState({ errored: false, sending: false, success: false })
+                        navigate("/projects");
+                    }
+                }}
+                text={state.message}
+                colorDeg={state.success ? "120" : "0"}
+            />
         </main>
     )
 }

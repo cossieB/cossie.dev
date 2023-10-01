@@ -1,7 +1,6 @@
-import { Setter } from "solid-js";
+import type { Setter } from "solid-js";
 import { projectArray } from "../Projects/projectArray";
 import { ChevronRight } from "~/svgs";
-import titleCase from "~/lib/titleCase";
 import { map } from "./Navbar";
 
 type Props = {

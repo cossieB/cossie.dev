@@ -36,7 +36,6 @@ type Props = {
     setExpanded: Setter<"large" | "game" | "api" | "interactive" | null>;
 };
 export function Navbar(props: Props) {
-    console.log(props.div)
     return <nav>
         <Transition
             onEnter={(el, done) => {

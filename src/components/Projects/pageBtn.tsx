@@ -22,9 +22,9 @@ export default function PageBtn(props: Props) {
     }
     onMount(() => {
         ref.addEventListener('keydown', handleKeypress)
-    })
-    onCleanup(() => {
-        ref.removeEventListener('keydown', handleKeypress)
+        onCleanup(() => {
+            ref.removeEventListener('keydown', handleKeypress)
+        })
     })
 
     const isDisabled = () => {

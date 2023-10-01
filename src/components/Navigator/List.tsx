@@ -1,5 +1,5 @@
 import { For, Match, Switch } from "solid-js";
-import { Projs } from "../Projects/projectArray";
+import type { Projs } from "../Projects/projectArray";
 import ExternalLink from "../shared/ExternalLink";
 import { NavLink } from "./NavLink";
 import { External } from "~/svgs";

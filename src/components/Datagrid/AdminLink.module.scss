@@ -1,0 +1,10 @@
+@use '~/mixins';
+.a {
+    @include mixins.flexCenter;
+    height: 100%;
+    padding: 0 0.5rem;
+    text-decoration: none;
+    &:visited {
+        color: #9E9EFF;
+    }
+}

@@ -8,6 +8,7 @@
         "jsxImportSource": "solid-js",
         "jsx": "preserve",
         "strict": true,
+        "skipLibCheck": true,
         "types": [
             "solid-start/env",
             "vite-plugin-pwa/solid",
@@ -19,6 +20,6 @@
                 "./src/*"
             ]
         },
-        "verbatimModuleSyntax": true
+        // "verbatimModuleSyntax": true
     }
 }

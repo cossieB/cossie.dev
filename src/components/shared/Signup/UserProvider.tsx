@@ -1,4 +1,4 @@
-import { Accessor, JSX, Setter, createContext, createSignal } from "solid-js";
+import { type Accessor, type JSX, type Setter, createContext, createSignal } from "solid-js";
 
 type UserCtx = {
     username: Accessor<string>
