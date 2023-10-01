@@ -120,19 +120,19 @@ export const quotes: Quote[] = [
     }, {
         quote: "You all need more therapy than I do, and I'm the crazy one.",
         author: 'Crazy Jane',
-        tags: new Set(["humorous", "fiction"])
+        tags: new Set(["humorous", "fiction", 'tv series', 'doom patrol'])
     }, {
         quote: `"Normal" ain't nothing but a state of mind.`,
         author: 'Maura Lee Karupt',
-        tags: new Set(["humorous", "fiction"])
+        tags: new Set(["humorous", "fiction", 'tv series', 'doom patrol'])
     }, {
         quote: "We're going to save the world, or whatever, and then I will have a stiff Manhattan and go to bed.",
         author: 'Rita Farr',
-        tags: new Set(["humorous", "fiction", "nerdy"])
+        tags: new Set(["humorous", "fiction", "nerdy", 'tv series', 'doom patrol'])
     }, {
         quote: "You've always been a man comfortable with compromise. I mean, after all, you fell in love with a Canadian.",
         author: 'Mr. Nobody',
-        tags: new Set(["humorous", "fiction", "villain"])
+        tags: new Set(["humorous", "fiction", "villain", 'tv series', 'doom patrol'])
     }, {
         quote: 'I was happy with people forgetting I exist, but mofos always gotta bring up the past.',
         author: 'Dex',
@@ -528,7 +528,7 @@ export const quotes: Quote[] = [
     }, {
         quote: "We know how to case banks. We're practically bankers.",
         author: "Mick Rory",
-        tags: new Set(["humorous", "fiction", "villain"])
+        tags: new Set(["humorous", "fiction", "villain", "legends of tomorrow"])
     }, {
         quote: "The problem with the French is that they don't have a word for entrepreneur",
         author: "George W. Bush",
@@ -930,7 +930,7 @@ export const quotes: Quote[] = [
         author: "Sovereign",
         tags: new Set(["fiction", "villain", "mass effect", "video game"])
     }, {
-        quote: "It takes a strong man to deny what's rigth in front of him. And if the truth is undeniable, you create your own.",
+        quote: "It takes a strong man to deny what's right in front of him. And if the truth is undeniable, you create your own.",
         author: "Col. John Konrad",
         tags: new Set(["fiction", "video game", "villain"])
     }, {
@@ -1061,5 +1061,13 @@ export const quotes: Quote[] = [
         quote: "Debugging is like being the detective in a crime movie where you are also the murderer",
         author: "Filipe Fortes",
         tags: new Set(["humorous", "non-fiction", "nerdy", "programming"])
+    }, {
+        quote: "Uh, we actually took care of the of the world last week.",
+        author: 'Cliff Steele',
+        tags: new Set(['humorous', 'fiction', 'tv series', 'doom patrol'])
+    }, {
+        quote: "If Tetris has taught me anything, it's that errors pile up and achievements disappear.",
+        author: "Unknown",
+        tags: new Set(['humorous', 'existential humor', 'nerdy'])
     }
 ]

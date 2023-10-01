@@ -9,12 +9,12 @@ const mongo = new MongoConnection;
 
 const f = createUploadthing({
     errorFormatter: (err) => {
-      return {
-        message: err.cause instanceof ServerError ? err.cause.message : err.message,
-        zodError: err.cause instanceof z.ZodError ? err.cause.flatten() : null,
-      };
+        return {
+            message: err.cause instanceof ServerError ? err.cause.message : err.message,
+            zodError: err.cause instanceof z.ZodError ? err.cause.flatten() : null,
+        };
     },
-  });
+});
 
 export const uploadRouter = {
     game: f({
@@ -37,7 +37,7 @@ export const uploadRouter = {
             }
         })
         .onUploadComplete(async data => {
-            const doc = {...data.metadata.input, ... data.file}
+            const doc = { ...data.metadata.input, ...data.file }; console.log(doc)
             await mongo.addImages(doc)
         }),
     logo: f({
@@ -59,7 +59,7 @@ export const uploadRouter = {
             }
         })
         .onUploadComplete(async data => {
-            const doc = {...data.metadata.input, ... data.file}
+            const doc = { ...data.metadata.input, ...data.file }; console.log(doc)
             await mongo.addImages(doc)
         }),
 } satisfies FileRouter;

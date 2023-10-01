@@ -1,4 +1,4 @@
-import { langs, frontend, backend, misc, type Lang } from './vars'
+import { Lang, backend, frontend, langs, misc } from "../About/vars"
 
 export const stack: { [key: string]: string } = {
     "framer motion": "https://pagepro.co/blog/wp-content/uploads/2020/03/framer-motion.png",
@@ -13,7 +13,10 @@ export const stack: { [key: string]: string } = {
     render: "https://intellyx.com/wp-content/uploads/2019/08/Render-cloud-intellyx-BC-logo.png",
     netlify: "https://upload.wikimedia.org/wikipedia/commons/b/b8/Netlify_logo.svg",
     apollo: "https://user-images.githubusercontent.com/841294/53402609-b97a2180-39ba-11e9-8100-812bab86357c.png",
-    trpc: "https://trpc.io/img/logo.svg"
+    trpc: "https://trpc.io/img/logo.svg",
+    'ag-grid': 'https://blog.ag-grid.com/content/images/2021/02/new-logo-1.png',
+    "upload thing": "https://images.clerk.dev/uploaded/img_2P1JBLxZ0O7gcv16iXX0zjGIqHY.png",
+    "drizzle orm": "https://avatars.githubusercontent.com/u/108468352?s=280&v=4"
 }
 const sections = [langs, frontend, backend, misc]
 
@@ -38,7 +41,7 @@ export type Projs = {
     external: true
     path: string
 } | {
-    external?: false 
+    external?: false
     path?: string
 })
 
@@ -54,23 +57,16 @@ export const projectArray: Projs[] = [
         repo: 'https://github.com/cossieB/meme-machine',
         type: 'large'
     }, {
-        title: "Spaza Game Store",
-        img: "/screenshots/spaza.png",
-        description: "Full-stack ecommerce website. Developed with TypeScript, React on the frontend and C#, ASP.NET, Entity Framework and Postgres on the backend. Features a JsonWebToken based authentication system. To view a working demo, please clone the repo and run docker-compose up in your terminal.",
-        stack: ["typescript", "react", "c#", "postgresql", "entity framework", "asp.net", "bootstrap", "json web token", "docker"],
-        repo: "https://github.com/cossieB/spaza-ecommerce",
-        type: 'large'
-    }, {
         title: "Internet Games Database",
         img: "/screenshots/igdb.png",
         imgMobile: "/screenshots/igdb_mobile.png",
         path: "https://internet-games-database.vercel.app/",
         external: true,
         description: "CRUD application for adding information about games and the gaming industry. Developed with TypeScript, Next.js, React and SASS. Uses Supabase Postgres as a database and Prisma ORM to interact with the database.",
-        stack: ["typescript", "next.js", "react", "node.js", "postgresql", "prisma", "mongodb", "supabase", "mongoose", "vercel", "framer motion", "sass"],
+        stack: ["typescript", "next.js", "react", "node.js", "postgresql", "prisma", "supabase", "vercel", "framer motion", "sass"],
         repo: "https://github.com/cossieB/internet-games-database",
         type: 'large'
-    },{
+    }, {
         title: "2048",
         img: "/screenshots/2048.png",
         imgMobile: "/screenshots/2048_mobile.png",
@@ -79,6 +75,14 @@ export const projectArray: Projs[] = [
         stack: ["typescript", "react", "firebase", "framer motion", "firestore", "sass"],
         repo: "https://github.com/cossieB/cossie.dev/tree/main/src/components/2048",
         type: "game"
+    }, {
+        title: 'Admin Panel',
+        img: "/screenshots/admin.png",
+        path: "/admin/games",
+        description: "Admin panel to manage data for the Internet Games Database project. Built with Solid.JS, Solid Start, TypeScript and SASS. Uses UploadThing for image uploads, Vercel Postgres as a database, drizzle orm to interact with the database and MongoDB to store responses from UploadThing.",
+        repo: "https://github.com/cossieB/cossie.dev/tree/main/src/components/admin",
+        stack: ["typescript", "solidjs", "vercel", "postgresql", "sass", "mongodb", "ag-grid", "upload thing", "drizzle orm", "node.js"],
+        type: 'large',
     }, {
         title: "Microservices",
         img: "/screenshots/microservices.png",
@@ -117,6 +121,13 @@ export const projectArray: Projs[] = [
         repo: "https://github.com/cossieB/cossie.dev/tree/main/src/components/Memory",
         type: "game"
     }, {
+        title: "Spaza Game Store",
+        img: "/screenshots/spaza.png",
+        description: "Full-stack ecommerce website. Developed with TypeScript, React on the frontend and C#, ASP.NET, Entity Framework and Postgres on the backend. Features a JsonWebToken based authentication system. To view a working demo, please clone the repo and run docker-compose up in your terminal.",
+        stack: ["typescript", "react", "c#", "postgresql", "entity framework", "asp.net", "bootstrap", "json web token", "docker"],
+        repo: "https://github.com/cossieB/spaza-ecommerce",
+        type: 'large'
+    }, {
         title: "Sudoku",
         img: '/screenshots/sudoku.png',
         imgMobile: '/screenshots/sudoku_mobile.png',
@@ -125,6 +136,15 @@ export const projectArray: Projs[] = [
         stack: ["typescript", "react", "firebase", "framer motion"],
         repo: "https://github.com/cossieB/cossie.dev/tree/main/src/components/Sudoku",
         type: "game"
+    }, {
+        title: "Random Quote Machine",
+        path: "/quotes",
+        img: "/screenshots/quotes.png",
+        imgMobile: "/screenshots/quotes_mobile.png",
+        description: "Random quotes from across the ages. Features filters and Twitter and Tumblr share buttons",
+        stack: ["typescript", "react", "firebase", "framer motion"],
+        repo: "https://github.com/cossieB/cossie.dev/tree/main/src/components/Quotes",
+        type: "interactive"
     }, {
         title: "Pomodoro",
         img: "/screenshots/pomodoro.png",
@@ -143,14 +163,5 @@ export const projectArray: Projs[] = [
         stack: ["typescript", "react", "firebase", "framer motion"],
         repo: "https://github.com/cossieB/cossie.dev/tree/main/src/components/Calculator",
         type: "interactive"
-    }, {
-        title: "Random Quote Machine",
-        path: "/quotes",
-        img: "/screenshots/quotes.png",
-        imgMobile: "/screenshots/quotes_mobile.png",
-        description: "Random quotes from across the ages. Features filters and Twitter and Tumblr share buttons",
-        stack: ["typescript", "react", "firebase", "framer motion"],
-        repo: "https://github.com/cossieB/cossie.dev/tree/main/src/components/Quotes",
-        type: "interactive"
-    }
+    },
 ]
