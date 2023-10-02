@@ -42,7 +42,7 @@ export default function platformPage() {
         <ErrorBoundary fallback={(e) => e.status == 404 ? <NotFound /> : <p> Something went wrong. Please try again later </p>}>
             <Suspense fallback={<Loader />}>
                 <Page title={data()?.name ?? "Platform"}>
-                    <PlatForm data={data()} />
+                    <PlatForm data={data.latest} />
                 </Page>
             </Suspense>
         </ErrorBoundary>

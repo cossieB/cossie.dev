@@ -62,7 +62,7 @@ export function PubForm(props: Props) {
                         images={[pub.logo]}
                         input={{
                             reference: pub.publisherId,
-                            table: 'developer'
+                            table: 'publisher'
                         }}
                         onError={e => setState('uploadError', e)}
                         single

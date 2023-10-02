@@ -101,3 +101,33 @@ $width: 25px;
 .formContainer {
     display: flex;
 }
+
+.adminHome {
+    height: 100vh;
+    @include mixins.flexCenter;
+    gap: 2rem;
+    flex-wrap: wrap;
+}
+
+.iconTile {
+    display: grid;
+    grid-template-columns: 6rem 6rem;
+    background-color: var(--clrRed);
+    padding: 1.25rem;
+    align-items: center;
+    justify-items: center;
+    svg {
+        width: 5rem;
+        height: 5rem;
+        fill: white;
+    }
+    >span:first-child {
+        grid-row: span 2;
+    }
+    >span:nth-child(2) {
+        font-size: large;
+    }
+    >span:last-child {
+        font-size: larger;
+    }
+}

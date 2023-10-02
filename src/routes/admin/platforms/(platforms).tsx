@@ -36,7 +36,7 @@ export default function PublishersAdminPage() {
         <Page title="Platforms">
             <AdminTable
                 columnDefs={columnDefs}
-                data={data}
+                data={data.latest}
             />
         </Page>
     )

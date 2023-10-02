@@ -58,7 +58,7 @@ export function PlatForm(props: Props) {
                     images={[platform.logo]}
                     input={{
                         reference: platform.platformId,
-                        table: 'developer'
+                        table: 'platform'
                     }}
                     onError={e => setState('uploadError', e)}
                     single

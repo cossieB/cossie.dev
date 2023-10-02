@@ -41,8 +41,8 @@ export default function publisherPage() {
     return (
         <ErrorBoundary fallback={(e) => e.status == 404 ? <NotFound /> : <p> Something went wrong. Please try again later </p>}>
             <Suspense fallback={<Loader />}>
-                <Page title={data()?.name ?? "Publisher"}>
-                    <PubForm data={data()} />
+                <Page title={data.latest?.name ?? "Publisher"}>
+                    <PubForm data={data.latest} />
                 </Page>
             </Suspense>
         </ErrorBoundary>

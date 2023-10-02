@@ -39,7 +39,7 @@ export default function PublishersAdminPage() {
         <Page title="Publishers">
             <AdminTable
                 columnDefs={columnDefs}
-                data={data}
+                data={data.latest}
             />
         </Page>
     )

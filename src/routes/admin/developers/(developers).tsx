@@ -39,7 +39,7 @@ export default function DevelopersAdminPage() {
         <Page title="Developers">
             <AdminTable
                 columnDefs={columnDefs}
-                data={data}
+                data={data.latest}
             />
         </Page>
     )

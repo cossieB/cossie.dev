@@ -77,7 +77,7 @@ export default function GamesAdminPage() {
     const data = useRouteData<typeof routeData>()
     return (
         <Page title="Games">
-            <AdminTable data={data} columnDefs={columnDefs} />
+            <AdminTable data={data.latest} columnDefs={columnDefs} />
         </Page>
     )
 }

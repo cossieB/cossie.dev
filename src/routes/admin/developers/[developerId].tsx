@@ -4,6 +4,7 @@ import ErrorBoundary, { type RouteDataArgs, useRouteData } from "solid-start";
 import { ServerError, createServerData$ } from "solid-start/server";
 import { DevForm } from "~/components/admin/dev/DevForm";
 import Loader from "~/components/shared/Loader/Loader";
+import Page from "~/components/shared/Page";
 import { db } from "~/db";
 import { developer } from "~/drizzle/schema";
 import NotFound from "~/routes/[...404]";
@@ -40,7 +41,9 @@ export default function DeveloperPage() {
     return (
         <ErrorBoundary fallback={(e) => e.status == 404 ? <NotFound /> : <p> Something went wrong. Please try again later </p>}>
             <Suspense fallback={<Loader />}>
-                <DevForm data={data()} />
+                <Page title={data.latest?.name ?? "Developer"}>
+                <DevForm data={data.latest} />
+                </Page>
             </Suspense>
         </ErrorBoundary>
     )

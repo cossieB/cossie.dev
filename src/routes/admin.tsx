@@ -5,7 +5,7 @@ import styles from './admin.module.scss'
 import { createServerData$ } from "solid-start/server";
 import { db } from "~/db";
 import { authenticate } from "~/utils/authenticate";
-import type { Developer, Platform, Publisher } from "~/drizzle/types";
+import type { Actor, Developer, Game, Platform, Publisher } from "~/drizzle/types";
 import type { SessionData } from "solid-start/session/sessions";
 
 export function routeData() {
@@ -18,10 +18,16 @@ export function routeData() {
     const platforms = createServerData$(async () => db.query.platform.findMany(), {
         key: 'platforms'
     })
+    const games = createServerData$(async () => db.query.game.findMany(), {
+        key: 'games'
+    })
+    const actors = createServerData$(async () => db.query.actor.findMany(), {
+        key: 'actors'
+    })
     const user = createServerData$(async (_, { request }) => authenticate(request), {
         key: 'auth'
     })
-    return { developers, publishers, platforms, user }
+    return { developers, publishers, platforms, user, games, actors }
 }
 
 export default function Layout() {
@@ -50,7 +56,16 @@ export default function Layout() {
     )
 }
 
-export const AdminContext = createContext<{ developers: Developer[], platforms: Platform[], publishers: Publisher[], user: Resource<SessionData | null | undefined> }>()
+type NewType = {
+    developers: Developer[];
+    platforms: Platform[];
+    publishers: Publisher[];
+    games: Game[];
+    actors: Actor[]
+    user: Resource<SessionData | null | undefined>;
+};
+
+export const AdminContext = createContext<NewType>()
 
 function AdminContextProvider(props: { children: JSXElement }) {
     const data = useRouteData<typeof routeData>();
@@ -63,7 +78,9 @@ function AdminContextProvider(props: { children: JSXElement }) {
                 developers: data.developers() ?? [],
                 publishers: data.publishers() ?? [],
                 platforms: data.platforms() ?? [],
-                user: data.user
+                games: data.games() ?? [],
+                user: data.user,
+                actors: data.actors() ?? []
             }}>
             {props.children}
         </AdminContext.Provider>
