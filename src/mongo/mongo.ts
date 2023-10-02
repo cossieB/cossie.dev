@@ -37,7 +37,7 @@ export default class MongoConnection {
         await this.sessionCollection.deleteOne({_id: new ObjectId(sessionId)})
     }
     addImages = async (obj: ImgMetadata) => {
-        this.imageCollection.insertOne(obj)
+        return this.imageCollection.insertOne(obj)
     }
 
 }
