@@ -10,15 +10,18 @@ $clrForm: hsl(0, 0%, 15%);
     position: relative;
     margin-top: 1.55rem;
 }
+
 .previews {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(150px, auto));
+
     img {
         width: 100%;
         height: 150px;
         object-fit: contain;
     }
 }
+
 .form {
     padding-top: 0.5rem;
     width: 90%;
@@ -28,7 +31,8 @@ $clrForm: hsl(0, 0%, 15%);
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin: 0 auto ;
+    margin: 0 auto;
+
     textarea,
     input,
     button {
@@ -42,9 +46,11 @@ $clrForm: hsl(0, 0%, 15%);
     input {
         padding: 0.25rem;
         width: 100%;
+
         &:focus,
         &:not(:placeholder-shown) {
             outline: none;
+
             +label {
                 top: -15px;
                 font-size: 12px;
@@ -57,10 +63,11 @@ $clrForm: hsl(0, 0%, 15%);
     >div {
         width: 90%;
     }
-    
+
     textarea {
         height: 12rem;
     }
+
     .submitBtn {
         margin-bottom: 1rem;
         font-size: large;
@@ -72,10 +79,12 @@ $clrForm: hsl(0, 0%, 15%);
         justify-content: center;
         align-items: center;
         padding: 1rem 5rem;
+
         &:hover:not(:disabled) {
             border: none;
             border-radius: .5rem;
         }
+
         &:disabled {
             background-color: gray;
         }
@@ -91,6 +100,7 @@ $clrForm: hsl(0, 0%, 15%);
     input {
         height: $width;
     }
+
     iframe {
         width: 100%;
         aspect-ratio: 16/9;
@@ -103,19 +113,23 @@ $clrForm: hsl(0, 0%, 15%);
     width: $width;
     @include mixins.truncate;
     align-items: center;
-    > img {
+
+    >img {
         height: $width;
         width: $width;
         object-fit: contain;
         margin-right: 0.5rem;
     }
+
     i {
         margin-left: auto;
     }
 }
+
 .delBtn {
     transition: color 250ms ease;
     transform: scale(1.5);
+
     &:hover {
         color: $clrRed
     }
@@ -124,6 +138,7 @@ $clrForm: hsl(0, 0%, 15%);
 .heroImgs {
     display: flex;
 }
+
 .addBtn {
     background-color: var(--clrRed) !important;
     @include mixins.flexCenter;
@@ -132,24 +147,29 @@ $clrForm: hsl(0, 0%, 15%);
 .checklist {
     display: flex;
     flex-wrap: wrap;
+
     >div {
         margin-right: 1rem;
         @include mixins.flexCenter;
     }
+
     input {
         width: unset;
     }
+
     label {
         position: unset;
         top: unset;
     }
 }
+
 .editable {
     margin: 1rem 0;
     padding: 0.5rem;
     background-color: whitesmoke;
     color: black;
     position: relative;
+
     &::before {
         content: "Summary";
         position: absolute;
@@ -159,29 +179,35 @@ $clrForm: hsl(0, 0%, 15%);
         opacity: 0.5;
     }
 }
+
 .selector {
     position: absolute;
     background-color: whitesmoke;
     color: var(--clrRed);
     overflow: scroll;
     height: 0rem;
-    top: 150%;
+    top: 100%;
     z-index: 99;
     width: 25rem;
     transition: height 250ms ease;
+
     &.open {
         height: 25rem;
     }
+
     li {
         cursor: pointer;
         padding: 0.25rem 0.5rem;
+
         &:hover {
             background-color: gainsboro;
         }
+
         display: flex;
         justify-content: space-between;
         align-items: center;
     }
+
     .checkbox {
         border-radius: 50%;
         height: 2rem;
@@ -189,6 +215,7 @@ $clrForm: hsl(0, 0%, 15%);
         scale: 0.5;
         border: var(--clrRed) 1px solid;
         @include mixins.flexCenter;
+
         &::after {
             opacity: 0;
             display: block;
@@ -199,19 +226,35 @@ $clrForm: hsl(0, 0%, 15%);
             background-color: var(--clrRed);
             transition: opacity ease 100ms;
         }
+
         &.selected::after {
             opacity: 1;
         }
     }
 }
+
 .charList {
     display: flex;
     justify-content: space-around;
     width: 90%;
-    > * {
+
+    >* {
         flex: 1;
     }
 }
+
+.btnDiv {
+    display: flex;
+    position: relative;
+    svg {
+        rotate: 0deg;
+        transition: rotate 150ms ease;
+    }
+    .open svg {
+        rotate: 180deg;
+    }
+}
+
 @media (max-width: 768px) {
     .form {
         width: 90%;
