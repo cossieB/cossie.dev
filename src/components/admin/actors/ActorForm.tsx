@@ -133,6 +133,7 @@ export default function ActorForm(props: Props) {
             <Show when={actor.photo}>
                 <HiddenInput name="photo" value={actor.photo!} />
             </Show>
+            <HiddenInput name="actorId" value={actor.actorId} />
             <HiddenInput name="characters" value={JSON.stringify(characters.list)} />
             <HiddenInput name="newItem" value={props.data ? 0 : 1} />
         </AdminForm>
