@@ -88,6 +88,14 @@ button {
         }
     }
 }
+ul {
+    list-style: none;
+    padding: 0;
+}
+.flexApart {
+    display: flex;
+    justify-content: space-between;
+}
 
 @media (min-width: 768px) {
 

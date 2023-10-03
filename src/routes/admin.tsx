@@ -9,19 +9,29 @@ import type { Actor, Developer, Game, Platform, Publisher } from "~/drizzle/type
 import type { SessionData } from "solid-start/session/sessions";
 
 export function routeData() {
-    const developers = createServerData$(async () => db.query.developer.findMany(), {
+    const developers = createServerData$(async () => db.query.developer.findMany({
+        orderBy: (fields) => fields.name
+    }), {
         key: 'developers'
     })
-    const publishers = createServerData$(async () => db.query.publisher.findMany(), {
+    const publishers = createServerData$(async () => db.query.publisher.findMany({
+        orderBy: (fields) => fields.name
+    }), {
         key: 'publishers'
     })
-    const platforms = createServerData$(async () => db.query.platform.findMany(), {
+    const platforms = createServerData$(async () => db.query.platform.findMany({
+        orderBy: (fields) => fields.name
+    }), {
         key: 'platforms'
     })
-    const games = createServerData$(async () => db.query.game.findMany(), {
+    const games = createServerData$(async () => db.query.game.findMany({
+        orderBy: (fields) => fields.title
+    }), {
         key: 'games'
     })
-    const actors = createServerData$(async () => db.query.actor.findMany(), {
+    const actors = createServerData$(async () => db.query.actor.findMany({
+        orderBy: (fields) => fields.name
+    }), {
         key: 'actors'
     })
     const user = createServerData$(async (_, { request }) => authenticate(request), {

@@ -27,7 +27,6 @@ function copyData(data: Props['data']): Developer {
 export function DevForm(props: Props) {
     const [dev, setDev] = createStore(copyData(props.data))
 
-
     const [state, setState] = createStore({
         isUploading: false,
         complete: false,

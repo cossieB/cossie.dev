@@ -24,6 +24,9 @@ export default function AdminNav() {
                 <AdminLi href="/admin/platforms">
                     Platforms
                 </AdminLi>
+                <AdminLi href="/admin/actors">
+                    Actors
+                </AdminLi>
                 <li>
                     <Show when={user()} fallback={
                         <A href="/admin/login">

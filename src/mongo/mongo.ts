@@ -8,7 +8,7 @@ type ImgMetadata = {
     url: string;
     size: number;
     reference: string;
-    table: "developer" | "publisher" | "platform" | "game";
+    table: "developer" | "publisher" | "platform" | "game" | "actor";
 }
 
 export default class MongoConnection {

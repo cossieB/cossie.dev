@@ -47,14 +47,14 @@ export const uploadRouter = {
     })
         .input(z.object({
             reference: z.string().uuid(),
-            table: z.enum(['developer', 'publisher', 'platform']),
+            table: z.enum(['developer', 'publisher', 'platform', 'actor']),
         }))
         .middleware(async opts => {
             await authenticateOrThrowUnauthorized(opts.req);
             return {
                 input: {
                     ...opts.input,
-                    field: 'logo'
+                    field: opts.input.table === 'actor' ? 'photo' : 'logo'
                 },
             }
         })

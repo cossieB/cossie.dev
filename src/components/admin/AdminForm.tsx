@@ -30,7 +30,10 @@ export default function AdminForm(props: Props) {
     })
     return (
         <>
-            <props.Form class={styles.form} {...props}>
+            <props.Form
+                class={styles.form}
+                {...props}
+            >
                 {props.children}
                 <SubmitButton
                     finished={props.state.complete}
