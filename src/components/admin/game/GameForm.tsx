@@ -1,5 +1,5 @@
 import { FormInput, SelectInput } from "~/components/admin/forms/FormInput";
-import type { Game } from "~/drizzle/types";
+import type { Developer, Game, Platform, Publisher } from "~/drizzle/types";
 import styles from "~/components/admin/forms/forms.module.scss";
 import { useContext, createEffect } from "solid-js";
 import { formatDateForInputElement } from "~/lib/formatDate";
@@ -19,7 +19,15 @@ import AdminForm from "../AdminForm";
 import CustomTextarea from "../CustomTextarea";
 
 export type Props = {
-    data?: Game & { tags: string[], platforms: string[] };
+    data?: Game & { 
+        tags: string[], 
+        platforms: string[] 
+    }
+    parentData: {
+        developers: Developer[]
+        publishers: Publisher[]
+        platforms: Platform[]
+    }
 }
 function copyData(data: Props['data']) {
     return {
@@ -39,7 +47,7 @@ function copyData(data: Props['data']) {
 }
 export default function GameForm(props: Props) {
     let form!: HTMLFormElement
-    const { developers, publishers, platforms } = useContext(AdminContext)!
+    const { developers, publishers, platforms } = props.parentData
     const [game, setGame] = createStore(copyData(props.data))
 
     createEffect(() => {

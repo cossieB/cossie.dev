@@ -5,7 +5,6 @@ import styles from './admin.module.scss'
 import { createServerData$ } from "solid-start/server";
 import { db } from "~/db";
 import { authenticate } from "~/utils/authenticate";
-import type { Actor, Developer, Game, Platform, Publisher } from "~/drizzle/types";
 import type { SessionData } from "solid-start/session/sessions";
 
 export function routeData() {
@@ -40,10 +39,13 @@ export function routeData() {
         initialValue: []
     })
     const user = createServerData$(async (_, { request }) => authenticate(request), {
-        key: 'auth'
+        key: 'auth', 
+        initialValue: null
     })
     return { developers, publishers, platforms, user, games, actors }
 }
+
+export type ParentRouteData = ReturnType<typeof routeData>
 
 export default function Layout() {
     // sync auth states across tabs
@@ -72,11 +74,6 @@ export default function Layout() {
 }
 
 type NewType = {
-    developers: Developer[];
-    platforms: Platform[];
-    publishers: Publisher[];
-    games: Game[];
-    actors: Actor[]
     user: Resource<SessionData | null | undefined>;
 };
 
@@ -90,12 +87,7 @@ function AdminContextProvider(props: { children: JSXElement }) {
     return (
         <AdminContext.Provider
             value={{
-                developers: data.developers() ?? [],
-                publishers: data.publishers() ?? [],
-                platforms: data.platforms() ?? [],
-                games: data.games() ?? [],
                 user: data.user,
-                actors: data.actors() ?? []
             }}>
             {props.children}
         </AdminContext.Provider>

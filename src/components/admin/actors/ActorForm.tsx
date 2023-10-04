@@ -1,24 +1,22 @@
 import { Actor, Game } from "~/drizzle/types";
 import AdminForm from "../AdminForm";
 import styles from "~/components/admin/forms/forms.module.scss";
-import { SetStoreFunction, createStore, unwrap } from "solid-js/store";
-import { For, Show, createEffect, createMemo, createSignal, useContext } from "solid-js";
+import { createStore } from "solid-js/store";
+import { For, Show, createEffect, createMemo, createSignal } from "solid-js";
 import { createServerAction$ } from "solid-start/server";
 import { updateActorOnDB } from "./updateActorOnDB";
 import { FormInput } from "../forms/FormInput"
 import CustomTextarea from "../CustomTextarea";
 import { DropZone } from "../forms/DropZone";
 import HiddenInput from "../forms/HiddenInput";
-import { AdminContext } from "~/routes/admin";
 import { ChevronDown } from "~/svgs";
 import clickOutside from "~/lib/clickOutside";
-import { arrayChanged } from "~/utils/arrayChanged";
-import { useRouteData } from "solid-start";
 false && clickOutside
 type Props = {
     data?: Actor & {
         characters: NewType[]
     }
+    games: Game[]
 }
 type NewType = {
     gameId: string;
@@ -101,6 +99,7 @@ export default function ActorForm(props: Props) {
                     modalOpen={state.modalOpen}
                     closeModal={() => setState('modalOpen', false)}
                     characerSet={getSet()}
+                    games={props.games}
                 />
             </div>
             <For each={actor.characters}>
@@ -146,17 +145,14 @@ type P = {
     characerSet: Set<string>
     setCharacters(chars: NewType[]): void
     modalOpen: boolean,
-    closeModal(): void
+    closeModal(): void,
+    games: Game[]
 }
 
 function GameSelector(props: P) {
-    const { games } = useContext(AdminContext)!
-    const t = useRouteData()
-    createEffect(() => {
-        console.log(unwrap(t()))
-    })
+
     const [input, setInput] = createSignal("")
-    const filtered = createMemo(() => games.filter(game => game.title.toLowerCase().includes(input().toLowerCase())))
+    const filtered = createMemo(() => props.games.filter(game => game.title.toLowerCase().includes(input().toLowerCase())))
     return (
         <ul
             class={styles.selector}

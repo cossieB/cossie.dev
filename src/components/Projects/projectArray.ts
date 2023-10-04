@@ -78,7 +78,7 @@ export const projectArray: Projs[] = [
     }, {
         title: 'Admin Panel',
         img: "/screenshots/admin.png",
-        path: "/admin/games",
+        path: "/admin",
         description: "Admin panel to manage data for the Internet Games Database project. Built with Solid.JS, Solid Start, TypeScript and SASS. Uses UploadThing for image uploads, Vercel Postgres as a database, drizzle orm to interact with the database and MongoDB to store responses from UploadThing.",
         repo: "https://github.com/cossieB/cossie.dev/tree/main/src/components/admin",
         stack: ["typescript", "solidjs", "vercel", "postgresql", "sass", "mongodb", "ag-grid", "upload thing", "drizzle orm", "node.js"],

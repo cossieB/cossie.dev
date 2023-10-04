@@ -8,9 +8,10 @@ import Page from "~/components/shared/Page";
 import { db } from "~/db";
 import { actor, actorsInGames, game } from "~/drizzle/schema";
 import NotFound from "~/routes/[...404]";
+import {routeData as parentRouteData} from "../../admin"
 
-export function routeData({ params }: RouteDataArgs) {
-    return createServerData$(async ([_, actorId]) => {
+export function routeData(args: RouteDataArgs) {
+    const serverData = createServerData$(async ([_, actorId]) => {
         try {
             const cq = db.select({
                 importance: actorsInGames.importance,
@@ -44,17 +45,19 @@ export function routeData({ params }: RouteDataArgs) {
             }
         }
     }, {
-        key: () => ['actors', params.actorId]
+        key: () => ['actors', args.params.actorId]
     })
+    return {actor: serverData, parentData: args.data as ReturnType<typeof parentRouteData>}
 }
 
 export default function DeveloperPage() {
-    const data = useRouteData<typeof routeData>()
+    const data = useRouteData<typeof routeData>();
+
     return (
         <ErrorBoundary fallback={(e) => e.status == 404 ? <NotFound /> : <p> Something went wrong. Please try again later </p>}>
             <Suspense fallback={<Loader />}>
-                <Page title={data.latest?.name ?? "Actor"}>
-                    <ActorForm data={data.latest} />
+                <Page title={data.actor.latest?.name ?? "Actor"}>
+                    <ActorForm data={data.actor.latest} games={data.parentData.games.latest!} />
                 </Page>
             </Suspense>
         </ErrorBoundary>

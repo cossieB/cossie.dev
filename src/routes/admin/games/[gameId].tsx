@@ -9,9 +9,10 @@ import Page from "~/components/shared/Page";
 import { db } from "~/db";
 import { genresOfGames, game, gamesOnPlatforms, platform } from "~/drizzle/schema";
 import NotFound from "~/routes/[...404]";
+import { ParentRouteData } from "~/routes/admin";
 
-export function routeData({ params }: RouteDataArgs) {
-    return createServerData$(async ([_, gameId]) => {
+export function routeData({ params, data }: RouteDataArgs) {
+    const serverData = createServerData$(async ([_, gameId]) => {
         try {
             const genreQuery = db.$with('t').as(db.select({
                 gameId: genresOfGames.gameId,
@@ -55,6 +56,7 @@ export function routeData({ params }: RouteDataArgs) {
     }, {
         key: () => ['games', params.gameId]
     })
+    return { game: serverData, parentData: data as ParentRouteData }
 }
 
 export default function AdminGameId() {
@@ -62,8 +64,15 @@ export default function AdminGameId() {
     return (
         <ErrorBoundary fallback={(e) => e.status == 404 ? <NotFound /> : <p> Something went wrong. Please try again later </p>}>
             <Suspense fallback={<Loader />}>
-                <Page title={data()?.title ?? "Game"}>
-                    <GameForm data={data.latest} />
+                <Page title={data.game.latest?.title ?? "Game"}>
+                    <GameForm
+                        data={data.game.latest}
+                        parentData={{
+                            publishers: data.parentData.publishers.latest!,
+                            developers: data.parentData.developers.latest!,
+                            platforms: data.parentData.platforms.latest!,
+                        }}
+                    />
                 </Page>
             </Suspense>
         </ErrorBoundary>

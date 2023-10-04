@@ -1,41 +1,48 @@
-import { JSXElement, useContext } from "solid-js"
-import { AdminContext } from "../admin"
+import { JSXElement } from "solid-js"
+import { type ParentRouteData } from "../admin"
 import styles from "../admin.module.scss"
 import { GamesSvg, DevelopersSvg, PublishersSvg, PlatformSvg, ScreenshotsSvg, ActorsSvg } from "~/svgs"
+import { useRouteData, type RouteDataArgs } from "solid-start"
+import MySiteTitle from "~/components/shared/MySiteTitle"
+
+export function routeData({ data }: RouteDataArgs) {
+    return data as ParentRouteData
+}
 
 export default function AdminPage() {
-    const { developers, publishers, platforms, games, actors } = useContext(AdminContext)!
+    const data = useRouteData<typeof routeData>();
     return (
         <main class={styles.adminHome}>
+            <MySiteTitle>Admin</MySiteTitle>
             <Tile
                 icon={<GamesSvg />}
                 label="Games"
-                count={games.length}
+                count={data.games.latest?.length ?? 0}
             />
             <Tile
                 icon={<DevelopersSvg />}
                 label="Developers"
-                count={developers.length}
+                count={data.developers.latest?.length ?? 0}
             />
             <Tile
                 icon={<PublishersSvg />}
                 label="Publishers"
-                count={publishers.length}
+                count={data.publishers.latest?.length ?? 0}
             />
             <Tile
                 icon={<PlatformSvg />}
                 label="Platforms"
-                count={platforms.length}
+                count={data.platforms.latest?.length ?? 0}
             />
             <Tile
                 icon={<ScreenshotsSvg />}
                 label="Screenshots"
-                count={games.reduce((prev, curr) => prev + curr.images.length, 0)}
+                count={(data.games.latest ?? []).reduce((prev, curr) => prev + curr.images.length, 0)}
             />
             <Tile
                 icon={<ActorsSvg />}
                 label="Actors"
-                count={actors.length}
+                count={data.actors.latest?.length ?? 0}
             />
         </main>
     )
