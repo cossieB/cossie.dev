@@ -1,4 +1,7 @@
-import { pgTable, uuid, text, varchar, timestamp, primaryKey } from "drizzle-orm/pg-core"
+import { pgTable, uuid, text, foreignKey, varchar, timestamp, unique, smallint, primaryKey } from "drizzle-orm/pg-core"
+
+import { sql } from "drizzle-orm"
+
 
 export const actor = pgTable("Actor", {
 	actorId: uuid("actorId").defaultRandom().primaryKey().notNull(),
@@ -46,6 +49,19 @@ export const platform = pgTable("Platform", {
 	summary: text("summary").notNull(),
 });
 
+export const actorsInGames = pgTable("ActorsInGames", {
+	actorId: uuid("actorId").notNull().references(() => actor.actorId, { onDelete: "cascade", onUpdate: "cascade" } ),
+	gameId: uuid("gameId").notNull().references(() => game.gameId, { onDelete: "cascade", onUpdate: "cascade" } ),
+	character: varchar("character", { length: 50 }).notNull(),
+	importance: smallint("importance").default(2).notNull(),
+	characterId: uuid("characterId").defaultRandom().primaryKey().notNull(),
+},
+(table) => {
+	return {
+		actorsInGamesGameIdActorIdKey: unique("ActorsInGames_gameId_actorId_key").on(table.actorId, table.gameId),
+	}
+});
+
 export const gamesOnPlatforms = pgTable("GamesOnPlatforms", {
 	gameId: uuid("gameId").notNull().references(() => game.gameId, { onDelete: "cascade", onUpdate: "cascade" } ),
 	platformId: uuid("platformId").notNull().references(() => platform.platformId, { onDelete: "cascade", onUpdate: "cascade" } ),
@@ -63,16 +79,5 @@ export const genresOfGames = pgTable("GenresOfGames", {
 (table) => {
 	return {
 		genresOfGamesPkey: primaryKey(table.genre, table.gameId)
-	}
-});
-
-export const actorsInGames = pgTable("ActorsInGames", {
-	actorId: uuid("actorId").notNull().references(() => actor.actorId, { onDelete: "cascade", onUpdate: "cascade" } ),
-	gameId: uuid("gameId").notNull().references(() => game.gameId, { onDelete: "cascade", onUpdate: "cascade" } ),
-	character: varchar("character", { length: 50 }).notNull(),
-},
-(table) => {
-	return {
-		actorsInGamesPkey: primaryKey(table.actorId, table.gameId)
 	}
 });

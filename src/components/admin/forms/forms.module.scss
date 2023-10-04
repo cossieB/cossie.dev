@@ -253,6 +253,12 @@ $clrForm: hsl(0, 0%, 15%);
     .open svg {
         rotate: 180deg;
     }
+    button {
+        padding: 0.5rem 1rem;
+        display: flex;
+        align-items: center;
+
+    }
 }
 
 @media (max-width: 768px) {

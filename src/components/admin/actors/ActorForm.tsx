@@ -1,7 +1,7 @@
 import { Actor, Game } from "~/drizzle/types";
 import AdminForm from "../AdminForm";
 import styles from "~/components/admin/forms/forms.module.scss";
-import { SetStoreFunction, createStore } from "solid-js/store";
+import { SetStoreFunction, createStore, unwrap } from "solid-js/store";
 import { For, Show, createEffect, createMemo, createSignal, useContext } from "solid-js";
 import { createServerAction$ } from "solid-start/server";
 import { updateActorOnDB } from "./updateActorOnDB";
@@ -12,9 +12,13 @@ import HiddenInput from "../forms/HiddenInput";
 import { AdminContext } from "~/routes/admin";
 import { ChevronDown } from "~/svgs";
 import clickOutside from "~/lib/clickOutside";
+import { arrayChanged } from "~/utils/arrayChanged";
+import { useRouteData } from "solid-start";
 false && clickOutside
 type Props = {
-    data?: Actor
+    data?: Actor & {
+        characters: NewType[]
+    }
 }
 type NewType = {
     gameId: string;
@@ -22,12 +26,13 @@ type NewType = {
     character: string;
     importance: number
 };
-function copyData(data: Props['data']): Actor {
+function copyData(data: Props['data']) {
     return {
         actorId: data?.actorId ?? crypto.randomUUID(),
         photo: data?.photo ?? "",
         name: data?.name ?? "",
         summary: data?.summary ?? "",
+        characters: data?.characters ?? []
     }
 }
 export default function ActorForm(props: Props) {
@@ -36,16 +41,10 @@ export default function ActorForm(props: Props) {
         isUploading: false,
         complete: false,
         uploadError: null as null | string,
-        modalOpen: false
+        modalOpen: false,
     })
 
-    const [characters, setCharacters] = createStore({
-        list: [] as NewType[],
-        get set() {
-            return getSet()
-        }
-    })
-    const getSet = createMemo(() => new Set(characters.list.map(x => x.gameId)))
+    const getSet = createMemo(() => new Set(actor.characters.map(x => x.gameId)))
 
     createEffect(() => {
         setActor(copyData(props.data))
@@ -62,7 +61,7 @@ export default function ActorForm(props: Props) {
             setState={setState}
             submitDisabled={
                 !actor.name ||
-                characters.list.some(x => !x.character)
+                actor.characters.some(x => !x.character)
             }
         >
             <FormInput
@@ -97,13 +96,14 @@ export default function ActorForm(props: Props) {
                     <ChevronDown />
                 </button>
                 <GameSelector
-                    setCharacters={setCharacters}
-                    characters={characters}
+                    setCharacters={(chars) => setActor('characters', chars)}
+                    characters={actor.characters}
                     modalOpen={state.modalOpen}
                     closeModal={() => setState('modalOpen', false)}
+                    characerSet={getSet()}
                 />
             </div>
-            <For each={characters.list}>
+            <For each={actor.characters}>
                 {char =>
                     <li class={styles.charList}>
                         <span>{char.gameTitle}</span>
@@ -111,21 +111,22 @@ export default function ActorForm(props: Props) {
                             type="text" required
                             placeholder={`Character in ${char.gameTitle}`}
                             oninput={e => {
-                                setCharacters('list', characters.list.findIndex(x => x.gameId === char.gameId), 'character', e.target.value)
+                                setActor('characters', actor.characters.findIndex(x => x.gameId === char.gameId), 'character', e.target.value)
                             }}
                             value={char.character}
                         />
-                        <select 
+                        <select
                             onchange={e => {
-                                setCharacters('list', characters.list.findIndex(x => x.gameId === char.gameId), 'importance', Number(e.target.value))
+                                setActor('characters', actor.characters.findIndex(x => x.gameId === char.gameId), 'importance', Number(e.target.value));
                             }}
                         >
-                            <option disabled>Role Type</option>
-                            <option selected={characters.list.find(x => x.gameId === char.gameId)?.importance == 1} value="1">Player Character</option>
-                            <option selected={characters.list.find(x => x.gameId === char.gameId)?.importance == 2} value="2">Main Role</option>
-                            <option selected={characters.list.find(x => x.gameId === char.gameId)?.importance == 3} value="3">Supporting Character</option>
-                            <option selected={characters.list.find(x => x.gameId === char.gameId)?.importance == 4} value="4">Background Character</option>
-                            <option selected={characters.list.find(x => x.gameId === char.gameId)?.importance == 5} value="5">Extra</option>
+                            <optgroup label="Role Type">
+                                <option selected={actor.characters.find(x => x.gameId === char.gameId)?.importance == 1} value="1">Player Character</option>
+                                <option selected={actor.characters.find(x => x.gameId === char.gameId)?.importance == 2} value="2">Main Role</option>
+                                <option selected={actor.characters.find(x => x.gameId === char.gameId)?.importance == 3} value="3">Supporting Character</option>
+                                <option selected={actor.characters.find(x => x.gameId === char.gameId)?.importance == 4} value="4">Background Character</option>
+                                <option selected={actor.characters.find(x => x.gameId === char.gameId)?.importance == 5} value="5">Extra</option>
+                            </optgroup>
                         </select>
                     </li>
                 }
@@ -134,27 +135,26 @@ export default function ActorForm(props: Props) {
                 <HiddenInput name="photo" value={actor.photo!} />
             </Show>
             <HiddenInput name="actorId" value={actor.actorId} />
-            <HiddenInput name="characters" value={JSON.stringify(characters.list)} />
+            <HiddenInput name="characters" value={JSON.stringify(actor.characters)} />
             <HiddenInput name="newItem" value={props.data ? 0 : 1} />
         </AdminForm>
     )
 }
 
 type P = {
-    characters: {
-        list: NewType[];
-        readonly set: Set<string>;
-    }
-    setCharacters: SetStoreFunction<{
-        list: NewType[];
-        readonly set: Set<string>;
-    }>
+    characters: NewType[]
+    characerSet: Set<string>
+    setCharacters(chars: NewType[]): void
     modalOpen: boolean,
     closeModal(): void
 }
 
 function GameSelector(props: P) {
     const { games } = useContext(AdminContext)!
+    const t = useRouteData()
+    createEffect(() => {
+        console.log(unwrap(t()))
+    })
     const [input, setInput] = createSignal("")
     const filtered = createMemo(() => games.filter(game => game.title.toLowerCase().includes(input().toLowerCase())))
     return (
@@ -180,22 +180,19 @@ function GameSelector(props: P) {
 }
 
 function Li(props: P & { game: Game }) {
-    const isSelected = createMemo(() => props.characters.set.has(props.game.gameId))
+    const isSelected = createMemo(() => props.characerSet.has(props.game.gameId))
     function handleClick() {
         if (isSelected()) {
-            props.setCharacters(prev => ({
-                list: prev.list.filter(x => x.gameId != props.game.gameId)
-            }))
+            props.setCharacters(props.characters.filter(x => x.gameId != props.game.gameId))
         }
         else
-            props.setCharacters(prev => ({
-                list: [...prev.list, {
+            props.setCharacters([...props.characters, {
                     gameId: props.game.gameId,
                     gameTitle: props.game.title,
                     character: "",
                     importance: 2
                 }]
-            }))
+            )
     }
     return (
         <li onclick={handleClick}>
