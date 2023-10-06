@@ -1,5 +1,4 @@
 import { createSignal, useContext } from "solid-js";
-import MySiteTitle from "~/components/shared/MySiteTitle";
 import { ProjectList } from "./ProjectList";
 import styles from "~/components/Projects/Projects.module.scss"
 import PageBtn from "~/components/Projects/pageBtn";
@@ -18,7 +17,6 @@ function Main() {
     const { selected } = useContext(ProjectsContext)!
     return (
         <main class="container" id={styles.container}>
-            <MySiteTitle>Projects</MySiteTitle>
             <PageBtn
                 setPage={setPage}
                 isNextBtn={false}

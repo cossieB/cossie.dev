@@ -8,7 +8,7 @@ import Page from "~/components/shared/Page";
 import { db } from "~/db";
 import { actor, actorsInGames, game } from "~/drizzle/schema";
 import NotFound from "~/routes/[...404]";
-import {routeData as parentRouteData} from "../../admin"
+import {ParentRouteData} from "../../admin"
 
 export function routeData(args: RouteDataArgs) {
     const serverData = createServerData$(async ([_, actorId]) => {
@@ -47,7 +47,13 @@ export function routeData(args: RouteDataArgs) {
     }, {
         key: () => ['actors', args.params.actorId]
     })
-    return {actor: serverData, parentData: args.data as ReturnType<typeof parentRouteData>}
+    const games = createServerData$(async () => db.query.game.findMany({
+        orderBy: (fields) => fields.title
+    }), {
+        key: () => ['games'],
+        initialValue: [],
+    })
+    return {actor: serverData, games}
 }
 
 export default function DeveloperPage() {
@@ -57,7 +63,7 @@ export default function DeveloperPage() {
         <ErrorBoundary fallback={(e) => e.status == 404 ? <NotFound /> : <p> Something went wrong. Please try again later </p>}>
             <Suspense fallback={<Loader />}>
                 <Page title={data.actor.latest?.name ?? "Actor"}>
-                    <ActorForm data={data.actor.latest} games={data.parentData.games.latest!} />
+                    <ActorForm data={data.actor.latest} games={data.games()!} />
                 </Page>
             </Suspense>
         </ErrorBoundary>

@@ -3,16 +3,15 @@ import { type Resource } from "solid-js";
 import { useRouteData } from "solid-start";
 import { createServerData$ } from "solid-start/server";
 import { db } from "~/db";
-import { developer } from "~/drizzle/schema";
 import AdminLink from "~/components/Datagrid/AdminLink";
 import { AdminTable } from "~/components/admin/AdminTable";
 import Page from "~/components/shared/Page";
 
 export function routeData() {
-    return createServerData$(async () => db
-        .select()
-        .from(developer)
-    )
+    return createServerData$(async () => db.query.developer.findMany(), {
+        key: () => ['developers'], 
+        initialValue: []
+    })
 }
 
 const columnDefs: Cols[] = [{
@@ -39,7 +38,7 @@ export default function DevelopersAdminPage() {
         <Page title="Developers">
             <AdminTable
                 columnDefs={columnDefs}
-                data={data.latest}
+                data={data()}
             />
         </Page>
     )

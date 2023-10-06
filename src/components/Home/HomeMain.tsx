@@ -1,13 +1,11 @@
 import styles from '~/components/Home/Home.module.scss'
 import { PuzzleSvg, QuestionMarkSvg, PhoneSvg, GithubSvg, LinkedInSvg, DockerSvg, FreeCCSvg } from '~/svgs'
 import ExternalLink from '../shared/ExternalLink'
-import MySiteTitle from '../shared/MySiteTitle'
 import NavItem from './NavItem'
 
 export default function HomeMain() {
     return (
         <main id={styles.homeContainer} class="container">
-            <MySiteTitle>Hello World</MySiteTitle>
             <nav id={styles.navbar}>
                 <NavItem
                     href='/projects'

@@ -1,7 +1,7 @@
-import { Actor, Game } from "~/drizzle/types";
+import type { Actor, Game } from "~/drizzle/types";
 import AdminForm from "../AdminForm";
 import styles from "~/components/admin/forms/forms.module.scss";
-import { createStore } from "solid-js/store";
+import { SetStoreFunction, createStore } from "solid-js/store";
 import { For, Show, createEffect, createMemo, createSignal } from "solid-js";
 import { createServerAction$ } from "solid-start/server";
 import { updateActorOnDB } from "./updateActorOnDB";
@@ -12,6 +12,7 @@ import HiddenInput from "../forms/HiddenInput";
 import { ChevronDown } from "~/svgs";
 import clickOutside from "~/lib/clickOutside";
 false && clickOutside
+
 type Props = {
     data?: Actor & {
         characters: NewType[]
@@ -30,7 +31,7 @@ function copyData(data: Props['data']) {
         photo: data?.photo ?? "",
         name: data?.name ?? "",
         summary: data?.summary ?? "",
-        characters: data?.characters ?? []
+        characters: data?.characters.slice() ?? []
     }
 }
 export default function ActorForm(props: Props) {
@@ -42,10 +43,10 @@ export default function ActorForm(props: Props) {
         modalOpen: false,
     })
 
-    const getSet = createMemo(() => new Set(actor.characters.map(x => x.gameId)))
+    const charHashSet = createMemo(() => new Set(actor.characters.map(x => x.gameId)))
 
     createEffect(() => {
-        setActor(copyData(props.data))
+        setActor(copyData(props.data));
     })
     const [submitting, { Form }] = createServerAction$(updateActorOnDB, {
         invalidate: () => ['actors', props.data?.actorId]
@@ -98,36 +99,17 @@ export default function ActorForm(props: Props) {
                     characters={actor.characters}
                     modalOpen={state.modalOpen}
                     closeModal={() => setState('modalOpen', false)}
-                    characerSet={getSet()}
+                    characerSet={charHashSet()}
                     games={props.games}
                 />
             </div>
             <For each={actor.characters}>
                 {char =>
-                    <li class={styles.charList}>
-                        <span>{char.gameTitle}</span>
-                        <input
-                            type="text" required
-                            placeholder={`Character in ${char.gameTitle}`}
-                            oninput={e => {
-                                setActor('characters', actor.characters.findIndex(x => x.gameId === char.gameId), 'character', e.target.value)
-                            }}
-                            value={char.character}
-                        />
-                        <select
-                            onchange={e => {
-                                setActor('characters', actor.characters.findIndex(x => x.gameId === char.gameId), 'importance', Number(e.target.value));
-                            }}
-                        >
-                            <optgroup label="Role Type">
-                                <option selected={actor.characters.find(x => x.gameId === char.gameId)?.importance == 1} value="1">Player Character</option>
-                                <option selected={actor.characters.find(x => x.gameId === char.gameId)?.importance == 2} value="2">Main Role</option>
-                                <option selected={actor.characters.find(x => x.gameId === char.gameId)?.importance == 3} value="3">Supporting Character</option>
-                                <option selected={actor.characters.find(x => x.gameId === char.gameId)?.importance == 4} value="4">Background Character</option>
-                                <option selected={actor.characters.find(x => x.gameId === char.gameId)?.importance == 5} value="5">Extra</option>
-                            </optgroup>
-                        </select>
-                    </li>
+                    <Character
+                        char={char}
+                        setActor={setActor as any}
+                        actor={actor}
+                    />
                 }
             </For>
             <Show when={actor.photo}>
@@ -149,15 +131,50 @@ type P = {
     games: Game[]
 }
 
-function GameSelector(props: P) {
+type P1 = {
+    char: NewType
+    actor: Actor & {
+        characters: NewType[]
+    }
+    setActor: SetStoreFunction<Actor & { characters: NewType[] }>
+}
 
+function Character(props: P1) {
+    return (
+        <li class={styles.charList}>
+            <span>{props.char.gameTitle}</span>
+            <input
+                type="text" required
+                placeholder={`Character in ${props.char.gameTitle}`}
+                oninput={e => {
+                    props.setActor('characters', props.actor.characters.findIndex(x => x.gameId === props.char.gameId), 'character', e.target.value);
+                }}
+                value={props.char.character} />
+            <select
+                onchange={e => {
+                    props.setActor('characters', props.actor.characters.findIndex(x => x.gameId === props.char.gameId), 'importance', Number(e.target.value));
+                }}
+            >
+                <optgroup label="Role Type">
+                    <option selected={props.actor.characters.find(x => x.gameId === props.char.gameId)?.importance == 1} value="1">Player Character</option>
+                    <option selected={props.actor.characters.find(x => x.gameId === props.char.gameId)?.importance == 2} value="2">Main Role</option>
+                    <option selected={props.actor.characters.find(x => x.gameId === props.char.gameId)?.importance == 3} value="3">Supporting Character</option>
+                    <option selected={props.actor.characters.find(x => x.gameId === props.char.gameId)?.importance == 4} value="4">Background Character</option>
+                    <option selected={props.actor.characters.find(x => x.gameId === props.char.gameId)?.importance == 5} value="5">Extra</option>
+                </optgroup>
+            </select>
+        </li>
+    );
+}
+
+function GameSelector(props: P) {
     const [input, setInput] = createSignal("")
     const filtered = createMemo(() => props.games.filter(game => game.title.toLowerCase().includes(input().toLowerCase())))
     return (
         <ul
             class={styles.selector}
             classList={{ [styles.open]: props.modalOpen }}
-            use:clickOutside={props.closeModal}
+            use: clickOutside={props.closeModal}
         >
             <input type="search"
                 value={input()}
@@ -176,24 +193,23 @@ function GameSelector(props: P) {
 }
 
 function Li(props: P & { game: Game }) {
-    const isSelected = createMemo(() => props.characerSet.has(props.game.gameId))
+    const isSelected = createMemo(() => props.characerSet.has(props.game.gameId));
     function handleClick() {
         if (isSelected()) {
             props.setCharacters(props.characters.filter(x => x.gameId != props.game.gameId))
         }
         else
             props.setCharacters([...props.characters, {
-                    gameId: props.game.gameId,
-                    gameTitle: props.game.title,
-                    character: "",
-                    importance: 2
-                }]
-            )
+                gameId: props.game.gameId,
+                gameTitle: props.game.title,
+                character: "",
+                importance: 2
+            }])
     }
     return (
-        <li onclick={handleClick}>
+        <li onclick={handleClick} classList={{ [styles.selected]: isSelected() }}>
             {props.game.title}
-            <div role="checkbox" aria-selected={isSelected()} classList={{ [styles.selected]: isSelected() }} class={styles.checkbox} />
+            <div role="checkbox" aria-selected={isSelected()} class={styles.checkbox} />
         </li>
     )
 }

@@ -35,6 +35,9 @@ export function routeData() {
             .innerJoin(publisher, eq(game.publisherId, publisher.publisherId))
             .leftJoin(genreQuery, eq(game.gameId, genreQuery.gameId))
             .leftJoin(platformQuery, eq(game.gameId, platformQuery.gameId))
+    }, {
+        key: () => ['games'],
+        initialValue: []
     })
 }
 
@@ -77,7 +80,7 @@ export default function GamesAdminPage() {
     const data = useRouteData<typeof routeData>()
     return (
         <Page title="Games">
-            <AdminTable data={data.latest} columnDefs={columnDefs} />
+            <AdminTable data={data()} columnDefs={columnDefs} />
         </Page>
     )
 }

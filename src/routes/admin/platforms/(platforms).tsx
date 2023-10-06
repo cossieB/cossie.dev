@@ -6,13 +6,13 @@ import AdminLink from "~/components/Datagrid/AdminLink"
 import { AdminTable } from "~/components/admin/AdminTable"
 import Page from "~/components/shared/Page"
 import { db } from "~/db"
-import { platform } from "~/drizzle/schema"
 
 export function routeData() {
-    return createServerData$(async () => db
-        .select()
-        .from(platform)
-    )
+    return createServerData$(async () => db.query.platform.findMany({
+        orderBy: fields => fields.name
+    }), {
+        key: () => ['platforms']
+    })
 }
 
 const columnDefs: Cols[] = [{
@@ -36,7 +36,7 @@ export default function PublishersAdminPage() {
         <Page title="Platforms">
             <AdminTable
                 columnDefs={columnDefs}
-                data={data.latest}
+                data={data()}
             />
         </Page>
     )

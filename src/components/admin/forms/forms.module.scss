@@ -207,7 +207,11 @@ $clrForm: hsl(0, 0%, 15%);
         justify-content: space-between;
         align-items: center;
     }
-
+    .selected {
+        div::after {
+            opacity: 1;
+        }
+    }
     .checkbox {
         border-radius: 50%;
         height: 2rem;
@@ -215,7 +219,6 @@ $clrForm: hsl(0, 0%, 15%);
         scale: 0.5;
         border: var(--clrRed) 1px solid;
         @include mixins.flexCenter;
-
         &::after {
             opacity: 0;
             display: block;
@@ -225,10 +228,6 @@ $clrForm: hsl(0, 0%, 15%);
             border-radius: 50%;
             background-color: var(--clrRed);
             transition: opacity ease 100ms;
-        }
-
-        &.selected::after {
-            opacity: 1;
         }
     }
 }

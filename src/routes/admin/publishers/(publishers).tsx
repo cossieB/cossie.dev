@@ -9,10 +9,10 @@ import { db } from "~/db"
 import { publisher } from "~/drizzle/schema"
 
 export function routeData() {
-    return createServerData$(async () => db
-        .select()
-        .from(publisher)
-    )
+    return createServerData$(async () => db.query.publisher.findMany(), {
+        key: () => ['publishers'],
+        initialValue: []
+    })
 }
 
 const columnDefs: Cols[] = [{
@@ -39,7 +39,7 @@ export default function PublishersAdminPage() {
         <Page title="Publishers">
             <AdminTable
                 columnDefs={columnDefs}
-                data={data.latest}
+                data={data()}
             />
         </Page>
     )

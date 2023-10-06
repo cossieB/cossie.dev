@@ -11,35 +11,35 @@ export function routeData() {
     const developers = createServerData$(async () => db.query.developer.findMany({
         orderBy: (fields) => fields.name
     }), {
-        key: 'developers',
+        key: () => ['developers'],
         initialValue: []
     })
     const publishers = createServerData$(async () => db.query.publisher.findMany({
         orderBy: (fields) => fields.name
     }), {
-        key: 'publishers',
+        key: () => ['publishers'],
         initialValue: []
     })
     const platforms = createServerData$(async () => db.query.platform.findMany({
         orderBy: (fields) => fields.name
     }), {
-        key: 'platforms',
+        key: () => ['platforms'],
         initialValue: []
     })
     const games = createServerData$(async () => db.query.game.findMany({
         orderBy: (fields) => fields.title
     }), {
-        key: 'games',
+        key: () => ['games'],
         initialValue: [],
     })
     const actors = createServerData$(async () => db.query.actor.findMany({
         orderBy: (fields) => fields.name
     }), {
-        key: 'actors',
+        key: () => ['actors'],
         initialValue: []
     })
     const user = createServerData$(async (_, { request }) => authenticate(request), {
-        key: 'auth', 
+        key: () => ['auth'], 
         initialValue: null
     })
     return { developers, publishers, platforms, user, games, actors }

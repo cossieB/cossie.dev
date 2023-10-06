@@ -56,7 +56,19 @@ export function routeData({ params, data }: RouteDataArgs) {
     }, {
         key: () => ['games', params.gameId]
     })
-    return { game: serverData, parentData: data as ParentRouteData }
+    const developers = createServerData$(async () => db.query.developer.findMany(), {
+        initialValue: [],
+        key: () => ['developers']
+    })
+    const publishers = createServerData$(async () => db.query.publisher.findMany(), {
+        initialValue: [],
+        key: () => ['publishers']
+    })
+    const platforms = createServerData$(async () => db.query.platform.findMany(), {
+        initialValue: [],
+        key: () => ['platforms']
+    })
+    return { game: serverData, developers, publishers, platforms }
 }
 
 export default function AdminGameId() {
@@ -64,13 +76,13 @@ export default function AdminGameId() {
     return (
         <ErrorBoundary fallback={(e) => e.status == 404 ? <NotFound /> : <p> Something went wrong. Please try again later </p>}>
             <Suspense fallback={<Loader />}>
-                <Page title={data.game.latest?.title ?? "Game"}>
+                <Page title={data.game()?.title ?? "Game"}>
                     <GameForm
-                        data={data.game.latest}
+                        data={data.game()}
                         parentData={{
-                            publishers: data.parentData.publishers.latest!,
-                            developers: data.parentData.developers.latest!,
-                            platforms: data.parentData.platforms.latest!,
+                            publishers: data.publishers()!,
+                            developers: data.developers()!,
+                            platforms: data.platforms()!,
                         }}
                     />
                 </Page>
