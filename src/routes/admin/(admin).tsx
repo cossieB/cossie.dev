@@ -1,4 +1,4 @@
-import { JSXElement } from "solid-js"
+import { type JSXElement } from "solid-js"
 import { type ParentRouteData } from "../admin"
 import styles from "../admin.module.scss"
 import { GamesSvg, DevelopersSvg, PublishersSvg, PlatformSvg, ScreenshotsSvg, ActorsSvg } from "~/svgs"

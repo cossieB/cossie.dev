@@ -8,7 +8,7 @@ export const initialState = {
     seconds: 1500,
     break: 300,
     sessionLength: 1500,
-    timer: null as NodeJS.Timer | null,
+    timer: null as NodeJS.Timeout | null,
     left: () => convert(initialState.seconds),
     breakTime: () => convert(initialState.break),
 }
@@ -96,7 +96,7 @@ export class PomodoroWrapper {
             seconds: 1500,
             break: 300,
             sessionLength: 1500,
-            timer: null as NodeJS.Timer | null
+            timer: null as NodeJS.Timeout | null
         })
     }
     

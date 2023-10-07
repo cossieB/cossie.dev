@@ -1,4 +1,4 @@
-import { Lang, backend, frontend, langs, misc } from "../About/vars"
+import { type Lang, backend, frontend, langs, misc } from "../About/vars"
 
 export const stack: { [key: string]: string } = {
     "framer motion": "https://pagepro.co/blog/wp-content/uploads/2020/03/framer-motion.png",

@@ -1,5 +1,5 @@
-import { type JSXElement, type Resource, createContext, createEffect, onCleanup, onMount } from "solid-js";
-import { Outlet, createRouteAction, useRouteData } from "solid-start";
+import { type JSXElement, type Resource, createContext, createEffect, onCleanup, onMount, Show } from "solid-js";
+import { Outlet, createRouteAction, useIsRouting, useRouteData } from "solid-start";
 import AdminNav from "~/components/admin/AdminNav";
 import styles from './admin.module.scss'
 import { createServerData$ } from "solid-start/server";
@@ -39,7 +39,7 @@ export function routeData() {
         initialValue: []
     })
     const user = createServerData$(async (_, { request }) => authenticate(request), {
-        key: () => ['auth'], 
+        key: () => ['auth'],
         initialValue: null
     })
     return { developers, publishers, platforms, user, games, actors }
@@ -48,6 +48,7 @@ export function routeData() {
 export type ParentRouteData = ReturnType<typeof routeData>
 
 export default function Layout() {
+    const isNavigating = useIsRouting()
     // sync auth states across tabs
     const [, auth] = createRouteAction(async () => { }, { invalidate: 'auth' })
     function onAuthChange() {
@@ -66,6 +67,9 @@ export default function Layout() {
             <div class={styles.container}>
                 <AdminNav />
                 <section class={styles.main}>
+                    <Show when={isNavigating()}>
+                        <div role="navigation" id={styles.navIndicator} />
+                    </Show>
                     <Outlet />
                 </section>
             </div>

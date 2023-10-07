@@ -8,21 +8,7 @@ $width: 25px;
     .mainImgs {
         display: flex;
     }
-    // .preview {
-    //     display: flex;
-    //     flex-wrap: wrap;
-    //     overflow-y: auto;
-    //     height: 100vh;
-    //     img {
-    //         object-fit: contain;
-    //         &:first-child {
-    //             width: 25%;
-    //         }
-    //         &:last-child {
-    //             width: 75%;
-    //         }
-    //     }
-    // }
+    position: relative;
 }
 @include mixins.hideScrollbar('.preview');
 
@@ -129,5 +115,33 @@ $width: 25px;
     }
     >span:last-child {
         font-size: larger;
+    }
+}
+#navIndicator {
+    z-index: 55;
+    position: absolute;
+    pointer-events: none;
+    height: 100vh;
+    width: 100%;
+    background-color: black;
+    opacity: 0.5;
+    &::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 5px;
+        animation: progress 500ms linear;
+        width: 100%;
+        background-color: var(--clrRed);
+    }
+}
+
+@keyframes progress {
+    from {
+        width: 0%;
+    }
+    to {
+        width: 100%;
     }
 }

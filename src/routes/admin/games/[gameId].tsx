@@ -1,15 +1,13 @@
 import { useRouteData } from "@solidjs/router";
 import { sql, eq } from "drizzle-orm";
-import { ErrorBoundary, Suspense } from "solid-js";
+import { ErrorBoundary } from "solid-js";
 import { type RouteDataArgs } from "solid-start";
 import { ServerError, createServerData$ } from "solid-start/server";
 import GameForm from "~/components/admin/game/GameForm";
-import Loader from "~/components/shared/Loader/Loader";
 import Page from "~/components/shared/Page";
 import { db } from "~/db";
 import { genresOfGames, game, gamesOnPlatforms, platform } from "~/drizzle/schema";
 import NotFound from "~/routes/[...404]";
-import { ParentRouteData } from "~/routes/admin";
 
 export function routeData({ params, data }: RouteDataArgs) {
     const serverData = createServerData$(async ([_, gameId]) => {
@@ -75,18 +73,18 @@ export default function AdminGameId() {
     const data = useRouteData<typeof routeData>();
     return (
         <ErrorBoundary fallback={(e) => e.status == 404 ? <NotFound /> : <p> Something went wrong. Please try again later </p>}>
-            <Suspense fallback={<Loader />}>
-                <Page title={data.game()?.title ?? "Game"}>
+            {/* <Suspense fallback={<Loader />}> */}
+                <Page title={data.game.latest?.title ?? "Game"}>
                     <GameForm
-                        data={data.game()}
+                        data={data.game.latest}
                         parentData={{
-                            publishers: data.publishers()!,
-                            developers: data.developers()!,
-                            platforms: data.platforms()!,
+                            publishers: data.publishers.latest ?? [],
+                            developers: data.developers.latest ?? [],
+                            platforms: data.platforms.latest ?? [],
                         }}
                     />
                 </Page>
-            </Suspense>
+            {/* </Suspense> */}
         </ErrorBoundary>
     )
 }

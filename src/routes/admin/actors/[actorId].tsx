@@ -1,14 +1,11 @@
 import { eq } from "drizzle-orm";
-import { Suspense } from "solid-js";
 import ErrorBoundary, { type RouteDataArgs, useRouteData } from "solid-start";
 import { ServerError, createServerData$ } from "solid-start/server";
 import ActorForm from "~/components/admin/actors/ActorForm";
-import Loader from "~/components/shared/Loader/Loader";
 import Page from "~/components/shared/Page";
 import { db } from "~/db";
 import { actor, actorsInGames, game } from "~/drizzle/schema";
 import NotFound from "~/routes/[...404]";
-import {ParentRouteData} from "../../admin"
 
 export function routeData(args: RouteDataArgs) {
     const serverData = createServerData$(async ([_, actorId]) => {
@@ -23,7 +20,7 @@ export function routeData(args: RouteDataArgs) {
                 .innerJoin(game, eq(game.gameId, actorsInGames.gameId))
                 .where(eq(actorsInGames.actorId, actorId))
                 .orderBy(fields => fields.gameTitle)
-                
+
             const aq = db.select()
                 .from(actor)
                 .where(eq(actor.actorId, actorId))
@@ -32,7 +29,7 @@ export function routeData(args: RouteDataArgs) {
             const [characters, result] = await Promise.all([cq, aq])
             if (result.length == 0)
                 throw new ServerError("Not Found", { status: 404 })
-            return {...result[0], characters}
+            return { ...result[0], characters }
         }
         catch (error: any) {
             if (error instanceof ServerError)
@@ -53,7 +50,7 @@ export function routeData(args: RouteDataArgs) {
         key: () => ['games'],
         initialValue: [],
     })
-    return {actor: serverData, games}
+    return { actor: serverData, games }
 }
 
 export default function DeveloperPage() {
@@ -61,11 +58,9 @@ export default function DeveloperPage() {
 
     return (
         <ErrorBoundary fallback={(e) => e.status == 404 ? <NotFound /> : <p> Something went wrong. Please try again later </p>}>
-            <Suspense fallback={<Loader />}>
-                <Page title={data.actor.latest?.name ?? "Actor"}>
-                    <ActorForm data={data.actor.latest} games={data.games()!} />
-                </Page>
-            </Suspense>
+            <Page title={data.actor.latest?.name ?? "Actor"}>
+                <ActorForm data={data.actor.latest} games={data.games.latest ?? []} />
+            </Page>
         </ErrorBoundary>
     )
 }

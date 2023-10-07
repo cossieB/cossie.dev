@@ -2,7 +2,7 @@ import { and, eq, inArray, not, sql } from "drizzle-orm";
 import { ServerError, type ServerFunctionEvent } from "solid-start";
 import { db } from "~/db";
 import { actor, actorsInGames } from "~/drizzle/schema";
-import { Actor } from "~/drizzle/types";
+import { type Actor } from "~/drizzle/types";
 import { authenticateOrThrowUnauthorized } from "~/utils/authenticate";
 
 export async function updateActorOnDB(fd: FormData, event: ServerFunctionEvent) {

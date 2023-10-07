@@ -1,9 +1,7 @@
 import { eq } from "drizzle-orm"
-import { Suspense } from "solid-js"
 import ErrorBoundary, { type RouteDataArgs, ServerError, useRouteData } from "solid-start"
 import { createServerData$ } from "solid-start/server"
 import { PubForm } from "~/components/admin/pub/PubForm"
-import Loader from "~/components/shared/Loader/Loader"
 import Page from "~/components/shared/Page"
 import { db } from "~/db"
 import { publisher } from "~/drizzle/schema"
@@ -40,11 +38,11 @@ export default function publisherPage() {
     const data = useRouteData<typeof routeData>()
     return (
         <ErrorBoundary fallback={(e) => e.status == 404 ? <NotFound /> : <p> Something went wrong. Please try again later </p>}>
-            <Suspense fallback={<Loader />}>
+            {/* <Suspense fallback={<Loader />}> */}
                 <Page title={data.latest?.name ?? "Publisher"}>
                     <PubForm data={data.latest} />
                 </Page>
-            </Suspense>
+            {/* </Suspense> */}
         </ErrorBoundary>
     )
 }

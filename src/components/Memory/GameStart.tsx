@@ -3,7 +3,7 @@ import Board from "./Board"
 import { MemoryContext } from "./MemoryProvider"
 
 export default function GameStart() {
-    let timer: NodeJS.Timer
+    let timer: NodeJS.Timeout
     const state = useContext(MemoryContext)!
     onMount(() => {
         timer = setInterval(() => {

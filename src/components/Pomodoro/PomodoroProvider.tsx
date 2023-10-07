@@ -17,7 +17,7 @@ export default function PomodoroProvider(props: { children: JSX.Element }) {
         left: () => convert(store.seconds),
         breakTime: () => convert(store.break),
         sessionLength: 1500,
-        timer: null as NodeJS.Timer | null
+        timer: null as NodeJS.Timeout | null
     })
     const state = new PomodoroWrapper(
         store,

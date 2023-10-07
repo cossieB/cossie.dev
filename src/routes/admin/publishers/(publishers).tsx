@@ -6,7 +6,6 @@ import AdminLink from "~/components/Datagrid/AdminLink"
 import { AdminTable } from "~/components/admin/AdminTable"
 import Page from "~/components/shared/Page"
 import { db } from "~/db"
-import { publisher } from "~/drizzle/schema"
 
 export function routeData() {
     return createServerData$(async () => db.query.publisher.findMany(), {

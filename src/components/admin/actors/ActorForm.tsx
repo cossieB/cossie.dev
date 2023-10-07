@@ -1,7 +1,7 @@
 import type { Actor, Game } from "~/drizzle/types";
 import AdminForm from "../AdminForm";
 import styles from "~/components/admin/forms/forms.module.scss";
-import { SetStoreFunction, createStore } from "solid-js/store";
+import { type SetStoreFunction, createStore } from "solid-js/store";
 import { For, Show, createEffect, createMemo, createSignal } from "solid-js";
 import { createServerAction$ } from "solid-start/server";
 import { updateActorOnDB } from "./updateActorOnDB";

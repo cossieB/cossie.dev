@@ -1,4 +1,4 @@
-import { Suspense, Show } from "solid-js";
+import { Show } from "solid-js";
 import type { ColDef, ColGroupDef } from "ag-grid-community";
 import GridTable from "~/components/Datagrid/GridTable";
 

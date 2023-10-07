@@ -1,19 +1,24 @@
 import type { SetStoreFunction } from "solid-js/store";
 
-export const initialState = {
-    activeCards: [] as { index: number, label: string }[],
-    matches: new Set<string>(),
-    inputDisabled: false,
-    time: 0,
-    flips: 0,
-    finished: false,
-    gameSize: 2
+type InitState = {
+    activeCards: {
+        index: number;
+        label: string;
+    }[];
+    matches: Set<string>;
+    inputDisabled: boolean;
+    time: number;
+    flips: number;
+    finished: boolean;
+    gameSize: number;
+
 }
 
 export class MemoryWrapper {
     constructor(
-        private _state: typeof initialState,
-        private setState: SetStoreFunction<typeof initialState>
+        private _state: InitState,
+        private setState: SetStoreFunction<InitState>,
+        private readonly initialState: InitState
     ) {
         this.flipOver = this.flipOver.bind(this)
         this.correct = this.correct.bind(this)
@@ -27,9 +32,9 @@ export class MemoryWrapper {
     get state() {
         return this._state
     }
-    flipOver(payload: typeof initialState.activeCards[number]) {
+    flipOver(payload: InitState['activeCards'][number]) {
         if (this._state.activeCards.length > 1) return;
-        const updatedState: Partial<typeof initialState> = {
+        const updatedState: Partial<InitState> = {
             activeCards: [...this._state.activeCards, payload],
             flips: this._state.flips + 1
         }
@@ -64,7 +69,7 @@ export class MemoryWrapper {
     }
     playAgain() {
         this.setState({
-            ...initialState,
+            ...this.initialState,
             gameSize: this._state.gameSize,
             matches: new Set()
         })
