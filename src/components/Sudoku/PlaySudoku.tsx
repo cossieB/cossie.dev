@@ -1,7 +1,8 @@
+import { useResize } from "~/hooks/useResize";
 import Block from "./Block"
 import Solver, { type Cell } from "./Solver"
 import styles from "./sudoku.module.scss";
-import { createRenderEffect, createSignal, For, onCleanup, onMount, type Setter } from "solid-js";
+import { createEffect, createRenderEffect, createSignal, For, onCleanup, onMount, Show, type Setter, on } from "solid-js";
 import { createMutable } from "solid-js/store";
 
 interface Props {
@@ -11,23 +12,24 @@ interface Props {
 }
 
 export default function PlaySudoku(props: Props) {
-    let ref: HTMLDivElement;
+    let ref!: HTMLDivElement;
     const puzzle = createMutable(new Solver(props.puzzleString))
     const [selected, setSelected] = createSignal<Cell>()
     const [clashes, setClashes] = createSignal<{ [key in 'row' | 'column' | 'region']: Set<Cell> } | null>(null)
     const [hasWon, setHasWon] = createSignal(false)
     const [error, setError] = createSignal(false)
-    
-    onMount(() => {
-        if (window.innerWidth > 768) return
+
+    const innerWidth = useResize()
+
+    createEffect(on(innerWidth, () => {
         const sudokuWidth = ref.clientWidth!;
         const width = sudokuWidth / 9;
         ref!.style.gridTemplateColumns = `repeat(9, ${width}px)`
-        const blocks = document.querySelectorAll<HTMLDivElement>('.sudoBlock')
+        const blocks = document.querySelectorAll<HTMLDivElement>(`.${styles.sudoBlock}`)
         blocks.forEach(block => {
             block.style.height = `${width}px`
         })
-    })
+    }))
     
     onMount(() => {
         document.addEventListener('keydown', handleKeypress)
@@ -43,8 +45,10 @@ export default function PlaySudoku(props: Props) {
 
         const increment = (num: number) => {
             let old = selected()!.cellNumber
-            if (old + num < 0 || old + num > 80) return old;
-            else if (old + num > 80) return old
+            if (old % 9 == 0 && num == -1) return old + 8
+            else if ((old - 8) % 9 == 0 && num == 1 ) return old - 8
+            else if (old < 9 && num == -9) return old + 72
+            else if (old > 71 && num == 9) return old - 72
             else return old + num
         }
         let newCellNumber = selected()!.cellNumber
@@ -106,7 +110,9 @@ export default function PlaySudoku(props: Props) {
 
     return (
         <div class="container" id={styles.container} onAuxClick={() => setSelected(undefined)}>
-            {error() && <div style={{ 'font-size': '5rem', position: 'absolute', background: 'red' }}>Could not solve puzzle.</div>}
+            <Show when={error()}>
+                <div style={{ 'font-size': '5rem', position: 'absolute', background: 'red' }}>Could not solve puzzle.</div>
+            </Show>
             <div style={{ 'margin-bottom': '1rem' }} >
                 <button class={styles.sudoBtn} onClick={check}  >
                     {puzzle.array.some(item => item.value == '.') ? "Check" : "Finish"}

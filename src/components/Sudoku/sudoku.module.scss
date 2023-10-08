@@ -15,7 +15,7 @@
 .sudoBlock {
     display: flex;
     border: 1px solid black;
-    height: 75px;
+    aspect-ratio: 1;
     font-size: x-large;
     @include flexCenter
 }
@@ -26,11 +26,16 @@
     font-size: 25px;
     padding: 1rem;
     background: none;
+    border: 1px solid black;
 
     &:hover {
         background-color: black;
         color: #8d008d;
     }
+}
+#sudoku {
+    width: 95%;
+    max-width: 700px;
 }
 
 @media (max-width: 768px) {
@@ -39,9 +44,6 @@
         font-size: 1rem;
     }
 
-    #sudoku {
-        width: 95%;
-    }
 
     .mobileBtns button {
         border: none;

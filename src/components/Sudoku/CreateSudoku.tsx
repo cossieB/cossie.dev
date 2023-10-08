@@ -1,8 +1,9 @@
-import { createRenderEffect, createSignal, onCleanup, onMount, type Setter } from "solid-js"
+import { createEffect, createRenderEffect, createSignal, on, onCleanup, onMount, type Setter } from "solid-js"
 import Block from "./Block"
 import Solver, {type Cell } from "./Solver"
 import styles from "./sudoku.module.scss";
 import { createMutable } from "solid-js/store";
+import { useResize } from "~/hooks/useResize";
 
 interface Props {
     setMode: Setter<boolean>
@@ -20,16 +21,17 @@ export default function CreateSudoku({setPuzzleString, setMode}: Props) {
 
     let ref: HTMLDivElement;
 
-    createRenderEffect(() => {
-        if (window.innerWidth > 768) return
+    const innerWidth = useResize()
+
+    createEffect(on(innerWidth, () => {
         const sudokuWidth = ref.clientWidth!;
         const width = sudokuWidth / 9;
         ref!.style.gridTemplateColumns = `repeat(9, ${width}px)`
-        const blocks = document.querySelectorAll<HTMLDivElement>('.sudoBlock') 
+        const blocks = document.querySelectorAll<HTMLDivElement>(`.${styles.sudoBlock}`)
         blocks.forEach(block => {
-            block.style.height = String(width) + 'px'
+            block.style.height = `${width}px`
         })
-    })
+    }))
 
     onMount(() => {
         document.addEventListener('keydown', handleKeypress)
@@ -43,8 +45,10 @@ export default function CreateSudoku({setPuzzleString, setMode}: Props) {
 
         const increment = (num: number) => {
             let old = selected()!.cellNumber
-            if (old + num < 0) return old;
-            else if (old + num > 80) return old
+            if (old % 9 == 0 && num == -1) return old + 8
+            else if ((old - 8) % 9 == 0 && num == 1 ) return old - 8
+            else if (old < 9 && num == -9) return old + 72
+            else if (old > 71 && num == 9) return old - 72
             else return old + num
         }
         let newCellNumber = selected()!.cellNumber
