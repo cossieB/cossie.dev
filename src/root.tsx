@@ -48,7 +48,7 @@ export default function Root() {
                 <Link rel="shortcut icon" type="image/ico" href="/favicon.ico" />
                 <Link rel="preconnect" href="https://fonts.googleapis.com" />
                 <Link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
-                {/* <Link rel="manifest" href="/manifest.json" /> */}
+                <Link rel="manifest" href="/manifest.json" />
                 <Link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
                 <Link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
                 <Link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />

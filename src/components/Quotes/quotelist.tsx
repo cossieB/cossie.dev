@@ -1077,5 +1077,9 @@ export const quotes: Quote[] = [
         quote: `The most astounding fact is the knowledge, that the atoms that comprise life on Earth - the atoms that make up the human body - are traceable to the crucibles that cooked light elements into heavy elements in their core, under extreme temperatures and pressures. These stars, the high mass ones among them, went unstable in their later years. They collapsed and then exploded, scattering their enriched guts across the galaxy: guts made of Carbon, Nitrogen, Oxygen, and all of the fundamental ingredients of life itself. These ingredients become parts of gas clouds that condense, collapse, form the next generation of solar systems - stars with orbiting planets - and those planets now have the ingredients for life itself. So that when I look up at the night sky and I know that, yes, we are part of this universe, we are in this universe, but perhaps more important than both of those facts is that the universe is in us. When I reflect on that fact, I look up, many people feel small - 'cause they're small and the universe is big - but I feel big. because, my atoms came from those stars. There's a level of connectivity. That's really what you want in life. You want to feel connected, want to feel relevant. You want to feel like you're a participant in the goings on of activities and events around you. That's precisely what we are, just by being alive`,
         author: "Neil DeGrasse Tyson",
         tags: new Set(["inspiring", "philosophical", "nerdy", "non-fiction"])        
+    }, {
+        quote: "Technically we only came to get Jane's longevity back but we probably would have tried to save you if there was time.",
+        author: "Cliff Steele",
+        tags: new Set(['humorous', 'fiction', 'tv series', 'doom patrol'])
     }
 ]

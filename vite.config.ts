@@ -116,7 +116,11 @@ export default defineConfig({
     },
     plugins: [
         solid({
-            adapter: vercel()
+            adapter: vercel({
+                prerender: {
+                    expiration: false
+                }
+            })
         }),
         VitePWA(pwaOptions),
     ],
