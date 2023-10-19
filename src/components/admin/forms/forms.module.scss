@@ -52,7 +52,8 @@ $clrForm: hsl(0, 0%, 15%);
             outline: none;
 
             +label {
-                top: -15px;
+                top: 0px;
+                transform: translateY(-100%);
                 font-size: 12px;
                 color: --var(--clrRed);
                 opacity: 1;
@@ -92,10 +93,13 @@ $clrForm: hsl(0, 0%, 15%);
 
     label {
         position: absolute;
-        top: 5px;
-        transition: all 250ms ease-in-out;
+        top: 50%;
+        transform: translateY(-50%);
+        left: 0.5rem;
         opacity: 0.5;
+        transition: all 250ms ease-in-out;
         pointer-events: none;
+        
     }
 
     input {
