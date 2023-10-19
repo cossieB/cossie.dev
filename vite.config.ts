@@ -116,11 +116,8 @@ export default defineConfig({
     },
     plugins: [
         solid({
-            adapter: vercel({
-                prerender: {
-                    expiration: 60*60*24
-                }
-            })
+            prerenderRoutes: ["/", "/projects", "/wordle", "/2048", "/pomodoro", "/calculator", "/quotes", "/memory", "/sudoku"],
+            adapter: vercel()
         }),
         VitePWA(pwaOptions),
     ],
