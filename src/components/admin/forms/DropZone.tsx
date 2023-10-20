@@ -96,7 +96,7 @@ export function DropZone<T extends keyof OurFileRouter>(props: Props<T>) {
                     </div>
                 </Match>
             </Switch>
-            <label >{props.text}</label>
+            <label class={styles.label} >{props.text}</label>
             <input
                 type="file"
                 accept="image/*"

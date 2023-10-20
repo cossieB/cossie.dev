@@ -43,7 +43,7 @@ $clrForm: hsl(0, 0%, 15%);
     }
 
     textarea,
-    input {
+    input:not(.checkbox) {
         padding: 0.25rem;
         width: 100%;
 
@@ -55,9 +55,19 @@ $clrForm: hsl(0, 0%, 15%);
                 top: 0px;
                 transform: translateY(-100%);
                 font-size: 12px;
-                color: --var(--clrRed);
+                color: var(--clrRed);
                 opacity: 1;
             }
+        }
+
+        +label {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            left: 0.5rem;
+            opacity: 0.5;
+            transition: all 250ms ease-in-out;
+            pointer-events: none;
         }
     }
 
@@ -89,17 +99,6 @@ $clrForm: hsl(0, 0%, 15%);
         &:disabled {
             background-color: gray;
         }
-    }
-
-    label {
-        position: absolute;
-        top: 50%;
-        transform: translateY(-50%);
-        left: 0.5rem;
-        opacity: 0.5;
-        transition: all 250ms ease-in-out;
-        pointer-events: none;
-        
     }
 
     input {
@@ -154,17 +153,18 @@ $clrForm: hsl(0, 0%, 15%);
     flex-wrap: wrap;
 
     >div {
+        position: relative;
         margin-right: 1rem;
+        display: flex;
         @include mixins.flexCenter;
+        >label {
+            font-size: 0.75rem;
+            opacity: 1;
+        }
     }
 
     input {
         width: unset;
-    }
-
-    label {
-        position: unset;
-        top: unset;
     }
 }
 
@@ -212,11 +212,13 @@ $clrForm: hsl(0, 0%, 15%);
         justify-content: space-between;
         align-items: center;
     }
+
     .selected {
         div::after {
             opacity: 1;
         }
     }
+
     .checkbox {
         border-radius: 50%;
         height: 2rem;
@@ -224,6 +226,7 @@ $clrForm: hsl(0, 0%, 15%);
         scale: 0.5;
         border: var(--clrRed) 1px solid;
         @include mixins.flexCenter;
+
         &::after {
             opacity: 0;
             display: block;
@@ -250,13 +253,16 @@ $clrForm: hsl(0, 0%, 15%);
 .btnDiv {
     display: flex;
     position: relative;
+
     svg {
         rotate: 0deg;
         transition: rotate 150ms ease;
     }
+
     .open svg {
         rotate: 180deg;
     }
+
     button {
         padding: 0.5rem 1rem;
         display: flex;

@@ -25,7 +25,7 @@ export function Checklist<T>(props: P<T>) {
                             type="checkbox"
                             value={item[props.idField] as string}
                             id={item[props.idField] as string}
-                            
+                            class={styles.checkbox}
                             checked={props.arr.includes(item[props.idField] as string)}
                         />
                         <label for={item[props.idField] as string}>{item[props.valueField] as string}</label>
