@@ -115,13 +115,7 @@ export default defineConfig({
         external: ['ag-grid-solid'],
     },
     plugins: [
-        solid({
-            adapter: vercel({
-                prerender: {
-                    expiration: 60*60*24
-                }
-            })
-        }),
+        solid({ adapter: vercel() }),
         VitePWA(pwaOptions),
     ],
 });
