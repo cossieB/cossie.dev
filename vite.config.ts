@@ -116,6 +116,7 @@ export default defineConfig({
     },
     plugins: [
         solid({
+            ssr: true,
             prerenderRoutes: ["/", "/projects", "/wordle", "/2048", "/pomodoro", "/calculator", "/quotes", "/memory", "/sudoku"],
             adapter: vercel()
         }),
