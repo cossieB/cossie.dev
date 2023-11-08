@@ -9,12 +9,10 @@ export default function GameStart() {
         timer = setInterval(() => {
             state.increaseTime()
         }, 1000)
+        onCleanup(() => {
+            clearInterval(timer)
+        })
     })
-
-    onCleanup(() => {
-        clearInterval(timer)
-    })
-    
     
     return (
         <>

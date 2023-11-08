@@ -12,9 +12,9 @@ export const bottomRow = letters.slice(19, 26)
 export default function WordleLogic() {
     createEffect(() => {
         document.addEventListener('keydown', handleKeypress);
-    })
-    onCleanup(() => {
-        document.removeEventListener('keydown', handleKeypress)
+        onCleanup(() => {
+            document.removeEventListener('keydown', handleKeypress)
+        })
     })
     function handleKeypress(e: KeyboardEvent) {
         if (state.inputDisabled) return;

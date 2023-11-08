@@ -15,9 +15,9 @@ export default function Logic2048(props: P) {
         document.addEventListener('keydown', handleKeyPress);
         props.array.push(createBlock(props.array));
         props.array.push(createBlock(props.array));
-    })
-    onCleanup(() => {
-        document.removeEventListener('keydown', handleKeyPress)
+        onCleanup(() => {
+            document.removeEventListener('keydown', handleKeyPress)
+        })
     })
 
     function handleKeyPress(e: KeyboardEvent) {
