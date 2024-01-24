@@ -1,6 +1,6 @@
 import type { JSXElement } from "solid-js"
 import styles from '~/components/Home/Home.module.scss'
-import { A } from "solid-start"
+import { A } from "@solidjs/router"
 
 type Props = {
     href: string,

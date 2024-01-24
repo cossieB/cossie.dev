@@ -1,6 +1,6 @@
+import { useLocation } from "@solidjs/router";
+import { HttpStatusCode } from "@solidjs/start";
 import { Show } from "solid-js";
-import { Title, useLocation } from "solid-start";
-import { HttpStatusCode } from "solid-start/server";
 import Navigator from "~/components/Navigator/Navigator";
 
 export default function NotFound() {
@@ -15,7 +15,7 @@ export default function NotFound() {
                     "align-items": 'center'
                 }}
             >
-                <Title>Not Found</Title>
+                <title>Not Found</title>
                 <HttpStatusCode code={404} />
                 <h1
                     style={{

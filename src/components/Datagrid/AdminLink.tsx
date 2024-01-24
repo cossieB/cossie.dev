@@ -1,5 +1,5 @@
 import type { ICellRendererParams } from "ag-grid-community";
-import { A } from "solid-start";
+import { A } from "@solidjs/router";
 import styles from './AdminLink.module.scss'
 
 export default function AdminLink(props: ICellRendererParams & {category: string, param: string}) {
