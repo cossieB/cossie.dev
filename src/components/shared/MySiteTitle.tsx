@@ -1,9 +1,11 @@
+import { Title } from "@solidjs/meta"
+
 type Props = {
     children: string
 }
 
 export default function MySiteTitle({children}: Props) {
     return (
-        <title> &lt; {children} /&gt; :: Cossie </title>
+        <Title> &lt; {children} /&gt; :: Cossie </Title>
     )
 }

@@ -2,14 +2,18 @@ import { FormInput, FormTextarea } from "./FormInput";
 import styles from "./Contact.module.scss"
 import { Match, Switch } from "solid-js";
 import Loader from "../shared/Loader/Loader";
-import { useNavigate } from "solid-start";
 import { Checkmark } from "~/svgs";
-import server$ from "solid-start/server";
 import { sendMail } from "~/nodemailer";
 import { createStore } from "solid-js/store";
 import { Popup } from "../shared/Popup";
+import { action, useAction, useNavigate } from "@solidjs/router";
+
 
 export default function ContactMain() {
+    const sendAction = action(async (name: string, email: string, company: string, message: string) => {
+        await sendMail(name, company, message, email)
+    })
+    const send = useAction(sendAction)
     const [state, setState] = createStore({
         sending: false,
         errored: false,
@@ -18,11 +22,8 @@ export default function ContactMain() {
     })
     const navigate = useNavigate()
 
-    const send = server$(async (name: string, email: string, company: string, message: string) => {
-        await sendMail(name, company, message, email)
-    })
     async function submit(e: SubmitEvent & { currentTarget: HTMLFormElement }) {
-        e.preventDefault()
+        e.preventDefault(); console.log(e.defaultPrevented)
         setState({ sending: true })
         const fd = new FormData(e.currentTarget);
 

@@ -6,6 +6,7 @@
     color: white;
     font-size: large;
     @include flexCenter;
+    height: 100vh;
     >.signup button {
         @extend .button
     }

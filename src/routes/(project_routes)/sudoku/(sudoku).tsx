@@ -1,7 +1,7 @@
-import { unstable_clientOnly } from "solid-start";
+import { clientOnly } from "@solidjs/start";
 import Page from "~/components/shared/Page";
 
-const Sudoku = unstable_clientOnly(() => import("~/components/Sudoku/Sudoku"))
+const Sudoku = clientOnly(() => import("~/components/Sudoku/Sudoku"))
 
 export default function SudokuPage() {
     return (
