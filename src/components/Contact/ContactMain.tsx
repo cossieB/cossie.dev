@@ -8,11 +8,12 @@ import { createStore } from "solid-js/store";
 import { Popup } from "../shared/Popup";
 import { action, useAction, useNavigate } from "@solidjs/router";
 
+const sendAction = action(async (name: string, email: string, company: string, message: string) => {
+    'use server'
+    await sendMail(name, company, message, email)
+})
 
 export default function ContactMain() {
-    const sendAction = action(async (name: string, email: string, company: string, message: string) => {
-        await sendMail(name, company, message, email)
-    })
     const send = useAction(sendAction)
     const [state, setState] = createStore({
         sending: false,

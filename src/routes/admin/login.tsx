@@ -5,10 +5,9 @@ import SubmitButton from "~/components/admin/SubmitButton";
 import { FormInput } from "~/components/admin/forms/FormInput";
 import styles from "~/components/admin/forms/forms.module.scss";
 import { Popup } from "~/components/shared/Popup";
-import { storage } from "../../utils/authenticate";
 import Page from "~/components/shared/Page";
-import { useNavigate } from "solid-start";
 import { createEffect } from "solid-js";
+import { useNavigate } from "@solidjs/router";
 
 export default function AdminLogin() {
     const [, setUser] = createStore({
@@ -61,11 +60,11 @@ async function loginAction(fd: FormData, { request }: ServerFunctionEvent) {
     const hash = createHash('sha256').update(password).digest("hex");
     if (hash != process.env.ADMIN_PASSWORD || username != process.env.ADMIN_USERNAME)
         throw new ServerError("Invalid Credentials", { status: 401 })
-    session.set("username", username);
-    session.set('image', '/favicon.ico')
-    return new Response('Login success', {
-        headers: {
-            'Set-Cookie': await storage.commitSession(session)
-        }
-    })
+    // session.set("username", username);
+    // session.set('image', '/favicon.ico')
+    // return new Response('Login success', {
+    //     headers: {
+    //         'Set-Cookie': await storage.commitSession(session)
+    //     }
+    // })
 };

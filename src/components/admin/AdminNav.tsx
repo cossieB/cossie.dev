@@ -1,10 +1,10 @@
 import { Show, useContext } from "solid-js";
 import { AdminLi } from "./AdminNavLink";
 import styles from "./nav.module.scss";
-import { AdminContext } from "~/routes/admin";
-import { A } from "@solidjs/router";
-import { createServerAction$ } from "solid-start/server";
-import { storage } from "~/utils/authenticate";
+import { A, action, useAction } from "@solidjs/router";
+import { getRequestEvent } from "solid-js/web";
+import { AdminContext } from "./AdminContextProvider";
+
 
 export default function AdminNav() {
     const { user } = useContext(AdminContext)!
@@ -28,7 +28,7 @@ export default function AdminNav() {
                     Actors
                 </AdminLi>
                 <li>
-                    <Show when={user()} fallback={
+                    <Show when={user} fallback={
                         <A href="/admin/login">
                             <span>Login</span>
                             <span class={styles.lockIcon}>
@@ -38,7 +38,7 @@ export default function AdminNav() {
                             </span>
                         </A>
                     } >
-                        <span style={{ 'align-self': 'center' }}> {user()!.username} </span>
+                        <span style={{ 'align-self': 'center' }}> {user} </span>
                         <LogoutBtn />
                     </Show>
                 </li>
@@ -47,22 +47,23 @@ export default function AdminNav() {
     )
 }
 
-function LogoutBtn() {
-    const [submitting, logout] = createServerAction$(async (_, event) => {
-        const cookie = event.request.headers.get("Cookie");
-        const session = await storage.getSession(cookie);
-        return new Response(null, {
-            headers: {
-                'Set-Cookie': await storage.destroySession(session)
-            }
-        })
-    }, {
-        invalidate: 'auth'
+const logoutAction = action(async () => {
+    const event = getRequestEvent()
+    if (!event) throw new Error("Something went wrong")
+    const cookie = event.request.headers.get("Cookie");
+    const session = await storage.getSession(cookie);
+    return new Response(null, {
+        headers: {
+            'Set-Cookie': await storage.destroySession(session)
+        }
     })
+}, 'auth')
+
+function LogoutBtn() {
+    const logout = useAction(logoutAction)
     return (
         <button
             class={styles.lockIcon}
-            disabled={submitting.pending}
             onclick={() => logout()}
         >
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-lock-fill" viewBox="0 0 16 16">

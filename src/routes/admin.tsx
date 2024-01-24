@@ -1,56 +1,55 @@
-import { type JSXElement, type Resource, createContext, createEffect, onCleanup, onMount, Show } from "solid-js";
-import { Outlet, createRouteAction, useIsRouting, useRouteData } from "solid-start";
+import { type JSXElement, onCleanup, onMount, Show } from "solid-js";
 import AdminNav from "~/components/admin/AdminNav";
 import styles from './admin.module.scss'
-import { createServerData$ } from "solid-start/server";
 import { db } from "~/db";
 import { authenticate } from "~/utils/authenticate";
-import type { SessionData } from "solid-start/session/sessions";
+import { action, cache, useIsRouting } from "@solidjs/router";
 
-export function routeData() {
-    const developers = createServerData$(async () => db.query.developer.findMany({
+export const getDevelopers = cache(async () => {
+    'use server'
+    return db.query.developer.findMany({
         orderBy: (fields) => fields.name
-    }), {
-        key: () => ['developers'],
-        initialValue: []
     })
-    const publishers = createServerData$(async () => db.query.publisher.findMany({
+}, "developers")
+
+export const getPublishers = cache(async () => {
+    'use server'
+    return db.query.publisher.findMany({
         orderBy: (fields) => fields.name
-    }), {
-        key: () => ['publishers'],
-        initialValue: []
     })
-    const platforms = createServerData$(async () => db.query.platform.findMany({
+}, "publishers")
+
+export const getPlatforms = cache(async () => {
+    'use server'
+    return db.query.platform.findMany({
         orderBy: (fields) => fields.name
-    }), {
-        key: () => ['platforms'],
-        initialValue: []
     })
-    const games = createServerData$(async () => db.query.game.findMany({
+}, "platforms")
+
+export const getGames = cache(async () => {
+    'use server'
+    return db.query.game.findMany({
         orderBy: (fields) => fields.title
-    }), {
-        key: () => ['games'],
-        initialValue: [],
     })
-    const actors = createServerData$(async () => db.query.actor.findMany({
+}, "games")
+
+export const getActors = cache(async () => {
+    'use server'
+    return db.query.actor.findMany({
         orderBy: (fields) => fields.name
-    }), {
-        key: () => ['actors'],
-        initialValue: []
     })
-    const user = createServerData$(async (_, { request }) => authenticate(request), {
-        key: () => ['auth'],
-        initialValue: null
-    })
-    return { developers, publishers, platforms, user, games, actors }
-}
+}, "actors")
 
-export type ParentRouteData = ReturnType<typeof routeData>
+export const getUser = cache(async () => {
+    'use server'
+    return authenticate()
+}, "auth")
 
-export default function Layout() {
+
+export default function Layout(props: { children: JSXElement }) {
     const isNavigating = useIsRouting()
     // sync auth states across tabs
-    const [, auth] = createRouteAction(async () => { }, { invalidate: 'auth' })
+    const auth = action(async () => { }, 'auth')
     function onAuthChange() {
         auth()
     }
@@ -63,37 +62,20 @@ export default function Layout() {
         })
     })
     return (
-        <AdminContextProvider>
-            <div class={styles.container}>
-                <AdminNav />
-                <section class={styles.main}>
-                    <Show when={isNavigating()}>
-                        <div role="navigation" id={styles.navIndicator} />
-                    </Show>
-                    <Outlet />
-                </section>
-            </div>
-        </AdminContextProvider>
+      //  <AdminContextProvider>
+        <div class={styles.container}>
+            <AdminNav />
+            <section class={styles.main}>
+                <Show when={isNavigating()}>
+                    <div role="navigation" id={styles.navIndicator} />
+                </Show>
+                {props.children}
+            </section>
+        </div>
+      //  </AdminContextProvider> 
     )
 }
 
-type NewType = {
-    user: Resource<SessionData | null | undefined>;
+export type NewType = {
+    user: string | null | undefined
 };
-
-export const AdminContext = createContext<NewType>()
-
-function AdminContextProvider(props: { children: JSXElement }) {
-    const data = useRouteData<typeof routeData>();
-    createEffect(() => {
-        window.localStorage.setItem('test', data.user()?.username)
-    })
-    return (
-        <AdminContext.Provider
-            value={{
-                user: data.user,
-            }}>
-            {props.children}
-        </AdminContext.Provider>
-    )
-}

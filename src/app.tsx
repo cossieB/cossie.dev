@@ -5,22 +5,25 @@ import { FileRoutes } from "@solidjs/start"; // only thing imported from SolidSt
 import { Suspense } from "solid-js";
 import "./root.scss"
 import { UserProvider } from "./components/shared/Signup/UserProvider";
+import { AdminContextProvider } from "./components/admin/AdminContextProvider";
 
 export default function App() {
   return (
     <MetaProvider>
       <UserProvider>
-        <Router
-          root={props => (
-            <>
-              <Suspense >
-                {props.children}
-              </Suspense>
-            </>
-          )}
-        >
-          <FileRoutes />
-        </Router>
+        <AdminContextProvider>
+          <Router
+            root={props => (
+              <>
+                <Suspense >
+                  {props.children}
+                </Suspense>
+              </>
+            )}
+          >
+            <FileRoutes />
+          </Router>
+        </AdminContextProvider>
       </UserProvider>
     </MetaProvider>
   );

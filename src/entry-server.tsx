@@ -1,4 +1,3 @@
-import { MetaProvider } from "@solidjs/meta";
 import { createHandler } from "@solidjs/start/entry";
 import { StartServer } from "@solidjs/start/server";
 // import { pwaInfo } from "virtual:pwa-info";

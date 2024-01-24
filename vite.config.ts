@@ -109,6 +109,14 @@ import { defineConfig } from "@solidjs/start/config";
 //     pwaOptions.selfDestroying = selfDestroying
 
 export default defineConfig({
+    start: {
+        server: {
+            prerender: {
+                crawlLinks: true,
+                ignore: ["/admin"]
+            },
+        }
+    }
     // ssr: {
     //     external: ['ag-grid-solid'],
     // },

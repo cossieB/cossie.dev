@@ -1,26 +1,22 @@
-import { ServerError } from "solid-start";
-import { createCookieSessionStorage } from "solid-start/session";
+import { getRequestEvent } from "solid-js/web";
+import { useSession } from "@solidjs/start/server";
 
-export const storage = createCookieSessionStorage({
-    cookie: {
-        secure: process.env.NODE_ENV === "production",
-        secrets: [process.env.SESSION_SECRET!],
-        sameSite: "strict",
-        path: "/",
-        httpOnly: true
-    }
-})
-export async function authenticate(request: Request) {
-    const cookie = request.headers.get('cookie');
-    const session = await storage.getSession(cookie);
-    if (!session.get('username'))
+export async function authenticate() {
+    const event = getRequestEvent()
+    if (!event) throw new Error("Something went wrong")
+
+    const session = await useSession(event, {
+        password: process.env.SESSION_SECRET!
+      });
+    const user = session.data.username;
+    if (!user)
         return null
-    return session.data
+    return user as string
 }
 
 export async function authenticateOrThrowUnauthorized(request: Request) {
-    const user = await authenticate(request) 
-    if (!user)
-        throw new ServerError('Unauthorized', {status: 401})
-    return user
+    // const user = await authenticate(request)
+    // if (!user)
+    //     throw new ServerError('Unauthorized', { status: 401 })
+    // return user
 }
