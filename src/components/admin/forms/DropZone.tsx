@@ -1,39 +1,21 @@
 import { For, Match, Switch, createSignal, mergeProps } from "solid-js";
 import styles from "./DropZone.module.scss";
 import { readFile } from "../../../lib/readFile";
-import { generateSolidHelpers } from "@uploadthing/solid";
-import type { OurFileRouter } from "~/server/uploadthing";
-import type { UploadFileResponse } from "uploadthing/client";
 import { createStore } from "solid-js/store";
 
-export type Props<T extends keyof OurFileRouter> = {
+export type Props = {
     images: string[]
     text?: string
     fileLimit?: number
     currentNum?: number
-    endpoint: T
-    input: OurFileRouter[T]['_def']['_input']
     onError: (err: any) => void
-    onSuccess: (res: UploadFileResponse[]) => void
+    onSuccess: () => void
     single: boolean
 }
 
-const { useUploadThing } = generateSolidHelpers<OurFileRouter>();
-
-export function DropZone<T extends keyof OurFileRouter>(props: Props<T>) {
+export function DropZone(props: Props) {
     let input!: HTMLInputElement
-    const { isUploading, startUpload } = useUploadThing(props.endpoint, {
-        onClientUploadComplete(res) {
-            props.onSuccess(res ?? [])
-        },
-        onUploadProgress(p) {
-            setProgress(p)
-        },
-        onUploadError(e) {
-            props.onError(e.message);
-            setPreviewImgs([])
-        },
-    })
+
     const [entered, setEntered] = createSignal(false);
     const [progress, setProgress] = createSignal(0)
     const merged = mergeProps({ text: "Drop Image Here", fileLimit: 1, currentNum: 0 }, props);
