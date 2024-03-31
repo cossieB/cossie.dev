@@ -6,11 +6,11 @@ import { createAsync } from "@solidjs/router";
 import { getGames, getPublishers, getDevelopers, getPlatforms, getActors } from "../admin";
 
 export default function AdminPage() {
-    const games = createAsync(getGames)
-    const publishers = createAsync(getPublishers)
-    const developers = createAsync(getDevelopers)
-    const platforms = createAsync(getPlatforms)
-    const actors = createAsync(getActors)
+    const games = createAsync(() => getGames())
+    const publishers = createAsync(() => getPublishers())
+    const developers = createAsync(() => getDevelopers())
+    const platforms = createAsync(() => getPlatforms())
+    const actors = createAsync(() => getActors())
     return (
         <Page title="Admin">
             <main class={styles.adminHome}>

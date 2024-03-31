@@ -10,6 +10,11 @@ const getActors = cache(async () => {
     'use server'
     return db.query.actor.findMany()
 }, 'actors')
+
+export const route = {
+    load: () => getActors()
+}
+
 const columnDefs: Cols[] = [{
     field: 'name'
 }, {
@@ -22,7 +27,7 @@ type X = Awaited<ReturnType<typeof getActors>>
 type Cols = ColDef<X[number]>
 
 export default function ActorsAdminPage() {
-    const data = createAsync(getActors)
+    const data = createAsync(() => getActors())
     return (
         <Page title="Actors">
             <AdminTable

@@ -1,16 +1,15 @@
-import { type Resource } from "solid-js";
 import { db } from "~/db";
 import { developer, game, gamesOnPlatforms, genresOfGames, platform, publisher } from "~/drizzle/schema";
 import { eq, sql } from "drizzle-orm"
 import type { ColDef, ICellEditorParams, ICellRendererParams } from "ag-grid-community";
 import DataEditor from "~/components/Datagrid/DataEditor";
 import AdminLink from "~/components/Datagrid/AdminLink";
-import { AdminTable } from "../../../components/admin/AdminTable";
+import { AdminTable } from "~/components/admin/AdminTable";
 import Page from "~/components/shared/Page";
 import { cache, createAsync } from "@solidjs/router";
 
 const getGames = cache(async () => {
-    'use server'
+    'use server'; 
     const genreQuery = db.$with('t').as(db.select({
         gameId: genresOfGames.gameId,
         tags: sql<string[]>`array_agg(genre)`.as('tags')
@@ -35,6 +34,10 @@ const getGames = cache(async () => {
         .leftJoin(genreQuery, eq(game.gameId, genreQuery.gameId))
         .leftJoin(platformQuery, eq(game.gameId, platformQuery.gameId))
 }, 'games')
+
+export const route = {
+    load: () => getGames()
+}
 
 type X = Awaited<ReturnType<typeof getGames>>
 
@@ -71,7 +74,7 @@ const columnDefs: Cols[] = [{
 },]
 
 export default function GamesAdminPage() {
-    const data = createAsync(getGames)
+    const data = createAsync(() => getGames())
     return (
         <Page title="Games">
             <AdminTable data={data()} columnDefs={columnDefs} />

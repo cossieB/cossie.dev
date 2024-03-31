@@ -1,5 +1,4 @@
 import { MongoClient, ObjectId } from "mongodb";
-import type { SessionData } from "solid-start/session/sessions";
 
 type ImgMetadata = {
     field: string;

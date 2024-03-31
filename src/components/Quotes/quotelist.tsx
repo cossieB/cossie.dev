@@ -1097,5 +1097,9 @@ export const quotes: Quote[] = [
         quote: "Living a life of constant war, taking life in every battle... It is the only box I have ever known. It shapes me as stone is shaped by the one who carves it. You and I commander, war is our sculptor and we are prisoners to it's design",
         author: "Javik",
         tags: new Set(['fiction', 'video game', 'mass effect'])
+    }, {
+        quote: "Ah you think darkness is your ally. But you merely adopted the dark; I was born in it, moulded by it. I didn't see the light until I was already a man, by then it was nothing to me but blinding!",
+        author: "Bane",
+        tags: new Set(["villain", "fiction", "movie"])
     }
 ]

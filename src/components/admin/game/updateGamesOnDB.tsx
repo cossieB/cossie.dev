@@ -1,11 +1,14 @@
 import type { Game } from "~/drizzle/types";
 import { db } from "~/db";
 import { game, gamesOnPlatforms, genresOfGames } from "~/drizzle/schema";
-import { ServerError, type ServerFunctionEvent } from "solid-start";
 import { eq } from "drizzle-orm";
 import { authenticateOrThrowUnauthorized } from "~/utils/authenticate";
+import { getRequestEvent } from "solid-js/web";
 
-export async function updateGamesOnDB(fd: FormData, event: ServerFunctionEvent) {
+export async function updateGamesOnDB(fd: FormData) {
+    'use server'
+    const event = getRequestEvent();
+    if (!event) throw new Error("Something went wrong")
     await authenticateOrThrowUnauthorized(event.request);
     const obj: { [key: string]: string | string[]; } = {};
     fd.forEach((val, key) => {

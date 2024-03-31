@@ -1,17 +1,15 @@
 import { For, Match, Switch, createSignal, mergeProps } from "solid-js";
 import styles from "./DropZone.module.scss";
-import { readFile } from "../../../lib/readFile";
 import { createStore } from "solid-js/store";
 
 export type Props = {
-    images: string[]
+    images: { url: string, file: File | null }[]
     text?: string
     fileLimit?: number
     currentNum?: number
-    onError: (err: any) => void
-    onSuccess: () => void
-    single: boolean
 }
+
+const MAX_FILE_SIZE = 8
 
 export function DropZone(props: Props) {
     let input!: HTMLInputElement
@@ -19,7 +17,7 @@ export function DropZone(props: Props) {
     const [entered, setEntered] = createSignal(false);
     const [progress, setProgress] = createSignal(0)
     const merged = mergeProps({ text: "Drop Image Here", fileLimit: 1, currentNum: 0 }, props);
-    const [previewImgs, setPreviewImgs] = createStore<string[]>([]);
+    const [files, setFiles] = createSignal<{ url: string, file: File }[]>([])
     const limit = merged.fileLimit - merged.currentNum;
 
     return (
@@ -32,52 +30,20 @@ export function DropZone(props: Props) {
             }}
             onDrop={async e => {
                 e.preventDefault()
-                if (!e.dataTransfer) return;
-                let files: File[]
-                if (e.dataTransfer.getData("URL")) {
-                    files = Array.from(e.dataTransfer.files)
-                        .filter(file => file.type.startsWith("image/"))
-                    setPreviewImgs(e.dataTransfer.getData("URL"))
-                }
-                else {
-                    files = Array.from(e.dataTransfer.files)
-                        .slice(0, limit)
-                        .filter(file => file.type.startsWith("image/"))
-                    files.forEach(file => readFile(src => setPreviewImgs(prev => [...prev, src]), file))
-                }
-                setEntered(false)
-                await upload(files);
+                if (!e.dataTransfer?.files) return;
+                selectFiles(Array.from(e.dataTransfer?.files))
             }}
             onDragLeave={() => setEntered(false)}
             onclick={() => {
                 input.click();
             }}
         >
-            <Switch>
-                <Match when={isUploading() && props.single}>
-                    <UploadState
-                        img={previewImgs[0]}
-                        progress={progress()}
-                        single
-                    />
-                </Match>
-                <Match when={isUploading()}>
-                    <For each={previewImgs}>
-                        {image =>
-                            <UploadState
-                                img={image}
-                                progress={progress()}
-                                single={props.single}
-                            />
-                        }
-                    </For>
-                </Match>
-                <Match when={!isUploading() && props.single}>
-                    <div class={styles.preview}>
-                        <img src={props.images[0]} alt="" />
-                    </div>
-                </Match>
-            </Switch>
+            <div class={styles.preview}>
+                <For each={files()}>
+                    {file =>  <img src={file.url} alt="" />}
+                </For>
+               
+            </div>
             <label class={styles.label} >{props.text}</label>
             <input
                 type="file"
@@ -86,39 +52,19 @@ export function DropZone(props: Props) {
                 ref={input}
                 multiple
                 onchange={e => {
-                    const files = Array.from(e.target.files ?? [])
-                        .slice(0, limit)
-                        .filter(file => file.type.startsWith("image/"))
-                    files.forEach(file => readFile(src => setPreviewImgs(prev => [...prev, src]), file));
-                    upload(files)
+                    if (!e.target.files) return;
+                    selectFiles(Array.from(e.target.files))
                 }}
             />
         </div>
     )
 
-    async function upload(files: File[]) {
-        await startUpload(files, props.input as any);
-        setPreviewImgs([]);
-        setProgress(0);
+    function selectFiles(fileList: File[]) {
+        const remainder = 8 - files().length
+        const urls = fileList
+            .filter(file => file.type.match(/(image|video)/) && file.size < MAX_FILE_SIZE * 1024 * 1024)
+            .map(file => ({ url: URL.createObjectURL(file), file })).slice(0, remainder);
+        setFiles(prev => [...prev, ...urls])
+        setEntered(false)
     }
-}
-
-type UpState = {
-    img: string
-    progress: number
-    single: boolean
-}
-type P2 = {
-    preview: UpState
-}
-
-function UploadState(props: UpState) {
-    return (
-        <div
-            class={`${styles.preview} ${props.single ? "" : styles.multi}`}
-            style={{ '--prog': props.progress }}
-        >
-            <img src={props.img} alt="" />
-        </div>
-    )
 }

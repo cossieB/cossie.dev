@@ -12,6 +12,7 @@
         "noEmit": true,
         "types": [
             "vinxi/client",
+            "vite/client",
             "vite-plugin-pwa/solid",
             "vite-plugin-pwa/info"
         ],

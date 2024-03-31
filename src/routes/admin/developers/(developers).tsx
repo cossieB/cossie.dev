@@ -10,6 +10,12 @@ const getDevelopers = cache(async () => {
     'use server'
     return db.query.developer.findMany()
 }, 'developers')
+
+export const route = {
+    load: () => getDevelopers()
+}
+
+
 type X = Awaited<ReturnType<typeof getDevelopers>>
 
 const columnDefs: Cols[] = [{
@@ -28,7 +34,7 @@ const columnDefs: Cols[] = [{
 type Cols = ColDef<X[number]>
 
 export default function DevelopersAdminPage() {
-    const data = createAsync(getDevelopers)
+    const data = createAsync(() => getDevelopers())
     return (
         <Page title="Developers">
             <AdminTable

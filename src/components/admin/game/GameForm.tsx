@@ -1,15 +1,13 @@
 import { FormInput, SelectInput } from "~/components/admin/forms/FormInput";
 import type { Developer, Game, Platform, Publisher } from "~/drizzle/types";
 import styles from "~/components/admin/forms/forms.module.scss";
-import { useContext, createEffect } from "solid-js";
+import { createEffect, createSignal } from "solid-js";
 import { formatDateForInputElement } from "~/lib/formatDate";
-import { asdfasdfsdsd } from "~/routes/admin";
 import { createStore } from "solid-js/store";
 import { ImagePreview } from "../forms/FilePreview";
 import { YouTubeIframe } from "./YouTubeIframe";
 import { Tags } from "./Tags";
 import { InputWithAddButton } from "../forms/InputWithAddButton";
-import { createServerAction$ } from "solid-start/server";
 import HiddenInput from "../forms/HiddenInput";
 import { updateGamesOnDB } from "./updateGamesOnDB";
 import { arrayChanged as arrayHasChanged } from "../../../utils/arrayChanged";
@@ -17,6 +15,7 @@ import { Checklist } from "../forms/Checklist";
 import { DropZone } from "../forms/DropZone";
 import AdminForm from "../AdminForm";
 import CustomTextarea from "../CustomTextarea";
+import { action, useAction, useSubmission } from "@solidjs/router";
 
 export type Props = {
     data?: Game & { 
@@ -40,15 +39,23 @@ function copyData(data: Props['data']) {
         developerId: data?.developerId ?? "",
         publisherId: data?.publisherId ?? "",
         releaseDate: data?.releaseDate ?? "",
-        images: [...(data?.images ?? [])],
+        images: [...(data?.images?.map(x => ({url: x, file: null as null | File})) ?? [])],
         banner: data?.banner ?? "",
         trailer: data?.trailer ?? "",
     }
 }
+
+const updateAction = action(updateGamesOnDB, 'updateGame')
+
 export default function GameForm(props: Props) {
     let form!: HTMLFormElement
     const { developers, publishers, platforms } = props.parentData
+    
+    const submit = useAction(updateAction)
+    const submitting = useSubmission(updateAction)
+    
     const [game, setGame] = createStore(copyData(props.data))
+    const [firebaseUrls, setFirebaseUrls] = createSignal<string[]>([])
 
     createEffect(() => {
         setGame(copyData(props.data))
@@ -61,15 +68,12 @@ export default function GameForm(props: Props) {
         pformsHaveChanged: () => arrayHasChanged(props.data?.platforms ?? [], game.platforms)
     })
 
-    const [submitting, { Form }] = createServerAction$(updateGamesOnDB, {
-        invalidate: () => ['games', game.gameId]
-    })
-
     return (
         <AdminForm
-            id="gameForm" class={styles.form}
+            id="gameForm" 
+            class={styles.form}
             ref={form}
-            Form={Form}
+            action={submit}
             submitting={submitting}
             state={state}
             setState={setState}
@@ -94,51 +98,18 @@ export default function GameForm(props: Props) {
             <div class={styles.heroImgs}>
                 <DropZone
                     text="Cover"
-                    onSuccess={(res) => setGame('cover', res[0].url)}
-                    images={[game.cover]}
-                    endpoint="game"
-                    input={{
-                        field: 'cover',
-                        reference: game.gameId
-                    }}
-                    onError={err => {
-                        setState({ uploadError: err });
-                    }}
-                    single={true}
+                    images={[{url: game.cover, file: null}]}                    
                 />
                 <DropZone
                     text="Banner"
-                    onSuccess={(res) => setGame('banner', res[0].url)}
-                    images={[game.banner]}
-                    endpoint="game"
-                    input={{
-                        field: 'banner',
-                        reference: game.gameId
-                    }}
-                    onError={err => {
-                        setState({ uploadError: err });
-                    }}
-                    single={true}
+                    images={[{url: game.banner, file: null}]}                    
                 />
             </div>
             <DropZone
-                endpoint="game"
                 text="Drop Screenshots Here"
                 fileLimit={8}
                 currentNum={game.images.length}
-                images={game.images}
-                input={{
-                    field: 'images',
-                    reference: game.gameId
-                }}
-                onError={(err) => {
-                    setState({ uploadError: err });
-                    setGame({ images: props.data?.images ?? [] })
-                }}
-                onSuccess={res => setGame({
-                    images: [...game.images, ...res.map(x => x.url)]
-                })}
-                single={false}
+                images={game.images}                
             />
             <ImagePreview
                 images={game.images}
@@ -207,5 +178,3 @@ export default function GameForm(props: Props) {
         </AdminForm>
     )
 }
-
-

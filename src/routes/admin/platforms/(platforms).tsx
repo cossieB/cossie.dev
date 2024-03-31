@@ -11,6 +11,10 @@ const getPlatforms = cache(async () => {
     return db.query.platform.findMany()
 }, 'platforms')
 
+export const route = {
+    load: () => getPlatforms()
+}
+
 const columnDefs: Cols[] = [{
     field: 'name'
 }, {
@@ -25,7 +29,7 @@ type X = Awaited<ReturnType<typeof getPlatforms>>
 type Cols = ColDef<X[number]>
 
 export default function PublishersAdminPage() {
-    const data = createAsync(getPlatforms)
+    const data = createAsync(() => getPlatforms())
     return (
         <Page title="Platforms">
             <AdminTable

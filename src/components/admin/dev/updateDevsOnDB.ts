@@ -1,11 +1,13 @@
 import { eq } from "drizzle-orm";
-import { ServerError, type ServerFunctionEvent } from "solid-start";
+import { getRequestEvent } from "solid-js/web";
 import { db } from "~/db";
 import { developer } from "~/drizzle/schema";
 import type { Developer } from "~/drizzle/types";
 import { authenticateOrThrowUnauthorized } from "~/utils/authenticate";
 
-export async function updateDevOnDB(fd: FormData, event: ServerFunctionEvent) {
+export async function updateDevOnDB(fd: FormData) {
+    const event = getRequestEvent()
+    if (!event) throw new Error("Something went wrong.")
     await authenticateOrThrowUnauthorized(event.request);
     const obj: { [key: string]: string; } = {};
     fd.forEach((val, key) => {

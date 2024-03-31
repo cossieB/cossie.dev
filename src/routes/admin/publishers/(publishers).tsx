@@ -9,6 +9,11 @@ const getPublishers = cache(async () => {
     'use server'
     return db.query.publisher.findMany()
 }, 'publishers')
+
+export const route = {
+    load: () => getPublishers()
+}
+
 const columnDefs: Cols[] = [{
     field: 'name'
 }, {
@@ -26,7 +31,7 @@ type X = Awaited<ReturnType<typeof getPublishers>>
 type Cols = ColDef<X[number]>
 
 export default function PublishersAdminPage() {
-    const data = createAsync(getPublishers)
+    const data = createAsync(() => getPublishers())
     return (
         <Page title="Publishers">
             <AdminTable

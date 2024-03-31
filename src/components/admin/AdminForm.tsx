@@ -1,12 +1,11 @@
-import { type JSXElement, type ParentComponent, createEffect } from "solid-js";
-import type { FormProps } from "solid-start/data/Form";
+import { type JSXElement, type ParentComponent, createEffect, splitProps, JSX } from "solid-js";
 import { Popup } from "../shared/Popup";
 import type { SetStoreFunction } from "solid-js/store";
 import SubmitButton from "./SubmitButton";
 import styles from "~/components/admin/forms/forms.module.scss";
 
 type Props = {
-    Form: ParentComponent<FormData | FormProps>
+    action: (fd: FormData) => Promise<string>
     children: JSXElement
     state: {
         isUploading: boolean;
@@ -21,19 +20,18 @@ type Props = {
     }
     setState: SetStoreFunction<{ uploadError: null | string, complete: boolean }>
     submitDisabled: boolean
-} & FormProps
+    ref: HTMLFormElement
+} & JSX.HTMLAttributes<HTMLFormElement>
 
 export default function AdminForm(props: Props) {
+
     createEffect(() => {
         if (props.submitting.result)
             props.setState('complete', true)
     })
     return (
         <>
-            <props.Form
-                class={styles.form}
-                {...props}
-            >
+            <form class={styles.form} ref={props.ref}>
                 {props.children}
                 <SubmitButton
                     finished={props.state.complete}
@@ -44,7 +42,7 @@ export default function AdminForm(props: Props) {
                         props.submitDisabled
                     }
                 />
-            </props.Form>
+            </form>
             <Popup
                 when={props.state.uploadError || props.submitting.error || props.submitting.result}
                 text={props.state.uploadError! || props.submitting.error?.message || props.submitting.result}
