@@ -3,13 +3,16 @@ import { developer, game, gamesOnPlatforms, genresOfGames, platform, publisher }
 import { eq, sql } from "drizzle-orm"
 import type { ColDef, ICellEditorParams, ICellRendererParams } from "ag-grid-community";
 import DataEditor from "~/components/Datagrid/DataEditor";
-import AdminLink from "~/components/Datagrid/AdminLink";
 import { AdminTable } from "~/components/admin/AdminTable";
 import Page from "~/components/shared/Page";
-import { cache, createAsync } from "@solidjs/router";
+import { RouteDefinition, cache, createAsync, createAsyncStore } from "@solidjs/router";
+import { Suspense } from "solid-js";
+import Loader from "~/components/shared/Loader/Loader";
+import { clientOnly } from "@solidjs/start";
+const AdminLink = clientOnly(() => import("~/components/Datagrid/AdminLink"))
 
 const getGames = cache(async () => {
-    'use server'; 
+    'use server';
     const genreQuery = db.$with('t').as(db.select({
         gameId: genresOfGames.gameId,
         tags: sql<string[]>`array_agg(genre)`.as('tags')
@@ -33,11 +36,11 @@ const getGames = cache(async () => {
         .innerJoin(publisher, eq(game.publisherId, publisher.publisherId))
         .leftJoin(genreQuery, eq(game.gameId, genreQuery.gameId))
         .leftJoin(platformQuery, eq(game.gameId, platformQuery.gameId))
-}, 'games')
+}, 'gamesWithPubDev')
 
 export const route = {
-    load: () => getGames()
-}
+    // load: () => getGames(),
+} satisfies RouteDefinition
 
 type X = Awaited<ReturnType<typeof getGames>>
 
@@ -74,7 +77,7 @@ const columnDefs: Cols[] = [{
 },]
 
 export default function GamesAdminPage() {
-    const data = createAsync(() => getGames())
+    const data = createAsyncStore(() => getGames())
     return (
         <Page title="Games">
             <AdminTable data={data()} columnDefs={columnDefs} />

@@ -6,6 +6,7 @@ import Page from "~/components/shared/Page";
 import { db } from "~/db";
 import { genresOfGames, game, gamesOnPlatforms, platform } from "~/drizzle/schema";
 import NotFound from "~/routes/[...404]";
+import { getPublishers, getDevelopers, getPlatforms } from "~/routes/admin";
 
 const getGame = cache(async (gameId: string) => {
     'use server'
@@ -56,17 +57,16 @@ const getGame = cache(async (gameId: string) => {
 export default function AdminGameId() {
     const params = useParams()
     const data = createAsync(() => getGame(params.gameId));
+    const publishers = createAsync(() => getPublishers())
+    const developers = createAsync(() => getDevelopers())
+    const platforms = createAsync(() => getPlatforms())
     return (
         <ErrorBoundary fallback={(e) => e.status == 404 ? <NotFound /> : <p> Something went wrong. Please try again later </p>}>
             {/* <Suspense fallback={<Loader />}> */}
             <Page title={data()?.title ?? "Game"}>
                 <GameForm
                     data={data()}
-                    parentData={{
-                        publishers: [],
-                        developers: [],
-                        platforms: [],
-                    }}
+                    parentData={{ publishers, developers, platforms, }}
                 />
             </Page>
             {/* </Suspense> */}

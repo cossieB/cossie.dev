@@ -1,7 +1,7 @@
 import { FormInput, SelectInput } from "~/components/admin/forms/FormInput";
 import type { Developer, Game, Platform, Publisher } from "~/drizzle/types";
 import styles from "~/components/admin/forms/forms.module.scss";
-import { createEffect, createSignal } from "solid-js";
+import { Accessor, createEffect, createSignal } from "solid-js";
 import { formatDateForInputElement } from "~/lib/formatDate";
 import { createStore } from "solid-js/store";
 import { ImagePreview } from "../forms/FilePreview";
@@ -23,9 +23,9 @@ export type Props = {
         platforms: string[] 
     }
     parentData: {
-        developers: Developer[]
-        publishers: Publisher[]
-        platforms: Platform[]
+        developers: Accessor<Developer[] | undefined>
+        publishers: Accessor<Publisher[] | undefined>
+        platforms: Accessor<Platform[] | undefined>
     }
 }
 function copyData(data: Props['data']) {
@@ -35,12 +35,12 @@ function copyData(data: Props['data']) {
         gameId: data?.gameId ?? crypto.randomUUID(),
         summary: data?.summary ?? "",
         title: data?.title ?? "",
-        cover: data?.cover ?? "",
+        cover: {url: data?.cover ?? "", file: null as null | File},
         developerId: data?.developerId ?? "",
         publisherId: data?.publisherId ?? "",
         releaseDate: data?.releaseDate ?? "",
         images: [...(data?.images?.map(x => ({url: x, file: null as null | File})) ?? [])],
-        banner: data?.banner ?? "",
+        banner: {url: data?.banner ?? "", file: null as null | File},
         trailer: data?.trailer ?? "",
     }
 }
@@ -49,15 +49,13 @@ const updateAction = action(updateGamesOnDB, 'updateGame')
 
 export default function GameForm(props: Props) {
     let form!: HTMLFormElement
-    const { developers, publishers, platforms } = props.parentData
     
     const submit = useAction(updateAction)
     const submitting = useSubmission(updateAction)
     
     const [game, setGame] = createStore(copyData(props.data))
-    const [firebaseUrls, setFirebaseUrls] = createSignal<string[]>([])
 
-    createEffect(() => {
+    createEffect(() => {console.log(props.data)
         setGame(copyData(props.data))
     })
     const [state, setState] = createStore({
@@ -98,18 +96,21 @@ export default function GameForm(props: Props) {
             <div class={styles.heroImgs}>
                 <DropZone
                     text="Cover"
-                    images={[{url: game.cover, file: null}]}                    
+                    images={[game.cover]}    
+                    setImages={imgs => setGame('cover', imgs[0])}                
                 />
                 <DropZone
                     text="Banner"
-                    images={[{url: game.banner, file: null}]}                    
+                    images={[game.banner]} 
+                    setImages={imgs => setGame('banner', imgs[0])}                   
                 />
             </div>
             <DropZone
                 text="Drop Screenshots Here"
                 fileLimit={8}
                 currentNum={game.images.length}
-                images={game.images}                
+                images={game.images}     
+                setImages={imgs => setGame('images', imgs)}           
             />
             <ImagePreview
                 images={game.images}
@@ -128,17 +129,17 @@ export default function GameForm(props: Props) {
                 setter={setGame}
             />
             <SelectInput
-                arr={(developers).map(dev => ({ label: dev.name, value: dev.developerId }))}
+                arr={(props.parentData.developers() ?? []).map(dev => ({ label: dev.name, value: dev.developerId }))}
                 name="developerId"
                 label="Developer"
-                default={(developers).find(x => x.developerId === game.developerId)?.developerId}
+                default={(props.parentData.developers() ?? []).find(x => x.developerId === game.developerId)?.developerId}
                 setter={setGame}
             />
             <SelectInput
-                arr={(publishers).map(pub => ({ label: pub.name, value: pub.publisherId })) ?? []}
+                arr={(props.parentData.publishers() ?? []).map(pub => ({ label: pub.name, value: pub.publisherId })) ?? []}
                 name="publisherId"
                 label="Publisher"
-                default={(publishers).find(x => x.publisherId === game.publisherId)?.publisherId}
+                default={(props.parentData.publishers() ?? []).find(x => x.publisherId === game.publisherId)?.publisherId}
                 setter={setGame}
             />
             <InputWithAddButton
@@ -153,7 +154,7 @@ export default function GameForm(props: Props) {
                 })}
             />
             <Checklist
-                items={platforms}
+                items={props.parentData.platforms() ?? []}
                 idField="platformId"
                 valueField="name"
                 arr={game.platforms}
@@ -166,8 +167,8 @@ export default function GameForm(props: Props) {
                 setter={setGame}
             />
             <YouTubeIframe link={game.trailer} />
-            <HiddenInput name="cover" value={game.cover} />
-            <HiddenInput name="banner" value={game.banner} />
+            <HiddenInput name="cover" value={game.cover.url} />
+            <HiddenInput name="banner" value={game.banner.url} />
             <HiddenInput name="images" value={game.images} />
             <HiddenInput name="tags" value={game.tags} />
             <HiddenInput name="gameId" value={game.gameId} />

@@ -1,9 +1,10 @@
-import { For, Match, Switch, createSignal, mergeProps } from "solid-js";
+import { For, Match, Show, Switch, createSignal, mergeProps } from "solid-js";
 import styles from "./DropZone.module.scss";
 import { createStore } from "solid-js/store";
 
 export type Props = {
     images: { url: string, file: File | null }[]
+    setImages: (obj: { url: string, file: File | null }[]) => void
     text?: string
     fileLimit?: number
     currentNum?: number
@@ -15,10 +16,21 @@ export function DropZone(props: Props) {
     let input!: HTMLInputElement
 
     const [entered, setEntered] = createSignal(false);
-    const [progress, setProgress] = createSignal(0)
     const merged = mergeProps({ text: "Drop Image Here", fileLimit: 1, currentNum: 0 }, props);
-    const [files, setFiles] = createSignal<{ url: string, file: File }[]>([])
     const limit = merged.fileLimit - merged.currentNum;
+
+    function selectFiles(fileList: File[]) {
+        const remainder = 8 - props.images.length
+        const urls = fileList
+            .filter(file => file.type.match(/(image|video)/) && file.size < MAX_FILE_SIZE * 1024 * 1024)
+            .map(file => ({ url: URL.createObjectURL(file), file }))
+        if (merged.fileLimit === 1) 
+            props.setImages(urls.slice(0, 1))
+        else {
+            props.setImages([...props.images, ...urls].slice(0, merged.fileLimit))
+        }
+        setEntered(false)
+    }
 
     return (
         <div
@@ -34,16 +46,11 @@ export function DropZone(props: Props) {
                 selectFiles(Array.from(e.dataTransfer?.files))
             }}
             onDragLeave={() => setEntered(false)}
-            onclick={() => {
-                input.click();
-            }}
+            onclick={() => input.click()}
         >
-            <div class={styles.preview}>
-                <For each={files()}>
-                    {file =>  <img src={file.url} alt="" />}
-                </For>
-               
-            </div>
+            <Show when={props.images.length === 1}>
+                <img src={props.images[0].url} />
+            </Show>
             <label class={styles.label} >{props.text}</label>
             <input
                 type="file"
@@ -58,13 +65,4 @@ export function DropZone(props: Props) {
             />
         </div>
     )
-
-    function selectFiles(fileList: File[]) {
-        const remainder = 8 - files().length
-        const urls = fileList
-            .filter(file => file.type.match(/(image|video)/) && file.size < MAX_FILE_SIZE * 1024 * 1024)
-            .map(file => ({ url: URL.createObjectURL(file), file })).slice(0, remainder);
-        setFiles(prev => [...prev, ...urls])
-        setEntered(false)
-    }
 }
