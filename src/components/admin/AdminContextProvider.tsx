@@ -1,19 +1,12 @@
-import { type JSXElement, createContext, createEffect } from "solid-js";
-import { createAsync } from "@solidjs/router";
-import { NewType, getUser } from "../../routes/admin";
+import { type JSXElement, createContext, createSignal, Accessor, Setter } from "solid-js";
 
-export const AdminContext = createContext<NewType | null>(null);
+export const AdminContext = createContext<{user: Accessor<string>, setUser: Setter<string>}>();
 
 export function AdminContextProvider(props: { children: JSXElement; }) {
-    const user = createAsync(async () => getUser());
-    createEffect(() => {
-        window.localStorage.setItem('test', user() ?? "");
-    });
+    const [user, setUser] = createSignal("")
+ 
     return (
-        <AdminContext.Provider
-            value={{
-                user: user() ?? "",
-            }}>
+        <AdminContext.Provider value={{user, setUser}}>
             {props.children}
         </AdminContext.Provider>
     );

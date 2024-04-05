@@ -1,63 +1,67 @@
-import { createHash } from "crypto";
 import { createStore } from "solid-js/store";
 import SubmitButton from "~/components/admin/SubmitButton";
 import { FormInput } from "~/components/admin/forms/FormInput";
 import styles from "~/components/admin/forms/forms.module.scss";
 import { Popup } from "~/components/shared/Popup";
 import Page from "~/components/shared/Page";
-import { createEffect } from "solid-js";
-import { action, useAction, useNavigate, useSubmission } from "@solidjs/router";
-import { getRequestEvent } from "solid-js/web";
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "~/firebase";
+import { action, redirect, useSubmission } from "@solidjs/router";
+import { getSession } from "../../utils/getSession";
+import { json } from "@solidjs/router"
+import { createHash } from "node:crypto";
+import { getUser } from "../data";
 
-async function login(fd: FormData) {
+const loginAction = action(async (user: { username: string, password: string }) => {
+    "use server";
+    
+    const hash = createHash('sha256').update(user.password).digest("hex");
 
-    try {
-        await signInWithEmailAndPassword(auth, fd.get('email') as string, fd.get('password') as string)
-        return "OK"
-    } 
-    catch (error) {
-        console.log(error)
-        if (error instanceof Error) return error
-        return new Error("Something went wrong")
-    }
-};
+    if (hash != process.env.ADMIN_PASSWORD || user.username != process.env.ADMIN_USERNAME)
+        return json("Invalid Credentials", { status: 400 })
 
-const loginAction = action(login, 'auth')
+    const session = await getSession();
+    await session.update({
+        user: {
+            username: user.username
+        }
+    });
+    throw redirect("/admin", { revalidate: getUser.key })
+});
+
 
 export default function AdminLogin() {
 
-    const submission = useSubmission(loginAction)
-    const [, setUser] = createStore({
+    const [state, setState] = createStore({
         username: "",
-        password: ""
+        password: "",
     })
+    const submission = useSubmission(loginAction)
 
     return (
         <Page title="Login">
-            <form action={loginAction} class={styles.form} method="post">
+            <form class={styles.form} method="post" action={loginAction.with({ username: state.username, password: state.password })}>
                 <FormInput
-                    name="email"
-                    setter={setUser}
+                    name="username"
+                    setter={setState}
                 />
                 <FormInput
                     name="password"
                     type="password"
-                    setter={setUser}
+                    setter={setState}
                 />
                 <SubmitButton
                     loading={submission.pending}
-                    disabled={false}
+                    disabled={!state.username || !state.password}
                     finished={false}
                     text="Login"
                 />
             </form>
             <Popup
-                close={() => {submission.clear() }}
-                text={(submission.result as Error).message}
-                when={submission.result instanceof Error}
-            /> 
+                close={submission.clear}
+                text={submission.result!}
+                when={!!submission.result}
+            />
         </Page>
     )
 }
+
+
