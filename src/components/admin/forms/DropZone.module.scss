@@ -1,7 +1,8 @@
 @use "~/mixins";
 
 .z {
-    height: 250px;
+    min-height: 250px;
+    max-height: 350px;
     border: dashed 1px var(--clrRed);
     display: flex;
     flex-wrap: wrap;
@@ -28,8 +29,19 @@
         max-width: 100%;
         object-fit: contain;
     }
-    &:not(:has(.multi)) {
+    &:not(:is(.multi)) {
         @include mixins.flexCenter;
+    }
+}
+
+.multi {
+    gap: 0;
+    img {
+        width: 25%;
+        aspect-ratio: 16/9;
+        object-fit: cover;
+        padding: 0;
+        margin: 0;
     }
 }
 
@@ -65,4 +77,19 @@
     translate: -50%;
     left: 50%;
     opacity: 0.5;
+}
+
+.uploading {
+    img {
+        animation: blink 1000ms ease infinite alternate-reverse;
+    }
+}
+
+@keyframes blink {
+    from {
+        opacity: 0.25;
+    }
+    to {
+        opacity: 0.5;
+    }
 }

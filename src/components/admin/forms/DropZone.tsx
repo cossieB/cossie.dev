@@ -1,41 +1,60 @@
-import { For, Match, Show, Switch, createSignal, mergeProps } from "solid-js";
+import { For, Match, Switch, createSignal, mergeProps, onCleanup } from "solid-js";
 import styles from "./DropZone.module.scss";
-import { createStore } from "solid-js/store";
+import { OurFileRouter } from "~/server/uploadthing";
+import { generateSolidHelpers } from "@uploadthing/solid";
+import { ClientUploadedFileData } from "uploadthing/types";
 
-export type Props = {
-    images: { url: string, file: File | null }[]
-    setImages: (obj: { url: string, file: File | null }[]) => void
+export type Props<T extends keyof OurFileRouter> = {
+    images: string[]
     text?: string
     fileLimit?: number
-    currentNum?: number
+    endpoint: T
+    input: OurFileRouter[T]['_def']['_input']
+    onError: (err: any) => void
+    onSuccess: (res: ClientUploadedFileData<null>[]) => void
+    setImages: (urls: string[]) => void
+    single: boolean
 }
 
-const MAX_FILE_SIZE = 8
+const { useUploadThing } = generateSolidHelpers<OurFileRouter>();
 
-export function DropZone(props: Props) {
-    let input!: HTMLInputElement
+export function DropZone<T extends keyof OurFileRouter>(props: Props<T>) {
+    let input!: HTMLInputElement;
+    
+    onCleanup(() => previews().forEach(URL.revokeObjectURL));
 
+    const { isUploading, startUpload } = useUploadThing(props.endpoint, {
+        onClientUploadComplete(res) {
+            setPreviews([])
+            props.onSuccess((res ?? []) as any)
+        },
+        onUploadError(e) {
+            setPreviews([])
+            props.onError(e.message);
+
+        },
+    })
     const [entered, setEntered] = createSignal(false);
-    const merged = mergeProps({ text: "Drop Image Here", fileLimit: 1, currentNum: 0 }, props);
-    const limit = merged.fileLimit - merged.currentNum;
+    const [previews, setPreviews] = createSignal<string[]>([])
+    const merged = mergeProps({ text: "Drop Image Here", fileLimit: 1 }, props);
+    const limit = merged.fileLimit - merged.images.length;
 
     function selectFiles(fileList: File[]) {
-        const remainder = 8 - props.images.length
         const urls = fileList
-            .filter(file => file.type.match(/(image|video)/) && file.size < MAX_FILE_SIZE * 1024 * 1024)
-            .map(file => ({ url: URL.createObjectURL(file), file }))
-        if (merged.fileLimit === 1) 
-            props.setImages(urls.slice(0, 1))
+            .map(file => URL.createObjectURL(file))
+        if (merged.fileLimit === 1)
+            setPreviews(urls.slice(0, 1))
         else {
-            props.setImages([...props.images, ...urls].slice(0, merged.fileLimit))
+            setPreviews(p => [...p, ...urls].slice(0, limit))
         }
         setEntered(false)
+        startUpload(fileList, props.input as any)
     }
 
     return (
         <div
             class={`${styles.z}`}
-            classList={{ [styles.enter]: entered() }}
+            classList={{ [styles.enter]: entered(), [styles.uploading]: isUploading(), [styles.multi]: !props.single }}
             onDragOver={e => {
                 e.preventDefault()
                 setEntered(true)
@@ -44,13 +63,26 @@ export function DropZone(props: Props) {
                 e.preventDefault()
                 if (!e.dataTransfer?.files) return;
                 selectFiles(Array.from(e.dataTransfer?.files))
+
             }}
             onDragLeave={() => setEntered(false)}
-            onclick={() => input.click()}
+            onclick={() => {
+                input.click();
+            }}
         >
-            <Show when={props.images.length === 1}>
-                <img src={props.images[0].url} />
-            </Show>
+            <Switch>
+                <Match when={isUploading() && props.single}>
+                    <img src={previews().at(0)} alt="" />
+                </Match>
+                <Match when={!isUploading() && props.single && props.images.at(0)}>
+                    <img src={props.images.at(0)} alt="" />
+                </Match>
+                <Match when={!props.single}>
+                    <For each={previews()}>
+                        {img => <img src={img} />}
+                    </For>
+                </Match>
+            </Switch>
             <label class={styles.label} >{props.text}</label>
             <input
                 type="file"
@@ -59,8 +91,8 @@ export function DropZone(props: Props) {
                 ref={input}
                 multiple
                 onchange={e => {
-                    if (!e.target.files) return;
-                    selectFiles(Array.from(e.target.files))
+                    if (e.target.files)
+                        selectFiles(Array.from(e.target.files))
                 }}
             />
         </div>

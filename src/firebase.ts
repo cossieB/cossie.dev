@@ -19,16 +19,5 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 
 export const auth = getAuth(app);
-signInAnonymously(auth)
-    .then(() => {
-        // Signed in..
-    })
-    .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        console.log(errorCode, errorMessage)
-        // ...
-    });
-
 export const db = getFirestore(app);
 export const storage = getStorage(app)

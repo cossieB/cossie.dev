@@ -1,4 +1,5 @@
 import { MongoClient, ObjectId } from "mongodb";
+import { SessionData } from "vinxi/http";
 
 type ImgMetadata = {
     field: string;

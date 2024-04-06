@@ -59,7 +59,7 @@ const logout = action(async () => {
     'use server'
     const session = await getSession()
     await session.clear();
-    return json("OK",)
+    return json("OK", {revalidate: getUser.key})
 }, 'auth')
 
 function LogoutBtn() {

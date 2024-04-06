@@ -1,7 +1,7 @@
 import { FormInput, SelectInput } from "~/components/admin/forms/FormInput";
-import type { Developer, Game, Platform, Publisher } from "~/drizzle/types";
+import type { Game } from "~/drizzle/types";
 import styles from "~/components/admin/forms/forms.module.scss";
-import { Accessor, createEffect, createSignal } from "solid-js";
+import { createEffect } from "solid-js";
 import { formatDateForInputElement } from "~/lib/formatDate";
 import { createStore } from "solid-js/store";
 import { ImagePreview } from "../forms/FilePreview";
@@ -15,17 +15,13 @@ import { Checklist } from "../forms/Checklist";
 import { DropZone } from "../forms/DropZone";
 import AdminForm from "../AdminForm";
 import CustomTextarea from "../CustomTextarea";
-import { action, useAction, useSubmission } from "@solidjs/router";
+import { action, createAsync, useSubmission } from "@solidjs/router";
+import { getPublishers, getDevelopers, getPlatforms } from "~/routes/data";
 
 export type Props = {
     data?: Game & { 
         tags: string[], 
         platforms: string[] 
-    }
-    parentData: {
-        developers: Accessor<Developer[] | undefined>
-        publishers: Accessor<Publisher[] | undefined>
-        platforms: Accessor<Platform[] | undefined>
     }
 }
 function copyData(data: Props['data']) {
@@ -35,12 +31,12 @@ function copyData(data: Props['data']) {
         gameId: data?.gameId ?? crypto.randomUUID(),
         summary: data?.summary ?? "",
         title: data?.title ?? "",
-        cover: {url: data?.cover ?? "", file: null as null | File},
+        cover: data?.cover ?? "",
         developerId: data?.developerId ?? "",
         publisherId: data?.publisherId ?? "",
         releaseDate: data?.releaseDate ?? "",
-        images: [...(data?.images?.map(x => ({url: x, file: null as null | File})) ?? [])],
-        banner: {url: data?.banner ?? "", file: null as null | File},
+        images: data?.images ?? [],
+        banner: data?.banner ?? "",
         trailer: data?.trailer ?? "",
     }
 }
@@ -48,14 +44,15 @@ function copyData(data: Props['data']) {
 const updateAction = action(updateGamesOnDB, 'updateGame')
 
 export default function GameForm(props: Props) {
-    let form!: HTMLFormElement
-    
-    const submit = useAction(updateAction)
-    const submitting = useSubmission(updateAction)
+    let form!: HTMLFormElement; 
+    const publishers = createAsync(() => getPublishers())
+    const developers = createAsync(() => getDevelopers())
+    const platforms = createAsync(() => getPlatforms())
+    const submitting = useSubmission(updateAction);
     
     const [game, setGame] = createStore(copyData(props.data))
 
-    createEffect(() => {console.log(props.data)
+    createEffect(() => {
         setGame(copyData(props.data))
     })
     const [state, setState] = createStore({
@@ -71,7 +68,11 @@ export default function GameForm(props: Props) {
             id="gameForm" 
             class={styles.form}
             ref={form}
-            action={submit}
+            action={updateAction.with(game, {
+                platformsHaveChanged: state.pformsHaveChanged(), 
+                tagsHaveChanged: state.tagsHaveChanged(),
+                isNewGame: !!props.data
+            })}
             submitting={submitting}
             state={state}
             setState={setState}
@@ -96,25 +97,58 @@ export default function GameForm(props: Props) {
             <div class={styles.heroImgs}>
                 <DropZone
                     text="Cover"
-                    images={[game.cover]}    
-                    setImages={imgs => setGame('cover', imgs[0])}                
+                    images={[game.cover]}      
+                    endpoint="game"
+                    input={{
+                        field: 'cover',
+                        reference: game.gameId
+                    }}
+                    onError={err => {
+                        setGame('cover', props.data?.cover ?? "")
+                        setState({ uploadError: err });
+                    }}      
+                    onSuccess={(res) => setGame('cover', res[0].url)}
+                    setImages={urls => setGame('cover', urls[0])}
+                    single            
                 />
                 <DropZone
                     text="Banner"
-                    images={[game.banner]} 
-                    setImages={imgs => setGame('banner', imgs[0])}                   
+                    images={[game.banner]}   
+                    endpoint="game"
+                    onSuccess={(res) => setGame('banner', res[0].url)}
+                    input={{
+                        field: 'banner',
+                        reference: game.gameId
+                    }}
+                    onError={err => {
+                        setGame('banner', props.data?.cover ?? "")
+                        setState({ uploadError: err });
+                    }}
+                    setImages={urls => setGame('banner', urls[0])}
+                    single            
                 />
             </div>
             <DropZone
                 text="Drop Screenshots Here"
                 fileLimit={8}
-                currentNum={game.images.length}
-                images={game.images}     
-                setImages={imgs => setGame('images', imgs)}           
+                images={game.images}   
+                endpoint="game"  
+                input={{
+                    field: 'images',
+                    reference: game.gameId
+                }}
+                onError={(err) => {
+                    setState({ uploadError: err });
+                }}
+                onSuccess={res => setGame({
+                    images: [...game.images, ...res.map(x => x.url)]
+                })}
+                setImages={urls => setGame('images', urls)}
+                single={false}                
             />
             <ImagePreview
-                images={game.images}
-                setImages={arr => setGame('images', arr)}
+                images={game.images}   
+                setImages={arr => setGame('images', arr)}             
             />
             <CustomTextarea
                 setter={val => setGame('summary', val)}
@@ -129,17 +163,17 @@ export default function GameForm(props: Props) {
                 setter={setGame}
             />
             <SelectInput
-                arr={(props.parentData.developers() ?? []).map(dev => ({ label: dev.name, value: dev.developerId }))}
+                arr={(developers() ?? []).map(dev => ({ label: dev.name, value: dev.developerId }))}
                 name="developerId"
                 label="Developer"
-                default={(props.parentData.developers() ?? []).find(x => x.developerId === game.developerId)?.developerId}
+                default={(developers() ?? []).find(x => x.developerId === game.developerId)?.developerId}
                 setter={setGame}
             />
             <SelectInput
-                arr={(props.parentData.publishers() ?? []).map(pub => ({ label: pub.name, value: pub.publisherId })) ?? []}
+                arr={(publishers() ?? []).map(pub => ({ label: pub.name, value: pub.publisherId })) ?? []}
                 name="publisherId"
                 label="Publisher"
-                default={(props.parentData.publishers() ?? []).find(x => x.publisherId === game.publisherId)?.publisherId}
+                default={(publishers() ?? []).find(x => x.publisherId === game.publisherId)?.publisherId}
                 setter={setGame}
             />
             <InputWithAddButton
@@ -154,7 +188,7 @@ export default function GameForm(props: Props) {
                 })}
             />
             <Checklist
-                items={props.parentData.platforms() ?? []}
+                items={platforms() ?? []}
                 idField="platformId"
                 valueField="name"
                 arr={game.platforms}
@@ -167,12 +201,6 @@ export default function GameForm(props: Props) {
                 setter={setGame}
             />
             <YouTubeIframe link={game.trailer} />
-            <HiddenInput name="cover" value={game.cover.url} />
-            <HiddenInput name="banner" value={game.banner.url} />
-            <HiddenInput name="images" value={game.images} />
-            <HiddenInput name="tags" value={game.tags} />
-            <HiddenInput name="gameId" value={game.gameId} />
-            <HiddenInput name="pforms" value={game.platforms} />
             <HiddenInput name="pformsHaveChanged" value={state.pformsHaveChanged() ? 1 : 0} />
             <HiddenInput name="tagsHaveChanged" value={state.tagsHaveChanged() ? 1 : 0} />
             <HiddenInput name="newGame" value={props.data ? 0 : 1} />

@@ -5,7 +5,7 @@ import SubmitButton from "./SubmitButton";
 import styles from "~/components/admin/forms/forms.module.scss";
 
 type Props = {
-    action: (fd: FormData) => Promise<string>
+    action: JSX.SerializableAttributeValue
     children: JSXElement
     state: {
         isUploading: boolean;
@@ -23,15 +23,15 @@ type Props = {
     ref: HTMLFormElement
 } & JSX.HTMLAttributes<HTMLFormElement>
 
-export default function AdminForm(props: Props) {
 
+export default function AdminForm(props: Props) {
     createEffect(() => {
         if (props.submitting.result)
             props.setState('complete', true)
     })
     return (
         <>
-            <form class={styles.form} ref={props.ref}>
+            <form class={styles.form} ref={props.ref} method="post" action={props.action}>
                 {props.children}
                 <SubmitButton
                     finished={props.state.complete}
@@ -49,7 +49,7 @@ export default function AdminForm(props: Props) {
                 colorDeg={props.submitting.result ? "125" : undefined}
                 close={() => {
                     props.setState('uploadError', null);
-                    props.submitting.clear()
+                    props.submitting.clear?.()
                 }}
             />
         </>
