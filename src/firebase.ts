@@ -3,6 +3,7 @@ import { initializeApp } from "firebase/app"
 import { getFirestore } from "firebase/firestore"
 import { getAuth, signInAnonymously } from "firebase/auth";
 import { getAnalytics } from 'firebase/analytics'
+import {getStorage} from 'firebase/storage'
 
 const firebaseConfig = {
     apiKey: "AIzaSyDu_GSKWh-KdkBN0CF4CGUCisRuQmlj1T0",
@@ -17,17 +18,6 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
-const auth = getAuth();
-signInAnonymously(auth)
-    .then(() => {
-        // Signed in..
-    })
-    .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        console.log(errorCode, errorMessage)
-        // ...
-    });
-
-export const db = getFirestore();
-
+export const auth = getAuth(app);
+export const db = getFirestore(app);
+export const storage = getStorage(app)

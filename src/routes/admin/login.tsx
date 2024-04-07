@@ -1,71 +1,65 @@
-import { createHash } from "crypto";
 import { createStore } from "solid-js/store";
-import { ServerError, type ServerFunctionEvent, createServerAction$ } from "solid-start/server";
 import SubmitButton from "~/components/admin/SubmitButton";
 import { FormInput } from "~/components/admin/forms/FormInput";
 import styles from "~/components/admin/forms/forms.module.scss";
 import { Popup } from "~/components/shared/Popup";
-import { storage } from "../../utils/authenticate";
 import Page from "~/components/shared/Page";
-import { useNavigate } from "solid-start";
-import { createEffect } from "solid-js";
+import { action, redirect, useSubmission } from "@solidjs/router";
+import { getSession } from "../../utils/getSession";
+import { json } from "@solidjs/router"
+import { createHash } from "node:crypto";
+import { getUser } from "~/data/admin";
+
+const loginAction = action(async (user: { username: string, password: string }) => {
+    "use server";
+    
+    const hash = createHash('sha256').update(user.password).digest("hex");
+
+    if (hash != process.env.ADMIN_PASSWORD || user.username != process.env.ADMIN_USERNAME)
+        return json("Invalid Credentials", { status: 400 })
+
+    const session = await getSession();
+    await session.update({
+        user: {
+            username: user.username
+        }
+    });
+    throw redirect("/admin", { revalidate: getUser.key })
+});
+
 
 export default function AdminLogin() {
-    const [, setUser] = createStore({
+
+    const [state, setState] = createStore({
         username: "",
-        password: ""
+        password: "",
     })
-    const [submitting, { Form }] = createServerAction$(loginAction, { invalidate: ['auth'] })
-    const navigate = useNavigate()
-    createEffect(() => {
-        if (submitting.result?.ok)
-            navigate(-1)
-    })
+    const submission = useSubmission(loginAction)
+
     return (
         <Page title="Login">
-            <Form class={styles.form}>
+            <form class={styles.form} method="post" action={loginAction.with({ username: state.username, password: state.password })}>
                 <FormInput
                     name="username"
-                    setter={setUser}
+                    setter={setState}
                 />
                 <FormInput
                     name="password"
                     type="password"
-                    setter={setUser}
+                    setter={setState}
                 />
                 <SubmitButton
-                    loading={submitting.pending}
-                    disabled={false}
+                    loading={submission.pending}
+                    disabled={!state.username || !state.password}
                     finished={false}
                     text="Login"
                 />
-            </Form>
+            </form>
             <Popup
-                close={() => {submitting.clear() }}
-                text={submitting.error.message}
-                when={submitting.error}
+                close={submission.clear}
+                text={submission.result!}
+                when={!!submission.result}
             />
         </Page>
     )
 }
-async function loginAction(fd: FormData, { request }: ServerFunctionEvent) {
-
-    const cookie = request.headers.get("Cookie");
-
-    const session = await storage.getSession(cookie);
-    const password = fd.get("password");
-    const username = fd.get("username");
-    if (!password || typeof password !== "string" || !username || typeof username !== "string") {
-        throw new ServerError('Invalid Credentials', { status: 401 })
-    }
-    const hash = createHash('sha256').update(password).digest("hex");
-    if (hash != process.env.ADMIN_PASSWORD || username != process.env.ADMIN_USERNAME)
-        throw new ServerError("Invalid Credentials", { status: 401 })
-    session.set("username", username);
-    session.set('image', '/favicon.ico')
-    return new Response('Login success', {
-        headers: {
-            'Set-Cookie': await storage.commitSession(session)
-        }
-    })
-};

@@ -1081,5 +1081,25 @@ export const quotes: Quote[] = [
         quote: "Technically we only came to get Jane's longevity back but we probably would have tried to save you if there was time.",
         author: "Cliff Steele",
         tags: new Set(['humorous', 'fiction', 'tv series', 'doom patrol'])
+    }, {
+        quote: "The difference between screwing around and science is writing it down.",
+        author: "Adam Savage",
+        tags: new Set(["humorous", 'non-fiction', 'tv series'])
+    }, {
+        quote: "Your grasp of the obvious is inspiring",
+        author: "Commander Shepard",
+        tags: new Set(['humorous', 'fiction', 'video game', 'mass effect'])
+    }, {
+        quote: "If you want a problem shot, ask a Turian. If you want a problem talked to death, ask an Asari. If you want a new problem, ask a Salarian. If you want a problem fixed, ask a Human",
+        author: "Commander Shepard",
+        tags: new Set(['humorous', 'fiction', 'video game', 'mass effect'])
+    }, {
+        quote: "Living a life of constant war, taking life in every battle... It is the only box I have ever known. It shapes me as stone is shaped by the one who carves it. You and I commander, war is our sculptor and we are prisoners to it's design",
+        author: "Javik",
+        tags: new Set(['fiction', 'video game', 'mass effect'])
+    }, {
+        quote: "Ah you think darkness is your ally. But you merely adopted the dark; I was born in it, moulded by it. I didn't see the light until I was already a man, by then it was nothing to me but blinding!",
+        author: "Bane",
+        tags: new Set(["villain", "fiction", "movie"])
     }
 ]

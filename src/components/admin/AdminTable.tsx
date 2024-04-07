@@ -7,6 +7,7 @@ type Props<T> = {
     columnDefs: (ColDef<any, any> | ColGroupDef<any>)[] | null | undefined;
 };
 export function AdminTable<T>(props: Props<T>) {
+    'use client'
     return (
         <main class={`ag-theme-alpine-dark`} style={{ width: '100%', height: '100vh' }}>
             {/* <Suspense fallback={<span>loading...</span>}> */}

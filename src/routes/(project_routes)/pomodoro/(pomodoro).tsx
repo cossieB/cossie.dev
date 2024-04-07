@@ -1,7 +1,7 @@
-import { unstable_clientOnly } from "solid-start";
+import { clientOnly } from "@solidjs/start";
 import Page from "~/components/shared/Page";
 
-const Main = unstable_clientOnly(() => import("~/components/Pomodoro/Pomodoro"))
+const Main = clientOnly(() => import("~/components/Pomodoro/Pomodoro"))
 
 export default function PomodoroPage() {
     return (

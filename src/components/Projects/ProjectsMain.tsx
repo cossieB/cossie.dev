@@ -16,7 +16,7 @@ function Main() {
     const [page, setPage] = createSignal(0);
     const { selected } = useContext(ProjectsContext)!
     return (
-        <main class="container" id={styles.container}>
+        <main >
             <PageBtn
                 setPage={setPage}
                 isNextBtn={false}

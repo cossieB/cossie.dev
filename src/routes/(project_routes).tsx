@@ -1,11 +1,11 @@
-import { Outlet } from "solid-start";
+import { JSX, JSXElement } from "solid-js";
 import Navigator from "~/components/Navigator/Navigator";
 
-export default function ProjectLayout() {
+export default function ProjectLayout(props: {children: JSXElement}) {
     return (
         <>
             <Navigator />
-            <Outlet />
+            {props.children}
         </>
     )
 }

@@ -1,5 +1,5 @@
 import { type JSXElement } from "solid-js";
-import { A } from "solid-start";
+import { A } from "@solidjs/router";
 import styles from "./navigator.module.scss";
 
 type Props = {

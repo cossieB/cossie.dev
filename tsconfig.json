@@ -1,25 +1,26 @@
 {
     "compilerOptions": {
-        "allowSyntheticDefaultImports": true,
-        "esModuleInterop": true,
         "target": "ESNext",
         "module": "ESNext",
         "moduleResolution": "node",
-        "jsxImportSource": "solid-js",
+        "allowSyntheticDefaultImports": true,
+        "esModuleInterop": true,
         "jsx": "preserve",
+        "jsxImportSource": "solid-js",
+        "allowJs": true,
         "strict": true,
-        "skipLibCheck": true,
+        "noEmit": true,
         "types": [
-            "solid-start/env",
+            "vinxi/client",
+            "vite/client",
             "vite-plugin-pwa/solid",
             "vite-plugin-pwa/info"
         ],
-        "baseUrl": "./",
+        "isolatedModules": true,
         "paths": {
             "~/*": [
                 "./src/*"
             ]
-        },
-        // "verbatimModuleSyntax": true
+        }
     }
 }

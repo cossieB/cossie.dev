@@ -1,5 +1,4 @@
 import { createEffect } from "solid-js"
-import { createServerAction$ } from "solid-start/server"
 import type { Developer } from "~/drizzle/types"
 import { FormInput, SelectInput } from "../forms/FormInput"
 import { createStore } from "solid-js/store"
@@ -10,10 +9,13 @@ import HiddenInput from "../forms/HiddenInput"
 import { DropZone } from "../forms/DropZone"
 import AdminForm from "../AdminForm"
 import CustomTextarea from "../CustomTextarea"
+import { action, useSubmission } from "@solidjs/router";
 
 type Props = {
     data?: Developer
 }
+const updateAction = action(updateDevsOnDB, 'updateDev');
+
 function copyData(data: Props['data']): Developer {
     return {
         country: data?.country ?? "",
@@ -24,29 +26,31 @@ function copyData(data: Props['data']): Developer {
         summary: data?.summary ?? "",
     }
 }
+
 export function DevForm(props: Props) {
+    let ref!: HTMLFormElement
     const [dev, setDev] = createStore(copyData(props.data))
 
     const [state, setState] = createStore({
         isUploading: false,
         complete: false,
         uploadError: null as null | string,
-        logoHasChanged: () => dev.logo && dev.logo !== props.data?.logo
     })
+    const submitting = useSubmission(updateAction);
+    
     createEffect(() => {
         setDev(copyData(props.data))
     })
-    const [submitting, { Form }] = createServerAction$(updateDevsOnDB, {
-        invalidate: () => ['developers', props.data?.developerId]
-    })
+
     return (
         <AdminForm
             id="devForm"
+            action={updateAction.with(dev, {isNewDev: !props.data})}
             class={styles.form}
-            Form={Form}
             submitting={submitting}
             state={state}
             setState={setState}
+            ref={ref}
             submitDisabled={
                 !dev.country ||
                 !dev.name ||
@@ -66,6 +70,7 @@ export function DevForm(props: Props) {
                 onError={e => setState('uploadError', e)}
                 single
                 text="Logo"
+                setImages={urls => setDev('logo', urls[0])}
             />
             <FormInput
                 name="name"
@@ -90,9 +95,6 @@ export function DevForm(props: Props) {
                 name="summary"
                 value={dev.summary}
             />
-            <HiddenInput name="logo" value={dev.logo} />
-            <HiddenInput name="developerId" value={dev.developerId} />
-            <HiddenInput name="newDev" value={props.data ? 0 : 1} />
         </AdminForm>
     )
 }

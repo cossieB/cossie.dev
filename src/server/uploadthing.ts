@@ -1,19 +1,16 @@
-import { ServerError } from "solid-start";
 import { createUploadthing } from "uploadthing/next";
-import type { FileRouter } from "uploadthing/server";
+import { UploadThingError, type FileRouter } from "uploadthing/server";
 import { z } from "zod";
+import { getUser } from "~/data/admin";
 import MongoConnection from "~/mongo/mongo";
-import { authenticateOrThrowUnauthorized } from "~/utils/authenticate";
 
 const mongo = new MongoConnection;
 
 const f = createUploadthing({
-    errorFormatter: (err) => {
-        return {
-            message: err.cause instanceof ServerError ? err.cause.message : err.message,
-            zodError: err.cause instanceof z.ZodError ? err.cause.flatten() : null,
-        };
-    },
+    errorFormatter: (err) => ({
+        // @ts-expect-error
+        error: err.cause?.error ?? err.message
+    }),
 });
 
 export const uploadRouter = {
@@ -28,7 +25,9 @@ export const uploadRouter = {
             field: z.enum(['cover', 'banner', 'images'])
         }))
         .middleware(async opts => {
-            await authenticateOrThrowUnauthorized(opts.req);
+            const user = await getUser()
+            if (!user)
+                throw new UploadThingError("Unauthorized")
             return {
                 input: {
                     ...opts.input,
@@ -40,6 +39,7 @@ export const uploadRouter = {
             const doc = { ...data.metadata.input, ...data.file };
             await mongo.addImages(doc);
         }),
+        
     logo: f({
         image: {
             maxFileSize: "4MB"
@@ -50,7 +50,9 @@ export const uploadRouter = {
             table: z.enum(['developer', 'publisher', 'platform', 'actor']),
         }))
         .middleware(async opts => {
-            await authenticateOrThrowUnauthorized(opts.req);
+            const user = await getUser()
+            if (!user)
+                throw new UploadThingError("Unauthorized")
             return {
                 input: {
                     ...opts.input,

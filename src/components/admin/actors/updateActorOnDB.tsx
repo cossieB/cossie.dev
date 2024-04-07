@@ -1,59 +1,52 @@
 import { and, eq, inArray, not, sql } from "drizzle-orm";
-import { ServerError, type ServerFunctionEvent } from "solid-start";
 import { db } from "~/db";
 import { actor, actorsInGames } from "~/drizzle/schema";
 import { type Actor } from "~/drizzle/types";
 import { authenticateOrThrowUnauthorized } from "~/utils/authenticate";
+import { Character } from "./ActorForm";
+import {json} from "@solidjs/router"
+import { getActor, getActors } from "~/data/admin";
 
-export async function updateActorOnDB(fd: FormData, event: ServerFunctionEvent) {
-    await authenticateOrThrowUnauthorized(event.request);
-    const obj: { [key: string]: string; } = {};
-    let characters: { gameId: string, character: string, importance: number, actorId: string }[] = []
-    fd.forEach((val, key) => {
-        if (typeof val != "string")
-            throw new ServerError('Invalid Format', { status: 400 })
-        else if (key == 'characters') {
-            characters = JSON.parse(val)
-        }
-        else {
-            obj[key] = val;
-        }
-    })
-    characters = characters.map(x => ({ ...x, actorId: obj.actorId }))
-    if (characters.some(x => x.character.length == 0 ))
-        throw new ServerError('Character name must be non-empty', {status: 400})
-    const { newItem, ...a } = obj;
+type Metadata = {
+    isNewActor: boolean;
+}
 
-    if (newItem === "0") {
+type CharWithActorId = Character & {actorId: string}
+
+export async function updateActorOnDB(body: Actor & {characters: Character[]}, metadata: Metadata) {
+    'use server'
+    await authenticateOrThrowUnauthorized();
+
+    const {characters: chars, ...a} = body;
+    const characters = chars.map (c => ({...c, actorId: body.actorId}))
+
+    if (!metadata.isNewActor) {
         await updateActor(a, characters);
-        return `Successfully edited actor, ${obj.name}, with ID ${obj.actorId}`
+        return json(`Successfully edited actor, ${body.name}, with ID ${body.actorId}`, {
+            revalidate: [getActor.keyFor(body.actorId), getActors.key]
+        })
     }
     else {
         await insertNewActor(a, characters);
-        return `Successfully added actor, ${obj.name}, with ID ${obj.actorId}`
+        return json(`Successfully added actor, ${body.name}, with ID ${body.actorId}`, {
+            revalidate: [getActors.key]
+        })
     }
 }
 
-type Character = {
-    gameId: string;
-    character: string;
-    importance: number;
-    actorId: string;
-};
-
-async function insertNewActor(a: { [key: string]: string; }, characters: Character[]) {
+async function insertNewActor(a: Actor, characters: CharWithActorId[]) {
+    'use server'
     await db.transaction(async (tx) => {
-        await tx.insert(actor).values(a as Actor);
+        await tx.insert(actor).values(a);
         if (characters.length > 0)
             await tx.insert(actorsInGames).values(characters);
     });
 }
 
-async function updateActor(a: { [key: string]: string; }, characters: Character[]) {
-    const { actorId } = a;
-    delete a.actorId;
+async function updateActor(a: Actor, characters: CharWithActorId[]) {
+    'use server'
     await db.transaction(async (tx) => {
-        await tx.update(actor).set(a as Actor).where(eq(actor.actorId, actorId));
+        await tx.update(actor).set(a).where(eq(actor.actorId, a.actorId));
         // drizzle requires values array to be non-empty so I have to handle the empty and non-empty cases separately.
         if (characters.length > 0) {
             const rows = await tx
@@ -73,7 +66,7 @@ async function updateActor(a: { [key: string]: string; }, characters: Character[
                     .delete(actorsInGames)
                     .where(
                         and(
-                            eq(actorsInGames.actorId, actorId),
+                            eq(actorsInGames.actorId, a.actorId),
                             not(inArray(actorsInGames.characterId, r))
                         )
                     );
@@ -82,7 +75,7 @@ async function updateActor(a: { [key: string]: string; }, characters: Character[
             await tx
                 .delete(actorsInGames)
                 .where(
-                    eq(actorsInGames.actorId, actorId)
+                    eq(actorsInGames.actorId, a.actorId)
                 );
         }
     });

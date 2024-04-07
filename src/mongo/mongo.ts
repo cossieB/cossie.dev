@@ -1,5 +1,5 @@
 import { MongoClient, ObjectId } from "mongodb";
-import type { SessionData } from "solid-start/session/sessions";
+import { SessionData } from "vinxi/http";
 
 type ImgMetadata = {
     field: string;

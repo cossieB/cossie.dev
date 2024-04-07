@@ -1,17 +1,18 @@
 import type { ColDef, ICellRendererParams } from "ag-grid-community";
 import { type Resource } from "solid-js";
-import { useRouteData } from "solid-start";
-import { createServerData$ } from "solid-start/server";
 import { db } from "~/db";
 import AdminLink from "~/components/Datagrid/AdminLink";
 import { AdminTable } from "~/components/admin/AdminTable";
 import Page from "~/components/shared/Page";
+import { cache, createAsync } from "@solidjs/router";
 
-export function routeData() {
-    return createServerData$(async () => db.query.actor.findMany(), {
-        key: () => ['actors'],
-        initialValue: []
-    })
+const getActors = cache(async () => {
+    'use server'
+    return db.query.actor.findMany()
+}, 'actors')
+
+export const route = {
+    load: () => getActors()
 }
 
 const columnDefs: Cols[] = [{
@@ -22,13 +23,11 @@ const columnDefs: Cols[] = [{
     cellRenderer: (params: ICellRendererParams<X[number]>) => <AdminLink {...params} category="actors" param={params.data?.actorId ?? ""} />,
 }]
 
-type UnwrapResource<T> = T extends Resource<infer x | undefined> ? x : never
-type X = NonNullable<UnwrapResource<ReturnType<typeof routeData>>>
-
+type X = Awaited<ReturnType<typeof getActors>>
 type Cols = ColDef<X[number]>
 
 export default function ActorsAdminPage() {
-    const data = useRouteData<typeof routeData>()
+    const data = createAsync(() => getActors())
     return (
         <Page title="Actors">
             <AdminTable

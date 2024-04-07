@@ -2,9 +2,11 @@ import { Show, createSignal } from "solid-js";
 import { validateUrl } from "../../../lib/validateUrl";
 
 export function YouTubeIframe(props: { link: string | URL; }) {
-    const [errorMsg, setErrorMsg] = createSignal("Failed to load YouTube")
+    const [errorMsg, setErrorMsg] = createSignal("")
     const url = () => props.link instanceof URL ? props.link : validateUrl(props.link);
     const params = () => {
+        if (!props.link)
+            return null
         if (!url() ) {
             setErrorMsg("Invalid URL")
             return null
@@ -29,7 +31,7 @@ export function YouTubeIframe(props: { link: string | URL; }) {
                 when={params()}
                 fallback={<p> {errorMsg()} </p>}
             >
-                <iframe width="560" height="315" src={`https://www.youtube.com/embed/${params()}`} title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                <iframe frameborder="0" width="560" height="315" src={`https://www.youtube.com/embed/${params()}`} title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
             </Show>
         </div>
     );
