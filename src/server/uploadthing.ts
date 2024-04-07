@@ -2,7 +2,6 @@ import { createUploadthing } from "uploadthing/next";
 import { UploadThingError, type FileRouter } from "uploadthing/server";
 import { z } from "zod";
 import { getUser } from "~/data/admin";
-import { sleep } from "~/lib/sleep";
 import MongoConnection from "~/mongo/mongo";
 
 const mongo = new MongoConnection;
@@ -26,7 +25,6 @@ export const uploadRouter = {
             field: z.enum(['cover', 'banner', 'images'])
         }))
         .middleware(async opts => {
-            await sleep(60000)
             const user = await getUser()
             if (!user)
                 throw new UploadThingError("Unauthorized")
