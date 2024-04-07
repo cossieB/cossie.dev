@@ -1,5 +1,4 @@
 import type { ColDef, ICellRendererParams } from "ag-grid-community";
-import { type Resource } from "solid-js";
 import { db } from "~/db";
 import AdminLink from "~/components/Datagrid/AdminLink";
 import { AdminTable } from "~/components/admin/AdminTable";

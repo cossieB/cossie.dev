@@ -8,7 +8,7 @@ import { action, redirect, useSubmission } from "@solidjs/router";
 import { getSession } from "../../utils/getSession";
 import { json } from "@solidjs/router"
 import { createHash } from "node:crypto";
-import { getUser } from "../data";
+import { getUser } from "~/data/admin";
 
 const loginAction = action(async (user: { username: string, password: string }) => {
     "use server";

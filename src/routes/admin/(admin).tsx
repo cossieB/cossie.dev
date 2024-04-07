@@ -3,7 +3,7 @@ import styles from "../admin.module.scss"
 import { GamesSvg, DevelopersSvg, PublishersSvg, PlatformSvg, ScreenshotsSvg, ActorsSvg } from "~/svgs"
 import Page from "~/components/shared/Page"
 import { createAsync } from "@solidjs/router";
-import { getGames, getPublishers, getDevelopers, getPlatforms, getActors, getUser } from "../data";
+import { getActors, getDevelopers, getGames, getPlatforms, getPublishers } from "~/data/admin";
 
 export default function AdminPage() {
     const games = createAsync(() => getGames())

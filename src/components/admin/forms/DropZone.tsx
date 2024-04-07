@@ -37,9 +37,9 @@ export function DropZone<T extends keyof OurFileRouter>(props: Props<T>) {
     const [entered, setEntered] = createSignal(false);
     const [previews, setPreviews] = createSignal<string[]>([])
     const merged = mergeProps({ text: "Drop Image Here", fileLimit: 1 }, props);
-    const limit = merged.fileLimit - merged.images.length;
-
+    
     function selectFiles(fileList: File[]) {
+        const limit = merged.fileLimit - merged.images.length;
         const urls = fileList
             .map(file => URL.createObjectURL(file))
         if (merged.fileLimit === 1)

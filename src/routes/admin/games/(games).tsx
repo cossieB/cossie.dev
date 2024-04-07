@@ -5,9 +5,7 @@ import type { ColDef, ICellEditorParams, ICellRendererParams } from "ag-grid-com
 import DataEditor from "~/components/Datagrid/DataEditor";
 import { AdminTable } from "~/components/admin/AdminTable";
 import Page from "~/components/shared/Page";
-import { RouteDefinition, cache, createAsync, createAsyncStore } from "@solidjs/router";
-import { Suspense } from "solid-js";
-import Loader from "~/components/shared/Loader/Loader";
+import { RouteDefinition, cache, createAsyncStore } from "@solidjs/router";
 import { clientOnly } from "@solidjs/start";
 const AdminLink = clientOnly(() => import("~/components/Datagrid/AdminLink"))
 

@@ -9,12 +9,13 @@ import HiddenInput from "../forms/HiddenInput"
 import { DropZone } from "../forms/DropZone"
 import AdminForm from "../AdminForm"
 import CustomTextarea from "../CustomTextarea"
-import { action, useAction, useSubmission } from "@solidjs/router";
+import { action, useSubmission } from "@solidjs/router";
 
 type Props = {
     data?: Developer
 }
-const updateAction = action(updateDevsOnDB, 'updateDev')
+const updateAction = action(updateDevsOnDB, 'updateDev');
+
 function copyData(data: Props['data']): Developer {
     return {
         country: data?.country ?? "",
@@ -34,9 +35,7 @@ export function DevForm(props: Props) {
         isUploading: false,
         complete: false,
         uploadError: null as null | string,
-        logoHasChanged: () => dev.logo && dev.logo !== props.data?.logo
     })
-    const submit = useAction(updateAction)
     const submitting = useSubmission(updateAction);
     
     createEffect(() => {
@@ -46,7 +45,7 @@ export function DevForm(props: Props) {
     return (
         <AdminForm
             id="devForm"
-            action={submit}
+            action={updateAction.with(dev, {isNewDev: !props.data})}
             class={styles.form}
             submitting={submitting}
             state={state}
@@ -71,6 +70,7 @@ export function DevForm(props: Props) {
                 onError={e => setState('uploadError', e)}
                 single
                 text="Logo"
+                setImages={urls => setDev('logo', urls[0])}
             />
             <FormInput
                 name="name"
@@ -95,9 +95,6 @@ export function DevForm(props: Props) {
                 name="summary"
                 value={dev.summary}
             />
-            <HiddenInput name="logo" value={dev.logo} />
-            <HiddenInput name="developerId" value={dev.developerId} />
-            <HiddenInput name="newDev" value={props.data ? 0 : 1} />
         </AdminForm>
     )
 }

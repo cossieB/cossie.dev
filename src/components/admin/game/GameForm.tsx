@@ -16,7 +16,7 @@ import { DropZone } from "../forms/DropZone";
 import AdminForm from "../AdminForm";
 import CustomTextarea from "../CustomTextarea";
 import { action, createAsync, useSubmission } from "@solidjs/router";
-import { getPublishers, getDevelopers, getPlatforms } from "~/routes/data";
+import { getPublishers, getDevelopers, getPlatforms } from "~/data/admin";
 
 export type Props = {
     data?: Game & { 
@@ -43,7 +43,7 @@ function copyData(data: Props['data']) {
 
 
 export default function GameForm(props: Props) {
-    const updateAction = action(updateGamesOnDB)
+    const updateAction = action(updateGamesOnDB, 'updateGame')
     let form!: HTMLFormElement; 
     const publishers = createAsync(() => getPublishers())
     const developers = createAsync(() => getDevelopers())
@@ -121,7 +121,7 @@ export default function GameForm(props: Props) {
                         reference: game.gameId
                     }}
                     onError={err => {
-                        setGame('banner', props.data?.cover ?? "")
+                        setGame('banner', props.data?.banner ?? "")
                         setState({ uploadError: err });
                     }}
                     setImages={urls => setGame('banner', urls[0])}

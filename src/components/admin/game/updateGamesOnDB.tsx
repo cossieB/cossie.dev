@@ -4,7 +4,7 @@ import { game, gamesOnPlatforms, genresOfGames } from "~/drizzle/schema";
 import { eq } from "drizzle-orm";
 import { authenticateOrThrowUnauthorized } from "~/utils/authenticate";
 import {json} from "@solidjs/router"
-import { getGame, getGames } from "~/routes/data";
+import { getGames, getGame } from "~/data/admin/game";
 
 type Metadata = {
     tagsHaveChanged: boolean;
@@ -14,7 +14,7 @@ type Metadata = {
 
 export async function updateGamesOnDB(body: Game & {platforms: string[], tags: string[]}, metadata: Metadata) {
     'use server'; 
-    // await authenticateOrThrowUnauthorized(); 
+    await authenticateOrThrowUnauthorized(); 
     const {platforms, tags, ...g} = body; 
     if (!metadata.isNewGame) {
         await db.transaction(async (tx) => {

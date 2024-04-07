@@ -1,8 +1,7 @@
 @use "~/mixins";
 
 .z {
-    min-height: 250px;
-    max-height: 350px;
+    height: 300px;
     border: dashed 1px var(--clrRed);
     display: flex;
     flex-wrap: wrap;
@@ -38,6 +37,7 @@
     gap: 0;
     img {
         width: 25%;
+        max-height: 50%;
         aspect-ratio: 16/9;
         object-fit: cover;
         padding: 0;

@@ -1,6 +1,5 @@
 import { createEffect } from "solid-js"
 import { createStore } from "solid-js/store"
-import { createServerAction$ } from "solid-start/server"
 import type { Platform } from "~/drizzle/types"
 import { DropZone } from "../forms/DropZone"
 import { FormInput } from "../forms/FormInput"
@@ -10,10 +9,12 @@ import { updatePlatformOnDB } from "./updatePlatformOnDB"
 import { formatDateForInputElement } from "~/lib/formatDate"
 import AdminForm from "../AdminForm"
 import CustomTextarea from "../CustomTextarea"
+import { action, useSubmission } from "@solidjs/router"
 
 type Props = {
     data?: Platform
 }
+const updateAction = action(updatePlatformOnDB, 'updatePlatform')
 function copyData(data: Props['data']): Platform {
     return {
         platformId: data?.platformId ?? crypto.randomUUID(),
@@ -24,6 +25,7 @@ function copyData(data: Props['data']): Platform {
     }
 }
 export function PlatForm(props: Props) {
+    let ref!: HTMLFormElement
     const [platform, setPlatform] = createStore(copyData(props.data))
 
     const [state, setState] = createStore({
@@ -34,13 +36,11 @@ export function PlatForm(props: Props) {
     createEffect(() => {
         setPlatform(copyData(props.data))
     })
-
-    const [submitting, { Form }] = createServerAction$(updatePlatformOnDB, {
-        invalidate: () => ['platforms', props.data?.platformId]
-    })
+    const submitting = useSubmission(updateAction)
     return (
         <AdminForm
-            Form={Form}
+            ref={ref}
+            action={updateAction.with(platform, {isNewPlatform: !props.data})}
             state={state}
             setState={setState}
             submitDisabled={
@@ -63,6 +63,7 @@ export function PlatForm(props: Props) {
                     onError={e => setState('uploadError', e)}
                     single
                     text="Logo"
+                    setImages={urls => setPlatform('logo', urls[0])}
                 />
             </div>
             <FormInput
@@ -81,9 +82,6 @@ export function PlatForm(props: Props) {
                 name="summary"
                 value={platform.summary}
             />
-            <HiddenInput name="logo" value={platform.logo} />
-            <HiddenInput name="platformId" value={platform.platformId} />
-            <HiddenInput name="newItem" value={props.data ? 0 : 1} />
         </AdminForm>
     )
 }

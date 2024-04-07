@@ -1,6 +1,4 @@
-import { getRequestEvent } from "solid-js/web";
-import { getUser } from "~/routes/data";
-import {json } from "@solidjs/router"
+import { getUser } from "~/data/admin";
 
 export async function authenticateOrThrowUnauthorized() {
     const user = await getUser();

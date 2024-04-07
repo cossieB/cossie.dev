@@ -3,7 +3,6 @@ import AdminForm from "../AdminForm";
 import styles from "~/components/admin/forms/forms.module.scss";
 import { type SetStoreFunction, createStore } from "solid-js/store";
 import { For, Show, createEffect, createMemo, createSignal } from "solid-js";
-import { createServerAction$ } from "solid-start/server";
 import { updateActorOnDB } from "./updateActorOnDB";
 import { FormInput } from "../forms/FormInput"
 import CustomTextarea from "../CustomTextarea";
@@ -11,15 +10,16 @@ import { DropZone } from "../forms/DropZone";
 import HiddenInput from "../forms/HiddenInput";
 import { ChevronDown } from "~/svgs";
 import clickOutside from "~/lib/clickOutside";
+import { action, createAsync, useSubmission } from "@solidjs/router";
+import { getGames } from "~/data/admin";
 false && clickOutside
 
 type Props = {
     data?: Actor & {
-        characters: NewType[]
+        characters: Character[]
     }
-    games: Game[]
 }
-type NewType = {
+export type Character = {
     gameId: string;
     gameTitle: string;
     character: string;
@@ -34,7 +34,14 @@ function copyData(data: Props['data']) {
         characters: data?.characters.slice() ?? []
     }
 }
+
+const updateAction = action(updateActorOnDB, 'updateActor')
+
 export default function ActorForm(props: Props) {
+    let ref!: HTMLFormElement;
+
+    const games = createAsync(() => getGames())
+    
     const [actor, setActor] = createStore(copyData(props.data))
     const [state, setState] = createStore({
         isUploading: false,
@@ -48,13 +55,12 @@ export default function ActorForm(props: Props) {
     createEffect(() => {
         setActor(copyData(props.data));
     })
-    const [submitting, { Form }] = createServerAction$(updateActorOnDB, {
-        invalidate: () => ['actors', props.data?.actorId]
-    })
+    const submitting = useSubmission(updateAction)
     return (
         <AdminForm
             class={styles.form}
-            Form={Form}
+            action={updateAction.with(actor, {isNewActor: !props.data})}
+            ref={ref}
             submitting={submitting}
             state={state}
             setState={setState}
@@ -79,6 +85,7 @@ export default function ActorForm(props: Props) {
                 onError={e => setState('uploadError', e)}
                 single
                 text="Photo"
+                setImages={urls => setActor("photo", urls[0])}
             />
             <CustomTextarea
                 setter={val => setActor('summary', val)}
@@ -100,7 +107,7 @@ export default function ActorForm(props: Props) {
                     modalOpen={state.modalOpen}
                     closeModal={() => setState('modalOpen', false)}
                     characerSet={charHashSet()}
-                    games={props.games}
+                    games={games() ?? []}
                 />
             </div>
             <For each={actor.characters}>
@@ -123,20 +130,20 @@ export default function ActorForm(props: Props) {
 }
 
 type P = {
-    characters: NewType[]
+    characters: Character[]
     characerSet: Set<string>
-    setCharacters(chars: NewType[]): void
+    setCharacters(chars: Character[]): void
     modalOpen: boolean,
     closeModal(): void,
     games: Game[]
 }
 
 type P1 = {
-    char: NewType
+    char: Character
     actor: Actor & {
-        characters: NewType[]
+        characters: Character[]
     }
-    setActor: SetStoreFunction<Actor & { characters: NewType[] }>
+    setActor: SetStoreFunction<Actor & { characters: Character[] }>
 }
 
 function Character(props: P1) {
@@ -174,7 +181,7 @@ function GameSelector(props: P) {
         <ul
             class={styles.selector}
             classList={{ [styles.open]: props.modalOpen }}
-            use: clickOutside={props.closeModal}
+            use:clickOutside={props.closeModal}
         >
             <input type="search"
                 value={input()}

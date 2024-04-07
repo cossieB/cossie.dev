@@ -1,19 +1,9 @@
-import { cache, createAsync } from "@solidjs/router"
+import { createAsync } from "@solidjs/router"
 import type { ICellRendererParams, ColDef } from "ag-grid-community"
-import type { Resource } from "solid-js"
 import AdminLink from "~/components/Datagrid/AdminLink"
 import { AdminTable } from "~/components/admin/AdminTable"
 import Page from "~/components/shared/Page"
-import { db } from "~/db"
-
-const getPlatforms = cache(async () => {
-    'use server'
-    return db.query.platform.findMany()
-}, 'platforms')
-
-export const route = {
-    load: () => getPlatforms()
-}
+import { getPlatforms } from "~/data/admin/platform"
 
 const columnDefs: Cols[] = [{
     field: 'name'
