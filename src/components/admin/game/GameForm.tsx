@@ -41,9 +41,9 @@ function copyData(data: Props['data']) {
     }
 }
 
-const updateAction = action(updateGamesOnDB, 'updateGame')
 
 export default function GameForm(props: Props) {
+    const updateAction = action(updateGamesOnDB)
     let form!: HTMLFormElement; 
     const publishers = createAsync(() => getPublishers())
     const developers = createAsync(() => getDevelopers())
@@ -71,13 +71,13 @@ export default function GameForm(props: Props) {
             action={updateAction.with(game, {
                 platformsHaveChanged: state.pformsHaveChanged(), 
                 tagsHaveChanged: state.tagsHaveChanged(),
-                isNewGame: !!props.data
+                isNewGame: !props.data,
             })}
             submitting={submitting}
             state={state}
             setState={setState}
             submitDisabled={
-                !game.title ||
+                !game.title || 
                 !game.cover ||
                 !game.banner ||
                 !game.summary ||
