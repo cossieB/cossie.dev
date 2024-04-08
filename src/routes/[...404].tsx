@@ -1,10 +1,11 @@
-import { useLocation } from "@solidjs/router";
+import { A, Navigate, useLocation } from "@solidjs/router";
 import { HttpStatusCode } from "@solidjs/start";
 import { Show } from "solid-js";
 import Navigator from "~/components/Navigator/Navigator";
 
 export default function NotFound() {
     const location = useLocation()
+    
     return (
         <>
             <main
@@ -27,9 +28,7 @@ export default function NotFound() {
                     404
                 </h1>
             </main>
-            <Show when={!location.pathname.startsWith('/admin')}>
-                <Navigator />
-            </Show>
+            <Navigator />
         </>
     );
 }

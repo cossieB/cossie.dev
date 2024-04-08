@@ -1,9 +1,9 @@
 import { type JSXElement, onCleanup, onMount, Show } from "solid-js";
 import AdminNav from "~/components/admin/AdminNav";
 import styles from './admin.module.scss'
-import { action, useIsRouting } from "@solidjs/router";
+import { RouteSectionProps, useIsRouting } from "@solidjs/router";
 
-export default function Layout(props: { children: JSXElement }) {
+export default function Layout(props: RouteSectionProps) {
     const isNavigating = useIsRouting()
 
     onMount(() => {
@@ -15,20 +15,14 @@ export default function Layout(props: { children: JSXElement }) {
         })
     })
     return (
-      //  <AdminContextProvider>
         <div class={styles.container}>
             <AdminNav />
             <section class={styles.main}>
                 <Show when={isNavigating()}>
-                    <div role="navigation" id={styles.navIndicator} />
+                    <div role="progressbar" id={styles.navIndicator} />
                 </Show>
                 {props.children}
             </section>
         </div>
-      //  </AdminContextProvider> 
     )
 }
-
-export type NewType = {
-    user: string | null | undefined
-};

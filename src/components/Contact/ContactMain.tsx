@@ -11,10 +11,20 @@ import { FormInput, FormTextarea } from "../admin/forms/FormInput";
 const sendAction = action(async (body: {name: string, email: string, organization: string, message: string}) => {
     'use server'
     try {
+        const errors: string[] = [];
+        Object.entries(body).forEach(([key, val]) => {
+            if (val === "") {
+                errors.push(key);
+            }
+        })
+        if (errors.length > 0) {
+            return new Error(`The following fields are required but are missing in your submission: ${errors.join(", ")}`)
+        }
         await sendMail(body.name, body.organization, body.message, body.email)
         return "Your message has been sent. Thank you for reaching out to me. I will come back to you as soon as possible. Redirecting in 5 seconds"
     } 
     catch (error) {
+        console.error(error)
         return new Error("Something went wrong. Please try again later")
     }
 })
@@ -27,6 +37,8 @@ export default function ContactMain() {
         organization: "",
         message: "",
     })
+
+    const disabled = () => Object.values(body).some( val => !val)
     const navigate = useNavigate()
     const submission = useSubmission(sendAction)
      
@@ -53,7 +65,7 @@ export default function ContactMain() {
                         required={false}
                     />
                     <button
-                        disabled={submission.pending || typeof submission.result === 'string'}
+                        disabled={submission.pending || typeof submission.result === 'string' || disabled()}
                         type="submit"
                     >
                         <Switch fallback="Submit">

@@ -16,7 +16,12 @@ export const stack: { [key: string]: string } = {
     trpc: "https://trpc.io/img/logo.svg",
     'ag-grid': 'https://blog.ag-grid.com/content/images/2021/02/new-logo-1.png',
     "upload thing": "https://images.clerk.dev/uploaded/img_2P1JBLxZ0O7gcv16iXX0zjGIqHY.png",
-    "drizzle orm": "https://avatars.githubusercontent.com/u/108468352?s=280&v=4"
+    "drizzle orm": "https://avatars.githubusercontent.com/u/108468352?s=280&v=4",
+    redis: "https://upload.wikimedia.org/wikipedia/en/thumb/6/6b/Redis_Logo.svg/1200px-Redis_Logo.svg.png",
+    nodemailer: "https://i0.wp.com/community.nodemailer.com/wp-content/uploads/2015/10/n2-2.png?fitu003d422%2C360u0026sslu003d1",
+    fastify: "https://fastify.dev/img/logos/fastify-black.svg",
+    "tanstack query": "https://devio2023-media.developers.io/wp-content/uploads/2023/11/tanstack-qeury-960x504.jpeg",
+    "railway.app": 'https://railway.app/brand/logotype-dark.png'
 }
 const sections = [langs, frontend, backend, misc]
 
@@ -47,16 +52,16 @@ export type Projs = {
 
 export const projectArray: Projs[] = [
     {
-        title: "Meme Machine",
-        img: "/screenshots/memes.png",
-        imgMobile: "/screenshots/memes_mobile.png",
-        path: "https://mememachine.vercel.app/",
-        external: true,
-        description: "Full-stack CRUD application for posting and viewing memes. Features 'like', 'follow' functionality and OAuth login with Google and Facebook. Developed with TypeScript, Next.js, React and Tailwind CSS. The data is stored in Supabase PostgreSQL and Prisma ORM is used to interact with the database. Uses the Next-Auth library for authentication and tRPC to bridge the front-end and back-end. ",
-        stack: ["typescript", "next.js", "react", "node.js", "postgresql", "prisma", "json web token", "vercel", "trpc", "tailwind"],
-        repo: 'https://github.com/cossieB/meme-machine',
-        type: 'large'
-    }, {
+        title: "Threader",
+        img: "/screenshots/threadxer.png",
+        imgMobile: "/screenshots/threadxer_mobile.png",
+        path: "https://threadxer.cossie.dev",
+        description: "Threadxer is a all-new social media platform where you can post your thoughts in under 180 characters. Features a custom built authentication system using JWTs and image uploading to Firebase Storage. On the back end uses Fastify server, TypeScript, PostgreSQL and Redis. On the front end uses Solid.js, Tanstack Query, SASS. And uses tRPC to bridge the front end and back end.",
+        stack: ["typescript", "fastify", "solidjs", "redis", "postgresql", "json web token", "vercel", "trpc", "sass", "node.js", "drizzle orm", "nodemailer",  "firebase", "tanstack query", "railway.app"],
+        repo: "https://github.com/cossieB/threadxer",
+        type: "large",
+        external: true
+    },  {
         title: "Internet Games Database",
         img: "/screenshots/igdb.png",
         imgMobile: "/screenshots/igdb_mobile.png",
@@ -83,6 +88,16 @@ export const projectArray: Projs[] = [
         repo: "https://github.com/cossieB/cossie.dev/tree/main/src/components/admin",
         stack: ["typescript", "solidjs", "vercel", "postgresql", "sass", "mongodb", "ag-grid", "upload thing", "drizzle orm", "node.js"],
         type: 'large',
+    }, {
+        title: "Meme Machine",
+        img: "/screenshots/memes.png",
+        imgMobile: "/screenshots/memes_mobile.png",
+        path: "https://mememachine.vercel.app/",
+        external: true,
+        description: "Full-stack CRUD application for posting and viewing memes. Features 'like', 'follow' functionality and OAuth login with Google and Facebook. Developed with TypeScript, Next.js, React and Tailwind CSS. The data is stored in Supabase PostgreSQL and Prisma ORM is used to interact with the database. Uses the Next-Auth library for authentication and tRPC to bridge the front-end and back-end. ",
+        stack: ["typescript", "next.js", "react", "node.js", "postgresql", "prisma", "json web token", "vercel", "trpc", "tailwind"],
+        repo: 'https://github.com/cossieB/meme-machine',
+        type: 'large'
     }, {
         title: "Microservices",
         img: "/screenshots/microservices.png",

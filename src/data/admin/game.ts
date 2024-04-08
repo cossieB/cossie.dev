@@ -1,4 +1,4 @@
-import { cache } from "@solidjs/router";
+import { cache, redirect } from "@solidjs/router";
 import { sql, eq } from "drizzle-orm";
 import { db } from "~/db";
 import { genresOfGames, gamesOnPlatforms, game, platform } from "~/drizzle/schema";
@@ -39,12 +39,12 @@ export const getGame = cache(async (gameId: string) => {
             .where(eq(game.gameId, gameId))
 
         if (result.length == 0)
-            throw new Error('404')
+            return redirect("/admin/404", {status: 404, statusText: "Not Found"})
         return { ...result[0].Game, tags: result[0].t?.tags ?? [], platforms: result[0].v?.platforms ?? [] }
     }
     catch (error: any) {
         if (error.message?.includes('invalid input syntax for type uuid'))
-            throw new Error('404')
+            return redirect("/admin/404", {status: 404, statusText: "Not Found"})
         throw error
     }
 }, `game`)
