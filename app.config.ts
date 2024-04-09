@@ -112,7 +112,7 @@ export default defineConfig({
     server: {
         preset: 'vercel',
         prerender: {
-            routes: ["/", "/about", "/contact", "/projects"],
+            routes: ["/", "/about", "/contact", "/projects", "/api"],
             ignore: ["/admin"]
         },
     }
