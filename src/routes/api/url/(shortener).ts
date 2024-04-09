@@ -3,6 +3,7 @@ import { MongoClient } from "mongodb";
 import { json, redirect } from "@solidjs/router"
 import whatwg from 'whatwg-url'
 import dns from 'dns/promises';
+import { getMongo } from "~/utils/getMongo";
 
 export type IURL = {
     original: string,
@@ -28,9 +29,7 @@ export async function POST(event: APIEvent) {
     if (typeof original !== "string")
         return json({ error: "Invalid URL" }, { status: 400 })
 
-    const client = new MongoClient(process.env.MONGO_URI!);
-    const database = client.db("cossiedev");
-    const collection = database.collection<IURL>("urls");
+    const {collection} = getMongo<IURL>("urls")
     const doc = await collection.findOne({ original })
 
     if (doc) {

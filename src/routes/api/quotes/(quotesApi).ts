@@ -10,7 +10,7 @@ type Q = Omit<typeof quotes[number], 'tags'> & {
 export function GET(event: APIEvent) {
     const shuffledQuotes = shuffleArray(quotes)
     const url = new URL(event.request.url)
-    const search = new URLSearchParams(url.search)
+    const search = url.searchParams
     const author = search.get("author");
     const limit = Number(search.get("limit")) || 1;
     const tags = search.getAll("tag");

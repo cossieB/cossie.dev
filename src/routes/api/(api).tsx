@@ -30,13 +30,13 @@ export default function ApiMainPage() {
                                 <li><a href="#url-shortener-response">URL Shortener Response</a></li>
                             </ul>
                         </li>
-                        <li>
+                        {/* <li>
                             <a href="#file-metadata">File Metadata</a>
                             <ul>
                                 <li><a href="#file-metadata-request">File Metadata Request</a></li>
                                 <li><a href="#file-metadata-response">File Metadata Response</a></li>
                             </ul>
-                        </li>
+                        </li> */}
                         <li>
                             <a href="#quotes-as-a-service">Quotes As A Service</a>
                             <ul>
@@ -179,7 +179,8 @@ export default function ApiMainPage() {
                 <pre><span class="pl-kos">{"{"}</span>
                     <span class="pl-c1">original</span>: <span class="pl-s">"https://threadxer.cossie.dev/"</span><span class="pl-kos">,</span>
                     <span class="pl-c1">short</span>: <span class="pl-s">"/api/url/0"</span>
-                    <span class="pl-kos">{"}"}</span></pre>
+                    <span class="pl-kos">{"}"}</span>
+                    </pre>
             </div>
             <div class="highlight highlight-source-js">
                 <pre><span class="pl-c1">400</span> <span class="pl-v">Bad</span> <span class="pl-v">Request</span></pre>
@@ -189,12 +190,12 @@ export default function ApiMainPage() {
                     <span class="pl-c1">error</span>: <span class="pl-s">"Invalid URL"</span>
                     <span class="pl-kos">{"}"}</span></pre>
             </div>
-            <h2><a id="file-metadata" class="anchor" aria-hidden="true" href="#file-metadata"><span
+            {/* <h2><a id="file-metadata" class="anchor" aria-hidden="true" href="#file-metadata"><span
                 aria-hidden="true" class="octicon octicon-link"></span></a>File Metadata</h2>
             <h3><a id="file-metadata-request" class="anchor" aria-hidden="true" href="#file-metadata-request"><span
                 aria-hidden="true" class="octicon octicon-link"></span></a>File Metadata Request</h3>
             <form class="single-form" action="/api/metadata" method="post" enctype="multipart/form-data"><input type="file"
-                name="file" required /><br /><button type="submit">Submit</button></form>
+                name="file" required /><br /><button type="submit">Submit</button></form> 
             <h3><a id="file-metadata-response" class="anchor" aria-hidden="true"
                 href="#file-metadata-response"><span aria-hidden="true" class="octicon octicon-link"></span></a>File
                 Metadata Response</h3>
@@ -208,13 +209,13 @@ export default function ApiMainPage() {
                     <span class="pl-c1">mimetype</span>: <span class="pl-s">"text/plain"</span><span class="pl-kos">,</span>
                     <span class="pl-c1">size</span>: <span class="pl-c1">2426</span>
                     <span class="pl-kos">{"}"}</span></pre>
-            </div>
+            </div> */}
             <h2><a id="quotes-as-a-service" class="anchor" aria-hidden="true" href="#quotes-as-a-service"><span
                 aria-hidden="true" class="octicon octicon-link"></span></a>Quotes As A Service</h2>
             <h3><a id="quotes-request" class="anchor" aria-hidden="true" href="#quotes-request"><span
                 aria-hidden="true" class="octicon octicon-link"></span></a>Quotes Request</h3>
             <div class="highlight highlight-source-js">
-                <pre><span class="pl-c1">GET</span> <span class="pl-c1">/</span><span class="pl-s1">api</span><span class="pl-c1">/</span><span class="pl-s1">quotes</span><span class="pl-c1">/</span>?<span class="pl-s1">limit</span><span class="pl-c1">=</span><span class="pl-kos">{"{"}</span><span class="pl-kos">{"{"}</span>number<span class="pl-kos">{"}"}</span><span class="pl-kos">{"}"}</span></pre>
+                <pre><span class="pl-c1">GET</span> <span class="pl-c1">/</span><span class="pl-s1">api</span><span class="pl-c1">/</span><span class="pl-s1">quotes</span><span class="pl-c1">/</span>?<span class="pl-s1">limit</span><span class="pl-c1">=</span><span class="pl-kos">{"{"}</span><span class="pl-kos">{"{"}</span>number<span class="pl-kos">{"}"}</span><span class="pl-kos">{"}"}</span><span>&author<span class="pl-c1">=</span>{"{{author}}&tag={{tag1}}&tag={{tag2}}"}</span></pre>
             </div>
             <h3><a id="quotes-response" class="anchor" aria-hidden="true" href="#quotes-response"><span
                 aria-hidden="true" class="octicon octicon-link"></span></a>Quotes Response</h3>
@@ -265,7 +266,15 @@ export default function ApiMainPage() {
             <h3><a id="create-exercise-request" class="anchor" aria-hidden="true"
                 href="#create-exercise-request"><span aria-hidden="true" class="octicon octicon-link"></span></a>Create
                 Exercise Request</h3>
-            <form class="single-form" id="exerciseForm" method="post">
+            <form class="single-form" id="exerciseForm" method="post"
+                onsubmit={e => {
+                    e.preventDefault();
+                    const exForm = document.getElementById('exerciseForm') as HTMLFormElement;
+                    const input = document.getElementById('exId') as HTMLInputElement
+                    exForm.action = `/api/exercisetracker/${input.value}/logs`
+                    exForm.submit()
+                }}
+            >
                 Create Exercise
                 <input id="exId" type="text" name="_id" placeholder="_id" required /><input type="text" name="description"
                     placeholder="description" required /><input type="number" name="duration" placeholder="duration"
@@ -360,8 +369,26 @@ export default function ApiMainPage() {
             <h3><a id="translator-request" class="anchor" aria-hidden="true" href="#translator-request"><span
                 aria-hidden="true" class="octicon octicon-link"></span></a>Translator Request</h3>
             <div id="translateDiv">
-                <form class="formColumn" id="translateForm"><textarea id="text" cols="30" rows="10"
-                    placeholder="lorry bank holiday 1.15" name="text" required> </textarea><select id="locale"
+                <form class="formColumn" id="translateForm"
+                    onsubmit={async e => {
+                        e.preventDefault();
+                        const text = (document.getElementById('text') as HTMLInputElement)!.value
+                        const locale = (document.getElementById('locale') as HTMLInputElement)!.value
+                        const res = await fetch('/api/translate', {
+                            method: 'POST',
+                            body: JSON.stringify({ text, locale }),
+                            headers: {
+                                'Content-Type': 'application/json'
+                            }
+                        })
+                        const data = await res.json()
+                        if (data.translation) {
+                            const resultDiv = document.getElementById('translateResult')!
+                            resultDiv.innerHTML = data.translation
+                        }
+                    }}
+                >
+                    <textarea id="text" cols="30" rows="10" placeholder="lorry bank holiday 1.15" name="text" required> </textarea><select id="locale"
                         name="locale">
                         <option value="british-to-american">British To American</option>
                         <option value="american-to-british">American To British</option>
@@ -385,7 +412,7 @@ export default function ApiMainPage() {
             <div class="highlight highlight-source-js">
                 <pre><span class="pl-kos">{"{"}</span>
                     <span class="pl-c1">text</span>: <span class="pl-s">"lorry bank holiday 1.15"</span><span class="pl-kos">,</span>
-                    <span class="pl-c1">translation</span>: <span class="pl-s">"&lt;span class=\"highlight\"&gt;truck&lt;/span&gt; &lt;span class=\"highlight\"&gt;public holiday&lt;/span&gt; &lt;span class=\"highlight\"&gt;1:15&lt;/span&gt;"</span>
+                    <span class="pl-c1">translation</span>: <span class="pl-s">"&lt;span class=\"translated\"&gt;truck&lt;/span&gt; &lt;span class=\"translated\"&gt;public holiday&lt;/span&gt; &lt;span class=\"translated\"&gt;1:15&lt;/span&gt;"</span>
                     <span class="pl-kos">{"}"}</span></pre>
             </div>
             <div class="highlight highlight-source-js">

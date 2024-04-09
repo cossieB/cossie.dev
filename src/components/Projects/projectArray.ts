@@ -99,13 +99,12 @@ export const projectArray: Projs[] = [
         repo: 'https://github.com/cossieB/meme-machine',
         type: 'large'
     }, {
-        title: "Microservices",
+        title: "REST API",
         img: "/screenshots/microservices.png",
         imgMobile: "/screenshots/microservices_mobile.png",
-        path: "https://api.cossie.dev/",
-        external: true,
-        description: "Various REST APIs including header parser, file metadata, timestamp microservices, issue and exercise trackers and translator services. Deployed on Netlify and uses serverless Netlify functions.",
-        stack: ["typescript", "node.js", "mongodb", "mongoose", "netlify"],
+        path: "/api",
+        description: "Various REST APIs including header parser, timestamp, issue and exercise trackers and translator services. Uses MongoDB as a database",
+        stack: ["typescript", "node.js", "mongodb"],
         repo: 'https://github.com/cossieB/serverless',
         type: 'api'
     }, {
