@@ -147,8 +147,10 @@ export default function ApiMainPage() {
                 aria-hidden="true" class="octicon octicon-link"></span></a>URL Shortener</h2>
             <h3><a id="url-shortener-request" class="anchor" aria-hidden="true" href="#url-shortener-request"><span
                 aria-hidden="true" class="octicon octicon-link"></span></a>URL Shortener Request</h3>
-            <form class="single-form" action="/api/url" method="post"><input type="text" name="original" id="original"
-                placeholder="Enter URL" /><button type="submit">Submit</button></form>
+            <form class="single-form" action="/api/url" method="post">
+                <input type="text" name="original" id="original" placeholder="Enter URL" />
+                <button type="submit">Submit</button>
+            </form>
             <br /> <strong><em>OR</em></strong>
             <div class="highlight highlight-source-js">
                 <pre><span class="pl-c1">POST</span> <span class="pl-c1">/</span><span class="pl-s1">api</span><span class="pl-c1">/</span><span class="pl-s1">url</span></pre>
