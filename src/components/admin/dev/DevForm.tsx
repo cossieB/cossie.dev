@@ -37,7 +37,7 @@ export function DevForm(props: Props) {
         uploadError: null as null | string,
     })
     const submitting = useSubmission(updateAction);
-    
+
     createEffect(() => {
         setDev(copyData(props.data))
     })
@@ -45,7 +45,7 @@ export function DevForm(props: Props) {
     return (
         <AdminForm
             id="devForm"
-            action={updateAction.with(dev, {isNewDev: !props.data})}
+            action={updateAction.with(dev, { isNewDev: !props.data })}
             class={styles.form}
             submitting={submitting}
             state={state}
@@ -59,19 +59,21 @@ export function DevForm(props: Props) {
                 !dev.summary
             }
         >
-            <DropZone
-                endpoint="logo"
-                onSuccess={res => setDev('logo', res[0].url)}
-                images={[dev.logo]}
-                input={{
-                    reference: dev.developerId,
-                    table: 'developer'
-                }}
-                onError={e => setState('uploadError', e)}
-                single
-                text="Logo"
-                setImages={urls => setDev('logo', urls[0])}
-            />
+            <div class={styles.heroImgs}>
+                <DropZone
+                    endpoint="logo"
+                    onSuccess={res => setDev('logo', res[0].url)}
+                    images={[dev.logo]}
+                    input={{
+                        reference: dev.developerId,
+                        table: 'developer'
+                    }}
+                    onError={e => setState('uploadError', e)}
+                    single
+                    text="Logo"
+                    setImages={urls => setDev('logo', urls[0])}
+                />
+            </div>
             <FormInput
                 name="name"
                 value={dev.name}

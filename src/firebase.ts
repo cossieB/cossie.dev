@@ -2,7 +2,6 @@
 import { initializeApp } from "firebase/app"
 import { getFirestore } from "firebase/firestore"
 import { getAuth, signInAnonymously } from "firebase/auth";
-import { getAnalytics } from 'firebase/analytics'
 import {getStorage} from 'firebase/storage'
 
 const firebaseConfig = {
@@ -21,3 +20,5 @@ const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const db = getFirestore(app);
 export const storage = getStorage(app)
+
+signInAnonymously(auth).then(() => console.log("Hello Visitor. Enjoy your stay"))

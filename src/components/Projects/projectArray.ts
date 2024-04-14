@@ -57,7 +57,7 @@ export const projectArray: Projs[] = [
         imgMobile: "/screenshots/threadxer_mobile.png",
         path: "https://threadxer.cossie.dev",
         description: "Threadxer is a all-new social media platform where you can post your thoughts in under 180 characters. Features a custom built authentication system using JWTs and image uploading to Firebase Storage. On the back end uses Fastify server, TypeScript, PostgreSQL and Redis. On the front end uses Solid.js, Tanstack Query, SASS. And uses tRPC to bridge the front end and back end.",
-        stack: ["typescript", "fastify", "solidjs", "redis", "postgresql", "json web token", "vercel", "trpc", "sass", "node.js", "drizzle orm", "nodemailer",  "firebase", "tanstack query", "railway.app"],
+        stack: ["typescript", "fastify", "solidjs", "redis", "postgresql", "json web token", "trpc", "sass", "node.js", "drizzle orm", "nodemailer",  "firebase", "tanstack query", "railway.app"],
         repo: "https://github.com/cossieB/threadxer",
         type: "large",
         external: true
