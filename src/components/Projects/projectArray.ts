@@ -89,16 +89,6 @@ export const projectArray: Projs[] = [
         stack: ["typescript", "solidjs", "vercel", "postgresql", "sass", "mongodb", "ag-grid", "upload thing", "drizzle orm", "node.js"],
         type: 'large',
     }, {
-        title: "Meme Machine",
-        img: "/screenshots/memes.png",
-        imgMobile: "/screenshots/memes_mobile.png",
-        path: "https://mememachine.vercel.app/",
-        external: true,
-        description: "Full-stack CRUD application for posting and viewing memes. Features 'like', 'follow' functionality and OAuth login with Google and Facebook. Developed with TypeScript, Next.js, React and Tailwind CSS. The data is stored in Supabase PostgreSQL and Prisma ORM is used to interact with the database. Uses the Next-Auth library for authentication and tRPC to bridge the front-end and back-end. ",
-        stack: ["typescript", "next.js", "react", "node.js", "postgresql", "prisma", "json web token", "vercel", "trpc", "tailwind"],
-        repo: 'https://github.com/cossieB/meme-machine',
-        type: 'large'
-    }, {
         title: "REST API",
         img: "/screenshots/microservices.png",
         imgMobile: "/screenshots/microservices_mobile.png",
@@ -116,6 +106,16 @@ export const projectArray: Projs[] = [
         stack: ['typescript', 'node.js', 'next.js', 'postgresql', 'prisma', 'apollo', 'supabase', 'graphql', 'vercel'],
         repo: "https://github.com/cossieB/internet-games-database/tree/main/graphql",
         type: 'api'
+    }, {
+        title: "Meme Machine",
+        img: "/screenshots/memes.png",
+        imgMobile: "/screenshots/memes_mobile.png",
+        path: "https://mememachine.vercel.app/",
+        external: true,
+        description: "Full-stack CRUD application for posting and viewing memes. Features 'like', 'follow' functionality and OAuth login with Google and Facebook. Developed with TypeScript, Next.js, React and Tailwind CSS. The data is stored in Supabase PostgreSQL and Prisma ORM is used to interact with the database. Uses the Next-Auth library for authentication and tRPC to bridge the front-end and back-end. ",
+        stack: ["typescript", "next.js", "react", "node.js", "postgresql", "prisma", "json web token", "vercel", "trpc", "tailwind"],
+        repo: 'https://github.com/cossieB/meme-machine',
+        type: 'large'
     }, {
         title: "Wordle",
         img: "/screenshots/wordle.png",

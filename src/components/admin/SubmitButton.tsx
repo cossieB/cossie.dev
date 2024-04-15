@@ -30,3 +30,13 @@ export default function SubmitButton(props: Props) {
         </button>
     )
 }
+
+export function AdminBtn(props: JSX.ButtonHTMLAttributes<HTMLButtonElement>) {
+    return (
+        <button
+            {...props}
+        >
+            {props.children}
+        </button>
+    )
+}

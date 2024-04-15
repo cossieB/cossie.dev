@@ -29,6 +29,7 @@ function copyData(data: Props['data']): Publisher {
 }
 export function PubForm(props: Props) {
     let ref!: HTMLFormElement
+
     const [pub, setPub] = createStore(copyData(props.data))
 
     const [state, setState] = createStore({
@@ -48,6 +49,7 @@ export function PubForm(props: Props) {
             state={state}
             setState={setState}
             submitting={submitting}
+            reset={() => setPub(copyData(props.data))}
             action={updateAction.with(pub, { isNewPub: !props.data })}
             ref={ref}
             submitDisabled={

@@ -44,7 +44,8 @@ function copyData(data: Props['data']) {
 
 export default function GameForm(props: Props) {
     const updateAction = action(updateGamesOnDB, 'updateGame')
-    let form!: HTMLFormElement; 
+    let form!: HTMLFormElement; 0
+
     const publishers = createAsync(() => getPublishers())
     const developers = createAsync(() => getDevelopers())
     const platforms = createAsync(() => getPlatforms())
@@ -76,6 +77,7 @@ export default function GameForm(props: Props) {
             submitting={submitting}
             state={state}
             setState={setState}
+            reset={() => setGame(copyData(props.data))}
             submitDisabled={
                 !game.title || 
                 !game.cover ||

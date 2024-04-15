@@ -29,6 +29,7 @@ function copyData(data: Props['data']): Developer {
 
 export function DevForm(props: Props) {
     let ref!: HTMLFormElement
+
     const [dev, setDev] = createStore(copyData(props.data))
 
     const [state, setState] = createStore({
@@ -50,6 +51,7 @@ export function DevForm(props: Props) {
             submitting={submitting}
             state={state}
             setState={setState}
+            reset={() => setDev(copyData(props.data))}
             ref={ref}
             submitDisabled={
                 !dev.country ||

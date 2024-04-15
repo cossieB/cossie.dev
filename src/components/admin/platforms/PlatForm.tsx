@@ -26,6 +26,7 @@ function copyData(data: Props['data']): Platform {
 }
 export function PlatForm(props: Props) {
     let ref!: HTMLFormElement
+
     const [platform, setPlatform] = createStore(copyData(props.data))
 
     const [state, setState] = createStore({
@@ -43,6 +44,7 @@ export function PlatForm(props: Props) {
             action={updateAction.with(platform, {isNewPlatform: !props.data})}
             state={state}
             setState={setState}
+            reset={() => setPlatform(copyData(props.data))}
             submitDisabled={
                 !platform.name ||
                 !platform.logo ||
