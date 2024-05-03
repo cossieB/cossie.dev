@@ -188,14 +188,15 @@ $clrForm: hsl(0, 0%, 15%);
 
 .selector {
     position: absolute;
-    background-color: whitesmoke;
-    color: var(--clrRed);
+    background-color: hsl(0, 0%, 10%);
+    color: white;
     overflow: scroll;
     height: 0rem;
-    top: 100%;
+    left: 100%;
     z-index: 99;
     width: 25rem;
     transition: height 250ms ease;
+    overflow-x: hidden;
 
     &.open {
         height: 25rem;
@@ -206,7 +207,7 @@ $clrForm: hsl(0, 0%, 15%);
         padding: 0.25rem 0.5rem;
 
         &:hover {
-            background-color: gainsboro;
+            background-color: hsl(0, 0%, 15%);
         }
 
         display: flex;

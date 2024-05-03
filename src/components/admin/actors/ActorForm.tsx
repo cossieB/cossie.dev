@@ -98,18 +98,18 @@ export default function ActorForm(props: Props) {
                     onclick={() => setState('modalOpen', prev => !prev)}
                     type="button"
                     classList={{ [styles.open]: state.modalOpen }}
+                    use:clickOutside={() => setState('modalOpen', false)}
                 >
                     Add Character{" "}
                     <ChevronDown />
-                </button>
                 <GameSelector
                     setCharacters={(chars) => setActor('characters', chars)}
                     characters={actor.characters}
                     modalOpen={state.modalOpen}
-                    closeModal={() => setState('modalOpen', false)}
                     characerSet={charHashSet()}
                     games={games() ?? []}
                 />
+                </button>
             </div>
             <For each={actor.characters}>
                 {char =>
@@ -129,7 +129,6 @@ type P = {
     characerSet: Set<string>
     setCharacters(chars: Character[]): void
     modalOpen: boolean,
-    closeModal(): void,
     games: Game[]
 }
 
@@ -170,17 +169,23 @@ function Character(props: P1) {
 }
 
 function GameSelector(props: P) {
+    let ref!: HTMLInputElement
     const [input, setInput] = createSignal("")
     const filtered = createMemo(() => props.games.filter(game => game.title.toLowerCase().includes(input().toLowerCase())))
+    createEffect(() => {
+        if (props.modalOpen)
+            ref.focus()
+    })
     return (
         <ul
             class={styles.selector}
             classList={{ [styles.open]: props.modalOpen }}
-            use:clickOutside={props.closeModal}
+            onclick={e => e.stopImmediatePropagation()}
         >
             <input type="search"
                 value={input()}
                 onInput={e => setInput(e.target.value)}
+                ref={ref}
             />
             <For each={filtered()}>
                 {game =>

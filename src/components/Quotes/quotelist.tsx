@@ -1101,5 +1101,9 @@ export const quotes: Quote[] = [
         quote: "Ah you think darkness is your ally. But you merely adopted the dark; I was born in it, moulded by it. I didn't see the light until I was already a man, by then it was nothing to me but blinding!",
         author: "Bane",
         tags: new Set(["villain", "fiction", "movie"])
+    }, {
+        quote: "We buy things we don't need with money we don't have to impress people we don't like",
+        author: "Dave Ramsey",
+        tags: new Set(["humorous", "non-fiction", "economic"])
     }
 ]
