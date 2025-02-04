@@ -2,6 +2,7 @@
 
 #calcContainer {
     background: antiquewhite;
+	height: 100vh;
 	@include mixins.flexCenter;
 }
 #calculator {

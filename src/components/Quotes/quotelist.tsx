@@ -1105,5 +1105,13 @@ export const quotes: Quote[] = [
         quote: "We buy things we don't need with money we don't have to impress people we don't like",
         author: "Dave Ramsey",
         tags: new Set(["humorous", "non-fiction", "economic"])
+    }, {
+        quote: "Tax payers shouldn't have a say in how their tax dollars are spent. That's anarchy",
+        author: "Sheriff Mike Johnson",
+        tags: new Set(["humorous", "fiction", "tv series", "economic"])
+    }, {
+        quote: "Given the opportunity, players will optimize the fun out of a game",
+        author: "Soren Johnson",
+        tags: new Set(["humorous", "nerdy", "video game"])
     }
 ]
