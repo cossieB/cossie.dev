@@ -29,7 +29,7 @@ const { createUploadThing } = generateSolidHelpers<OurFileRouter>();
 
 export function DropZone<T extends keyof OurFileRouter>(props: Props<T>) {
     let input!: HTMLInputElement;
-    const {isUploading, startUpload} = createUploadThing(props.endpoint, {
+    const { isUploading, startUpload } = createUploadThing(props.endpoint, {
         onUploadError: e => {
             props.onError((e.cause as any)?.error ?? e.message)
         },
@@ -42,27 +42,32 @@ export function DropZone<T extends keyof OurFileRouter>(props: Props<T>) {
     const merged = mergeProps({ text: "Drop Image Here", fileLimit: 1 }, props);
 
     async function selectFiles(fileList: File[]) {
-        const limit = merged.fileLimit - merged.images.length;
-        const urls = fileList
-            .map(file => URL.createObjectURL(file))
-        if (merged.fileLimit === 1)
-            setPreviews(urls.slice(0, 1))
+
+        if (merged.fileLimit === 1) {
+            const url = URL.createObjectURL(fileList[0])
+            setPreviews([url])
+        }
         else {
-            setPreviews(p => [...p, ...urls].slice(0, limit))
+            const limit = merged.fileLimit - merged.images.length;
+            const l = fileList.slice(0, limit - previews().length).map(file => URL.createObjectURL(file))
+            setPreviews(p => [...p, ...l].slice(0, limit))
         }
         setEntered(false)
+
         const res = await startUpload(fileList as any, props.input as any)
-        if (!res) return;
-        props.onSuccess(res)
+
+        previews().forEach(URL.revokeObjectURL)
+        setPreviews([])
+        res && props.onSuccess(res)
     }
 
     return (
         <div
             class={`${styles.z}`}
-            classList={{ 
-                [styles.enter]: entered(), 
-                [styles.uploading]: isUploading(), 
-                [styles.multi]: !props.single 
+            classList={{
+                [styles.enter]: entered(),
+                [styles.uploading]: isUploading(),
+                [styles.multi]: !props.single
             }}
             onDragOver={e => {
                 e.preventDefault()

@@ -1,4 +1,4 @@
-import { Show } from "solid-js";
+import { Show, onCleanup, onMount } from "solid-js";
 import type { ColDef, ColGroupDef } from "ag-grid-community";
 import GridTable from "~/components/Datagrid/GridTable";
 
@@ -8,6 +8,12 @@ type Props<T> = {
 };
 export function AdminTable<T>(props: Props<T>) {
     'use client'
+    onMount(() => {
+        document.body.style.overflow = "hidden"
+        onCleanup(() => {
+            document.body.style.overflow = 'auto'
+        })
+    })
     return (
         <main class={`ag-theme-alpine-dark`} style={{ width: '100%', height: '100vh' }}>
             {/* <Suspense fallback={<span>loading...</span>}> */}

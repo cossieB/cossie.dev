@@ -18,7 +18,7 @@ type Props = {
         error?: any
         clear: () => void
         result?: unknown
-        pending: boolean
+        pending?: boolean
     }
     setState: SetStoreFunction<{ uploadError: null | string, complete: boolean }>
     submitDisabled: boolean
@@ -42,7 +42,7 @@ export default function AdminForm(props: Props) {
                     when={/\/add\/?$/.test(location.pathname) && props.state.complete}
                     fallback={<SubmitButton
                         finished={props.state.complete}
-                        loading={props.submitting.pending}
+                        loading={!!props.submitting.pending}
                         disabled={
                             props.state.complete ||
                             props.state.isUploading ||
