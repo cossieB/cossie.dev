@@ -4,41 +4,44 @@ import { OurFileRouter } from "~/server/uploadthing";
 import { generateSolidHelpers } from "@uploadthing/solid";
 import { ClientUploadedFileData } from "uploadthing/types";
 
+type DZInput<T extends keyof OurFileRouter> = T extends 'game' ?
+    {
+        field: "cover" | "banner" | "images";
+        reference: string
+    } : {
+        reference: string;
+        table: "developer" | "publisher" | "platform" | "actor";
+    };
+
 export type Props<T extends keyof OurFileRouter> = {
     images: string[]
     text?: string
     fileLimit?: number
     endpoint: T
-    input: OurFileRouter[T]['_def']['_input']
+    input: DZInput<T>
     onError: (err: any) => void
     onSuccess: (res: ClientUploadedFileData<null>[]) => void
     setImages: (urls: string[]) => void
     single: boolean
 }
 
-const { useUploadThing } = generateSolidHelpers<OurFileRouter>();
+const { createUploadThing } = generateSolidHelpers<OurFileRouter>();
 
 export function DropZone<T extends keyof OurFileRouter>(props: Props<T>) {
     let input!: HTMLInputElement;
-    
-    onCleanup(() => previews().forEach(URL.revokeObjectURL));
-
-    const { isUploading, startUpload } = useUploadThing(props.endpoint, {
-        onClientUploadComplete(res) {
-            setPreviews([])
-            props.onSuccess((res ?? []) as any)
-        },
-        onUploadError(e) {
-            setPreviews([])
-            props.onError(e.message);
-
+    const {isUploading, startUpload} = createUploadThing(props.endpoint, {
+        onUploadError: e => {
+            props.onError((e.cause as any)?.error ?? e.message)
         },
     })
+
+    onCleanup(() => previews().forEach(URL.revokeObjectURL));
+
     const [entered, setEntered] = createSignal(false);
     const [previews, setPreviews] = createSignal<string[]>([])
     const merged = mergeProps({ text: "Drop Image Here", fileLimit: 1 }, props);
-    
-    function selectFiles(fileList: File[]) {
+
+    async function selectFiles(fileList: File[]) {
         const limit = merged.fileLimit - merged.images.length;
         const urls = fileList
             .map(file => URL.createObjectURL(file))
@@ -48,13 +51,19 @@ export function DropZone<T extends keyof OurFileRouter>(props: Props<T>) {
             setPreviews(p => [...p, ...urls].slice(0, limit))
         }
         setEntered(false)
-        startUpload(fileList, props.input as any)
+        const res = await startUpload(fileList as any, props.input as any)
+        if (!res) return;
+        props.onSuccess(res)
     }
 
     return (
         <div
             class={`${styles.z}`}
-            classList={{ [styles.enter]: entered(), [styles.uploading]: isUploading(), [styles.multi]: !props.single }}
+            classList={{ 
+                [styles.enter]: entered(), 
+                [styles.uploading]: isUploading(), 
+                [styles.multi]: !props.single 
+            }}
             onDragOver={e => {
                 e.preventDefault()
                 setEntered(true)
@@ -77,7 +86,7 @@ export function DropZone<T extends keyof OurFileRouter>(props: Props<T>) {
                 <Match when={!isUploading() && props.single && props.images.at(0)}>
                     <img src={props.images.at(0)} alt="" />
                 </Match>
-                <Match when={!props.single}>
+                <Match when={!props.single && isUploading()}>
                     <For each={previews()}>
                         {img => <img src={img} />}
                     </For>
