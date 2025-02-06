@@ -1,17 +1,19 @@
-import { cache, redirect } from "@solidjs/router";
+import { query, redirect } from "@solidjs/router";
 import { sql, eq } from "drizzle-orm";
 import { db } from "~/db";
 import { genresOfGames, gamesOnPlatforms, game, platform } from "~/drizzle/schema";
+import { sleep } from "~/lib/sleep";
 
-export const getGames = cache(async () => {
+export const getGames = query(async () => {
     'use server';
     return db.query.game.findMany({
         orderBy: (fields) => fields.title
     });
 }, "games");
 
-export const getGame = cache(async (gameId: string) => {
+export const getGame = query(async (gameId: string) => {
     'use server'
+
     try {
         const genreQuery = db.$with('t').as(db.select({
             gameId: genresOfGames.gameId,

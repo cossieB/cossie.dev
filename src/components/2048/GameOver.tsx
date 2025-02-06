@@ -59,8 +59,6 @@ export default function GameOver(props: P) {
                         props.setGameOver(false);
                         props.setScore(0)
                         while (props.array.length > 0) props.array.pop()
-                        props.array.push(createBlock(props.array))
-                        props.array.push(createBlock(props.array))
                     }}>
                         Play Again
                     </button>

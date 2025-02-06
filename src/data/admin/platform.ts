@@ -1,14 +1,14 @@
-import { cache } from "@solidjs/router";
+import { query } from "@solidjs/router";
 import { db } from "~/db";
 
-export const getPlatforms = cache(async () => {
+export const getPlatforms = query(async () => {
     'use server';
     return db.query.platform.findMany({
         orderBy: (fields) => fields.name
     });
 }, "platforms");
 
-export const getPlatform = cache(async (platformId: string) => {
+export const getPlatform = query(async (platformId: string) => {
     'use server';
     try {
         const result = await db.query.platform.findFirst({

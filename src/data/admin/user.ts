@@ -1,7 +1,7 @@
-import { cache } from "@solidjs/router";
+import { query } from "@solidjs/router";
 import { getSession } from "~/utils/getSession";
 
-export const getUser = cache(async () => {
+export const getUser = query(async () => {
     'use server';
     const session = await getSession();
     if (!session.data.user) return null;

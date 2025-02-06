@@ -1,16 +1,16 @@
-import { cache } from "@solidjs/router";
+import { query } from "@solidjs/router";
 import { eq } from "drizzle-orm";
 import { db } from "~/db";
 import { actorsInGames, game, actor } from "~/drizzle/schema";
 
-export const getActors = cache(async () => {
+export const getActors = query(async () => {
     'use server';
     return db.query.actor.findMany({
         orderBy: (fields) => fields.name
     });
 }, "actors");
 
-export const getActor = cache(async (actorId: string) => {
+export const getActor = query(async (actorId: string) => {
     'use server';
     try {
         const cq = db.select({

@@ -1,14 +1,14 @@
-import { cache } from "@solidjs/router";
+import { query } from "@solidjs/router";
 import { db } from "~/db";
 
-export const getPublishers = cache(async () => {
+export const getPublishers = query(async () => {
     'use server';
     return db.query.publisher.findMany({
         orderBy: (fields) => fields.name
     });
 }, "publishers");
 
-export const getPublisher = cache(async (publisherId: string) => {
+export const getPublisher = query(async (publisherId: string) => {
     'use server';
     try {
         const result = await db.query.publisher.findFirst({

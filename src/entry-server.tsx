@@ -34,7 +34,6 @@ export default createHandler(() => (
                     <link
                         href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;700&family=Press+Start+2P&family=Stick+No+Bills:wght@600&family=Orbitron:wght@500&display=swap"
                         rel="stylesheet" />
-                    <title>Cossie</title>
 
                     {assets}
                 </head>
