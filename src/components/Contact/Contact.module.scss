@@ -1,4 +1,4 @@
-@import "~/mixins";
+@use '~/mixins';
 
 #container {
     color: white;
@@ -10,7 +10,7 @@
 }
 
 #formDiv {
-    @include flexCenter(column);
+    @include mixins.flexCenter(column);
     height: 100%;
 }
 

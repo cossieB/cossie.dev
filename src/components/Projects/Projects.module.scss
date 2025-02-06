@@ -1,5 +1,5 @@
 @use 'details';
-@import '../../mixins';
+@use '../../mixins';
 
 #container {
     display: flex;
@@ -12,7 +12,7 @@
         color: white;
     }
 }
-@include hideScrollbar("#container");
+@include mixins.hideScrollbar("#container");
 
 .main {
     position: absolute;
@@ -38,7 +38,7 @@ $clr2: #0ae9e9;
     background: linear-gradient($clr1, $clr2 );
     color: black;
     font-size: clamp(1rem, 10vw, 20rem);
-    @include flexCenter;
+    @include mixins.flexCenter;
     cursor: pointer;
     top: 0;
     z-index: 2;

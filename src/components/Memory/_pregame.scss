@@ -1,4 +1,4 @@
-@import '~/mixins';
+@use '~/mixins';
 
 .button {
     background: none;
@@ -17,7 +17,7 @@
     width: 100%;
 }
 .difficulty {
-    @include flexCenter();
+    @include mixins.flexCenter();
     color: white;
     font-size: 1.25rem;
     width: max-content;
@@ -43,8 +43,8 @@
     }
 }
 .rules {
-    @include fullScreen;
-    @include flexCenter(column);
+    @include mixins.fullScreen;
+    @include mixins.flexCenter(column);
     z-index: 30;
     backdrop-filter: blur(10px);
     position: absolute;

@@ -1,4 +1,5 @@
-@import "../../mixins", "../../variables";
+@use "../../mixins";
+@use "../../variables";
 
 $bg: #141b26;
 $htwt: 15rem;
@@ -46,7 +47,7 @@ $htwt: 15rem;
     font-size: 1.5rem;
     border-radius: 15px;
     font-family: serif;
-    color: $grayishhwhite;
+    color: variables.$grayishhwhite;
     height: 5rem;
     width: auto;
     display: flex;
@@ -58,8 +59,8 @@ $htwt: 15rem;
     svg {
         height: 3rem;
         width: 3rem;
-        color: $neonblue;
-        fill: $neonblue;
+        color: variables.$neonblue;
+        fill: variables.$neonblue;
     }
 
     &:not(.active) :hover {
@@ -176,7 +177,7 @@ $htwt: 15rem;
         justify-content: flex-start;
         overflow-x: scroll;
     }
-    @include hideScrollbar("#aboutNav");
+    @include mixins.hideScrollbar("#aboutNav");
     
     .aboutNavBtn {
         width: max-content;

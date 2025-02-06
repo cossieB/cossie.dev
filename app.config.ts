@@ -115,6 +115,15 @@ export default defineConfig({
             routes: ["/", "/about", "/contact", "/projects", "/api"],
             ignore: ["/admin"]
         },
+    },
+    vite: {
+        css: {
+            preprocessorOptions: {
+                scss: {
+                    api: 'modern'
+                }
+            }
+        }
     }
     // ssr: {
     //     external: ['ag-grid-solid'],

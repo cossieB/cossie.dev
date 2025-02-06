@@ -1,4 +1,6 @@
-@import 'mixins', 'variables', "./animations";
+@use 'mixins';
+@use 'variables';
+@use "./animations";
 
 * {
     box-sizing: border-box;
@@ -18,7 +20,7 @@ body {
     height: 100vh;
     margin: 0px;
     padding: 0px;
-    background: linear-gradient(90deg, $bgClr, darkslategray, $bgClr);
+    background: linear-gradient(90deg, variables.$bgClr, darkslategray, variables.$bgClr);
     font-family: 'Nunito', sans-serif;
 }
 

@@ -1,4 +1,4 @@
-@import '~/mixins';
+@use '~/mixins';
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap');
 
 #pomodoro {
@@ -6,7 +6,7 @@
     background: teal;
     color: white;
     height: 100vh;
-    @include flexCenter;
+    @include mixins.flexCenter;
 }
 
 .buttonDiv {

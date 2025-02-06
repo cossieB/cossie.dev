@@ -1,4 +1,4 @@
-@import '~/mixins';
+@use '~/mixins';
 
 .details {
     width: 100vw;
@@ -63,7 +63,7 @@
 @media (min-width: 768px) {
     .details {
         height: 100vh;
-        @include flexCenter;
+        @include mixins.flexCenter;
         >div {
             width: 65%;
             margin: 0 auto;
@@ -79,5 +79,5 @@
             margin: 0 auto;
         }
     }
-    @include hideScrollbar('.details')
+    @include mixins.hideScrollbar('.details')
 }

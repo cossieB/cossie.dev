@@ -1,11 +1,11 @@
 @use './pregame';
-@import '~/mixins';
+@use '~/mixins';
 
 #memory {
     background: #a6a6c7;
     color: white;
     font-size: large;
-    @include flexCenter;
+    @include mixins.flexCenter;
     height: 100vh;
     >.signup button {
         @extend .button
@@ -23,11 +23,11 @@ $delay: 250ms;
     height: 7.5rem;
     position: relative;
     font-size: xx-large;
-    @include flexCenter;
+    @include mixins.flexCenter;
     >div {
         position: absolute;
         inset: 0;
-        @include flexCenter;
+        @include mixins.flexCenter;
         transition: transform $delay linear;
     }
     svg {

@@ -8,6 +8,7 @@ import Signup from "../shared/Signup/Signup";
 import { UserContext } from "../shared/Signup/UserProvider";
 import MemoryProvider, { MemoryContext } from "./MemoryProvider";
 
+
 export default function MemoryMain() {
     return (
         <MemoryProvider>
@@ -17,6 +18,7 @@ export default function MemoryMain() {
 }
 
 function Main() {
+    
     const { username } = useContext(UserContext)!
     const { state } = useContext(MemoryContext)!
     const [readInstructions, setReadInstructions] = createSignal(false);

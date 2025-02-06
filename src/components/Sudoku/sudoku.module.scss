@@ -1,7 +1,7 @@
-@import '~/mixins';
+@use '~/mixins';
 
 #container {
-    @include flexCenter(column);
+    @include mixins.flexCenter(column);
     background-color: #8d008d88;
     height: 100vh;
 }
@@ -17,7 +17,7 @@
     border: 1px solid black;
     aspect-ratio: 1;
     font-size: x-large;
-    @include flexCenter
+    @include mixins.flexCenter
 }
 .fixed {
     color: black
