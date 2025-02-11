@@ -2,7 +2,6 @@ import { query, redirect } from "@solidjs/router";
 import { sql, eq } from "drizzle-orm";
 import { db } from "~/db";
 import { genresOfGames, gamesOnPlatforms, game, platform } from "~/drizzle/schema";
-import { sleep } from "~/lib/sleep";
 
 export const getGames = query(async () => {
     'use server';

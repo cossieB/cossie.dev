@@ -49,7 +49,7 @@ export default function AdminLogin() {
                     setter={setState}
                 />
                 <SubmitButton
-                    loading={submission.pending}
+                    loading={!!submission.pending}
                     disabled={!state.username || !state.password}
                     finished={false}
                     text="Login"

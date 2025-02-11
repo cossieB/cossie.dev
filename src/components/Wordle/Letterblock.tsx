@@ -8,7 +8,7 @@ interface P extends RowProps {
 }
 
 export default function LetterBlock(props: P) {
-    let ref: HTMLDivElement
+    let ref!: HTMLDivElement
     createEffect(() => {
         let className = "";
         if (props.guessList.length > props.row) {

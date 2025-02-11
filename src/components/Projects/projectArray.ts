@@ -21,7 +21,10 @@ export const stack: { [key: string]: string } = {
     nodemailer: "https://i0.wp.com/community.nodemailer.com/wp-content/uploads/2015/10/n2-2.png?fitu003d422%2C360u0026sslu003d1",
     fastify: "https://fastify.dev/img/logos/fastify-black.svg",
     "tanstack query": "https://devio2023-media.developers.io/wp-content/uploads/2023/11/tanstack-qeury-960x504.jpeg",
-    "railway.app": 'https://railway.app/brand/logotype-dark.png'
+    "railway.app": 'https://railway.app/brand/logotype-dark.png',
+    rust: "https://upload.wikimedia.org/wikipedia/commons/d/d5/Rust_programming_language_black_logo.svg",
+    tauri: "https://upload.wikimedia.org/wikipedia/en/0/01/TauriAppLogo.svg",
+    sqlite: "https://upload.wikimedia.org/wikipedia/commons/3/38/SQLite370.svg"
 }
 const sections = [langs, frontend, backend, misc]
 
@@ -61,17 +64,16 @@ export const projectArray: Projs[] = [
         repo: "https://github.com/cossieB/threadxer",
         type: "large",
         external: true
-    },  {
-        title: "Internet Games Database",
-        img: "/screenshots/igdb.png",
-        imgMobile: "/screenshots/igdb_mobile.png",
-        path: "https://internet-games-database.vercel.app/",
-        external: true,
-        description: "CRUD application for adding information about games and the gaming industry. Developed with TypeScript, Next.js, React and SASS. Uses Supabase Postgres as a database and Prisma ORM to interact with the database.",
-        stack: ["typescript", "next.js", "react", "node.js", "postgresql", "prisma", "supabase", "vercel", "framer motion", "sass"],
-        repo: "https://github.com/cossieB/internet-games-database",
-        type: 'large'
     }, {
+        title: "Miniger",
+        img: "/screenshots/miniger.png",
+        description: "Miniger is a multi-platform desktop application to manage your media. It was built with Tauri, Typescript, Rust and SQLite. Includes a built-in video player",
+        repo: "https://github.com/cossieB/miniger",
+        type: "large",
+        external: true,
+        path: "https://github.com/cossieB/miniger/releases/tag/v0.0.0-alpha",
+        stack: ["typescript", "rust", "tauri", "sqlite", "solidjs", "ag-grid"]
+    },  {
         title: "2048",
         img: "/screenshots/2048.png",
         imgMobile: "/screenshots/2048_mobile.png",
@@ -107,6 +109,16 @@ export const projectArray: Projs[] = [
         repo: "https://github.com/cossieB/internet-games-database/tree/main/graphql",
         type: 'api'
     }, {
+        title: "Internet Games Database",
+        img: "/screenshots/igdb.png",
+        imgMobile: "/screenshots/igdb_mobile.png",
+        path: "https://internet-games-database.vercel.app/",
+        external: true,
+        description: "CRUD application for adding information about games and the gaming industry. Developed with TypeScript, Next.js, React and SASS. Uses Supabase Postgres as a database and Prisma ORM to interact with the database.",
+        stack: ["typescript", "next.js", "react", "node.js", "postgresql", "prisma", "supabase", "vercel", "framer motion", "sass"],
+        repo: "https://github.com/cossieB/internet-games-database",
+        type: 'large'
+    },{
         title: "Meme Machine",
         img: "/screenshots/memes.png",
         imgMobile: "/screenshots/memes_mobile.png",

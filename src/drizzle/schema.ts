@@ -57,9 +57,9 @@ export const actorsInGames = pgTable("ActorsInGames", {
 	characterId: uuid("characterId").defaultRandom().primaryKey().notNull(),
 },
 (table) => {
-	return {
-		actorsInGamesGameIdActorIdKey: unique("ActorsInGames_gameId_actorId_key").on(table.actorId, table.gameId),
-	}
+	return [
+		unique("ActorsInGames_gameId_actorId_key").on(table.actorId, table.gameId),
+	]
 });
 
 export const gamesOnPlatforms = pgTable("GamesOnPlatforms", {
@@ -67,9 +67,10 @@ export const gamesOnPlatforms = pgTable("GamesOnPlatforms", {
 	platformId: uuid("platformId").notNull().references(() => platform.platformId, { onDelete: "cascade", onUpdate: "cascade" } ),
 },
 (table) => {
-	return {
-		gamesOnPlatformsPkey: primaryKey(table.gameId, table.platformId)
-	}
+	return [
+		primaryKey({columns: [table.gameId, table.platformId]})
+	]
+	
 });
 
 export const genresOfGames = pgTable("GenresOfGames", {
@@ -77,7 +78,7 @@ export const genresOfGames = pgTable("GenresOfGames", {
 	gameId: uuid("gameId").notNull().references(() => game.gameId, { onDelete: "cascade", onUpdate: "cascade" } ),
 },
 (table) => {
-	return {
-		genresOfGamesPkey: primaryKey(table.genre, table.gameId)
-	}
+	return [
+		primaryKey({columns: [table.genre, table.gameId]})
+	]
 });

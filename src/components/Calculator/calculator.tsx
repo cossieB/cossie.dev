@@ -3,33 +3,48 @@ import styles from "./calculator.module.scss"
 import type { ClickEvent } from "~/lib/solidTypes";
 import Page from "../shared/Page";
 
+const ops = ["*", "/", "+", "-"];
+
+function getBtn(key: string) {
+    let button: HTMLButtonElement | undefined
+    if (/^\d$/.test(key) || ops.includes(key))
+        button = document.querySelector(`button[value="${key}"]`) as HTMLButtonElement;
+
+    if (key === "Enter")
+        button = document.getElementById(styles.equals) as HTMLButtonElement;
+
+    if (key == "Backspace")
+        button = document.getElementById("calc_del_btn") as HTMLButtonElement;
+
+    if (key == "Escape")
+        button = document.getElementById(styles.clear) as HTMLButtonElement;
+
+    if (key == ".")
+        button = document.getElementById("calc_decimal") as HTMLButtonElement
+    return button;
+}
+
 export default function CalculatorMain() {
     const [display, setDisplay] = createSignal("0")
     const [calc, setCalc] = createSignal("")
-    const ops = ["*", "/", "+", "-"];
 
     function handleKeyup(e: KeyboardEvent) {
-        let button: HTMLButtonElement | undefined;
-        if (/^\d$/.test(e.key) || ops.includes(e.key))
-            button = document.querySelector(`button[value="${e.key}"]`) as HTMLButtonElement
-
-        if (e.key === "Enter")
-            button = document.getElementById(styles.equals) as HTMLButtonElement
-
-        if (e.key == "Backspace")
-            button = document.getElementById("calc_del_btn") as HTMLButtonElement
-
-        if (e.key == "Escape")
-            button = document.getElementById(styles.clear) as HTMLButtonElement
-
-        console.log(button)
+        const button = getBtn(e.key);
+        button?.classList.remove(styles.clicked)
         button?.click()
-
     }
+
+    function handleKeydown(e: KeyboardEvent) {
+        const button = getBtn(e.key)
+        button?.classList.add(styles.clicked)
+    }
+
     onMount(() => {
         document.addEventListener("keyup", handleKeyup)
+        document.addEventListener("keydown", handleKeydown)
         onCleanup(() => {
             document.removeEventListener("keyup", handleKeyup)
+            document.removeEventListener("keydown", handleKeydown)
         })
     })
     function numPress(e: ClickEvent<HTMLButtonElement>) {
@@ -103,7 +118,7 @@ export default function CalculatorMain() {
                         <button class={styles.numButtons} id={styles.two} value="2" onClick={numPress}>2</button>
                         <button class={styles.numButtons} id={styles.three} value="3" onClick={numPress}>3</button>
                         <button class={styles.numButtons} id={styles.subtract} value="-" onClick={operation} >-</button>
-                        <button class={styles.numButtons} id={styles.decimal} onClick={decimal} >.</button>
+                        <button class={styles.numButtons} id={"calc_decimal"} onClick={decimal} >.</button>
                         <button class={styles.numButtons} id={styles.zero} value="0" onClick={numPress}>0</button>
                         <button class={styles.numButtons} id={styles.equals} style={{ background: "green" }} onClick={evaluate}>=</button>
                     </div>
@@ -112,3 +127,4 @@ export default function CalculatorMain() {
         </Page>
     )
 }
+

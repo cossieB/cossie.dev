@@ -1113,5 +1113,9 @@ export const quotes: Quote[] = [
         quote: "Given the opportunity, players will optimize the fun out of a game",
         author: "Soren Johnson",
         tags: new Set(["humorous", "nerdy", "video game"])
+    }, {
+        quote: "If you are not embarrassed by the first version of your product, you've launched too late",
+        author: "Reid Hoffman",
+        tags: new Set(["humorous", "economic", "non fiction"])
     }
 ]

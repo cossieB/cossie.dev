@@ -18,7 +18,7 @@ export class Elem {
 }
 
 export function ControlElem(props: {item: Elem}) {
-    let ref: HTMLDivElement;
+    let ref!: HTMLDivElement;
     const windowWidth = useResize()
     onMount(() => {
         setTimeout(() => {

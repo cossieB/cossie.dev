@@ -8,7 +8,7 @@ interface P1 {
 
 export default function Key(props: P1) {
 
-    let ref: HTMLDivElement;
+    let ref!: HTMLDivElement;
 
     createEffect(() => {
         color()

@@ -19,7 +19,7 @@ export default function CreateSudoku({setPuzzleString, setMode}: Props) {
         region: new Set<Cell>(),
     })
 
-    let ref: HTMLDivElement;
+    let ref!: HTMLDivElement;
 
     const innerWidth = useResize()
 

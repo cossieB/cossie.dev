@@ -28,6 +28,11 @@
 	background: gray;
 	color: white;
 	font-size: 20px;
+	transition: scale 50ms ease;
+
+	&:active, &.clicked {
+		scale: 0.95;
+	}
 }
 #result {
 	font-size: 15px;
