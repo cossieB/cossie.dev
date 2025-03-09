@@ -67,11 +67,11 @@ export const projectArray: Projs[] = [
     }, {
         title: "Miniger",
         img: "/screenshots/miniger.png",
-        description: "Miniger is a multi-platform desktop application to manage your media. It was built with Tauri, Typescript, Rust and SQLite. Includes a built-in video player",
+        description: "Miniger is a cross-platform desktop application to manage your media. It was built with Tauri, Typescript, Rust and SQLite. Includes a built-in video player",
         repo: "https://github.com/cossieB/miniger",
         type: "large",
         external: true,
-        path: "https://github.com/cossieB/miniger/releases/tag/v0.0.0-alpha",
+        path: "https://github.com/cossieB/miniger/releases/tag/v0.0.1",
         stack: ["typescript", "rust", "tauri", "sqlite", "solidjs", "ag-grid"]
     },  {
         title: "2048",
