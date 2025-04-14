@@ -1,4 +1,4 @@
-import { mergeProps, onMount, onCleanup } from "solid-js";
+import { mergeProps } from "solid-js";
 import titleCase from "~/lib/titleCase";
 import styles from "./forms.module.scss";
 import { PatchPlusSvg } from "~/svgs";
@@ -15,20 +15,16 @@ export function InputWithAddButton(props: Props) {
     let ref!: HTMLInputElement;
     const merged = mergeProps({ label: props.name, required: false }, props);
     function addItem () {
-        props.addItem(ref.value.trim());
+        const val = ref.value.trim();
+        if (!val) return;
+        props.addItem(val);
         ref.value = ""
     }
     function handleEnter(e: KeyboardEvent) {
+
         if (e.key == 'Enter')
             addItem()
     }
-    onMount(() => {
-        ref.addEventListener('keyup', handleEnter )
-        
-        onCleanup(() => {
-            ref.removeEventListener('keyup', handleEnter)
-        })
-    })
     return (
         <div class={styles.formControl}>
             <input
@@ -40,6 +36,11 @@ export function InputWithAddButton(props: Props) {
                 placeholder=" "
                 disabled={props.disabled}
                 autocomplete="off" 
+                onKeyUp={handleEnter}
+                onKeyPress={e => {
+                    if (e.key == "Enter")
+                        e.preventDefault()
+                }}
                 />
             <label for={`${merged.name}`}>{titleCase(merged.label)}</label>
             <button

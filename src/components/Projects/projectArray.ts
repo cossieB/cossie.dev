@@ -71,7 +71,7 @@ export const projectArray: Projs[] = [
         repo: "https://github.com/cossieB/miniger",
         type: "large",
         external: true,
-        path: "https://github.com/cossieB/miniger/releases/tag/v0.0.1",
+        path: "https://github.com/cossieB/miniger/releases",
         stack: ["typescript", "rust", "tauri", "sqlite", "solidjs", "ag-grid"]
     },  {
         title: "2048",

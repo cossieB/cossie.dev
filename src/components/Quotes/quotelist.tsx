@@ -1117,5 +1117,9 @@ export const quotes: Quote[] = [
         quote: "If you are not embarrassed by the first version of your product, you've launched too late",
         author: "Reid Hoffman",
         tags: new Set(["humorous", "economic", "non fiction"])
+    }, {
+        quote: "Krogan don't waste energy voicing opinions. We just crush everyone else who has one",
+        author: "Urdnot Wreav",
+        tags: new Set(["humorous", "video game", "mass effect"])
     }
 ]
