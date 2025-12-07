@@ -1,6 +1,7 @@
 import { APIEvent } from "@solidjs/start/server"
 import { MongoClient } from "mongodb";
 import { json, redirect } from "@solidjs/router"
+import {URL as WhatwgURL} from 'whatwg-url'
 import dns from 'dns/promises';
 import { getMongo } from "~/utils/getMongo";
 
@@ -36,7 +37,16 @@ export async function POST(event: APIEvent) {
         return json({ original, short })
     }
 
-
+    let q: WhatwgURL;
+    // Check if given URL is valid. If not throw exception
+    try {
+        q = new WhatwgURL(original)
+        await dns.lookup(q.hostname)
+    }
+    catch (e: any) {
+        console.log(e)
+        return json({ error: "Invalid URL" }, { status: 400 })
+    }
     const allUrls = await collection.countDocuments();
     let short = `/api/url/${allUrls}`
     await collection.insertOne({ original, short })
