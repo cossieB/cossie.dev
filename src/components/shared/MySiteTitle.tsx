@@ -4,8 +4,8 @@ type Props = {
     children: string
 }
 
-export default function MySiteTitle({children}: Props) {
+export default function MySiteTitle(props: Props) {
     return (
-        <Title> &lt; {children} /&gt; :: Cossie </Title>
+        <Title> &lt; {props.children} /&gt; :: Cossie </Title>
     )
 }
