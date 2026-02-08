@@ -1,6 +1,6 @@
 import { json } from "@solidjs/router"
 import { APIEvent } from "@solidjs/start/server";
-import { quotes } from "~/components/Quotes/quotelist";
+import { quotes } from "~/features/quotes/quotelist";
 import shuffleArray from "~/lib/shuffleArray";
 
 type Q = Omit<typeof quotes[number], 'tags'> & {

@@ -1,6 +1,6 @@
 import { json } from "@solidjs/router"
 import { APIEvent } from "@solidjs/start/server";
-import Translator from "~/utils/translator";
+import Translator from "./utils/translator";
 
 export async function POST(event: APIEvent) {
     const { text, locale } = await event.request.json();

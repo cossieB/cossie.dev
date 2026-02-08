@@ -8,7 +8,7 @@ export async function POST(event: APIEvent) {
     const contentType = event.request.headers.get("Content-Type");
     let description, duration, date: unknown
     if (!contentType) 
-        return json({error: "Invalid content type"})
+        return new Response(null, {status: 415})
     else if (contentType.includes("application/x-www-form-urlencoded")) {
         ({description, duration, date} = Object.fromEntries(await event.request.formData()))
     }

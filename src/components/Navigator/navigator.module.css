@@ -1,0 +1,104 @@
+.nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    --navHeight: 100px;
+    --duration: 250ms;
+    --margin: 0.5rem;
+    --width: 18rem;
+    z-index: 5;
+    --hovered: hsl(0, 0%, 23%);
+
+    a {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        color: whitesmoke;
+        text-decoration: none;
+
+        &:visited {
+            color: whitesmoke;
+        }
+
+        &.active {
+            color: springgreen;
+            font-style: italic;
+        }
+    }
+
+    button {
+        border: none;
+        background: none;
+        background-color: #00000050;
+        padding: 0.25rem;
+        transition: background 200ms ease;
+
+        &:hover {
+            background-color: black;
+        }
+    }
+
+    >nav {
+        height: calc(var(--navHeight) + 2 * var(--margin));
+        transition: height var(--duration) ease;
+
+        background: #222;
+        position: relative;
+        width: var(--width);
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        >ul {
+            position: absolute;
+            list-style: none;
+            margin: var(--margin) 0;
+            top: 0;
+            padding: 0;
+        }
+
+        li {
+            padding: 0.25rem 1rem;
+            display: flex;
+            align-items: center;
+            height: 2.5rem;
+            width: calc(0.9 * var(--width));
+            cursor: pointer;
+            place-items: center;
+            border-radius: 0.5rem;
+
+            &:hover {
+                background-color: var(--hovered);
+            }
+
+            svg {
+                margin-left: auto;
+            }
+        }
+    }
+
+    header {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+
+        svg {
+            border-radius: 50%;
+            height: 2rem;
+            width: 2rem;
+            padding: 0.5rem;
+        }
+
+        span {
+            font-weight: bold;
+        }
+
+        &:hover {
+            svg {
+                background-color: var(--hovered);
+            }
+        }
+    }
+}

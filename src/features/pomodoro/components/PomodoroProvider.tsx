@@ -1,0 +1,35 @@
+import { type JSX, createContext } from "solid-js";
+import { PomodoroWrapper, initialState } from "../utils/store";
+import { createStore } from "solid-js/store";
+import { convert } from "../utils/convert";
+import startWav from "../assets/start.mp3"
+import endWav from "../assets/end.wav"
+
+export const PomodoroContext = createContext<PomodoroWrapper>()
+
+export default function PomodoroProvider(props: { children: JSX.Element }) {
+    // const [endBeep, startBeep] = useAudios(["https://raw.githubusercontent.com/freeCodeCamp/cdn/master/build/testable-projects-fcc/audio/BeepSound.wav", "https://www.soundjay.com/buttons/beep-05.wav"])
+    const endBeep = new Audio(endWav)
+    const startBeep = new Audio(startWav)
+    const [store, setState] = createStore({
+        breakMin: 5,
+        sessionMin: 25,
+        seconds: 1500,
+        break: 300,
+        left: () => convert(store.seconds),
+        breakTime: () => convert(store.break),
+        sessionLength: 1500,
+        timer: null as NodeJS.Timeout | null
+    })
+    const state = new PomodoroWrapper(
+        store,
+        setState,
+        endBeep,
+        startBeep
+    )
+    return (
+        <PomodoroContext.Provider value={state}>
+            {props.children}
+        </PomodoroContext.Provider>
+    )
+}

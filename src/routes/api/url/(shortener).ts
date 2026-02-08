@@ -1,6 +1,5 @@
 import { APIEvent } from "@solidjs/start/server"
-import { MongoClient } from "mongodb";
-import { json, redirect } from "@solidjs/router"
+import { json } from "@solidjs/router"
 import {URL as WhatwgURL} from 'whatwg-url'
 import dns from 'dns/promises';
 import { getMongo } from "~/utils/getMongo";

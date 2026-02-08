@@ -1,5 +1,5 @@
+// @refresh reload
 import { StartServer, createHandler } from "@solidjs/start/server";
-// import { pwaInfo } from "virtual:pwa-info";
 
 export default createHandler(() => (
     <StartServer
@@ -30,11 +30,10 @@ export default createHandler(() => (
                     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
                     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
                     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
-                    {/* {pwaInfo?.webManifest?.href ? <link rel="manifest" href={pwaInfo.webManifest.href} /> : ''} */}
                     <link
                         href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;700&family=Press+Start+2P&family=Stick+No+Bills:wght@600&family=Orbitron:wght@500&display=swap"
-                        rel="stylesheet" />
-
+                        rel="stylesheet" 
+                        />
                     {assets}
                 </head>
                 <body>

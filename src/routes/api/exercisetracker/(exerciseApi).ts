@@ -1,6 +1,6 @@
 import { json } from "@solidjs/router"
 import { APIEvent } from "@solidjs/start/server";
-import { getMongo } from "../../../utils/getMongo";
+import { getMongo } from "~/utils/getMongo";
 
 export type ExerciseUser = {
     username: string;

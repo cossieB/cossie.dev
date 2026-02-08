@@ -1,8 +1,11 @@
-import "./github.scss"
+import { Title } from "@solidjs/meta";
+import "./github.css"
+import { CustomSiteTitle } from "~/components/CustomSiteTitle";
 
 export default function ApiMainPage() {
     return (
         <main class="markdown-body">
+            <CustomSiteTitle title="Rest API" />
             <h1><a id="microservices" class="anchor" aria-hidden="true" href="#microservices"><span
                 aria-hidden="true" class="octicon octicon-link"></span></a>Documentation</h1>
             <ul>

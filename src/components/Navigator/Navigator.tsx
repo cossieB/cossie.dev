@@ -1,10 +1,10 @@
 import { Show, createSignal } from "solid-js"
-import { projectArray } from "../Projects/projectArray"
-import styles from "./navigator.module.scss"
+import styles from "./navigator.module.css"
 import { Transition } from "solid-transition-group"
 import clickOutside from "~/lib/clickOutside"
 import { Navbar } from "./Navbar"
 import { MenuButton } from "./MenuButton"
+import { projectArray } from "~/features/home/utils/projectArray"
 false && clickOutside
 
 export default function Navigator() {

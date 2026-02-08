@@ -1,5 +1,5 @@
+import { MenuIcon, XIcon } from "lucide-solid";
 import { type Accessor, type Setter, Show } from "solid-js";
-import { CloseSvg, MenuSvg } from "~/svgs";
 
 type Props = {
     isOpen: Accessor<boolean>;
@@ -17,9 +17,9 @@ export function MenuButton(props: Props) {
     >
         <Show
             when={props.isOpen()}
-            fallback={<MenuSvg />}
+            fallback={<MenuIcon size={"2rem"} />}
         >
-            <CloseSvg />
+            <XIcon size={"2rem"} />
         </Show>
     </button>;
 }

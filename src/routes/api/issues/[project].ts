@@ -1,7 +1,7 @@
 import { json } from "@solidjs/router"
 import { APIEvent } from "@solidjs/start/server";
-import { getMongo } from "../../../utils/getMongo";
 import { ObjectId } from "mongodb";
+import { getMongo } from "~/utils/getMongo";
 
 type Issue = {
     issue_title: string,

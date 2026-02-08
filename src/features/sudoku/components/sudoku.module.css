@@ -1,0 +1,63 @@
+#container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background-color: #8d008d88;
+    height: 100vh;
+}
+
+#sudoku {
+    display: grid;
+    grid-template-columns: repeat(9, 75px);
+    border: 5px solid black;
+}
+
+.sudoBlock {
+    display: flex;
+    border: 1px solid black;
+    aspect-ratio: 1;
+    font-size: x-large;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.fixed {
+    color: black
+}
+.sudoBtn {
+    font-size: 25px;
+    padding: 1rem;
+    background: none;
+    border: 1px solid black;
+
+    &:hover {
+        background-color: black;
+        color: #8d008d;
+    }
+}
+#sudoku {
+    width: 95%;
+    max-width: 700px;
+}
+
+@media (max-width: 768px) {
+    .sudoBtn {
+        height: auto;
+        font-size: 1rem;
+    }
+
+
+    .mobileBtns button {
+        border: none;
+        background: none;
+        font-size: 2rem;
+        margin-left: 1rem;
+    }
+}
+
+@media (min-width: 768px) {
+    .mobileBtns {
+        display: none;
+    }
+}

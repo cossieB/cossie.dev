@@ -1,7 +1,7 @@
 import type { Setter } from "solid-js";
-import { projectArray } from "../Projects/projectArray";
-import { ChevronRight } from "~/svgs";
 import { map } from "./Navbar";
+import { projectArray } from "~/features/home/utils/projectArray";
+import { ChevronRightIcon } from "lucide-solid";
 
 type Props = {
     setExpanded: Setter<"large" | "game" | "api" | "interactive" | null>;
@@ -12,7 +12,7 @@ export function Category(props: Props) {
     return (
         <li onclick={() => props.setExpanded(props.type)}>
             {map[props.type]}
-            <ChevronRight />
+            <ChevronRightIcon />
         </li>
     );
 }

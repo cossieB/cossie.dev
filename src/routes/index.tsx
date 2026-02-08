@@ -1,10 +1,9 @@
-import Page from '~/components/shared/Page';
-import HomeMain from '~/components/Home/HomeMain';
+import { HomePage } from "~/features/home/components/Home";
 
-export default function HomePage() {
+export default function Home() {
     return (
-        <Page title='Hello World'>
-            <HomeMain />
-        </Page>
-    )
+        <main>
+            <HomePage />
+        </main>
+    );
 }

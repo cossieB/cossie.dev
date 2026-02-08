@@ -1,10 +1,10 @@
 import { type Accessor, For, Match, type Setter, Switch } from "solid-js";
-import { type Projs, projectArray } from "../Projects/projectArray";
-import { LeftArrowSvg } from "~/svgs";
 import { Transition } from "solid-transition-group";
 import { Category } from "./Category";
 import { List } from "./List";
 import { NavLink } from "./NavLink";
+import { projectArray, type Projs } from "~/features/home/utils/projectArray";
+import { ChevronLeftIcon } from "lucide-solid";
 
 export const map: { [k in Projs['type']]: string } = {
     api: "API",
@@ -18,13 +18,13 @@ const paths = [{
     path: '/'
 }, {
     title: "About Me",
-    path: '/about'
-}, {
-    title: "Contact Me",
-    path: '/contact'
+    path: '#about'
 }, {
     title: "Projects",
-    path: "/projects"
+    path: "#projects"
+}, {
+    title: "Contact Me",
+    path: '#contact'
 }]
 
 
@@ -60,7 +60,7 @@ export function Navbar(props: Props) {
                 <Match when={props.isOpen() && !!props.expanded()}>
                     <ul>
                         <header onclick={() => props.setExpanded(null)}>
-                            <LeftArrowSvg />{" "}
+                            <ChevronLeftIcon />{" "}
                             <span>{map[props.expanded()!]}</span>
                         </header>
                         <List array={projectArray.filter(x => x.type === props.expanded())} />

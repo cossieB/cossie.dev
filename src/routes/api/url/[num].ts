@@ -1,6 +1,6 @@
 import { APIEvent } from "@solidjs/start/server";
 import { MongoClient } from "mongodb";
-import { IURL } from "./(shortener)";
+import { type IURL } from "./(shortener)";
 import { json, redirect } from "@solidjs/router"
 
 export async function GET(event: APIEvent) {

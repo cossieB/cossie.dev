@@ -1,5 +1,5 @@
 import { RouteDefinition } from "@solidjs/router";
-import { timestampResponse } from "~/utils/timestampResponse";
+import { timestampResponse } from "./utils/timestampResponse";
 
 export const route = {
     info: {

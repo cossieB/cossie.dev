@@ -1,6 +1,6 @@
 import { json } from "@solidjs/router"
 import { APIEvent } from "@solidjs/start/server";
-import Converter from "~/utils/converter";
+import Converter from "./utils";
 
 export function GET(event: APIEvent) {
     const url = new URL(event.request.url)

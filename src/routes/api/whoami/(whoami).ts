@@ -1,12 +1,10 @@
-import { getRequestEvent } from "solid-js/web";
 import {json} from "@solidjs/router"
+import {APIEvent} from "@solidjs/start/server"
 
-export function GET() {
-    const event = getRequestEvent();
-    if (!event)
-        return json
+export function GET(event: APIEvent) {
+    const ipaddress = event.request.headers.get("CF-Connecting-IP")
     return json({
-        ipaddress: event.clientAddress,
+        ipaddress: ipaddress ?? event.clientAddress,
         language: event.request.headers.get("accept-language"),
         software: event.request.headers.get("user-agent")
     })

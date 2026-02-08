@@ -1,0 +1,280 @@
+#container {
+    --boardColor: #c8dd0f;
+    background-color: #3b4b50;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 100vh;
+}
+
+.game {
+    width: 100vw;
+    height: 100vh;
+}
+
+.board {
+    position: relative;
+    display: grid;
+    background-color: var(--boardColor);
+
+    .block {
+        background-color: oklch(from var(--boardColor) calc(l - 0.15) c h);
+        border-radius: 5px;
+    }
+}
+
+.controlElem {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    border-radius: 5px;
+    transition: all 250ms ease;
+    opacity: 0;
+    --val: 2;
+    background-color: oklch(from blue l c calc(var(--val) * 50 ));
+}
+
+.score {
+    font-family: 'Orbitron', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    span {
+        font-size: clamp(1rem, 10vw, 5rem);
+    }
+
+    >aside {
+        color: #c8dd0f;
+        font-size: 1rem;
+    }
+}
+
+.gameOver {
+    position: absolute;
+    font-family: 'Orbitron', sans-serif;
+    backdrop-filter: blur(10px) grayscale(1);
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    top: 0;
+    left: 0;
+    color: #c8dd0f;
+    z-index: 50;
+
+    >div:first-child {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    h3 {
+        justify-self: flex-end;
+        padding: 0;
+        margin: 0;
+        text-align: center;
+    }
+
+    h4 {
+        justify-self: flex-start;
+        padding: 0;
+        margin: 0;
+        text-align: center;
+    }
+
+    .buttons {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: fit-content;
+        gap: 0.5rem;
+
+        >button {
+            height: 2rem;
+            border: none;
+        }
+
+        button:first-child {
+            background-color: springgreen;
+        }
+
+        button:last-child {
+            background-color: aqua;
+        }
+    }
+}
+
+.leadersPanel {
+    color: #c8dd0f;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.leaderboard {
+    align-self: center;
+    justify-content: center;
+}
+
+.signup {
+    color: white;
+}
+
+.leadership {
+    backdrop-filter: blur(10px);
+    border: 1px solid white;
+    display: grid;
+    grid-template-columns: auto auto;
+    padding: 0.5rem;
+    margin-bottom: 0.5rem;
+    border-radius: 5%;
+    color: white;
+    width: auto;
+
+    > :nth-child(2) {
+        display: flex;
+        width: 5rem;
+        align-items: center;
+        justify-content: center;
+        grid-area: 1 / 2 / 3 / 3;
+        font-size: 1.5rem;
+    }
+}
+
+@media (max-width: 1024px) {
+    .game {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        height: 100vh;
+        overflow: hidden;
+        --hgtwdth: 4rem;
+        /*USED IN JAVASCRIPT. DO NOT CHANGE!!!!!!! */
+        --gap: 0.25rem;
+    }
+
+    .score {
+        width: 80%;
+        height: 25%;
+        padding: 0;
+        margin: 0;
+    }
+
+
+    .board {
+        grid-template-columns: repeat(4, var(--hgtwdth));
+        gap: var(--gap);
+        padding: var(--gap);
+
+        .block {
+            height: var(--hgtwdth);
+        }
+    }
+
+    .controlElem {
+        height: var(--hgtwdth);
+        width: var(--hgtwdth);
+    }
+
+    .leadersPanel {
+        height: 100vh;
+        background-color: rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(10px);
+        width: 100vw;
+        position: fixed;
+        top: 0;
+        left: 0;
+        transform: translateX(100vw);
+        transition: transform 250ms ease;
+    }
+
+    .leaderboard {
+        width: 100%;
+    }
+
+    .gameOver {
+        h3 {
+            font-size: 5rem;
+        }
+
+        h4 {
+            font-size: 4rem;
+        }
+    }
+
+    .HSToggle {
+        border: none;
+        background: none;
+        color: #c8dd0f;
+        margin-top: 2.25rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+}
+
+@media (min-width: 1024px) {
+
+    .game {
+        --hgtwdth: 7.5rem;
+        /* USED IN JAVASCRIPT. DO NOT CHANGE!!!!!!! */
+        overflow: hidden;
+        height: 100vh;
+        top: 0;
+        left: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .board {
+        gap: 0.5rem;
+        padding: 0.5rem;
+        grid-template-columns: repeat(4, var(--hgtwdth));
+
+        .block {
+            height: var(--hgtwdth);
+        }
+    }
+
+    .controlElem {
+        font-size: 3.5rem;
+        height: var(--hgtwdth);
+        width: var(--hgtwdth);
+    }
+
+    .score {
+        position: absolute;
+        top: 40%;
+        left: 1%;
+        width: 25%;
+    }
+
+    .leadersPanel {
+        position: absolute;
+        right: 0;
+        height: 100%;
+        margin-right: 1rem;
+    }
+
+    .leaderboard {
+        height: 50%;
+    }
+
+    .gameOver {
+
+        h3 {
+            font-size: 10rem;
+        }
+
+        h4 {
+            font-size: 8rem;
+        }
+    }
+}

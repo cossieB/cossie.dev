@@ -1,6 +1,6 @@
 import { json } from "@solidjs/router"
 import { APIEvent } from "@solidjs/start/server";
-import { timestampResponse } from "../../../utils/timestampResponse";
+import { timestampResponse } from "./utils/timestampResponse";
 
 export function GET(event: APIEvent) {
     const { date } = event.params;
