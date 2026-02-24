@@ -87,7 +87,8 @@
         align-items: center;
         background-color: gray;
         cursor: pointer;
-        transition-delay: 1750ms;
+        transition-property: background;
+        transition-delay: 1500ms;
     }
 }
 

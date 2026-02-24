@@ -1,7 +1,7 @@
 import styles from "./Wordle.module.css"
 import GameOver from "./GameOver";
 import { addLetter, backspace, endGame, flipOver, nextGuess, state } from "../utils/store";
-import { createEffect, onCleanup, Show } from "solid-js";
+import { onCleanup, onMount, Show } from "solid-js";
 import Blocks from "./Blocks";
 import Keyboard from "./Keyboard";
 
@@ -12,7 +12,7 @@ export const middleRow = letters.slice(10, 19)
 export const bottomRow = letters.slice(19, 26)
 
 export default function Wordle() {
-    createEffect(() => {
+    onMount(() => {
         document.addEventListener('keydown', handleKeypress);
         onCleanup(() => {
             document.removeEventListener('keydown', handleKeypress)

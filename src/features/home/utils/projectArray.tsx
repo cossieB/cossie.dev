@@ -40,7 +40,7 @@ export const projectArray: Projs[] = [
             </>
         ),
         repo: "https://github.com/cossieB/1clip",
-        stack: ["tauri", "solidjs", "typescript", "rust", "sqlite", "kysely", "ag-grid"],
+        stack: ["tauri", "solidjs", "typescript", "tailwind", "rust", "sqlite", "kysely", "ag-grid"],
         type: "large",
         external: true,
         path: "https://github.com/cossieB/miniger/releases/tag/v0.4.1"

@@ -198,11 +198,10 @@
     display: grid;
     inset: 0;
     backdrop-filter: blur(10px);
-    justify-items: center;
-    align-content: center;
+
     opacity: 1;
     translate: 0;
-
+        justify-items: center;
     transition:
         opacity 250ms ease,
         translate 250ms ease,
@@ -212,7 +211,7 @@
     transition-behavior: allow-discrete;
 
     >div {
-        width: min(90%, 1200px);
+        width: min(95%, 1200px);
         background: linear-gradient(#267369, #00332c);
         box-shadow: 0 0 15px black;
         border-radius: 0 2rem;
@@ -244,6 +243,14 @@
         width: fit-content;
         margin-inline: auto;
         margin-block: 1rem;
+    }
+
+    @media (width < 768px) {
+        overflow: scroll;
+    }
+
+    @media (width > 768px) {
+        align-content: center;
     }
 }
 
