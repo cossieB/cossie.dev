@@ -10,7 +10,7 @@ export type Projs = {
     type: 'large' | 'game' | 'api' | 'interactive'
     external: boolean
     path: string
-} 
+}
 
 export const projectArray: Projs[] = [
     {
@@ -28,7 +28,7 @@ export const projectArray: Projs[] = [
         type: "large",
         external: true,
         path: "https://1clip.cossie.dev"
-    },{
+    }, {
         title: "Miniger",
         img: "/projects/miniger.png",
         description: (
@@ -44,16 +44,32 @@ export const projectArray: Projs[] = [
         type: "large",
         external: true,
         path: "https://github.com/cossieB/miniger/releases/tag/v0.4.1"
-    },{
-        title: "REST API",
-        img: "/projects/rest.png",
-        imgMobile: "/projects/rest_mobile.png",
-        path: "/api",
-        description: "Various REST APIs including header parser, timestamp, issue and exercise trackers and translator services. Uses MongoDB as a database",
-        stack: ["typescript", "node.js", "mongodb"],
-        repo: 'https://github.com/cossieB/serverless',
+    }, {
+        title: "IGDB Rest API",
+        description: (
+            <>
+                <p>IGDB is a public REST API for information about the video game industry. Users can also leave reviews for games. It was built with Hono server library on Cloudflare Workers and uses Better-Auth for authentication</p>
+            </>
+        ),
         type: 'api',
-        external: false
+        external: true,
+        img: "/projects/rest.png",
+        path: "https://igdb.cossie.workers.dev/scalar",
+        repo: "https://github.com/cossieB/igdb",
+        stack: ["typescript", "hono", "cloudflare", "sqlite", "drizzle", "better-auth"]
+    }, {
+        title: "IGDB GraphQL API",
+        description: (
+            <>
+                <p>The GraphQL version of the IGDB API</p>
+            </>
+        ),
+        type: 'api',
+        external: true,
+        img: "/projects/graphql.png",
+        path: "https://igdb.cossie.workers.dev/graphql",
+        repo: "https://github.com/cossieB/igdb/tree/main/src/graphql",
+        stack: ["typescript", "hono", "cloudflare", "sqlite", "drizzle", "better-auth", "graphql"]
     }, {
         title: "2048",
         img: "/projects/2048.png",
@@ -70,7 +86,7 @@ export const projectArray: Projs[] = [
         imgMobile: "/projects/wordle_mobile.png",
         path: "/wordle",
         description: "My recreation of the popular game Wordle",
-        stack: ["typescript", "solidjs", "firebase", ],
+        stack: ["typescript", "solidjs", "firebase",],
         repo: "https://github.com/cossieB/cossie.dev/tree/main/src/components/Wordle",
         type: "game",
         external: false
@@ -90,7 +106,7 @@ export const projectArray: Projs[] = [
         imgMobile: '/projects/sudoku_mobile.png',
         path: "/sudoku",
         description: "Play sudoku. Features clash highlighting and custom puzzle creator. It can also solve most puzzles using the backtracking algorithm.",
-        stack: ["typescript", "solidjs", "firebase", ],
+        stack: ["typescript", "solidjs", "firebase",],
         repo: "https://github.com/cossieB/cossie.dev/tree/main/src/components/Sudoku",
         type: "game",
         external: false
@@ -100,7 +116,7 @@ export const projectArray: Projs[] = [
         img: "/projects/quotes.png",
         imgMobile: "/projects/quotes_mobile.png",
         description: "Random quotes from across the ages. Features filters and Twitter and Tumblr share buttons",
-        stack: ["typescript", "solidjs", "firebase", ],
+        stack: ["typescript", "solidjs", "firebase",],
         repo: "https://github.com/cossieB/cossie.dev/tree/main/src/components/Quotes",
         type: "interactive",
         external: false
@@ -110,7 +126,7 @@ export const projectArray: Projs[] = [
         imgMobile: "/projects/pomodoro_mobile.png",
         path: "/pomodoro",
         description: "Timer for the pomodoro technique. You can change the session and the break lengths.",
-        stack: ["typescript", "solidjs", "firebase", ],
+        stack: ["typescript", "solidjs", "firebase",],
         repo: "https://github.com/cossieB/cossie.dev/tree/main/src/components/Pomodoro",
         type: "interactive",
         external: false
@@ -120,7 +136,7 @@ export const projectArray: Projs[] = [
         imgMobile: "/projects/calculator_mobile.png",
         path: "/calculator",
         description: "Non-scientific calculator.",
-        stack: ["typescript", "solidjs", "firebase", ],
+        stack: ["typescript", "solidjs", "firebase",],
         repo: "https://github.com/cossieB/cossie.dev/tree/main/src/components/Calculator",
         type: "interactive",
         external: false

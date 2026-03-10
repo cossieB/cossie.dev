@@ -13,7 +13,7 @@ type Props = {
 };
 
 export function ProjectDetails(props: Props) {
-    const additionalProps = props.proj.external ? { target: "_blank", rel: "noreferrer" } : undefined
+    const additionalProps = props.proj.external ? { target: "_blank", rel: "noopener" } : undefined
     return (
         <div class={styles.details}>
             <div use:clickOutside={props.close} >
