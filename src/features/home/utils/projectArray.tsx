@@ -43,7 +43,7 @@ export const projectArray: Projs[] = [
         stack: ["tauri", "solidjs", "typescript", "tailwind", "rust", "sqlite", "kysely", "ag-grid"],
         type: "large",
         external: true,
-        path: "https://github.com/cossieB/miniger/releases/tag/v0.4.1"
+        path: "https://github.com/cossieB/miniger/releases/"
     }, {
         title: "IGDB Rest API",
         description: (
