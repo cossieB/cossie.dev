@@ -7,10 +7,9 @@ import { projectArray, type Projs } from "~/features/home/utils/projectArray";
 import { ChevronLeftIcon } from "lucide-solid";
 
 export const map: { [k in Projs['type']]: string } = {
-    api: "API",
-    game: "Games",
-    interactive: "Interactive",
-    large: "Larger Scale Projects"
+    backend: "Backend Projects",
+    frontend: "Frontend Projects",
+    "full-stack": "Full-Stack Projects"
 }
 
 const paths = [{
@@ -32,8 +31,8 @@ type Props = {
     div: HTMLDivElement;
     setHeight: Setter<number>;
     isOpen: Accessor<boolean>;
-    expanded: Accessor<"large" | "game" | "api" | "interactive" | null>;
-    setExpanded: Setter<"large" | "game" | "api" | "interactive" | null>;
+    expanded: Accessor<"full-stack" | "backend" | "frontend" | null>;
+    setExpanded: Setter<"full-stack" | "backend" | "frontend" | null>;
 };
 export function Navbar(props: Props) {
     return <nav>
@@ -75,10 +74,9 @@ export function Navbar(props: Props) {
                                     href={path.path}
                                 />}
                         </For>
-                        <Category setExpanded={props.setExpanded} type="large" />
-                        <Category setExpanded={props.setExpanded} type="game" />
-                        <Category setExpanded={props.setExpanded} type="api" />
-                        <Category setExpanded={props.setExpanded} type="interactive" />
+                        <Category setExpanded={props.setExpanded} type="full-stack" />
+                        <Category setExpanded={props.setExpanded} type="backend" />
+                        <Category setExpanded={props.setExpanded} type="frontend" />
                     </ul>
                 </Match>
             </Switch>

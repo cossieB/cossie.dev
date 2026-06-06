@@ -52,9 +52,9 @@ export function HomePage() {
                 </div>
             </section>
             <section >
-                <Header label="Projects" id="projects" />
+                <Header label="Full Stack Projects" id="projects" />
                 <div class={styles.projects}>
-                    <For each={projectArray.filter(proj => proj.type == "large")}>
+                    <For each={projectArray.filter(proj => proj.type == "full-stack")}>
                         {(proj, i) =>
                             <LargeProject
                                 proj={proj}
@@ -65,9 +65,23 @@ export function HomePage() {
                 </div>
             </section>
             <section>
-                <Header label="Smaller Projects" id="small-projects" />
+                <Header label="Backend Projects" id="backend-projects" />
                 <div class={styles.grid} >
-                    <For each={projectArray.filter(project => project.type != "large")}>
+                    <For each={projectArray.filter(project => project.type == "backend")}>
+                        {project =>
+                            <SmallProject
+                                proj={project}
+                                reversed
+                                setSelectedProject={setSelectedProject}
+                            />
+                        }
+                    </For>
+                </div>
+            </section>
+            <section>
+                <Header label="Frontend Projects" id="frontend-projects" />
+                <div class={styles.grid} >
+                    <For each={projectArray.filter(project => project.type == "frontend")}>
                         {project =>
                             <SmallProject
                                 proj={project}

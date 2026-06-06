@@ -63,7 +63,7 @@
             padding: 0.25rem 1rem;
             display: flex;
             align-items: center;
-            height: 2.5rem;
+            
             width: calc(0.9 * var(--width));
             cursor: pointer;
             place-items: center;

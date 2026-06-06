@@ -4,7 +4,7 @@ import { projectArray } from "~/features/home/utils/projectArray";
 import { ChevronRightIcon } from "lucide-solid";
 
 type Props = {
-    setExpanded: Setter<"large" | "game" | "api" | "interactive" | null>;
+    setExpanded: Setter<"full-stack" | "backend" | "frontend" | null>;
     type: typeof projectArray[number]['type'];
     label?: string;
 };

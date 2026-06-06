@@ -12,7 +12,9 @@
     h3 {
         font-size: clamp(1rem, calc(2.5vw + 1rem), 2.5rem);
     }
-
+    h3 {
+        margin-block: 1rem;
+    }
     section {
         scroll-snap-align: start;
     }

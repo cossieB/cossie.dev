@@ -11,7 +11,7 @@ export default function App() {
         <Router
             root={props => (
                 <MetaProvider>
-                    <Title>Cossie</Title>
+                    <Title>Buntu Cossie</Title>
                     <Navigator />
                     <Suspense>{props.children}</Suspense>
                 </MetaProvider>

@@ -12,7 +12,7 @@ type Props = {
 };
 
 export function LargeProject(props: Props) {
-    const additionalProps = props.proj.external ? {target:"_blank", rel:"noreferrer"} : undefined
+    const additionalProps = props.proj.external ? {target:"_blank", rel:"noopener"} : undefined
     return (
         <div class={styles.project} classList={{ [styles.reversed]: props.reversed }} >
             <img src={STORAGE_DOMAIN + props.proj.img} />
@@ -32,7 +32,7 @@ export function LargeProject(props: Props) {
 }
 
 export function SmallProject(props: Props) {
-    const additionalProps = props.proj.external ? {target:"_blank", rel:"noreferrer"} : undefined    
+    const additionalProps = props.proj.external ? {target:"_blank", rel:"noopener"} : undefined    
     return (
         <div class={styles.small}>
             <img src={STORAGE_DOMAIN + props.proj.img} />

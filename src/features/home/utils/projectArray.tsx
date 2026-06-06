@@ -7,7 +7,7 @@ export type Projs = {
     description: JSXElement,
     stack: string[],
     repo: string,
-    type: 'large' | 'game' | 'api' | 'interactive'
+    type: "full-stack" | "backend" | "frontend"
     external: boolean
     path: string
 }
@@ -25,7 +25,7 @@ export const projectArray: Projs[] = [
         ),
         repo: "https://github.com/cossieB/1clip",
         stack: ["tanstack-router", "solidjs", "typescript", "node.js", "postgres", "drizzle", "railway", "redis", "better-auth", "cloudflare", "tanstack-query", "nodemailer", "ag-grid"],
-        type: "large",
+        type: "full-stack",
         external: true,
         path: "https://1clip.cossie.dev"
     }, {
@@ -41,22 +41,37 @@ export const projectArray: Projs[] = [
         ),
         repo: "https://github.com/cossieB/1clip",
         stack: ["tauri", "solidjs", "typescript", "tailwind", "rust", "sqlite", "kysely", "ag-grid"],
-        type: "large",
+        type: "full-stack",
         external: true,
         path: "https://github.com/cossieB/miniger/releases/"
+    }, {
+        title: "OAuth2.1 Authorization Server",
+        img: "/projects/oauth2.png",
+        description: (
+            <>
+                <p>My custom built OAuth2.1 authorization server. It was built with Typescript, Hono, Drizzle ORM and deployed to Cloudflare Workers.</p>
+                <p>It uses the Authorization Code flow with PKCE and JWT access tokens.</p>
+            </>
+        ),
+        external: true,
+        path: "https://oauth2.cossie.workers.dev",
+        repo: "https://github.com/cossieB/oauth2",
+        stack: ["typescript", "sqlite", "drizzle", "cloudflare", "node.js", "hono", "jwt", "tailwind"],
+        type: "backend"
     }, {
         title: "IGDB Rest API",
         description: (
             <>
-                <p>IGDB is a public REST API for information about the video game industry. Users can also leave reviews for games. It was built with Hono server library on Cloudflare Workers and uses Better-Auth for authentication</p>
+                <p>IGDB is a public REST API for information about the video game industry. Users can also leave reviews for games. It was built with .NET 10, C#, Entity Framework and PostgreSQL. It includes authentication and rate limiting</p>
+                <p>The project is deployed on AWS EC2 using docker images and sits behind an Nginx reverse proxy</p>
             </>
         ),
-        type: 'api',
+        type: "backend",
         external: true,
         img: "/projects/rest.png",
-        path: "https://igdb.cossie.workers.dev/scalar",
+        path: "https://igdb-dotnet.cossie.dev/scalar",
         repo: "https://github.com/cossieB/igdb",
-        stack: ["typescript", "hono", "cloudflare", "sqlite", "drizzle", "better-auth"]
+        stack: ["csharp", "dotnet", "aws", "postgres", "entity-framework", "docker", "nginx"]
     }, {
         title: "IGDB GraphQL API",
         description: (
@@ -64,7 +79,7 @@ export const projectArray: Projs[] = [
                 <p>The GraphQL version of the IGDB API</p>
             </>
         ),
-        type: 'api',
+        type: "backend",
         external: true,
         img: "/projects/graphql.png",
         path: "https://igdb.cossie.workers.dev/graphql",
@@ -78,7 +93,7 @@ export const projectArray: Projs[] = [
         description: "Clone of the 2048 puzzle/strategy game. Features mobile swipe controls. High scores stored in Firestore and local storage. This game has complex logic, so it was quite challenging to develop.",
         stack: ["typescript", "react", "firebase", "firestore", "sass"],
         repo: "https://github.com/cossieB/cossie.dev/tree/main/src/components/2048",
-        type: "game",
+        type: "frontend",
         external: false
     }, {
         title: "Wordle",
@@ -88,7 +103,7 @@ export const projectArray: Projs[] = [
         description: "My recreation of the popular game Wordle",
         stack: ["typescript", "solidjs", "firebase",],
         repo: "https://github.com/cossieB/cossie.dev/tree/main/src/components/Wordle",
-        type: "game",
+        type: "frontend",
         external: false
     }, {
         title: 'Memory Game',
@@ -98,7 +113,7 @@ export const projectArray: Projs[] = [
         description: "Quiz that tests your memory. Features customizable game size. High scores stored in Firestore and local storage.",
         stack: ["typescript", "solidjs", "firebase", "firestore"],
         repo: "https://github.com/cossieB/cossie.dev/tree/main/src/components/Memory",
-        type: "game",
+        type: "frontend",
         external: false
     }, {
         title: "Sudoku",
@@ -108,7 +123,7 @@ export const projectArray: Projs[] = [
         description: "Play sudoku. Features clash highlighting and custom puzzle creator. It can also solve most puzzles using the backtracking algorithm.",
         stack: ["typescript", "solidjs", "firebase",],
         repo: "https://github.com/cossieB/cossie.dev/tree/main/src/components/Sudoku",
-        type: "game",
+        type: "frontend",
         external: false
     }, {
         title: "Random Quote Machine",
@@ -118,7 +133,7 @@ export const projectArray: Projs[] = [
         description: "Random quotes from across the ages. Features filters and Twitter and Tumblr share buttons",
         stack: ["typescript", "solidjs", "firebase",],
         repo: "https://github.com/cossieB/cossie.dev/tree/main/src/components/Quotes",
-        type: "interactive",
+        type: "frontend",
         external: false
     }, {
         title: "Pomodoro",
@@ -128,7 +143,7 @@ export const projectArray: Projs[] = [
         description: "Timer for the pomodoro technique. You can change the session and the break lengths.",
         stack: ["typescript", "solidjs", "firebase",],
         repo: "https://github.com/cossieB/cossie.dev/tree/main/src/components/Pomodoro",
-        type: "interactive",
+        type: "frontend",
         external: false
     }, {
         title: "Calculator",
@@ -138,7 +153,7 @@ export const projectArray: Projs[] = [
         description: "Non-scientific calculator.",
         stack: ["typescript", "solidjs", "firebase",],
         repo: "https://github.com/cossieB/cossie.dev/tree/main/src/components/Calculator",
-        type: "interactive",
+        type: "frontend",
         external: false
     }
 ]
