@@ -4,6 +4,7 @@ import { Projs } from "../utils/projectArray";
 import styles from "./home.module.css"
 import { Setter } from "solid-js";
 import { STORAGE_DOMAIN } from "~/env";
+import { ProjectDetails } from "./ProjectDetails";
 
 type Props = {
     proj: Projs;
@@ -22,11 +23,14 @@ export function LargeProject(props: Props) {
                 {props.proj.description}
                 </div>
                 <div class={styles.links}>
-                    <button title="More information" onclick={() => props.setSelectedProject(props.proj)}> <CircleQuestionMarkIcon size={"2rem"} /> </button>
+                    <button title="More information" popoverTarget={`popover-${props.proj.title}`}> <CircleQuestionMarkIcon size={"2rem"} /> </button>
                     <A title="Github repo" href={props.proj.repo}  {...additionalProps}> <CodeIcon size={"2rem"} /> </A>
                     <A title="Link to demo" href={props.proj.path}  {...additionalProps}> <ExternalLinkIcon size={"2rem"} /> </A>
                 </div>
             </div>
+            <ProjectDetails
+                proj={props.proj}
+            />    
         </div>
     )
 }
@@ -38,10 +42,13 @@ export function SmallProject(props: Props) {
             <img src={STORAGE_DOMAIN + props.proj.img} />
             <h4> {props.proj.title} </h4>
             <div class={styles.links}>
-                <button title="More information" onclick={() => props.setSelectedProject(props.proj)}> <CircleQuestionMarkIcon size={"2rem"} /> </button>
+                <button title="More information" popoverTarget={`popover-${props.proj.title}`}> <CircleQuestionMarkIcon size={"2rem"} /> </button>
                 <A title="Github repo" href={props.proj.repo} {...additionalProps}> <CodeIcon size={"2rem"} /> </A>
                 <A title="Link to demo" href={props.proj.path} {...additionalProps}> <ExternalLinkIcon size={"2rem"} /> </A>
             </div>
+            <ProjectDetails
+                proj={props.proj}
+            />            
         </div>
     )
 }

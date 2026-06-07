@@ -12,9 +12,11 @@
     h3 {
         font-size: clamp(1rem, calc(2.5vw + 1rem), 2.5rem);
     }
+
     h3 {
         margin-block: 1rem;
     }
+
     section {
         scroll-snap-align: start;
     }
@@ -146,7 +148,7 @@
     @media (width > 1024px) {
         flex-direction: row;
 
-        img {
+        >img {
             width: 50%;
         }
 
@@ -196,8 +198,95 @@
 }
 
 .details {
+    border: none;
+    width: min(95%, 1200px);
+
+    transition:
+        translate 200ms ease,
+        opacity 200ms ease,
+        display 200ms ease allow-discrete,
+        overlay 200ms ease allow-discrete;
+
+
+    left: 50%;
+    top: 50%;
+    translate: -50% -45%;
+    opacity: 0;
+
+    &:popover-open {
+        translate: -50% -50%;
+        opacity: 1;
+
+        @starting-style {
+            opacity: 0;
+            translate: -50% -45%;
+
+            &::backdrop {
+                backdrop-filter: blur(0px);
+            }
+        }
+
+        &::backdrop {
+            backdrop-filter: blur(10px);
+        }
+    }
+
+    >div {
+
+        background: linear-gradient(#267369, #00332c);
+        box-shadow: 0 0 15px black;
+        border-radius: 0 2rem;
+
+        corner-shape: bevel;
+
+    }
+
+    .screens {
+        display: flex;
+        width: 100%;
+        justify-content: space-around;
+        flex-wrap: wrap;
+
+        img {
+            max-height: 300px;
+
+            &:first-child {
+                border: 10px solid black;
+            }
+
+            &:last-child {
+                border: 5px solid black;
+                border-radius: 1rem;
+            }
+        }
+    }
+
+    .description {
+        width: fit-content;
+        margin-inline: auto;
+        margin-block: 1rem;
+    }
+
+
+
+    &::backdrop {
+        background-color: rgba(2, 6, 23, 0);
+        backdrop-filter: blur(0px);
+        transition:
+            background 200ms ease,
+            backdrop-filter 200ms ease,
+            overlay 200ms allow-discrete,
+            display 200ms allow-discrete;
+    }
+}
+
+/*
+.details {
+    &:popover-open {
+        display: grid;
+    }
     position: fixed;
-    display: grid;
+    
     inset: 0;
     backdrop-filter: blur(10px);
 
@@ -217,7 +306,7 @@
         background: linear-gradient(#267369, #00332c);
         box-shadow: 0 0 15px black;
         border-radius: 0 2rem;
-        /* chrome only atm. */
+        
         corner-shape: bevel;
     }
 
@@ -255,7 +344,7 @@
         align-content: center;
     }
 }
-
+*/
 .projectHeader {
     display: flex;
     align-items: center;
@@ -277,13 +366,6 @@
     }
 }
 
-@starting-style {
-    .details {
-        opacity: 0;
-        translate: 0 50px;
-    }
-}
-
 .grid {
     display: grid;
     gap: 0.5rem;
@@ -297,7 +379,7 @@
 .small {
     position: relative;
 
-    .links {
+    .links:not([popover] .links) {
         left: 50%;
         top: 50%;
         translate: -50%;
@@ -318,7 +400,7 @@
             opacity: 0.8;
         }
 
-        .links {
+        .links:not([popover] .links) {
             opacity: 1;
             translate: -50% -50%;
             pointer-events: all;

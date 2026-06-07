@@ -96,9 +96,6 @@ export function HomePage() {
                 <Header label="Contact Me" id="contact" />
                 <ContactMe />
             </section>
-            <Show when={selectedProject()}>
-                {project => <ProjectDetails proj={project()} close={() => setSelectedProject()} />}
-            </Show>
         </div>
     )
 }

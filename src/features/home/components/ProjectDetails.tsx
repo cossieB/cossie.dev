@@ -9,18 +9,17 @@ false && clickOutside
 
 type Props = {
     proj: Projs;
-    close: () => void
 };
 
 export function ProjectDetails(props: Props) {
     const additionalProps = props.proj.external ? { target: "_blank", rel: "noopener" } : undefined
     return (
-        <div class={styles.details}>
-            <div use:clickOutside={props.close} >
+        <div popover="auto" id={`popover-${props.proj.title}`} class={styles.details}>
+            <div >
                 <div class={styles.projectHeader}>
                     <h3> {props.proj.title} </h3>
                     <div class={styles.links}>
-                        <button title="Close" onclick={props.close} > <CircleXIcon size={"2rem"} /> </button>
+                        <button title="Close" popoverTarget={`popover-${props.proj.title}`} popoverTargetAction="hide" > <CircleXIcon size={"2rem"} /> </button>
                         <A title="Github repo" href={props.proj.repo} {...additionalProps}> <CodeIcon size={"2rem"} /> </A>
                         <A title="Link to demo" href={props.proj.path} {...additionalProps}> <ExternalLinkIcon size={"2rem"} /> </A>
                     </div>
@@ -34,7 +33,7 @@ export function ProjectDetails(props: Props) {
                         <img src={STORAGE_DOMAIN + props.proj.imgMobile} alt="" />
                     </Show>
                 </div>
-                <div class={styles.stack} >
+                <div aria-label="Technologies used" class={styles.stack} >
                     <For each={props.proj.stack}>
                         {tool => <img title={tool} class={styles.tool} src={`${STORAGE_DOMAIN}/stack/${tool}.png`} alt="" />}
                     </For>

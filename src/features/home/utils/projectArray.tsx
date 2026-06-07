@@ -83,7 +83,7 @@ export const projectArray: Projs[] = [
         external: true,
         img: "/projects/graphql.png",
         path: "https://igdb.cossie.workers.dev/graphql",
-        repo: "https://github.com/cossieB/igdb/tree/main/src/graphql",
+        repo: "https://github.com/cossieB/igdb/tree/nodejs/src/graphql",
         stack: ["typescript", "hono", "cloudflare", "sqlite", "drizzle", "better-auth", "graphql"]
     }, {
         title: "2048",
@@ -143,16 +143,6 @@ export const projectArray: Projs[] = [
         description: "Timer for the pomodoro technique. You can change the session and the break lengths.",
         stack: ["typescript", "solidjs", "firebase",],
         repo: "https://github.com/cossieB/cossie.dev/tree/main/src/components/Pomodoro",
-        type: "frontend",
-        external: false
-    }, {
-        title: "Calculator",
-        img: "/projects/calculator.png",
-        imgMobile: "/projects/calculator_mobile.png",
-        path: "/calculator",
-        description: "Non-scientific calculator.",
-        stack: ["typescript", "solidjs", "firebase",],
-        repo: "https://github.com/cossieB/cossie.dev/tree/main/src/components/Calculator",
         type: "frontend",
         external: false
     }
