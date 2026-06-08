@@ -2,13 +2,16 @@ html {
   scroll-snap-type: y mandatory;
 }
 
-html, body {
-  overscroll-behavior-y: contain; /* Prevents refresh while allowing normal scroll */
+html,
+body {
+  overscroll-behavior-y: contain;
+  /* Prevents refresh while allowing normal scroll */
 }
 
 :root {
-    --neon-pink: #F0F;
+  --neon-pink: #F0F;
   --neon-green: hsl(150 100% 50%);
+
 }
 
 body {
@@ -24,17 +27,22 @@ button {
   border: none;
 }
 
-h1,h2,h3,h4,h5,h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   text-align: center;
   font-family: "Stick No Bills", sans-serif;
 }
 
 @keyframes blink {
-    from {
-        opacity: 0;
-    }
+  from {
+    opacity: 0;
+  }
 
-    to {
-        opacity: 1;
-    }
+  to {
+    opacity: 1;
+  }
 }
