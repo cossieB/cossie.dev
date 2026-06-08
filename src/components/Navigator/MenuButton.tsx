@@ -14,6 +14,7 @@ export function MenuButton(props: Props) {
             else
                 props.setIsOpen(true);
         }}
+        aria-label="Menu button"
     >
         <Show
             when={props.isOpen()}

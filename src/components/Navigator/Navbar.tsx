@@ -81,5 +81,5 @@ export function Navbar(props: Props) {
                 </Match>
             </Switch>
         </Transition>
-    </nav>;
+    </nav>
 }

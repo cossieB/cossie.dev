@@ -48,20 +48,20 @@ export function ContactMe() {
 
             <form class={styles.contact} method="post" action={sendAction.with(body)}>
                 <div class={styles.formControl} >
-                    <input onchange={e => setBody({ name: e.currentTarget.value })} type="text" required placeholder=" " />
-                    <label> Name </label>
+                    <input id="contact-name" onchange={e => setBody({ name: e.currentTarget.value })} type="text" required placeholder=" " />
+                    <label for="contact-name"> Name </label>
                 </div>
                 <div class={styles.formControl} >
-                    <input onchange={e => setBody({ email: e.currentTarget.value })} type="email" required placeholder=" " />
-                    <label> Email </label>
+                    <input id="contact-email" onchange={e => setBody({ email: e.currentTarget.value })} type="email" required placeholder=" " />
+                    <label for="contact-email"> Email </label>
                 </div>
                 <div class={styles.formControl} >
-                    <input onchange={e => setBody({ company: e.currentTarget.value })} type="text" required placeholder=" " />
-                    <label> Company </label>
+                    <input id="contact-co" onchange={e => setBody({ company: e.currentTarget.value })} type="text" required placeholder=" " />
+                    <label for="contact-co"> Company </label>
                 </div>
                 <div class={styles.formControl}>
-                    <textarea onchange={e => setBody({ message: e.currentTarget.value })} required minLength={3} placeholder=" " />
-                    <label> Message </label>
+                    <textarea id="contact-msg" onchange={e => setBody({ message: e.currentTarget.value })} required minLength={3} placeholder=" " />
+                    <label for="contact-msg"> Message </label>
                 </div>
                 <button
                     type="submit"

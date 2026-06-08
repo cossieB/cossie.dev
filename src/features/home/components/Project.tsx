@@ -16,7 +16,7 @@ export function LargeProject(props: Props) {
     const additionalProps = props.proj.external ? {target:"_blank", rel:"noopener"} : undefined
     return (
         <div class={styles.project} classList={{ [styles.reversed]: props.reversed }} >
-            <img src={STORAGE_DOMAIN + props.proj.img} />
+            <img src={STORAGE_DOMAIN + props.proj.img} alt={props.proj.title} />
             <div class={styles.description}>
                 <h3> {props.proj.title} </h3>
                 <div class={styles.desc}>
@@ -39,7 +39,7 @@ export function SmallProject(props: Props) {
     const additionalProps = props.proj.external ? {target:"_blank", rel:"noopener"} : undefined    
     return (
         <div class={styles.small}>
-            <img src={STORAGE_DOMAIN + props.proj.img} />
+            <img src={STORAGE_DOMAIN + props.proj.img} alt={props.proj.title} />
             <h4> {props.proj.title} </h4>
             <div class={styles.links}>
                 <button title="More information" popoverTarget={`popover-${props.proj.title}`}> <CircleQuestionMarkIcon size={"2rem"} /> </button>
