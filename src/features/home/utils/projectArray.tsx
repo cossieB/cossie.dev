@@ -39,7 +39,7 @@ export const projectArray: Projs[] = [
                 <small>*currently FFMPEG isn't bundled with the app and needs to be installed separately by the user.</small>
             </>
         ),
-        repo: "https://github.com/cossieB/1clip",
+        repo: "https://github.com/cossieB/miniger",
         stack: ["tauri", "solidjs", "typescript", "tailwind", "rust", "sqlite", "kysely", "ag-grid"],
         type: "full-stack",
         external: true,
@@ -51,6 +51,7 @@ export const projectArray: Projs[] = [
             <>
                 <p>My custom built OAuth2.1 authorization server. It was built with Typescript, Hono, Drizzle ORM and deployed to Cloudflare Workers.</p>
                 <p>It uses the Authorization Code flow with PKCE and JWT access tokens.</p>
+                <p>A demonstration playground is available at <a target="__blank" href="https://oauth2-demo.netlify.app">https://oauth2-demo.netlify.app</a> </p>
             </>
         ),
         external: true,
