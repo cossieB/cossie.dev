@@ -5,6 +5,7 @@ import { Projs } from "../utils/projectArray";
 import styles from "./home.module.css"
 import clickOutside from "~/lib/clickOutside";
 import { STORAGE_DOMAIN } from "~/env";
+import { Dynamic } from "solid-js/web";
 false && clickOutside
 
 type Props = {
@@ -24,7 +25,7 @@ export function ProjectDetails(props: Props) {
                 </div>
             </div>
             <div class={styles.description}>
-                {props.proj.description}
+                <Dynamic component={props.proj.description} />
             </div>
             <div class={styles.screens} >
                 <img src={STORAGE_DOMAIN + props.proj.img} alt="" />

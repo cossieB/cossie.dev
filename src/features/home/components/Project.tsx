@@ -5,6 +5,7 @@ import styles from "./home.module.css"
 import { Setter } from "solid-js";
 import { STORAGE_DOMAIN } from "~/env";
 import { ProjectDetails } from "./ProjectDetails";
+import { Dynamic } from "solid-js/web";
 
 type Props = {
     proj: Projs;
@@ -13,14 +14,14 @@ type Props = {
 };
 
 export function LargeProject(props: Props) {
-    const additionalProps = props.proj.external ? {target:"_blank", rel:"noopener"} : undefined
+    const additionalProps = props.proj.external ? { target: "_blank", rel: "noopener" } : undefined
     return (
         <div class={styles.project} classList={{ [styles.reversed]: props.reversed }} >
             <img src={STORAGE_DOMAIN + props.proj.img} alt={props.proj.title} />
             <div class={styles.description}>
                 <h3> {props.proj.title} </h3>
                 <div class={styles.desc}>
-                {props.proj.description}
+                    <Dynamic component={props.proj.description} />
                 </div>
                 <div class={styles.links}>
                     <button title="More information" popoverTarget={`popover-${props.proj.title}`}> <CircleQuestionMarkIcon size={"2rem"} /> </button>
@@ -30,13 +31,13 @@ export function LargeProject(props: Props) {
             </div>
             <ProjectDetails
                 proj={props.proj}
-            />    
+            />
         </div>
     )
 }
 
 export function SmallProject(props: Props) {
-    const additionalProps = props.proj.external ? {target:"_blank", rel:"noopener"} : undefined    
+    const additionalProps = props.proj.external ? { target: "_blank", rel: "noopener" } : undefined
     return (
         <div class={styles.small}>
             <img src={STORAGE_DOMAIN + props.proj.img} alt={props.proj.title} />
@@ -48,7 +49,7 @@ export function SmallProject(props: Props) {
             </div>
             <ProjectDetails
                 proj={props.proj}
-            />            
+            />
         </div>
     )
 }

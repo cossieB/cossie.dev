@@ -4,7 +4,7 @@ export type Projs = {
     title: string,
     img: string,
     imgMobile?: string,
-    description: JSXElement,
+    description: () => JSXElement,
     stack: string[],
     repo: string,
     type: "full-stack" | "backend" | "frontend"
@@ -17,7 +17,7 @@ export const projectArray: Projs[] = [
         title: "1Clip",
         img: "/projects/1clip.png",
         imgMobile: "/projects/1clip_mobile.png",
-        description: (
+        description: () => (
             <>
                 <p>1Clip is the ultimate gamer hangout. It is a place where gamers can showcase their skills, their screenshots, fanart or even fanfic.</p>
                 <p>Users can upload their videos or images to Cloudflare R2. Uses BetterAuth for authorization, Postgres, Redis and Railway as the PaaS.</p>
@@ -31,7 +31,7 @@ export const projectArray: Projs[] = [
     }, {
         title: "Miniger",
         img: "/projects/miniger.png",
-        description: (
+        description: () => (
             <>
                 <p>Miniger is a multi-platform desktop application to manage and play movies. </p>
                 <p>It was built with Tauri, Typescript and Rust. It uses SQLite as a database and Kysely ORM to interact with the database</p>
@@ -47,7 +47,7 @@ export const projectArray: Projs[] = [
     }, {
         title: "OAuth2.1 Authorization Server",
         img: "/projects/oauth2.png",
-        description: (
+        description: () => (
             <>
                 <p>My custom built OAuth2.1 authorization server. It was built with Typescript, Hono, Drizzle ORM and deployed to Cloudflare Workers.</p>
                 <p>It uses the Authorization Code flow with PKCE and JWT access tokens.</p>
@@ -61,7 +61,7 @@ export const projectArray: Projs[] = [
         type: "backend"
     }, {
         title: "IGDB Rest API",
-        description: (
+        description: () => (
             <>
                 <p>IGDB is a public REST API for information about the video game industry. Users can also leave reviews for games. It was built with .NET 10, C#, Entity Framework and PostgreSQL. It includes authentication and rate limiting</p>
                 <p>The project is deployed on AWS EC2 using docker images and sits behind an Nginx reverse proxy</p>
@@ -75,7 +75,7 @@ export const projectArray: Projs[] = [
         stack: ["csharp", "dotnet", "aws", "postgres", "entity-framework", "docker", "nginx"]
     }, {
         title: "IGDB GraphQL API",
-        description: (
+        description: () => (
             <>
                 <p>The GraphQL version of the IGDB API</p>
             </>
@@ -91,7 +91,7 @@ export const projectArray: Projs[] = [
         img: "/projects/2048.png",
         imgMobile: "/projects/2048_mobile.png",
         path: "/2048",
-        description: "Clone of the 2048 puzzle/strategy game. Features mobile swipe controls. High scores stored in Firestore and local storage. This game has complex logic, so it was quite challenging to develop.",
+        description: () => "Clone of the 2048 puzzle/strategy game. Features mobile swipe controls. High scores stored in Firestore and local storage. This game has complex logic, so it was quite challenging to develop.",
         stack: ["typescript", "react", "firebase", "firestore", "sass"],
         repo: "https://github.com/cossieB/cossie.dev/tree/main/src/components/2048",
         type: "frontend",
@@ -101,7 +101,7 @@ export const projectArray: Projs[] = [
         img: "/projects/wordle.png",
         imgMobile: "/projects/wordle_mobile.png",
         path: "/wordle",
-        description: "My recreation of the popular game Wordle",
+        description: () => "My recreation of the popular game Wordle",
         stack: ["typescript", "solidjs", "firebase",],
         repo: "https://github.com/cossieB/cossie.dev/tree/main/src/components/Wordle",
         type: "frontend",
@@ -111,7 +111,7 @@ export const projectArray: Projs[] = [
         path: '/memory',
         img: "/projects/memory.png",
         imgMobile: "/projects/memory_mobile.png",
-        description: "Quiz that tests your memory. Features customizable game size. High scores stored in Firestore and local storage.",
+        description: () => "Quiz that tests your memory. Features customizable game size. High scores stored in Firestore and local storage.",
         stack: ["typescript", "solidjs", "firebase", "firestore"],
         repo: "https://github.com/cossieB/cossie.dev/tree/main/src/components/Memory",
         type: "frontend",
@@ -121,7 +121,7 @@ export const projectArray: Projs[] = [
         img: '/projects/sudoku.png',
         imgMobile: '/projects/sudoku_mobile.png',
         path: "/sudoku",
-        description: "Play sudoku. Features clash highlighting and custom puzzle creator. It can also solve most puzzles using the backtracking algorithm.",
+        description: () => "Play sudoku. Features clash highlighting and custom puzzle creator. It can also solve most puzzles using the backtracking algorithm.",
         stack: ["typescript", "solidjs", "firebase",],
         repo: "https://github.com/cossieB/cossie.dev/tree/main/src/components/Sudoku",
         type: "frontend",
@@ -131,7 +131,7 @@ export const projectArray: Projs[] = [
         path: "/quotes",
         img: "/projects/quotes.png",
         imgMobile: "/projects/quotes_mobile.png",
-        description: "Random quotes from across the ages. Features filters and Twitter and Tumblr share buttons",
+        description: () => "Random quotes from across the ages. Features filters and Twitter and Tumblr share buttons",
         stack: ["typescript", "solidjs", "firebase",],
         repo: "https://github.com/cossieB/cossie.dev/tree/main/src/components/Quotes",
         type: "frontend",
@@ -141,7 +141,7 @@ export const projectArray: Projs[] = [
         img: "/projects/pomodoro.png",
         imgMobile: "/projects/pomodoro_mobile.png",
         path: "/pomodoro",
-        description: "Timer for the pomodoro technique. You can change the session and the break lengths.",
+        description: () => "Timer for the pomodoro technique. You can change the session and the break lengths.",
         stack: ["typescript", "solidjs", "firebase",],
         repo: "https://github.com/cossieB/cossie.dev/tree/main/src/components/Pomodoro",
         type: "frontend",
