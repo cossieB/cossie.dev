@@ -17,8 +17,8 @@ export function LargeProject(props: Props) {
     const additionalProps = props.proj.external ? { target: "_blank", rel: "noopener" } : undefined
     return (
         <div class={styles.project} classList={{ [styles.reversed]: props.reversed }} >
-            <img src={STORAGE_DOMAIN + props.proj.img} alt={props.proj.title} />
-            <div class={styles.description}>
+            <img class={styles.img} src={STORAGE_DOMAIN + props.proj.img} alt={props.proj.title} />
+            <article >
                 <h3> {props.proj.title} </h3>
                 <div class={styles.desc}>
                     <Dynamic component={props.proj.description} />
@@ -28,7 +28,7 @@ export function LargeProject(props: Props) {
                     <A title="Github repo" href={props.proj.repo}  {...additionalProps}> <CodeIcon size={"2rem"} /> </A>
                     <A title="Link to demo" href={props.proj.path}  {...additionalProps}> <ExternalLinkIcon size={"2rem"} /> </A>
                 </div>
-            </div>
+            </article>
             <ProjectDetails
                 proj={props.proj}
             />

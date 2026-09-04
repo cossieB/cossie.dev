@@ -19,8 +19,7 @@ export const projectArray: Projs[] = [
         imgMobile: "/projects/1clip_mobile.png",
         description: () => (
             <>
-                <p>1Clip is the ultimate gamer hangout. It is a place where gamers can showcase their skills, their screenshots, fanart or even fanfic.</p>
-                <p>Users can upload their videos or images to Cloudflare R2. Uses BetterAuth for authorization, Postgres, Redis and Railway as the PaaS.</p>
+                1Clip is the ultimate digital hangout for gamers to showcase their gameplay skills, screenshots, fan art, and fan fiction. The platform handles media uploads using Cloudflare R2 and secures user accounts with BetterAuth. Its robust backend relies on PostgreSQL, Redis, and Railway for seamless deployment and scaling.
             </>
         ),
         repo: "https://github.com/cossieB/1clip",
@@ -33,10 +32,7 @@ export const projectArray: Projs[] = [
         img: "/projects/miniger.png",
         description: () => (
             <>
-                <p>Miniger is a multi-platform desktop application to manage and play movies. </p>
-                <p>It was built with Tauri, Typescript and Rust. It uses SQLite as a database and Kysely ORM to interact with the database</p>
-                <p>It uses FFMPEG to generate video thumbnails, get metadata and do video conversions.</p>
-                <small>*currently FFMPEG isn't bundled with the app and needs to be installed separately by the user.</small>
+                Miniger is a multi-platform desktop application designed for managing movie libraries. Built using Tauri, TypeScript, and Rust, it stores data in an SQLite database managed through the Kysely ORM. The application leverages FFmpeg for video thumbnail generation, metadata extraction, and format conversion, and integrates with TMDB to automatically tag movies and actors.
             </>
         ),
         repo: "https://github.com/cossieB/miniger",
