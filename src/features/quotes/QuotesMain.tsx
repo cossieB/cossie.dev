@@ -1,8 +1,7 @@
-import { ErrorBoundary, For, createEffect, createSignal } from "solid-js";
+import { ErrorBoundary, For, Show, createEffect, createSignal } from "solid-js";
 import { quotes as quotesList, type Quote as QuoteType } from "./quotelist";
 import styles from "./quotes.module.css"
 import { createStore } from "solid-js/store";
-import { setDifference } from "~/lib/setDifference";
 import { Quote } from "./Quote";
 import { ReactiveSet } from "@solid-primitives/set";
 import { getUniqueTags, colors } from "./utils";
@@ -41,8 +40,9 @@ export default function QuotesMain() {
         index: 0,
         quote: () => filteredQuotes()[state.index],
         quoteTags: () => Array.from(state.quote().tags),
-        otherTags: () => Array.from(setDifference(tags, state.quote().tags)),
-        filters: new ReactiveSet<string>()
+        otherTags: () => Array.from(tags.difference(state.quote().tags)),
+        filters: new ReactiveSet<string>(),
+        showFilters: false
     })
 
     function toggleFilter(filter: string) {
@@ -64,30 +64,26 @@ export default function QuotesMain() {
             style={{ background: windowWidth() > 768 ? `url(${state.bgImg().src})` : state.color() }}
             id={styles.quoteContainer}
         >
-            <div>
-                <ErrorBoundary fallback={<p>Error: No quotes to show. Please reload the page.</p>}>
-                    <Quote quote={state.quote} color={state.color} next={next} />
-                    <div class={`${styles.tags}`} >
-                        <For each={state.quoteTags()}>
-                            {tag => <Tag
-                                tag={tag}
-                                activeTags={state.quote().tags}
-                                color={state.color}
-                                toggleFilter={toggleFilter}
-                                filters={state.filters}
-                            />}
-                        </For>
-                        <For each={state.otherTags()}>
-                            {tag => <Tag
-                                tag={tag}
-                                activeTags={state.quote().tags}
-                                color={state.color}
-                                toggleFilter={toggleFilter}
-                                filters={state.filters}
-                            />}
-                        </For>
-                    </div>
-                </ErrorBoundary>
+            <Quote quote={state.quote} color={state.color} next={next} toggleFilters={() => setState({ showFilters: !state.showFilters })} />
+            <div class={`${styles.tags}`} classList={{[styles.show]: state.showFilters}} >
+                <For each={state.quoteTags()}>
+                    {tag => <Tag
+                        tag={tag}
+                        activeTags={state.quote().tags}
+                        color={state.color}
+                        toggleFilter={toggleFilter}
+                        filters={state.filters}
+                    />}
+                </For>
+                <For each={state.otherTags()}>
+                    {tag => <Tag
+                        tag={tag}
+                        activeTags={state.quote().tags}
+                        color={state.color}
+                        toggleFilter={toggleFilter}
+                        filters={state.filters}
+                    />}
+                </For>
             </div>
         </main>
     )

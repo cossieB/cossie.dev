@@ -724,7 +724,7 @@ export const quotes: Quote[] = [
     }, {
         quote: "Reflect that whatever misfortune is your lot, it could only be worse in Milwaukee",
         author: "National Lampoon's Deteriorata",
-        tags: new Set(["humorous", "fiction", "dry humor"])
+        tags: new Set(["humorous", "fiction"])
     }, {
         quote: "Two wrongs don't make a right, but three lefts do",
         author: "Harold A. Lerch",
@@ -836,7 +836,7 @@ export const quotes: Quote[] = [
     }, {
         quote: "One morning I shot an elephant in my pajamas. How he got in my pajamas, I don't know.",
         author: "Captain Spaulding",
-        tags: new Set(["humorous", "surreal humor", "fiction"])
+        tags: new Set(["humorous", "fiction"])
     }, {
         quote: "It depends on what the meaning of 'is' is.",
         author: "Bill Clinton",
@@ -856,7 +856,7 @@ export const quotes: Quote[] = [
     }, {
         quote: "im not owned! im not owned!!, i continue to insist as i slowly shrink and transform into a corn cob",
         author: "dril",
-        tags: new Set(["humorous", "non-fiction", "surreal humor", "social media"])
+        tags: new Set(["humorous", "non-fiction", "social media"])
     }, {
         quote: "and another thing: im not mad. please dont put in the newspaper that i got mad",
         author: "dril",
@@ -922,7 +922,7 @@ export const quotes: Quote[] = [
         author: "Saren",
         tags: new Set(["fiction", "villain", "anti-hero", "mass effect", "video game",])
     }, {
-        quote: "Is submission not preferable to extinction.",
+        quote: "Is submission not preferable to extinction?",
         author: "Saren",
         tags: new Set(["fiction", "villain", "anti-hero", "mass effect", "video game",])
     }, {
@@ -1050,7 +1050,7 @@ export const quotes: Quote[] = [
         author: "Clay Kaczmarek",
         tags: new Set(["fiction", "video game", "philosophical"])
     }, {
-        quote: "They say ambition is an unattractive trait in a woman.You know what I find really unattractive? Waiting around for something to happen. Staring out a window, thinking the life you should be living is out there somewhere but not being willing to open the door and go get it. Even if someone tells you you can't. Being a coward is only cute in the Wizard of Oz.",
+        quote: "They say ambition is an unattractive trait in a woman. You know what I find really unattractive? Waiting around for something to happen. Staring out a window, thinking the life you should be living is out there somewhere but not being willing to open the door and go get it. Even if someone tells you you can't. Being a coward is only cute in the Wizard of Oz.",
         author: "Miriam 'Midge' Maisel",
         tags: new Set(['fiction', 'tv series', 'inspiring', 'motivational'])
     }, {
@@ -1121,5 +1121,25 @@ export const quotes: Quote[] = [
         quote: "Krogan don't waste energy voicing opinions. We just crush everyone else who has one",
         author: "Urdnot Wreav",
         tags: new Set(["humorous", "video game", "mass effect"])
+    }, {
+        quote: "I don't want to see a ghost, it's the sight to I fear most, I'd rather have a piece of toast, watch the evening news",
+        author: "Des'ree",
+        tags: new Set(["song lyrics"])
+    }, {
+        quote: "A happy ending for folks like us? Wrong city, wrong people",
+        author: "Johnny Silverhand",
+        tags: new Set(["video game", "fiction"])
+    }, {
+        quote: "Programming today is a race between software engineers striving to build bigger and better idiot-proof programs, and the Universe trying to produce bigger and better idiots. So far, the Universe is winning.",
+        author: "Rick Cook",
+        tags: new Set(["non-fiction", "humorous", "programming", "nerdy"])
+    },{
+        quote: "There are two ways to write error-free programs; only the third one works.",
+        author: "Alan J. Perlis",
+        tags: new Set(["non-fiction", "humorous", "programming", "nerdy"])
+    }, {
+        quote: "Give a man a program, frustrate him for a day. Teach a man to program, frustrate him for a lifetime.",
+        author: "Muhammad Waseem",
+        tags: new Set(["non-fiction", "humorous", "programming", "nerdy"])
     }
 ]
