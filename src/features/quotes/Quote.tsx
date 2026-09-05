@@ -1,10 +1,10 @@
 import { Setter } from "solid-js";
-import { type Quote } from "./quotelist";
+import { type Quote as QuoteType } from "./quotelist";
 import styles from "./quotes.module.css";
 
 interface P {
     color: () => string;
-    quote: () => Quote;
+    quote: () => QuoteType;
     next(): void;
     toggleFilters: () => void
 }

@@ -8,12 +8,12 @@ type Props = {
     external?: boolean
 };
 export function NavLink(props: Props) {
-    const additionalProps = props.external ? {target:"_blank", rel:"noreferrer"} : undefined 
+    const additionalProps = props.external ? { target: "_blank", rel: "noreferrer" } : undefined
     return (
-        <li>
-            <A activeClass={styles.active} end href={props.href} {...additionalProps}>
+        <A activeClass={styles.active} end href={props.href} {...additionalProps}>
+            <li>
                 {props.children}
-            </A>
-        </li>
+            </li>
+        </A>
     );
 }
