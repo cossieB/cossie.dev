@@ -1,4 +1,3 @@
-import { Setter } from "solid-js";
 import { type Quote as QuoteType } from "./quotelist";
 import styles from "./quotes.module.css";
 

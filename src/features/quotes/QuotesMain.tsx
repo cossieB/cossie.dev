@@ -63,6 +63,7 @@ export default function QuotesMain() {
         <main
             style={{ background: windowWidth() > 768 ? `url(${state.bgImg().src})` : state.color() }}
             id={styles.quoteContainer}
+            classList={{[styles.hasFilter]: state.filters.size > 0}}
         >
             <Quote quote={state.quote} color={state.color} next={next} toggleFilters={() => setState({ showFilters: !state.showFilters })} />
             <div class={`${styles.tags}`} classList={{[styles.show]: state.showFilters}} >

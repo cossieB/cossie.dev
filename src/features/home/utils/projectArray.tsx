@@ -69,9 +69,7 @@ export const projectArray: Projs[] = [
     }, {
         title: "IGDB GraphQL API",
         description: () => (
-            <>
-                <p>The GraphQL version of the IGDB API. Set x-api-key header to <code>uk_QOFDUChUqBhrAvaxVLNZudHsoZunRxlPAaArZUeTyktQIibZlGEHbmyemOwHYCNg</code> </p>
-            </>
+            <p>The GraphQL version of the IGDB API. Set x-api-key header to <code>uk_QOFDUChUqBhrAvaxVLNZudHsoZunRxlPAaArZUeTyktQIibZlGEHbmyemOwHYCNg</code> </p>
         ),
         type: "backend",
         external: true,
@@ -92,6 +90,7 @@ export const projectArray: Projs[] = [
     }, {
         title: "Image Converter",
         img: "/projects/image-converter.png",
+        imgMobile: "/projects/image-converter_mobile.png",
         path: "/image-converter",
         description: () => "A serverless, in-browser image converter and resizer. It handles local conversion to WebP, PNG, JPEG, JPEG-XL, and AVIF based on browser support.",
         stack: ["typescript", "solidjs"],
