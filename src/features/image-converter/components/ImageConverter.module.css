@@ -19,7 +19,8 @@
   overflow: hidden;
 }
 
-.uploadbox:hover, .uploadbox.dragging {
+.uploadbox:hover,
+.uploadbox.dragging {
   border-color: #3b82f6;
   background-color: #eff6ff;
 }
@@ -39,7 +40,7 @@
   flex-direction: column;
   align-items: center;
   gap: 0.5rem;
-  pointer-events: none; 
+  pointer-events: none;
 }
 
 .uploadIcon {
@@ -48,7 +49,8 @@
   transition: color 0.2s ease;
 }
 
-.uploadbox:hover .uploadIcon, .uploadbox.dragging .uploadIcon {
+.uploadbox:hover .uploadIcon,
+.uploadbox.dragging .uploadIcon {
   color: #3b82f6;
 }
 
@@ -128,9 +130,13 @@
 
 .controlsRow {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 0.5rem;
-  padding-left: calc(48px + 1rem); 
+  padding-left: 1rem;
+  @media (width > 1024px) {
+    padding-left: calc(48px + 1rem);
+  }
 }
 
 .preview {
@@ -146,7 +152,7 @@
   display: flex;
   flex-direction: column;
   flex-grow: 1;
-  min-width: 0; 
+  min-width: 0;
 }
 
 .fileName {
@@ -310,8 +316,13 @@
 }
 
 @keyframes spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .deleteBtn {

@@ -3,6 +3,7 @@ import { createStore, produce } from "solid-js/store";
 import styles from "./ImageConverter.module.css";
 import { TrashIcon, DownloadIcon, Link2Icon, Link2OffIcon, LoaderCircleIcon } from "lucide-solid";
 import { canConvertToFormat, convertImage, type ImageFormat } from "../utils/canConvertToFormat";
+import { CustomSiteTitle } from "~/components/CustomSiteTitle";
 
 type Status = "idle" | "converting" | "done" | "error";
 
@@ -68,7 +69,7 @@ export default function ImageConverter() {
 
     const findIndex = (id: string) => list.findIndex((item) => item.id === id);
 
-    const invalidateResult = (items: Item[], index: number) => {
+    function invalidateResult(items: Item[], index: number) {
         const item = items[index];
         if (item.resultUrl) URL.revokeObjectURL(item.resultUrl);
         item.status = "idle";
@@ -77,7 +78,7 @@ export default function ImageConverter() {
         item.errorMessage = undefined;
     };
 
-    const handleFiles = (files: FileList | null) => {
+    function handleFiles(files: FileList | null) {
         if (!files) return;
 
         const newItems: Item[] = Array.from(files).map((file) => ({
@@ -105,7 +106,7 @@ export default function ImageConverter() {
         });
     };
 
-    const removeFile = (id: string) => {
+    function removeFile(id: string) {
         const index = findIndex(id);
         if (index === -1) return;
         const item = list[index];
@@ -114,7 +115,7 @@ export default function ImageConverter() {
         setList((prev) => prev.filter((i) => i.id !== id));
     };
 
-    const setFormat = (id: string, format: ImageFormat) => {
+    function setFormat(id: string, format: ImageFormat) {
         const index = findIndex(id);
         if (index === -1) return;
         setList(produce((items) => {
@@ -123,7 +124,7 @@ export default function ImageConverter() {
         }));
     };
 
-    const setWidth = (id: string, raw: string) => {
+    function setWidth (id: string, raw: string) {
         const index = findIndex(id);
         if (index === -1) return;
         setList(produce((items) => {
@@ -137,7 +138,7 @@ export default function ImageConverter() {
         }));
     };
 
-    const setHeight = (id: string, raw: string) => {
+    function setHeight (id: string, raw: string) {
         const index = findIndex(id);
         if (index === -1) return;
         setList(produce((items) => {
@@ -151,7 +152,7 @@ export default function ImageConverter() {
         }));
     };
 
-    const toggleLock = (id: string) => {
+    function toggleLock (id: string) {
         const index = findIndex(id);
         if (index === -1) return;
         setList(produce((items) => {
@@ -164,7 +165,7 @@ export default function ImageConverter() {
         }));
     };
 
-    const convertOne = async (id: string) => {
+    async function convertOne (id: string) {
         const index = findIndex(id);
         if (index === -1) return;
 
@@ -204,7 +205,7 @@ export default function ImageConverter() {
         }
     };
 
-    const convertAll = () => {
+    function convertAll() {
         list.forEach((item) => {
             if (item.status === "idle" || item.status === "error") {
                 convertOne(item.id);
@@ -225,6 +226,7 @@ export default function ImageConverter() {
 
     return (
         <div class={styles.wrapper}>
+            <CustomSiteTitle title="Image Converter" />
             <div
                 class={`${styles.uploadbox} ${isDragging() ? styles.dragging : ''}`}
                 onDragEnter={() => setIsDragging(true)}

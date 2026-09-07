@@ -58,22 +58,19 @@ export const projectArray: Projs[] = [
     }, {
         title: "IGDB Rest API",
         description: () => (
-            <>
-                <p>IGDB is a public REST API for information about the video game industry. Users can also leave reviews for games. It was built with .NET 10, C#, Entity Framework and PostgreSQL. It includes authentication and rate limiting</p>
-                <p>The project is deployed on AWS EC2 using docker images and sits behind an Nginx reverse proxy</p>
-            </>
+            <p>IGDB is a public REST API for information about the video game industry. Users can also leave reviews for games. It was built with Hono server library on Cloudflare Workers and uses Better-Auth for authentication</p>
         ),
         type: "backend",
         external: true,
         img: "/projects/rest.png",
         path: "https://igdb-dotnet.cossie.dev/scalar",
         repo: "https://github.com/cossieB/igdb",
-        stack: ["csharp", "dotnet", "aws", "postgres", "entity-framework", "docker", "nginx"]
+        stack: ["typescript", "cloudflare", "sqlite", "drizzle", "better-auth"]
     }, {
         title: "IGDB GraphQL API",
         description: () => (
             <>
-                <p>The GraphQL version of the IGDB API</p>
+                <p>The GraphQL version of the IGDB API. Set x-api-key header to <code>uk_QOFDUChUqBhrAvaxVLNZudHsoZunRxlPAaArZUeTyktQIibZlGEHbmyemOwHYCNg</code> </p>
             </>
         ),
         type: "backend",
@@ -87,9 +84,18 @@ export const projectArray: Projs[] = [
         img: "/projects/2048.png",
         imgMobile: "/projects/2048_mobile.png",
         path: "/2048",
-        description: () => "Clone of the 2048 puzzle/strategy game. Features mobile swipe controls. High scores stored in Firestore and local storage. This game has complex logic, so it was quite challenging to develop.",
-        stack: ["typescript", "react", "firebase", "firestore", "sass"],
-        repo: "https://github.com/cossieB/cossie.dev/tree/main/src/components/2048",
+        description: () => "Clone of the 2048 puzzle/strategy game. Features mobile swipe controls. High scores stored in Firestore and local storage.",
+        stack: ["typescript", "solidjs", "firebase", "firestore"],
+        repo: "https://github.com/cossieB/cossie.dev/tree/main/src/features/2048",
+        type: "frontend",
+        external: false
+    }, {
+        title: "Image Converter",
+        img: "/projects/image-converter.png",
+        path: "/image-converter",
+        description: () => "A serverless, in-browser image converter and resizer. It handles local conversion to WebP, PNG, JPEG, JPEG-XL, and AVIF based on browser support.",
+        stack: ["typescript", "solidjs"],
+        repo: "https://github.com/cossieB/cossie.dev/tree/main/src/features/image-converter",
         type: "frontend",
         external: false
     }, {
@@ -99,7 +105,7 @@ export const projectArray: Projs[] = [
         path: "/wordle",
         description: () => "My recreation of the popular game Wordle",
         stack: ["typescript", "solidjs", "firebase",],
-        repo: "https://github.com/cossieB/cossie.dev/tree/main/src/components/Wordle",
+        repo: "https://github.com/cossieB/cossie.dev/tree/main/src/features/wordle",
         type: "frontend",
         external: false
     }, {
@@ -109,7 +115,7 @@ export const projectArray: Projs[] = [
         imgMobile: "/projects/memory_mobile.png",
         description: () => "Quiz that tests your memory. Features customizable game size. High scores stored in Firestore and local storage.",
         stack: ["typescript", "solidjs", "firebase", "firestore"],
-        repo: "https://github.com/cossieB/cossie.dev/tree/main/src/components/Memory",
+        repo: "https://github.com/cossieB/cossie.dev/tree/main/src/features/memory",
         type: "frontend",
         external: false
     }, {
@@ -119,7 +125,7 @@ export const projectArray: Projs[] = [
         path: "/sudoku",
         description: () => "Play sudoku. Features clash highlighting and custom puzzle creator. It can also solve most puzzles using the backtracking algorithm.",
         stack: ["typescript", "solidjs", "firebase",],
-        repo: "https://github.com/cossieB/cossie.dev/tree/main/src/components/Sudoku",
+        repo: "https://github.com/cossieB/cossie.dev/tree/main/src/features/sudoku",
         type: "frontend",
         external: false
     }, {
@@ -129,7 +135,7 @@ export const projectArray: Projs[] = [
         imgMobile: "/projects/quotes_mobile.png",
         description: () => "Random quotes from across the ages. Features filters and Twitter and Tumblr share buttons",
         stack: ["typescript", "solidjs", "firebase",],
-        repo: "https://github.com/cossieB/cossie.dev/tree/main/src/components/Quotes",
+        repo: "https://github.com/cossieB/cossie.dev/tree/main/src/features/quotes",
         type: "frontend",
         external: false
     }, {
@@ -139,7 +145,7 @@ export const projectArray: Projs[] = [
         path: "/pomodoro",
         description: () => "Timer for the pomodoro technique. You can change the session and the break lengths.",
         stack: ["typescript", "solidjs", "firebase",],
-        repo: "https://github.com/cossieB/cossie.dev/tree/main/src/components/Pomodoro",
+        repo: "https://github.com/cossieB/cossie.dev/tree/main/src/features/pomodoro",
         type: "frontend",
         external: false
     }
