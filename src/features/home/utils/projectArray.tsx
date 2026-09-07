@@ -63,7 +63,7 @@ export const projectArray: Projs[] = [
         type: "backend",
         external: true,
         img: "/projects/rest.png",
-        path: "https://igdb-dotnet.cossie.dev/scalar",
+        path: "https://igdb.cossie.workers.dev/scalar",
         repo: "https://github.com/cossieB/igdb",
         stack: ["typescript", "cloudflare", "sqlite", "drizzle", "better-auth"]
     }, {
