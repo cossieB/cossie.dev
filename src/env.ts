@@ -1,1 +1,0 @@
-export const STORAGE_DOMAIN = import.meta.env.VITE_STORAGE_DOMAIN

@@ -1,23 +1,19 @@
-import { MetaProvider, Title } from "@solidjs/meta";
-import { Router } from "@solidjs/router";
-import { FileRoutes } from "@solidjs/start/router";
-import { Suspense } from "solid-js";
-import "./reset.css"
-import "./app.css";
-import Navigator from "./components/Navigator/Navigator";
+import { Title } from '@solidjs/meta';
+import { Loading } from 'solid-js';
+// Typed client env, validated and baked in at build time (see env.ts).
+import { env } from 'virtual:env/client';
+import { paths, Router } from './router';
+import './App.css';
 
 export default function App() {
-    return (
-        <Router
-            root={props => (
-                <MetaProvider>
-                    <Title>Buntu Cossie</Title>
-                    <Navigator />
-                    <Suspense>{props.children}</Suspense>
-                </MetaProvider>
-            )}
-        >
-            <FileRoutes />
-        </Router>
-    );
+  return (
+    <Router>
+      {(props) => (
+        <>
+          <Title>{env.VITE_APP_NAME}</Title>
+          <Loading fallback={<main>Loading…</main>}>{props.children}</Loading>
+        </>
+      )}
+    </Router>
+  );
 }

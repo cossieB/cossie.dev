@@ -1,12 +1,20 @@
-import { Title } from "@solidjs/meta";
-import { HttpStatusCode } from "@solidjs/start";
+import { Title } from '@solidjs/meta';
+import type { RouteDefinition } from '@solidjs/router';
+import { httpStatus } from '@solidjs/web';
+
+// The catch-all route. httpStatus() sets the response status during SSR
+// (a no-op in the browser); it runs in preload so the status code is set
+// before the response head flushes.
+export const route = {
+  preload: () => httpStatus(404),
+} satisfies RouteDefinition;
 
 export default function NotFound() {
   return (
     <main>
       <Title>Not Found</Title>
-      <HttpStatusCode code={404} />
       <h1>Page Not Found</h1>
     </main>
   );
 }
+
