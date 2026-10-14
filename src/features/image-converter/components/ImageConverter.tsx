@@ -24,7 +24,7 @@ type Item = {
     lockAspect: boolean;
 };
 
-const CANDIDATE_FORMATS: ImageFormat[] = ["webp", "jpeg", "png", "avif"];
+const CANDIDATE_FORMATS: ImageFormat[] = ["webp", "jpeg", "png", "avif", "jxl"];
 
 function formatBytes(bytes: number) {
     if (bytes === 0) return '0 Bytes';
