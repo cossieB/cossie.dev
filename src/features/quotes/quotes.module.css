@@ -1,0 +1,182 @@
+#quoteContainer {
+    background-color: black;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
+    background-size: cover !important;
+    transition: background 500ms ease;
+    height: 100vh;
+    width: 100%;
+    display: grid;
+    overflow-y: auto;
+
+    @media (width < 768px) {
+        gap: 0.5rem;
+    }
+}
+
+#quote-box {
+    background: none;
+    margin-block: auto;
+    border-radius: 10px;
+
+    
+    padding: 1.5rem 1.5rem;
+    transition: all 500ms ease;
+    position: relative;
+    width: 50%;
+    left: 2rem;
+    @media (width < 768px) {
+        left: 0;
+        margin-inline: auto;
+        background-color: whitesmoke;
+        width: 95%;
+    }
+
+    &::before {
+        top: -2rem;
+        left: -2rem;
+        font-size: 7.5rem;
+        position: absolute;
+        content: open-quote;
+    }
+
+    &::after {
+        bottom: 0rem;
+        right: -2rem;
+        font-size: 7.5rem;
+        position: absolute;
+        content: close-quote;
+    }
+}
+
+#text {
+    position: relative;
+    font-size: 2rem;
+}
+
+#author {
+    text-align: right;
+    font-size: 1.5rem;
+}
+
+#quoteButtons {
+    height: 50px;
+    display: flex;
+    justify-content: space-around;
+}
+
+#new-quote {
+    background: none;
+    color: white;
+    font-size: 16px;
+    border: none;
+    transition: all 500ms ease;
+    padding: 0.25rem;
+
+    &:hover {
+        background: inherit;
+    }
+}
+
+#socialButtons {
+    display: flex;
+
+    svg {
+        transition: all 500ms ease;
+    }
+}
+
+#new-quote:active {
+    transform: scale(0.95);
+}
+
+.tags {
+    --clr: rgba(0, 0, 0, 0);
+    display: flex;
+    flex-wrap: wrap;
+    width: 50%;
+    gap: 0.25rem;
+    transition: height 200ms ease;
+    overflow: hidden;
+    display: none;
+    height: fit-content;
+    @media (width < 768px) {
+        width: 95%;
+        margin-inline: auto;
+    }
+    &.show {
+        display: flex;
+    }
+}
+
+.tag {
+    color: black;
+    position: relative;
+    transition: background-color 250ms ease;
+    cursor: pointer;
+    background-color: var(--clr);
+    padding: 0.25rem;
+    @media (width < 768px) {
+        background-color: whitesmoke;
+    }
+    &.inActive {
+        opacity: 0.5;
+    }
+
+    &::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+        z-index: -1;
+        padding: 1rem;
+
+    }
+
+    &.filtered {
+        outline-style: solid;
+        outline-width: 2px;
+        outline-offset: -1px;
+        outline-color: #222;
+        @media (width > 768px) {
+            outline-color: #ddd;
+        }
+    }
+
+    &.disabled {
+        background-color: gray;
+        cursor: not-allowed;
+    }
+}
+
+.filterBtn {
+    background: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &:is(.hasFilter .filterBtn) {
+        animation: blink 1s linear infinite alternate-reverse;
+    }
+}
+
+@keyframes vegas {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(3600deg);
+    }
+}
+
+@keyframes blink {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0.2;
+    }
+}

@@ -1,0 +1,205 @@
+#memory {
+    background: #a6a6c7;
+    color: white;
+    font-size: large;
+    height: 100vh;
+    width: 100%;
+    --delay: 250ms;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#memoryBlock {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    gap: 0.5rem;
+}
+
+.memoryCard {
+    aspect-ratio: 1;
+    height: 7.5rem;
+    position: relative;
+    font-size: xx-large;
+    justify-content: center;
+
+    >div {
+        display: flex;
+        justify-content: center;
+        position: absolute;
+        inset: 0;
+        align-items: center;
+        transition: transform var(--delay) linear;
+    }
+
+    svg {
+        transform: scale(3);
+    }
+
+    .backCard {
+        transition-delay: var(--delay);
+    }
+
+    .frontCard {
+        transition-delay: 0s;
+    }
+}
+
+.frontCard {
+    background-color: gold;
+    transform: rotateY(90deg);
+}
+
+.backCard {
+    background: url('../assets/tile.jpg');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    z-index: 3;
+    transform: rotateY(0deg);
+}
+
+.show {
+    >div {
+        transition: transform var(--delay) linear;
+    }
+
+    .frontCard {
+        transform: rotateY(0deg);
+        transition-delay: var(--delay);
+    }
+
+    .backCard {
+        transform: rotateY(90deg);
+        transition-delay: 0s;
+    }
+}
+
+@media (max-width: 768px) {
+    .memoryCard {
+        height: 4rem;
+    }
+}
+
+.button {
+    background: none;
+    border: 1px solid white;
+    padding: 0.75rem;
+    transition: all 250ms ease;
+
+    &:hover {
+        background-color: white;
+        color: black;
+    }
+}
+
+#highScores {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-around;
+    width: 100%;
+}
+
+.difficulty {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 1.25rem;
+    width: max-content;
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+    border: 2px solid white;
+    border-radius: 50rem;
+    position: relative;
+
+    >div {
+        margin: 0 0.75rem;
+        height: 100%;
+    }
+
+    button {
+        box-sizing: content-box;
+        font-size: 1.25rem;
+        padding: 0.75rem;
+        width: 1.5rem;
+        background: none;
+        border: none;
+        color: inherit;
+        border-left: 1px solid white;
+        border-right: 1px solid white;
+    }
+}
+
+.rules {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    z-index: 30;
+    backdrop-filter: blur(10px);
+    position: absolute;
+    position: fixed;
+    inset: 0;
+}
+
+#finished {
+    display: flex;
+    flex-direction: column;
+    width: 90%;
+    height: 100%;
+}
+
+.datesAndTimes {
+    display: flex;
+    justify-content: space-between;
+}
+
+.leaderboardContainer {
+    width: 33%;
+}
+
+.memScores {
+    display: flex;
+
+    >div:first-child {
+        margin-right: 2rem;
+    }
+}
+
+.memscorediv {
+    display: grid;
+    grid-template-columns: auto auto;
+    margin-bottom: 1rem;
+
+    > :last-child {
+        background-color: white;
+        color: #161661;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: x-large;
+        grid-area: 1 / 2 / 3 / 3;
+    }
+}
+
+@media (max-width: 768px) {
+    #highScores {
+        flex-direction: column-reverse;
+        align-items: center;
+        width: 100%;
+    }
+
+    .leaderboard,
+    .leadership {
+        width: 100%;
+    }
+
+    .leaderboardContainer {
+        width: 90%;
+    }
+
+    .datesAndTimes {
+        width: 100%;
+    }
+}
