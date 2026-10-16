@@ -42,10 +42,9 @@ export function ContactMe() {
     })
     const disabled = () => Object.values(body).some(val => !val)
     const submission = useSubmissions(sendAction)
-
+    
     return (
         <div>
-
             <form class={styles.contact} method="post" action={sendAction.with(body)}>
                 <div class={styles.formControl} >
                     <input 
@@ -94,30 +93,30 @@ export function ContactMe() {
                 </div>
                 <button
                     type="submit"
-                    disabled={disabled() || submission[0].result == true}
+                    disabled={disabled() || typeof submission.at(0)?.result !== "undefined"}
                 >
-                    {/* <Switch fallback="Submit">
-                        <Match when={submission[0].result === false}>
+                    <Switch fallback="Submit">
+                        <Match when={submission.at(0)?.result === false}>
                             <Loader />
                         </Match>
-                        <Match when={submission[0].result === true}>
+                        <Match when={submission.at(0)?.result === true}>
                             <CheckIcon />
                         </Match>
-                    </Switch> */}
+                    </Switch>
                 </button>
 
-                {/* <Switch >
-                    <Match when={submission[0].result === true}>
+                <Switch >
+                    <Match when={submission.at(0)?.result === true}>
                         <div>
                             Hello, {body.name}, your message has been sent. Thank you for reaching out to me. I will come back to you as soon as possible. In the meantime feel free to poke around this portfolio and my GitHub to check out my cool projects
                         </div>
                     </Match>
-                    <Match when={submission[0].result === false}>
+                    <Match when={submission.at(0)?.result === false}>
                         <div>
                             Oh boy something went wrong. I'm on the case, please try again later.
                         </div>
                     </Match>
-                </Switch> */}
+                </Switch>
             </form>
         </div>
     )

@@ -10,11 +10,3 @@ export default function clickOutside(handler: (e: MouseEvent) => void) {
     onCleanup(() => document.body.removeEventListener("click", onClick));
   };
 }
-
-declare module "solid-js" {
-    namespace JSX {
-      interface Directives {  
-        clickOutside(el: Element, accessor: Function): void
-      }
-    }
-  }

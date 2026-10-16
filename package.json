@@ -33,6 +33,7 @@
     "@lucide/solid": "^1.52.0",
     "@remix-run/cookie": "^0.5.4",
     "@solid-primitives/set": "^1.0.0-next.4",
+    "@solid-primitives/transition-group": "^2.0.0-next.2",
     "@solidjs/meta": "^1.0.0-next.2",
     "@solidjs/router": "^2.0.0-next.38",
     "@solidjs/web": "^2.0.0-rc.14",
