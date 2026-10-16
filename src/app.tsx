@@ -1,8 +1,8 @@
 import { Title } from '@solidjs/meta';
 import { Loading } from 'solid-js';
 // Typed client env, validated and baked in at build time (see env.ts).
-import { env } from 'virtual:env/client';
 import { paths, Router } from './router';
+import './reset.css'
 import './App.css';
 
 export default function App() {
@@ -10,7 +10,6 @@ export default function App() {
     <Router>
       {(props) => (
         <>
-          <Title>{env.VITE_APP_NAME}</Title>
           <Loading fallback={<main>Loading…</main>}>{props.children}</Loading>
         </>
       )}

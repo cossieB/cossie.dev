@@ -2,13 +2,22 @@
 // src/server-config.ts (single-flight collector) share one instance.
 import { pageRoutes } from 'virtual:file-routes';
 import { createRouter, intentPreload } from '@solidjs/router';
-import { fileRoutes } from '@solidjs/router/fs';
+import { lazy } from 'solid-js';
+const QuotesMain = lazy(() => import("./features/quotes/QuotesMain"))
+
 
 // Link preloading is opt-in. intentPreload() is the hover/focus/touch
 // strategy: resting on a link warms its code and runs its preload, which is
 // what makes navigation feel instant once the data lives on the server.
 export const Router = createRouter({
-  routes: fileRoutes(pageRoutes)
+  preloadLinks: intentPreload(),
+  routes: [
+    {
+      path: "/quotes",
+      component: QuotesMain
+    }
+  ]
+  // routes: fileRoutes(pageRoutes)
 });
 
 export const { paths } = Router;

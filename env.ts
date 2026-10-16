@@ -18,5 +18,6 @@ export default {
   },
   client: {
     VITE_APP_NAME: v.optional(v.pipe(v.string(), v.minLength(1)), 'Solid App'),
+    VITE_STORAGE_DOMAIN: v.string()
   },
 };

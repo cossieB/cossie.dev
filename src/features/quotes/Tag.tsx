@@ -14,23 +14,14 @@ export function Tag(props: Props) {
     const isActive = () => props.activeTags.has(props.tag);
     const isFiltered = () => props.filters.has(props.tag);
     const isDisabled = createMemo(() => {
-        if (props.filters.size == 0) return false;
-        outer:
-        for (const quote of quotes) {
-            if (!quote.tags.has(props.tag)) continue;
-            let counter = 0;
-            for (const filter of props.filters) {
-                if (quote.tags.has(filter)) {
-                    counter++;
-                    if (counter == props.filters.size) return false
-                }
-                else {
-                    continue outer;
-                }
-            }
-        }
-        return true;
-    })
+    if (props.filters.size === 0) return false;
+
+    const filters = [...props.filters];
+    return !quotes.some(quote =>
+        quote.tags.has(props.tag) &&
+        filters.every(filter => quote.tags.has(filter))
+    );
+});
     return (
         <span
             class={[styles.tag, {
