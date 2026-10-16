@@ -1,14 +1,13 @@
-import { StoreSetter } from "solid-js";
+import { flush, StoreSetter } from "solid-js";
 import { convert } from "./convert";
 import type { ClickEvent } from "~/lib/solidTypes";
 
 export const initialState = {
-    breakMin: 5,
-    sessionMin: 25,
     seconds: 1500,
     break: 300,
+    breakLength: 300,
     sessionLength: 1500,
-    timer: null as NodeJS.Timeout | null,
+    timer: -1,
     left: () => convert(initialState.seconds),
     breakTime: () => convert(initialState.break),
 }
@@ -19,7 +18,7 @@ export class PomodoroWrapper {
         private setState: StoreSetter<typeof initialState>,
         private endBeep: HTMLAudioElement,
         private startBeep: HTMLAudioElement
-    ){
+    ) {
         this.incSess = this.incSess.bind(this)
         this.incBreak = this.incBreak.bind(this)
         this.start = this.start.bind(this)
@@ -32,85 +31,80 @@ export class PomodoroWrapper {
         return this._state
     }
     incSess(e: ClickEvent<HTMLButtonElement>) {
-        if (!this._state.timer) {
+        if (this._state.timer === -1) {
             let s = Math.max(60, Math.min(3600, this._state.seconds + 60 * Number(e.currentTarget!.value)))
-            let m = Math.max(1, Math.min(60, this._state.sessionMin + 1 * Number(e.currentTarget!.value)))
-            this.setState(state => { 
-                state.sessionMin = m, 
-                state.seconds = s, 
-                state.sessionLength = s })
-        }
-    }
-    incBreak(e: ClickEvent<HTMLButtonElement>) {
-        if (!this._state.timer) {
-            let m = Math.max(1, Math.min(60, this._state.breakMin + 1 * Number(e.currentTarget!.value)))
-            this.setState(s => { 
-                s.breakMin = m, 
-                s.break = m * 60 
+            this.setState(state => {
+                state.seconds = s
+                state.sessionLength = s
             })
         }
     }
+    incBreak(e: ClickEvent<HTMLButtonElement>) {
+        if (this._state.timer !== -1) return
+
+        let m = Math.max(60, Math.min(3600, this._state.breakLength + 60 * Number(e.currentTarget!.value)))
+        this.setState(s => {
+            s.breakLength = m 
+            s.break = m 
+        })
+    }
     start() {
-        if (!this._state.timer) {
-            this.startBeep.pause(); 
+        if (this._state.timer === -1) {
+            this.startBeep.pause();
             this.startBeep.currentTime = 0;
             this.startBeep.play()
+            window.clearInterval(this.state.timer)
             this.setState(s => {
-                s.timer = setInterval(this.countdown, 1000)
+                s.timer = window.setInterval(this.countdown, 1000)
             })
         }
         else {
             this.clearTimer();
         }
-    }    
+    }
     countdown() {
         if (this._state.seconds > 0) {
             let newSecs = this._state.seconds - 1;
-            this.setState(s => { s.seconds = newSecs})
+            this.setState(s => { s.seconds = newSecs });
+            return;
         }
-        else if (this._state.timer) {
-            this.clearTimer()
-            this.endBeep.play();
-            this.setState(s => {
-                s.timer = setInterval(this.breakCountdown, 1000)
-            })
-        }
+        this.clearTimer()
+        this.endBeep.play();
+        this.setState(s => {
+            s.timer = window.setInterval(this.breakCountdown, 1000)
+        })
+
     }
     breakCountdown() {
         if (this._state.break > 0) {
-            let newSecs = this._state.break - 1;
-            this.setState(s =>{ 
-                s.break = newSecs
+            this.setState(s => {
+                s.break = this._state.break - 1
             })
+            return;
         }
-        else if (this._state.timer) {
-            this.clearTimer()
-            this.setState(s =>{
-                s.seconds = this._state.sessionLength
-            })
-            this.start()
-        }
-    
+        this.clearTimer()
+        this.setState(s => {
+            s.seconds = this._state.sessionLength;
+            s.break = this._state.breakLength
+        })
+        flush()
+        this.start()
+
     }
     reset() {
-        if (this._state.timer) {
-            this.clearTimer()
-        }
-        this.endBeep.pause(); 
+        this.clearTimer()
+        this.endBeep.pause();
         this.endBeep.currentTime = 0;
         this.setState(s => {
-            s.breakMin = 5,
-            s.sessionMin = 25,
-            s.seconds = 1500,
-            s.break = 300,
-            s.sessionLength = 1500,
-            s.timer = null 
+            s.seconds = 1500
+            s.break = 300
+            s.sessionLength = 1500
+            s.timer = -1
         })
     }
-    
+
     clearTimer() {
-        if (!this._state.timer) return;
-        clearInterval(this._state.timer);
-        this.setState(s => { s.timer = null });
+        window.clearInterval(this._state.timer);
+        this.setState(s => { s.timer = -1 });
     }
 }

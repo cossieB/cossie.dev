@@ -41,15 +41,27 @@ declare module "virtual:file-routes" {
       $$route: FileRouteEagerRef<typeof import("./src/routes/[...404]")>;
     },
     {
+      path: "/image-converter";
+      page: true;
+      $component: FileRouteLazyRef<typeof import("./src/routes/image-converter")>;
+      $$route?: undefined;
+    },
+    {
       path: "/";
       page: true;
       $component: FileRouteLazyRef<typeof import("./src/routes/index")>;
       $$route?: undefined;
     },
     {
-      path: "/users/";
+      path: "/pomodoro";
       page: true;
-      $component: FileRouteLazyRef<typeof import("./src/routes/users/index")>;
+      $component: FileRouteLazyRef<typeof import("./src/routes/pomodoro")>;
+      $$route?: undefined;
+    },
+    {
+      path: "/quotes";
+      page: true;
+      $component: FileRouteLazyRef<typeof import("./src/routes/quotes")>;
       $$route?: undefined;
     }
   ];
@@ -74,10 +86,26 @@ declare module "virtual:file-routes" {
       children?: undefined;
     },
     {
-      path: "/users/";
-      id: "/users/";
+      path: "/quotes";
+      id: "/quotes";
       page: true;
-      $component: FileRouteLazyRef<typeof import("./src/routes/users/index")>;
+      $component: FileRouteLazyRef<typeof import("./src/routes/quotes")>;
+      $$route?: undefined;
+      children?: undefined;
+    },
+    {
+      path: "/pomodoro";
+      id: "/pomodoro";
+      page: true;
+      $component: FileRouteLazyRef<typeof import("./src/routes/pomodoro")>;
+      $$route?: undefined;
+      children?: undefined;
+    },
+    {
+      path: "/image-converter";
+      id: "/image-converter";
+      page: true;
+      $component: FileRouteLazyRef<typeof import("./src/routes/image-converter")>;
       $$route?: undefined;
       children?: undefined;
     }

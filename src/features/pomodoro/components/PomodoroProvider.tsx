@@ -12,14 +12,13 @@ export default function PomodoroProvider(props: { children: Element }) {
     const endBeep = new Audio(endWav)
     const startBeep = new Audio(startWav)
     const [store, setState] = createStore({
-        breakMin: 5,
-        sessionMin: 25,
+        breakLength: 300,
+        sessionLength: 1500,
         seconds: 1500,
         break: 300,
         left: () => convert(store.seconds),
         breakTime: () => convert(store.break),
-        sessionLength: 1500,
-        timer: null as NodeJS.Timeout | null
+        timer: -1
     })
     const state = new PomodoroWrapper(
         store,

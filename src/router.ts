@@ -3,6 +3,8 @@
 import { pageRoutes } from 'virtual:file-routes';
 import { createRouter, intentPreload } from '@solidjs/router';
 import { lazy } from 'solid-js';
+import Home from './routes';
+import { fileRoutes } from '@solidjs/router/fs';
 const QuotesMain = lazy(() => import("./features/quotes/QuotesMain"))
 
 
@@ -11,13 +13,8 @@ const QuotesMain = lazy(() => import("./features/quotes/QuotesMain"))
 // what makes navigation feel instant once the data lives on the server.
 export const Router = createRouter({
   preloadLinks: intentPreload(),
-  routes: [
-    {
-      path: "/quotes",
-      component: QuotesMain
-    }
-  ]
-  // routes: fileRoutes(pageRoutes)
+
+  routes: fileRoutes(pageRoutes)
 });
 
 export const { paths } = Router;

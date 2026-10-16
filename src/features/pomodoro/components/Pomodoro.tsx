@@ -12,7 +12,7 @@ export default function PomodoroMain() {
 }
 
 function Main() {
-    const state = useContext(PomodoroContext)!
+    const state = useContext(PomodoroContext)!; 
     return (
         <main id={styles.pomodoro} class="container">
             <div id={styles.outer}>
@@ -21,7 +21,7 @@ function Main() {
                         <h2 id={styles["break-label"]}>Break Length</h2>
                         <div class={styles.buttonDiv}>
                             <button id={styles["break-increment"]} class={styles.pomoBtn} onClick={state.incBreak} value={"1"}>↑</button>
-                            <h3 id={styles["break-length"]}>{state.state.breakMin}</h3>
+                            <h3 id={styles["break-length"]}>{Math.floor(state.state.breakLength / 60)}</h3>
                             <button id={styles["break-decrement"]} class={styles.pomoBtn} onClick={state.incBreak} value={"-1"}>↓</button>
                         </div>
                     </section>
@@ -29,7 +29,7 @@ function Main() {
                         <h2 id={styles["session-label"]}>Session Length</h2>
                         <div class={styles.buttonDiv}>
                             <button id={styles["session-increment"]} class={styles.pomoBtn} value={"1"} onClick={state.incSess}>↑</button>
-                            <h3 id={styles["session-length"]}> {state.state.sessionMin}</h3>
+                            <h3 id={styles["session-length"]}> {Math.floor(state.state.sessionLength / 60)}</h3>
                             <button id={styles["session-decrement"]} class={styles.pomoBtn} value={"-1"} onClick={state.incSess}>↓</button>
                         </div>
                     </section>
@@ -42,7 +42,7 @@ function Main() {
                     <button id={styles.reset} class={styles.pomoBtn} onClick={state.reset}>
                         <TimerResetIcon size={"2.5rem"} />
                     </button>
-                    <button id={styles["start_stop"]} class={[styles.pomoBtn, {[styles.waiting]: !state.state.timer}]} onClick={state.start} >
+                    <button id={styles["start_stop"]} class={[styles.pomoBtn, {[styles.waiting]: state.state.timer === -1}]} onClick={state.start} >
                         <TimerIcon  size={"2.5rem"} />
                     </button>
                 </div>
