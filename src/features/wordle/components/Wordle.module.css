@@ -37,37 +37,15 @@
 
 .colorblock {
     top: 100%;
+    --delay: 0;
+    transition: top 500ms ease;
+    transition-delay: calc(var(--delay) * 250ms);
+
+    &.show {
+        top: 0;
+    }
 }
 
-.block0 {
-    transition: all 500ms ease;
-    top: 0;
-    transition-delay: calc(0 * 250ms);
-}
-
-.block1 {
-    transition: all 500ms ease;
-    top: 0;
-    transition-delay: calc(1 * 250ms);
-}
-
-.block2 {
-    transition: all 500ms ease;
-    top: 0;
-    transition-delay: calc(2 * 250ms);
-}
-
-.block3 {
-    transition: all 500ms ease;
-    top: 0;
-    transition-delay: calc(3 * 250ms);
-}
-
-.block4 {
-    transition: all 500ms ease;
-    top: 0;
-    transition-delay: calc(4 * 250ms);
-}
 
 .keyboard {
     display: flex;

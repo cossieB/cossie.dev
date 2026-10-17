@@ -1,4 +1,4 @@
-import { Setter, onSettled, onCleanup } from "solid-js";
+import { Setter, onSettled, onCleanup, StoreSetter, flush } from "solid-js";
 import { Elem } from "../components/ControlElem";
 import createBlock from "./createBlock";
 
@@ -6,18 +6,19 @@ interface P {
     setScore: Setter<number>
     setGameOver: Setter<boolean>
     array: Elem[]
+    setArray: StoreSetter<Elem[]>
 }
 
 export function use2048Logic(props: P) {
     onSettled(() => {
         document.addEventListener('keydown', handleKeyPress);
-        props.array.push(createBlock(props.array));
-        props.array.push(createBlock(props.array));
+        props.setArray(state => {
+            state.push(createBlock(props.array));
+            state.push(createBlock(props.array));
+        })
+        return () => document.removeEventListener('keydown', handleKeyPress)
     })
-    onCleanup(() => {
-        document.removeEventListener('keydown', handleKeyPress)
-    })
-
+    
     function handleKeyPress(e: KeyboardEvent) {
         const validKeys = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'] as const;
         type Key = typeof validKeys[number];

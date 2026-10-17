@@ -1,30 +1,37 @@
 import { action, useSubmissions } from "@solidjs/router";
 import { createStore } from "solid-js";
-import { sendMail } from "~/utils/nodemailer";
 import styles from "./home.module.css"
 import { Match, Show, Switch } from "solid-js";
 import Loader from "~/components/Loader/Loader";
 import { CheckIcon } from "@lucide/solid";
+import env from "virtual:env/server";
 
 const sendAction = action(async (body: { name: string, email: string, company: string, message: string }) => {
-    'use server'
+    'use server';
     try {
         const errors: string[] = [];
         Object.entries(body).forEach(([key, val]) => {
-            if (val === "") {
+            if (!val) {
                 errors.push(key);
             }
         })
         if (errors.length > 0) {
             return new Error(`The following fields are required but are missing in your submission: ${errors.join(", ")}`)
         }
-        const options = {
-            from: `Cossie Bot <${process.env.FROM}>`,
-            to: process.env.TO,
+
+        const { Resend } = await import("resend")
+        const { error } = await new Resend(env.RESEND_KEY).emails.send({
+            to: env.TO,
             subject: `${body.name} - ${body.company} :: Portfolio`,
-            html: `<div style="text-align: center"><h1>${body.company}</h1><h2>${body.name}</h2><h2>${body.email}</h2><p>${body.message}</p></div>`
+            html: `<div style="text-align: center"><h1>${body.company}</h1><h2>${body.name}</h2><h2>${body.email}</h2><p>${body.message}</p></div>`,
+            from: `Cossie Bot <${process.env.FROM}>`,
+        })
+
+        if (error) {
+            console.error(error);
+            return false
         }
-        await sendMail(options)
+
         return true
     }
     catch (error) {
@@ -42,49 +49,49 @@ export function ContactMe() {
     })
     const disabled = () => Object.values(body).some(val => !val)
     const submission = useSubmissions(sendAction)
-    
+
     return (
         <div>
             <form class={styles.contact} method="post" action={sendAction.with(body)}>
                 <div class={styles.formControl} >
-                    <input 
-                    id="contact-name" 
-                    onChange={e => setBody(draft => {
-                        draft.name = e.currentTarget.value
-                    })}
+                    <input
+                        id="contact-name"
+                        onChange={e => setBody(draft => {
+                            draft.name = e.currentTarget.value
+                        })}
                         type="text"
                         required
                         placeholder=" " />
                     <label for="contact-name"> Name </label>
                 </div>
                 <div class={styles.formControl} >
-                    <input 
-                    id="contact-email" 
-                    onChange={e => setBody(draft => {
-                        draft.email = e.currentTarget.value
-                    })}
+                    <input
+                        id="contact-email"
+                        onChange={e => setBody(draft => {
+                            draft.email = e.currentTarget.value
+                        })}
                         type="email"
                         required
                         placeholder=" " />
                     <label for="contact-email"> Email </label>
                 </div>
                 <div class={styles.formControl} >
-                    <input 
-                    id="contact-co" 
-                    onChange={e => setBody(draft => {
-                        draft.company = e.currentTarget.value
-                    })}
+                    <input
+                        id="contact-co"
+                        onChange={e => setBody(draft => {
+                            draft.company = e.currentTarget.value
+                        })}
                         type="text"
                         required
                         placeholder=" " />
                     <label for="contact-co"> Company </label>
                 </div>
                 <div class={styles.formControl}>
-                    <textarea 
-                    id="contact-msg" 
-                    onChange={e => setBody(draft => {
-                        draft.message = e.currentTarget.value
-                    })}
+                    <textarea
+                        id="contact-msg"
+                        onChange={e => setBody(draft => {
+                            draft.message = e.currentTarget.value
+                        })}
                         required minlength={3
 
                         }

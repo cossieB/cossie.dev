@@ -6,7 +6,7 @@ import { createEffect, createSignal, For, onCleanup, onSettled, Show } from "sol
 import { ProjectDetails } from "./ProjectDetails"
 import { LargeProject, SmallProject } from "./Project"
 import { ContactMe } from "./ContactMe"
-import { STORAGE_DOMAIN } from "~/env"
+import env from "virtual:env/client"
 
 export function HomePage() {
     const [selectedProject, setSelectedProject] = createSignal<Projs | undefined>()
@@ -38,7 +38,7 @@ export function HomePage() {
             <section>
                 <Header label="About" id="about" />
                 <div class={styles.about} >
-                    <img src={`${STORAGE_DOMAIN}/avatar.png`} alt="" />
+                    <img src={`${env.VITE_STORAGE_DOMAIN}/avatar.png`} alt="" />
                     <div class={styles.bio}>
                         <p>
                             I am Buntu Cossie a full-stack developer from South Africa. I make web apps in TypeScript, C#, React, Next.js, Solid.js and PostgreSQL amongst a whole list of other technologies.

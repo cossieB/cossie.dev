@@ -1,4 +1,3 @@
-import { createEffect } from "solid-js";
 import { addLetter, state } from "../utils/store";
 import styles from "./Wordle.module.css"
 
@@ -10,44 +9,31 @@ export default function Key(props: P1) {
 
     let ref!: HTMLDivElement;
 
-    createEffect(
-        () => state.word,
-        color
-    )
 
-    function color() {
+    const cls = () => {
+        let className = "";
+        for (let guess of state.guessList) {
+            for (let i = 0; i < guess.length; i++) {
 
-        if (ref.classList.contains(styles.correct)) return
-
-        const className = getClassName();
-        if (className) {
-            ref.className = `${styles.key} ${className}`
-        }
-
-        function getClassName() {
-            let className = "";
-            for (let guess of state.guessList) {
-                for (let i = 0; i < guess.length; i++) {
-
-                    if (guess[i] != props.letter) continue;
-                    if (state.word[i] == props.letter) {
-                        return styles.correct;
-                    }
-                    else if (state.word.includes(props.letter)) {
-                        className = styles.ok;
-                    }
-                    else {
-                        className = styles.wrong;
-                    }
+                if (guess[i] != props.letter) continue;
+                if (state.word[i] == props.letter) {
+                    return styles.correct;
+                }
+                else if (state.word.includes(props.letter)) {
+                    className = styles.ok;
+                }
+                else {
+                    className = styles.wrong;
                 }
             }
-            return className
         }
+        return className
     }
+
     return (
         <div
             ref={ref!}
-            class={`${styles.key}`}
+            class={[styles.key, cls()]}
             onClick={() => {
                 !state.inputDisabled && addLetter(props.letter)
             }}

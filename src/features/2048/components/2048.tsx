@@ -1,4 +1,4 @@
-import { createSignal, createStore, Match, Switch } from "solid-js";
+import { createSignal, createStore, Match, Show, Switch } from "solid-js";
 import styles from "./2048.module.css"
 import type { Elem } from "./ControlElem";
 import GameOver from "./GameOver";
@@ -14,9 +14,14 @@ export default function Game2048() {
     const [searchParams, setSearchParams] = useSearchParams()
     const [score, setScore] = createSignal(0);
     const [gameOver, setGameOver] = createSignal(false);
-    const array: Elem[] = []
+    const [array, setArray] = createStore<Elem[]>([])
     const windowWidth = useResize()
-    const move = use2048Logic({array, setGameOver, setScore})
+    const move = use2048Logic({
+        array,
+        setGameOver,
+        setScore,
+        setArray
+    })
     return (
         <div class="container" id={styles.container} >
             <Switch >
@@ -53,7 +58,7 @@ export default function Game2048() {
                             array={array}
                             move={move}
                         />
-                        {windowWidth() < 1024 &&
+                        <Show when={windowWidth() < 1024}>
                             <button
                                 class={styles.HSToggle}
                                 onClick={() => {
@@ -66,9 +71,9 @@ export default function Game2048() {
                                     <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z" />
                                 </svg>
                             </button>
-                        }
+                        </Show>
                         <div class={styles.leadersPanel}>
-                            {windowWidth() < 1024 &&
+                            <Show when={windowWidth() < 1024}>
                                 <button
                                     class={styles.HSToggle}
                                     onClick={() => {
@@ -81,7 +86,7 @@ export default function Game2048() {
                                     </svg>
                                     Back
                                 </button>
-                            }
+                            </Show>
                             <LocalLeaders />
                             <GlobalLeaders />
                         </div>

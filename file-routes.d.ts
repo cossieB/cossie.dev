@@ -35,6 +35,12 @@ declare module "virtual:file-routes" {
   /** The flat route manifest, in scan order. */
   const routes: readonly [
     {
+      path: "/2048";
+      page: true;
+      $component: FileRouteLazyRef<typeof import("./src/routes/2048")>;
+      $$route?: undefined;
+    },
+    {
       path: "/*404";
       page: true;
       $component: FileRouteLazyRef<typeof import("./src/routes/[...404]")>;
@@ -63,6 +69,18 @@ declare module "virtual:file-routes" {
       page: true;
       $component: FileRouteLazyRef<typeof import("./src/routes/quotes")>;
       $$route?: undefined;
+    },
+    {
+      path: "/memory";
+      page: true;
+      $component: FileRouteLazyRef<typeof import("./src/routes/memory")>;
+      $$route?: undefined;
+    },
+    {
+      path: "/wordle";
+      page: true;
+      $component: FileRouteLazyRef<typeof import("./src/routes/wordle")>;
+      $$route?: undefined;
     }
   ];
   export default routes;
@@ -86,10 +104,34 @@ declare module "virtual:file-routes" {
       children?: undefined;
     },
     {
+      path: "/2048";
+      id: "/2048";
+      page: true;
+      $component: FileRouteLazyRef<typeof import("./src/routes/2048")>;
+      $$route?: undefined;
+      children?: undefined;
+    },
+    {
+      path: "/memory";
+      id: "/memory";
+      page: true;
+      $component: FileRouteLazyRef<typeof import("./src/routes/memory")>;
+      $$route?: undefined;
+      children?: undefined;
+    },
+    {
       path: "/quotes";
       id: "/quotes";
       page: true;
       $component: FileRouteLazyRef<typeof import("./src/routes/quotes")>;
+      $$route?: undefined;
+      children?: undefined;
+    },
+    {
+      path: "/wordle";
+      id: "/wordle";
+      page: true;
+      $component: FileRouteLazyRef<typeof import("./src/routes/wordle")>;
       $$route?: undefined;
       children?: undefined;
     },

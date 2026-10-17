@@ -3,8 +3,8 @@ import { For, Show } from "solid-js";
 import { Projs } from "../utils/projectArray";
 import styles from "./home.module.css"
 import clickOutside from "~/lib/clickOutside";
-import { STORAGE_DOMAIN } from "~/env";
 import { dynamic, Dynamic } from "@solidjs/web";
+import env from "virtual:env/client";
 
 false && clickOutside
 
@@ -28,14 +28,14 @@ export function ProjectDetails(props: Props) {
                 <Dynamic component={props.proj.description} />
             </div>
             <div class={styles.screens} >
-                <img src={STORAGE_DOMAIN + props.proj.img} alt="" />
+                <img src={env.VITE_STORAGE_DOMAIN + props.proj.img} alt="" />
                 <Show when={props.proj.imgMobile}>
-                    <img src={STORAGE_DOMAIN + props.proj.imgMobile} alt="" />
+                    <img src={env.VITE_STORAGE_DOMAIN + props.proj.imgMobile} alt="" />
                 </Show>
             </div>
             <div aria-label="Technologies used" class={styles.stack} >
                 <For each={props.proj.stack}>
-                    {tool => <img title={tool} class={styles.tool} src={`${STORAGE_DOMAIN}/stack/${tool}.png`} alt="" />}
+                    {tool => <img title={tool} class={styles.tool} src={`${env.VITE_STORAGE_DOMAIN}/stack/${tool}.png`} alt="" />}
                 </For>
             </div>
         </article>
