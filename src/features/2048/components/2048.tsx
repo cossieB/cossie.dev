@@ -1,6 +1,6 @@
 import { createSignal, createStore, Match, Show, Switch } from "solid-js";
 import styles from "./2048.module.css"
-import type { Elem } from "./ControlElem";
+import type { Block } from "./ControlElem";
 import GameOver from "./GameOver";
 import { GlobalLeaders, LocalLeaders } from "./Leaders";
 import { useResize } from "~/hooks/useResize";
@@ -14,12 +14,12 @@ export default function Game2048() {
     const [searchParams, setSearchParams] = useSearchParams()
     const [score, setScore] = createSignal(0);
     const [gameOver, setGameOver] = createSignal(false);
-    const [array, setArray] = createStore<Elem[]>([])
+    const [array, setArray] = createStore<Block[]>([])
     const windowWidth = useResize()
     const move = use2048Logic({
         array,
         setGameOver,
-        setScore,
+        addScore: s => setScore(prev => prev + s),
         setArray
     })
     return (
@@ -43,6 +43,7 @@ export default function Game2048() {
                         setScore={setScore}
                         setGameOver={setGameOver}
                         array={array}
+                        setArray={setArray}
                     />
                 </Match>
                 <Match when={searchParams.name && !gameOver()}>

@@ -1,26 +1,28 @@
 import { Setter, onSettled, onCleanup, StoreSetter, flush } from "solid-js";
-import { Elem } from "../components/ControlElem";
-import createBlock from "./createBlock";
+import { Block } from "../components/ControlElem";
+import { createBlock, SIZE } from "./createBlock";
 
+const validKeys = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'] as const;
 interface P {
-    setScore: Setter<number>
+    addScore(s: number): void
     setGameOver: Setter<boolean>
-    array: Elem[]
-    setArray: StoreSetter<Elem[]>
+    array: Block[]
+    setArray: StoreSetter<Block[]>
 }
+
+
 
 export function use2048Logic(props: P) {
     onSettled(() => {
         document.addEventListener('keydown', handleKeyPress);
         props.setArray(state => {
-            state.push(createBlock(props.array));
-            state.push(createBlock(props.array));
+            createBlock(state)
+            createBlock(state)
         })
         return () => document.removeEventListener('keydown', handleKeyPress)
     })
-    
+
     function handleKeyPress(e: KeyboardEvent) {
-        const validKeys = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'] as const;
         type Key = typeof validKeys[number];
         if (!validKeys.includes(e.key as Key)) return;
         const key = e.key as Key;
@@ -41,101 +43,99 @@ export function use2048Logic(props: P) {
         }
     }
 
-    function move(direction: 'up' | 'down' | 'left' | 'right') {
-        let sortKey: 'left' | 'top';
-        let key: typeof sortKey;
-        if (direction == 'left' || direction == 'right') {
-            sortKey = 'left';
-            key = 'top';
-        }
-        else {
-            sortKey = 'top';
-            key = 'left';
-        }
 
-        const factor = direction == 'left' || direction == 'up' ? 1 : -1; // factor dynamically reverses the sort order of the array
-        const sorted = [...props.array].sort((a, b) => {
-            if (a[sortKey] * factor < b[sortKey] * factor)
-                return -1;
-            else
-                return 1;
-        });
+    /** True when the grid is full and no neighbouring blocks share a value. */
+    function isGameOver(draft: Block[]): boolean {
+        if (draft.length < SIZE * SIZE) return false
 
-        for (let iter = 0; iter < 4; iter++) {
-            const arr = sorted.filter(x => x[key] == iter);
-            if (arr.length == 0)
-                continue;
+        const grid: number[][] = Array.from({ length: SIZE }, () =>
+            new Array<number>(SIZE).fill(0)
+        )
+        for (const b of draft) grid[b.top][b.left] = b.value
 
-            arr.forEach((cell, i) => {
-
-                if (direction == 'left' || direction == 'up') {
-                    if (i == 0) {
-                        cell[sortKey] = 0;
-                    }
-                    else {
-                        cell[sortKey] = arr[i - 1][sortKey] + 1;
-                    }
-                }
-                else {
-                    if (i == 0) {
-                        cell[sortKey] = 3;
-                    }
-                    else {
-                        cell[sortKey] = arr[i - 1][sortKey] - 1;
-                    }
-                }
-                if (i != 0 && arr[i].value == arr[i - 1].value && !arr[i - 1].deleted) {
-                    collide(arr[i - 1], arr[i]);
-                }
-            });
-        }
-        removeDeleted()
-        if (props.array.length < 16)
-            props.array.push(createBlock(props.array));
-        if (props.array.length == 16) checkGameOver()
-    }
-    function collide(toIncrease: Elem, toDelete: Elem) {
-        toIncrease.value *= 2;
-        toDelete.left = toIncrease.left;
-        toDelete.top = toIncrease.top;
-        toDelete.value = toIncrease.value;
-        toDelete.deleted = true;
-        props.setScore(prev => prev + toIncrease.value);
-    }
-    function removeDeleted() {
-        let i = 0
-        while (i < props.array.length) {
-            const elem = props.array[i]
-            if (elem.deleted) {
-                props.array.splice(i, 1)
-                continue
+        for (let r = 0; r < SIZE; r++) {
+            for (let c = 0; c < SIZE; c++) {
+                if (c + 1 < SIZE && grid[r][c] === grid[r][c + 1]) return false
+                if (r + 1 < SIZE && grid[r][c] === grid[r + 1][c]) return false
             }
-            i++
         }
+        return true
     }
+    type Direction = 'up' | 'down' | 'left' | 'right'
 
-    function checkGameOver() {
-        props.array.sort((a, b) => {
-            if (a.index() < b.index()) return -1
-            else return 1;
+    function move(direction: Direction): boolean {
+        const horizontal = direction === 'left' || direction === 'right'
+        const towardStart = direction === 'left' || direction === 'up'
+        const axis = horizontal ? 'left' : 'top'
+        const line = horizontal ? 'top' : 'left'
+
+        let moved = false
+        let score = 0
+        let gameOver = false
+
+        props.setArray((draft) => {
+            const lines = new Map<number, number[]>()
+            for (let i = 0; i < draft.length; i++) {
+                const key = draft[i][line]
+                const group = lines.get(key)
+                if (group) group.push(i)
+                else lines.set(key, [i])
+            }
+
+            const removed: number[] = []
+
+            for (const indices of lines.values()) {
+                indices.sort((a, b) =>
+                    towardStart
+                        ? draft[a][axis] - draft[b][axis]
+                        : draft[b][axis] - draft[a][axis]
+                )
+
+                let slot = towardStart ? 0 : SIZE - 1
+                const step = towardStart ? 1 : -1
+                let last = -1
+                let lastMerged = false
+
+                for (const i of indices) {
+                    const block = draft[i]
+
+                    if (last !== -1 && !lastMerged && draft[last].value === block.value) {
+                        draft[last].value *= 2
+                        score += draft[last].value // sum of both merged blocks
+                        block[axis] = draft[last][axis]
+                        removed.push(i)
+                        lastMerged = true
+                        moved = true
+                    } else {
+                        if (block[axis] !== slot) {
+                            block[axis] = slot
+                            moved = true
+                        }
+                        last = i
+                        lastMerged = false
+                        slot += step
+                    }
+                }
+            }
+
+            removed.sort((a, b) => b - a)
+            for (const i of removed) draft.splice(i, 1)
+
+            // Only a move that changed something spawns a block / can end the game
+            if (moved) {
+                createBlock(draft)
+                gameOver = isGameOver(draft)
+            }
         })
-        for (let i = 0; i < props.array.length; i++) {
-            const elem = props.array[i];
-            if ((i + 1) % 4 != 0) {
-                if (props.array[i + 1].value == elem.value) {
-                    return
-                }
-            }
-            if (i + 4 < props.array.length) {
-                if (props.array[i + 4].value == elem.value) {
-                    return
-                }
-            }
-        }
-        setTimeout(() => {
-            props.setGameOver(true);
-        }, 1000)
+
+        if (score > 0) props.addScore(score)
+        if (gameOver) props.setGameOver(true)
+
+        return moved
     }
+
+
 
     return move
 }
+

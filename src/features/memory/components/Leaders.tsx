@@ -1,4 +1,4 @@
-import { For } from "solid-js";
+import { For, Show } from "solid-js";
 import styles from './memory.module.css';
 import { formatDate } from "~/lib/formatDate";
 import { P24235 } from "../types/interfaces";
@@ -6,8 +6,8 @@ import { P24235 } from "../types/interfaces";
 export default function Leaders(props: P24235) {
     return (
         <div class={styles.leaderboardContainer}>
-            {props.leaders.length > 0 && <h4> {props.header} </h4>}
-            {props.leaders.length > 0 &&
+            <Show when={props.leaders.length > 0}>
+                <h4> {props.header} </h4>
                 <div class={styles.leaderboard}>
                     <For each={props.leaders} >
                     {item =>
@@ -25,7 +25,8 @@ export default function Leaders(props: P24235) {
                             </div>
                         </div>}
                     </For>
-                </div>}
+                </div>
+            </Show>            
         </div>
     )
 }

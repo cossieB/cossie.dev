@@ -2,42 +2,20 @@ import { createEffect, onSettled } from 'solid-js';
 import styles from "./2048.module.css"
 import { useResize } from '~/hooks/useResize';
 
-export class Elem {
-    readonly id = Math.floor(Math.random() * 1000000).toString()
-    public value = Math.random() < 0.75 ? 2 : 4;
-    public deleted?: boolean
-    constructor(
-        public top: number,
-        public left: number,
-    ){
-        this.index = this.index.bind(this)
-    }
-    index() {
-        return 4 * this.top + this.left
-    }
+
+export type Block = {
+    top: number
+    left: number
+    value: number
 }
 
-export function ControlElem(props: {item: Elem}) {
+
+
+export function ControlElem(props: { item: Block }) {
     let ref!: HTMLDivElement;
     const windowWidth = useResize()
-    onSettled(() => {
-        setTimeout(() => {
-            ref.style.opacity = "1"
-        }, 250)
-    })
-    createEffect(
-        () => props.item.value,
-        (val) => {
-        if (val > 2) {
-            ref.style.transform = `scale(1.5)`
-            setTimeout(() => {
-                ref.style.setProperty('transform', null)
-            }, 50)
-        }
-    })
-    createEffect(
-        () => props.item,
-        (item) => {
+
+    const coords = () => {
         let htwt: number;
         let gap: number;
         if (windowWidth() > 1024) {
@@ -48,14 +26,35 @@ export function ControlElem(props: {item: Elem}) {
             htwt = 4;
             gap = 0.25
         }
-        ref.style.top = `${item.top * htwt + gap * (item.top + 1)}rem`
-        ref.style.left = `${item.left * htwt + gap * (item.left + 1)}rem`
-    })  
+        return {
+            top: props.item.top * htwt + gap * (props.item.top + 1),
+            left: props.item.left * htwt + gap * (props.item.left + 1)
+        }
+    }
+
+    onSettled(() => {
+        setTimeout(() => {
+            ref.style.opacity = "1"
+        }, 250)
+    })
+    createEffect(
+        () => props.item.value,
+        () => {
+            ref.style.transform = `scale(1.5)`
+            setTimeout(() => {
+                ref.style.setProperty('transform', null)
+            }, 50)
+        })
+
     return (
         <div
             ref={ref!}
-            style={{'--val': props.item.value}}
-            class={`${styles.controlElem} ${styles['val'+props.item.value]}`}
+            style={{
+                '--val': props.item.value,
+                top: `${coords().top}rem`,
+                left: `${coords().left}rem`
+            }}
+            class={`${styles.controlElem} ${styles['val' + props.item.value]}`}
         >
             {props.item.value}
         </div>

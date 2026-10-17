@@ -1,24 +1,26 @@
 import styles from "./2048.module.css"
 import { Board } from "./Board";
-import { onSettled, type Setter, useContext } from "solid-js";
-import type { Elem } from "./ControlElem";
+import { onSettled, type Setter, StoreSetter } from "solid-js";
+import type { Block } from "./ControlElem";
 import type { Scores } from "../types/types";
 import { addDoc, collection } from "firebase/firestore";
 import { db } from "~/integrations/firebase";
 import { useSearchParams } from "@solidjs/router";
 import { useGetUsernameFromSearchParams } from "~/hooks/useUsername";
+import { createBlock } from "../utils/createBlock";
 
 interface P {
     score: number
-    array: Elem[]
+    array: Block[]
+    setArray: StoreSetter<Block[]>
     setScore: Setter<number>
     setGameOver: Setter<boolean>
 }
 
 export default function GameOver(props: P) {
     onSettled(() => {
-        // setLocal();
-        // setGlobal()
+        setLocal();
+        setGlobal()
     })
     const username = useGetUsernameFromSearchParams()
     const [_, setSearchParams] = useSearchParams()
@@ -59,7 +61,11 @@ export default function GameOver(props: P) {
                     <button onClick={() => {
                         props.setGameOver(false);
                         props.setScore(0)
-                        while (props.array.length > 0) props.array.pop()
+                        props.setArray(array => {
+                            array.length = 0
+                            createBlock(array)
+                            createBlock(array)
+                        })
                     }}>
                         Play Again
                     </button>
@@ -67,7 +73,11 @@ export default function GameOver(props: P) {
                         props.setGameOver(false);
                         props.setScore(0)
                         setSearchParams({ name: undefined })
-                        while (props.array.length > 0) props.array.pop()
+                        props.setArray(array => {
+                            array.length = 0
+                            createBlock(array)
+                            createBlock(array)
+                        })
                     }}>
                         Change Name
                     </button>
