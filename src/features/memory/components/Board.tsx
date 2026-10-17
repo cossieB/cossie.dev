@@ -1,23 +1,31 @@
 import Card from "./Card";
 import styles from "./memory.module.css";
 import { type ISvg, svgs } from "./svgs";
-import { createEffect, createSignal, For, useContext } from "solid-js";
+import { createEffect, createSignal, For, onSettled, useContext } from "solid-js";
 import shuffleArray from "~/lib/shuffleArray";
 import { MemoryContext } from "./MemoryProvider";
 
 export default function Board() {
     let ref: HTMLDivElement
     const [cards, setCards] = createSignal<ISvg[]>([])
-    const {state} = useContext(MemoryContext)
+    const { state } = useContext(MemoryContext)
+
+    onSettled(() => {
+        const abortController = new AbortController()
+        window.addEventListener('resize', () => adjustGrid(state.gameSize), {
+            signal: abortController.signal
+        })
+        return () => abortController.abort()
+    })
 
     createEffect(
         () => state.gameSize,
-        () => {
-        const deck = selectCards();
-        const shuffled = shuffleArray([...deck, ...deck]);
-        setCards(shuffled); 
-        adjustGrid()
-    })
+        (size) => {
+            const deck = selectCards();
+            const shuffled = shuffleArray([...deck, ...deck]);
+            setCards(shuffled);
+            adjustGrid(size)
+        })
 
     function selectCards() {
         const arr: typeof svgs = [];
@@ -28,18 +36,18 @@ export default function Board() {
         }
         return arr
     }
-    
-    function adjustGrid() {
+
+    function adjustGrid(gameSize: number) {
         let columns: [number, number]
-        const { gameSize: size } = state
-        if (size <= 2)
+
+        if (gameSize <= 2)
             columns = [5, 5]
-        else if (size == 3)
+        else if (gameSize == 3)
             columns = [6, 5]
         else
             columns = [8, 5]
 
-        if (window.innerWidth > 768) {
+        if (window.innerWidth > 1024) {
             ref!.style.gridTemplateColumns = `repeat(${columns[0]}, auto)`
         }
         else {
@@ -48,7 +56,7 @@ export default function Board() {
     }
 
     return (
-        <div ref={ref!} id={styles.block}>
+        <div ref={ref!} id={styles.memoryBlock}>
             <For each={cards()}>
                 {(card, idx) =>
                     <Card

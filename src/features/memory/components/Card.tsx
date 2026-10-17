@@ -3,7 +3,7 @@ import correctAudio from "../assets/correct.ogg";
 import flipAudio from "../assets/flip.wav"
 import nopeAudio from "../assets/nope.wav"
 import type { ISvg } from './svgs';
-import { useContext } from 'solid-js';
+import { flush, useContext } from 'solid-js';
 import { MemoryContext } from './MemoryProvider';
 
 export interface P01955 {
@@ -38,6 +38,7 @@ export default function Card(props: P01955) {
             if (state.activeCards[0].label == props.card.label) {
                 audio.src = correctAudio
                 fn.correct(props.card.label)
+                flush()
                 if (state.matches.size == state.gameSize * 5) 
                     fn.win()
             }

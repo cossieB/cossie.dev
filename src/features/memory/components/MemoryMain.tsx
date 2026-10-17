@@ -19,7 +19,7 @@ export default function MemoryMain() {
 function Main() {
     const [name, setName] = createSignal("")
     const [searchParams, setSearchParams] = useSearchParams()
-    const {state} = useContext(MemoryContext)!
+    const {state} = useContext(MemoryContext)
     const [readInstructions, setReadInstructions] = createSignal(false);
     return (
         <div class="container" id={styles.memory}>

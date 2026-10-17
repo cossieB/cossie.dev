@@ -1,22 +1,17 @@
-import { onCleanup, onSettled, useContext } from "solid-js"
+import { onSettled, useContext } from "solid-js"
 import Board from "./Board"
 import { MemoryContext } from "./MemoryProvider"
 
 export default function GameStart() {
-    let timer: NodeJS.Timeout
+
     const state = useContext(MemoryContext)!
     onSettled(() => {
-        timer = setInterval(() => {
+        const timer = setInterval(() => {
             state.increaseTime()
         }, 1000)
+        return () => clearInterval(timer)
     })
-    onCleanup(() => {
-        clearInterval(timer)
-    })
-    
-    return (
-        <>
-            <Board />
-        </>
-    )
+
+    return <Board />
+
 }
