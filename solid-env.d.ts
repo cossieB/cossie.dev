@@ -21,7 +21,6 @@ declare module 'virtual:env/server' {
     ? O
     : string;
   const env: {
-    readonly "SESSION_SECRET": __Out<__Schema["server"]["SESSION_SECRET"]>;
     readonly "FROM": __Out<__Schema["server"]["FROM"]>;
     readonly "TO": __Out<__Schema["server"]["TO"]>;
     readonly "RESEND_KEY": __Out<__Schema["server"]["RESEND_KEY"]>;

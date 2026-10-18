@@ -47,6 +47,13 @@ declare module "virtual:file-routes" {
       $$route: FileRouteEagerRef<typeof import("./src/routes/[...404]")>;
     },
     {
+      path: "/api/whoami";
+      page: false;
+      $GET: FileRouteLazyRef<typeof import("./src/routes/api/whoami")>;
+      $HEAD: FileRouteLazyRef<typeof import("./src/routes/api/whoami")>;
+      $$route?: undefined;
+    },
+    {
       path: "/image-converter";
       page: true;
       $component: FileRouteLazyRef<typeof import("./src/routes/image-converter")>;

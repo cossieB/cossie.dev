@@ -23,7 +23,7 @@ export default defineConfig({
         middleware: './src/middleware.ts',
         // Emit dist/server/node.js: a ready-to-run Node server (static
         // assets + the handler). Other platforms import dist/server/server.js.
-        node: true,
+        node: false,
         // Typed env is on by convention: ./env.ts is probed automatically.
         // (Set `env: false` here to opt out.)
       },

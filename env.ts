@@ -14,13 +14,12 @@ export default {
   server: {
     // Comma-separated, newest first — see src/server/session.ts for the
     // rotation story. Generate one: `openssl rand -base64 32`.
-    SESSION_SECRET: v.pipe(v.string(), v.minLength(32)),
     FROM: v.string(),
     TO: v.string(),
     RESEND_KEY: v.string()
   },
   client: {
-    VITE_APP_NAME: v.optional(v.pipe(v.string(), v.minLength(1)), 'Solid App'),
+    VITE_APP_NAME: v.optional(v.pipe(v.string(), v.minLength(1)), 'cossie'),
     VITE_STORAGE_DOMAIN: v.string()
   },
 };
