@@ -1,0 +1,130 @@
+.app {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  width: min(100%, 36rem);
+  margin: 0 auto;
+  padding: 1rem 1rem 3rem;
+  color-scheme: light dark;
+
+  --paper: #e4ebf0;
+  --board: #fbfdfe;
+  --line: #b4c2cc;
+  --line-strong: #17283a;
+
+  --ink: #13202d;
+  --muted: #5b6f80;
+
+  --pen: #1d52cf;
+  --solved: #08796a;
+  --accent: #1d52cf;
+  --on-accent: #ffffff;
+
+  --peer: #e9f0f5;
+  --same: #c9dcec;
+  --select: #ffdc7a;
+
+  --good: #0a6b4f;
+  --good-bg: #dcf3e9;
+  --warn: #8a5300;
+  --warn-bg: #fff0cf;
+  --bad: #b5231a;
+  --bad-bg: #fde2df;
+
+  --font-ui: "Avenir Next", "Segoe UI Variable Text", "Segoe UI", system-ui, sans-serif;
+  --font-num: ui-rounded, "SF Pro Rounded", "Avenir Next Rounded", "Nunito", "Segoe UI", system-ui,
+    sans-serif;
+
+  margin: 0;
+  min-height: 100dvh;
+  width: 100%;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-ui);
+  line-height: 1.45;
+  -webkit-text-size-adjust: 100%;
+}
+
+@media (prefers-color-scheme: dark) {
+  .app {
+    --paper: #0d141b;
+    --board: #14202a;
+    --line: #2a3a48;
+    --line-strong: #a9bccb;
+
+    --ink: #e8f0f6;
+    --muted: #8da2b3;
+
+    --pen: #7ba8ff;
+    --solved: #5fd6c2;
+    --accent: #7ba8ff;
+    --on-accent: #0d141b;
+
+    --peer: #1a2a37;
+    --same: #25435e;
+    --select: #6a5413;
+
+    --good: #6fe0b4;
+    --good-bg: #123327;
+    --warn: #ffc766;
+    --warn-bg: #3a2c0c;
+    --bad: #ff9a90;
+    --bad-bg: #3e1d1a;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .app *,
+  .app *::before,
+  .app *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}
+
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.title {
+  margin: 0;
+  font-family: var(--font-num);
+  font-size: 1.9rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+.tabs {
+  display: flex;
+  gap: 0.2rem;
+  padding: 0.2rem;
+  border: 1.5px solid var(--line-strong);
+  border-radius: 0.8rem;
+}
+
+.tab {
+  min-height: 2.5rem;
+  padding: 0.4rem 1rem;
+  border: 0;
+  border-radius: 0.6rem;
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  font-weight: 650;
+  cursor: pointer;
+}
+
+.tab:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 1px;
+}
+
+.active {
+  background: var(--ink);
+  color: var(--board);
+}

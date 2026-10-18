@@ -20,11 +20,20 @@
 
     a {
         text-decoration: none;
+
         &[data-active] {
             color: springgreen;
             font-style: italic;
         }
     }
+
+    a[href^="http"]:after {
+        content: " \2197";
+        /* North-east arrow symbol */
+        font-size: 0.9em;
+        display: inline-block;
+    }
+
 }
 
 .panel {

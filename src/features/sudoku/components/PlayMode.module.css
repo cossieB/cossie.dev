@@ -1,0 +1,75 @@
+.mode {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.setup {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.levels {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.status {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  width: 100%;
+  max-width: 34rem;
+  margin: 0 auto;
+}
+
+.status span {
+  color: var(--muted);
+}
+
+.tools {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+  width: 100%;
+  max-width: 34rem;
+  margin-inline: auto;
+}
+
+.win {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  width: 100%;
+  max-width: 34rem;
+  margin-inline: auto;
+  padding: 0.85rem 1rem;
+  border: 1.5px solid var(--good);
+  border-radius: 0.65rem;
+  background: var(--good-bg);
+  color: var(--good);
+}
+
+.winText {
+  margin: 0;
+  font-weight: 650;
+}
+
+.keys {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.85rem;
+  text-align: center;
+}
+
+/* Keyboard hints are noise on touch devices. */
+@media (hover: none) {
+  .keys {
+    display: none;
+  }
+}

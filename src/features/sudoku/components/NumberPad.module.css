@@ -1,0 +1,59 @@
+.pad {
+  display: grid;
+  grid-template-columns: repeat(9, 1fr);
+  gap: 0.35rem;
+  width: 100%;
+  max-width: 34rem;
+  margin-inline: auto;
+}
+
+.key {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.15rem;
+  min-width: 0;
+  padding: 0.5rem 0 0.4rem;
+  border: 1.5px solid var(--line-strong);
+  border-radius: 0.55rem;
+  background: var(--board);
+  color: var(--ink);
+  font: inherit;
+  cursor: pointer;
+  transition:
+    background-color 0.1s,
+    transform 0.06s;
+}
+
+.key:hover {
+  background: var(--peer);
+}
+
+.key:active {
+  transform: translateY(1px);
+}
+
+.key:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.digit {
+  font-family: var(--font-num);
+  font-size: clamp(1.15rem, 5.5vw, 1.6rem);
+  font-weight: 650;
+  line-height: 1;
+}
+
+.left {
+  color: var(--muted);
+  font-size: 0.7rem;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+/* All nine placed: dim the key, but leave it usable. */
+.done {
+  opacity: 0.4;
+}

@@ -1,0 +1,97 @@
+.board {
+  display: grid;
+  grid-template-columns: repeat(9, 1fr);
+  width: 100%;
+  max-width: 34rem;
+  aspect-ratio: 1;
+  margin-inline: auto;
+  overflow: hidden;
+  border: 3px solid var(--line-strong);
+  border-radius: 0.5rem;
+  background: var(--board);
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+
+.cell {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-width: 0;
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  font-family: var(--font-num);
+  font-size: clamp(1.15rem, 6vw, 2rem);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  cursor: pointer;
+  transition: background-color 0.08s;
+}
+
+/* Outer edge is drawn by the board's own border. */
+.cell:nth-child(9n) {
+  border-right: 0;
+}
+.cell:nth-child(n + 73) {
+  border-bottom: 0;
+}
+
+/* Heavier lines between the 3x3 boxes: after columns 3 and 6, after rows 3 and 6. */
+.cell:nth-child(9n + 3),
+.cell:nth-child(9n + 6) {
+  border-right: 2px solid var(--line-strong);
+}
+.cell:nth-child(n + 19):nth-child(-n + 27),
+.cell:nth-child(n + 46):nth-child(-n + 54) {
+  border-bottom: 2px solid var(--line-strong);
+}
+
+/* Whose digit is it? */
+.given {
+  color: var(--ink);
+  font-weight: 750;
+}
+.player {
+  color: var(--pen);
+  font-weight: 500;
+}
+.solved {
+  color: var(--solved);
+  font-weight: 600;
+}
+
+/* Highlights. Later rules win, so selection beats same-digit beats peers. */
+.peer {
+  background: var(--peer);
+}
+.same {
+  background: var(--same);
+}
+.selected {
+  background: var(--select);
+  box-shadow: inset 0 0 0 2px var(--accent);
+}
+.conflict {
+  background: var(--bad-bg);
+}
+.conflict .digit {
+  color: var(--bad);
+}
+
+.digit {
+  display: block;
+}
+
+/* Pencil marks: a 3x3 grid inside the cell */
+.notes {
+  position: absolute;
+  inset: 2px;
+  display: grid;
+  grid-template: repeat(3, 1fr) / repeat(3, 1fr);
+  place-items: center;
+  color: var(--muted);
+  font-size: clamp(0.5rem, 2.1vw, 0.75rem);
+  font-weight: 600;
+  pointer-events: none;
+}

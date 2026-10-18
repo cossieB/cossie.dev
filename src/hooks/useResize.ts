@@ -5,9 +5,7 @@ export function useResize() {
     onSettled(() => {
         setWindowWidth(window.innerWidth);
         window.addEventListener('resize', resize);
-    });
-    onCleanup(() => {
-        window.removeEventListener('resize', resize);
+        return () => window.removeEventListener('resize', resize)
     });
     function resize() {
         setWindowWidth(window.innerWidth);
