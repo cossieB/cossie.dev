@@ -20,5 +20,9 @@
     "binding": "DB",
     "database_name": "portfolio",
     "database_id": "d26a85b0-d106-4ec8-8f09-6fd13cc558b0"
+  }],
+  "kv_namespaces": [{
+    "binding": "KV",
+    "id": "a3a9750243014cb993aa5d7002c7ef7e"
   }]
 }
