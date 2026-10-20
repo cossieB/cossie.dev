@@ -24,6 +24,7 @@ declare module 'virtual:env/server' {
     readonly "FROM": __Out<__Schema["server"]["FROM"]>;
     readonly "TO": __Out<__Schema["server"]["TO"]>;
     readonly "RESEND_KEY": __Out<__Schema["server"]["RESEND_KEY"]>;
+    readonly "BETTER_AUTH_SECRET": __Out<__Schema["server"]["BETTER_AUTH_SECRET"]>;
     readonly "VITE_APP_NAME": __Out<__Schema["client"]["VITE_APP_NAME"]>;
     readonly "VITE_STORAGE_DOMAIN": __Out<__Schema["client"]["VITE_STORAGE_DOMAIN"]>;
   };

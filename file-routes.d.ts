@@ -47,6 +47,14 @@ declare module "virtual:file-routes" {
       $$route: FileRouteEagerRef<typeof import("./src/routes/[...404]")>;
     },
     {
+      path: "/api/auth/:..auth";
+      page: false;
+      $GET: FileRouteLazyRef<typeof import("./src/routes/api/auth/[..auth]")>;
+      $POST: FileRouteLazyRef<typeof import("./src/routes/api/auth/[..auth]")>;
+      $HEAD: FileRouteLazyRef<typeof import("./src/routes/api/auth/[..auth]")>;
+      $$route?: undefined;
+    },
+    {
       path: "/api/whoami";
       page: false;
       $GET: FileRouteLazyRef<typeof import("./src/routes/api/whoami")>;
@@ -81,6 +89,12 @@ declare module "virtual:file-routes" {
       path: "/quotes";
       page: true;
       $component: FileRouteLazyRef<typeof import("./src/routes/quotes")>;
+      $$route?: undefined;
+    },
+    {
+      path: "/smoke-signals";
+      page: true;
+      $component: FileRouteLazyRef<typeof import("./src/routes/smoke-signals")>;
       $$route?: undefined;
     },
     {
@@ -161,6 +175,14 @@ declare module "virtual:file-routes" {
       id: "/pomodoro";
       page: true;
       $component: FileRouteLazyRef<typeof import("./src/routes/pomodoro")>;
+      $$route?: undefined;
+      children?: undefined;
+    },
+    {
+      path: "/smoke-signals";
+      id: "/smoke-signals";
+      page: true;
+      $component: FileRouteLazyRef<typeof import("./src/routes/smoke-signals")>;
       $$route?: undefined;
       children?: undefined;
     },

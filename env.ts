@@ -16,7 +16,8 @@ export default {
     // rotation story. Generate one: `openssl rand -base64 32`.
     FROM: v.string(),
     TO: v.string(),
-    RESEND_KEY: v.string()
+    RESEND_KEY: v.string(),
+    BETTER_AUTH_SECRET: v.string()
   },
   client: {
     VITE_APP_NAME: v.optional(v.pipe(v.string(), v.minLength(1)), 'cossie'),

@@ -7,6 +7,6 @@ export default function clickOutside(handler: (e: MouseEvent) => void) {
     };
 
     document.body.addEventListener("click", onClick);
-    onCleanup(() => document.body.removeEventListener("click", onClick));
+    return () => document.body.removeEventListener("click", onClick);
   };
 }
