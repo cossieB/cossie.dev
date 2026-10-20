@@ -1,7 +1,7 @@
 .toggle {
     position: fixed;
     top: 0.5rem;
-    left: 0.5rem;
+    right: 0.5rem;
     background: none;
     border: none;
 }
@@ -12,6 +12,7 @@
     position: fixed;
     top: 2.5rem;
     width: 100%;
+    right: 0.5rem;
     max-width: 320px;
     overflow: hidden;
     background-color: #222;
