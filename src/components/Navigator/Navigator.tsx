@@ -1,4 +1,4 @@
-import { createSignal, onCleanup, For, onSettled } from "solid-js";
+import { createSignal, For, onSettled } from "solid-js";
 import styles from "./Navigator.module.css";
 import { ChevronLeftIcon, ChevronRightIcon, MenuIcon } from "@lucide/solid";
 import { projectArray } from "~/features/home/utils/projectArray";

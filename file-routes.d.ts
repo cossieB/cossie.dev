@@ -47,11 +47,11 @@ declare module "virtual:file-routes" {
       $$route: FileRouteEagerRef<typeof import("./src/routes/[...404]")>;
     },
     {
-      path: "/api/auth/:..auth";
+      path: "/api/auth/*auth";
       page: false;
-      $GET: FileRouteLazyRef<typeof import("./src/routes/api/auth/[..auth]")>;
-      $POST: FileRouteLazyRef<typeof import("./src/routes/api/auth/[..auth]")>;
-      $HEAD: FileRouteLazyRef<typeof import("./src/routes/api/auth/[..auth]")>;
+      $GET: FileRouteLazyRef<typeof import("./src/routes/api/auth/[...auth]")>;
+      $POST: FileRouteLazyRef<typeof import("./src/routes/api/auth/[...auth]")>;
+      $HEAD: FileRouteLazyRef<typeof import("./src/routes/api/auth/[...auth]")>;
       $$route?: undefined;
     },
     {
@@ -92,12 +92,6 @@ declare module "virtual:file-routes" {
       $$route?: undefined;
     },
     {
-      path: "/smoke-signals";
-      page: true;
-      $component: FileRouteLazyRef<typeof import("./src/routes/smoke-signals")>;
-      $$route?: undefined;
-    },
-    {
       path: "/sudoku";
       page: true;
       $component: FileRouteLazyRef<typeof import("./src/routes/sudoku")>;
@@ -107,6 +101,12 @@ declare module "virtual:file-routes" {
       path: "/wordle";
       page: true;
       $component: FileRouteLazyRef<typeof import("./src/routes/wordle")>;
+      $$route?: undefined;
+    },
+    {
+      path: "/shrnkr";
+      page: true;
+      $component: FileRouteLazyRef<typeof import("./src/routes/shrnkr")>;
       $$route?: undefined;
     }
   ];
@@ -155,6 +155,14 @@ declare module "virtual:file-routes" {
       children?: undefined;
     },
     {
+      path: "/shrnkr";
+      id: "/shrnkr";
+      page: true;
+      $component: FileRouteLazyRef<typeof import("./src/routes/shrnkr")>;
+      $$route?: undefined;
+      children?: undefined;
+    },
+    {
       path: "/sudoku";
       id: "/sudoku";
       page: true;
@@ -175,14 +183,6 @@ declare module "virtual:file-routes" {
       id: "/pomodoro";
       page: true;
       $component: FileRouteLazyRef<typeof import("./src/routes/pomodoro")>;
-      $$route?: undefined;
-      children?: undefined;
-    },
-    {
-      path: "/smoke-signals";
-      id: "/smoke-signals";
-      page: true;
-      $component: FileRouteLazyRef<typeof import("./src/routes/smoke-signals")>;
       $$route?: undefined;
       children?: undefined;
     },
