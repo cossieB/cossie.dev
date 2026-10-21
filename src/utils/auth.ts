@@ -28,5 +28,12 @@ export const auth = betterAuth({
         ipAddress: {
             ipAddressHeaders: ["CF-Connecting-IP", "X-Real-IP"]
         }
+    },
+    session: {
+        cookieCache: {
+            enabled: true,            
+        }
     }
 })
+
+export type User = typeof auth.$Infer.Session.user
