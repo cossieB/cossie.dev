@@ -1,15 +1,15 @@
 import { sql } from "drizzle-orm";
-import { index, integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
+import { index, integer, sqliteTable, text, unique } from "drizzle-orm/sqlite-core";
 import { users } from "./auth-schema";
 
 export const urlLinks = sqliteTable("url_links", {
     linkId: integer("id").primaryKey(),
-    userId: text("user_id").references(() => users.id, { onDelete: "cascade" }),
+    userId: text("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
     shortCode: text("short_code", { length: 16 }).notNull().unique(),
     longUrl: text("long_url").notNull(),
     isCustomAlias: integer("is_custom_alias", { mode: "boolean" }).notNull().default(false),
     isActive: integer("is_active", { mode: "boolean" }).notNull().default(true),
-    category: text("category", {enum: ["general", "marketing", "social media", "work", "personal"]}).notNull().default("general"),
+    category: text("category", {enum: ["general", "marketing", "social-media", "work", "personal"]}).notNull().default("general"),
     expiresAt: integer("expires_at", { mode: "timestamp_ms" }),
     createdAt: integer("created_at", { mode: "timestamp_ms" })
         .default(sql`(cast(unixepoch('subsecond') * 1000 as integer))`)

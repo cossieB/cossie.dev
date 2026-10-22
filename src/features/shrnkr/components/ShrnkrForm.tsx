@@ -1,8 +1,9 @@
 import { GlobeIcon, ClipboardPasteIcon, CircleAlertIcon } from "@lucide/solid"
 import { StoreSetter, Show, For } from "solid-js"
-import { Input, LinkCategory } from "./types"
 import styles from "./Shrnkr.module.css"
 import titleCase from "~/lib/titleCase"
+import { createShortUrl, Input, LinkCategory } from "../api"
+import { useAction, useSubmissions } from "@solidjs/router"
 
 type P = {
     input: Input,
@@ -11,9 +12,14 @@ type P = {
 
 export function ShrnkrForm(props: P) {
     let inputRef!: HTMLInputElement
-
+    const invalidUrl = () => props.input.url && !/^https:\/\//.test(props.input.url)
+    
+    const submission = useSubmissions(createShortUrl)
     return (
-        <form>
+        <form 
+            method="post"
+            action={createShortUrl.with(props.input)}
+        >
             <div class={styles.formControl}>
                 <label for="destinationUrl">Destination URL <span style="color:var(--danger)">*</span></label>
                 <div class={styles.inputWrapper}>
@@ -43,7 +49,7 @@ export function ShrnkrForm(props: P) {
                     </button>
 
                 </div>
-                <Show when={props.input.url && !/^https:\/\//.test(props.input.url)}>
+                <Show when={invalidUrl()}>
                     <p
                         id="urlError"
                         style={{
@@ -71,7 +77,7 @@ export function ShrnkrForm(props: P) {
                     <div class={styles.formControl}>
                         <label>Category</label>
                         <select id="linkTag" class="form-select" onChange={(e) => { props.setInput(s => { s.category = e.currentTarget.value as LinkCategory }) }}>
-                            <For each={["general", "marketing", "personal", "work", "social"]}>
+                            <For each={["general", "marketing", "personal", "work", "social-media"]}>
                                 {opt => <option value={opt}> {titleCase(opt)} </option>}
                             </For>
                         </select>
@@ -129,6 +135,17 @@ export function ShrnkrForm(props: P) {
                     </div>
                 </div>
             </div>
+            <button 
+                type="submit"
+                disabled={
+                    !props.input.url ||
+                    invalidUrl() ||
+                    props.input.customBackHalf.length > 0 && props.input.customBackHalf.length < 5 ||
+                    !!submission.at(-1)?.result
+                }
+            >
+                Create Short URL
+            </button>
         </form>
     )
 }

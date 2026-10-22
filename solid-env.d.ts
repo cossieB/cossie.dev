@@ -10,6 +10,7 @@ declare module 'virtual:env/client' {
   const env: {
     readonly "VITE_APP_NAME": __Out<__Schema["client"]["VITE_APP_NAME"]>;
     readonly "VITE_STORAGE_DOMAIN": __Out<__Schema["client"]["VITE_STORAGE_DOMAIN"]>;
+    readonly "VITE_APP_URL": __Out<__Schema["client"]["VITE_APP_URL"]>;
   };
   export { env };
   export default env;
@@ -27,6 +28,7 @@ declare module 'virtual:env/server' {
     readonly "BETTER_AUTH_SECRET": __Out<__Schema["server"]["BETTER_AUTH_SECRET"]>;
     readonly "VITE_APP_NAME": __Out<__Schema["client"]["VITE_APP_NAME"]>;
     readonly "VITE_STORAGE_DOMAIN": __Out<__Schema["client"]["VITE_STORAGE_DOMAIN"]>;
+    readonly "VITE_APP_URL": __Out<__Schema["client"]["VITE_APP_URL"]>;
   };
   export { env };
   export default env;

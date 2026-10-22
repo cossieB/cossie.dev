@@ -21,6 +21,7 @@ export default {
   },
   client: {
     VITE_APP_NAME: v.optional(v.pipe(v.string(), v.minLength(1)), 'cossie'),
-    VITE_STORAGE_DOMAIN: v.string()
+    VITE_STORAGE_DOMAIN: v.string(),
+    VITE_APP_URL: v.string()
   },
 };

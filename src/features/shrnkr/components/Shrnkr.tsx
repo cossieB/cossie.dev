@@ -5,8 +5,11 @@ import { AuthButtonsGroup } from "~/features/auth/components/AuthButtonGroup";
 import { Hero } from "./Hero";
 import { ShrnkrForm } from "./ShrnkrForm";
 import { ShrnkrPreview } from "./Preview";
-import { LinkCategory } from "./types";
 import { ShrnkrResult } from "./ShrnkrResult";
+import { createShortUrl, LinkCategory } from "../api";
+import { useSubmissions } from "@solidjs/router";
+import { env } from "virtual:env/client";
+
 
 export default function Shrnkr(props: ParentProps) {
     const [input, setInput] = createStore({
@@ -19,9 +22,7 @@ export default function Shrnkr(props: ParentProps) {
         campaignTerm: ""
     })
 
-    const a = action(function*() {
-        'use server'
-    })
+    const submission = useSubmissions(createShortUrl)
 
     return (
         <div class={styles.main}>
@@ -43,7 +44,11 @@ export default function Shrnkr(props: ParentProps) {
                             url={input.url}
                             category={input.category}
                         />
-                        
+                        <Show when={submission.at(-1)?.result}>
+                            {res => <ShrnkrResult
+                                shortenedUrl={`${env.VITE_APP_URL}/s/${res().shortCode}`}
+                            />}
+                        </Show>
                     </div>
                 </div>
             </div>
