@@ -1,97 +1,55 @@
-import { createEffect, createSignal, Loading, ParentProps, Show } from "solid-js";
+import { action, createStore, Loading, ParentProps, Show } from "solid-js";
 import styles from "./Shrnkr.module.css"
 import { user } from "~/features/auth/api";
 import { AuthButtonsGroup } from "~/features/auth/components/AuthButtonGroup";
-import { CircleAlertIcon, ClipboardPasteIcon, GlobeIcon } from "@lucide/solid";
+import { Hero } from "./Hero";
+import { ShrnkrForm } from "./ShrnkrForm";
+import { ShrnkrPreview } from "./Preview";
+import { LinkCategory } from "./types";
+import { ShrnkrResult } from "./ShrnkrResult";
 
 export default function Shrnkr(props: ParentProps) {
+    const [input, setInput] = createStore({
+        url: "",
+        customBackHalf: "",
+        category: "general" as LinkCategory,
+        campaignSource: "",
+        campaignName: "",
+        campaignMedium: "",
+        campaignTerm: ""
+    })
+
+    const a = action(function*() {
+        'use server'
+    })
 
     return (
         <div class={styles.main}>
             <div class={styles.container}>
                 <Hero />
-                <Loading>
-
-                    <div class={styles.workspace} >
-                        <div class={[styles.formCard, styles.panel]}>
+                <div class={styles.workspace} >
+                    <div class={[styles.formCard, styles.panel]}>
+                        <Loading>
                             <Show
                                 when={user()}
                                 fallback={<AuthButtonsGroup />}
                             >
-                                <ShrnkrForm />
+                                <ShrnkrForm input={input} setInput={setInput} />
                             </Show>
-                        </div>
+                        </Loading>
                     </div>
-                </Loading>
-            </div>
-        </div>
-    )
-}
-
-export function Hero() {
-    return (
-        <>
-            <h1 class={styles.title}>
-                Shorten Links with Live Intelligence
-            </h1>
-            <p class={styles.description}>
-                Transform long, cumbersome URLs into powerful, brandable short links with
-                real-time metadata previews, QR code exports, and instant analytics tracking.
-            </p>
-        </>
-    );
-}
-
-export function ShrnkrForm() {
-    let inputRef!: HTMLInputElement
-    const [input, setInput] = createSignal("")
-
-    return (
-        <div>
-            <div class={styles.formControl}>
-                <label for="destinationUrl">Destination URL <span style="color:var(--danger)">*</span></label>
-                <div class={styles.inputWrapper}>
-                    <GlobeIcon />
-                    <input
-                        ref={inputRef}
-                        type="url"
-                        id="destinationUrl"
-                        class={styles.formInput}
-                        required
-                        onChange={e => setInput(e.currentTarget.value.trim())}
-                        placeholder="https://example.com/long-article-or-campaign-page"
-                        value={input()}
-                    />
-                    <button
-                        class={styles.pasteBtn}
-                        onClick={async () => {
-                            try {
-                                const content = await navigator.clipboard.readText();
-                                setInput(content.trim())
-                            }
-                            catch (error) { }
-                        }}
-                    >
-                        <ClipboardPasteIcon />
-                    </button>
-
+                    <div class={[styles.panel]}>
+                        <ShrnkrPreview
+                            url={input.url}
+                            category={input.category}
+                        />
+                        
+                    </div>
                 </div>
-                <Show when={input() && !/^https:\/\//.test(input())}>
-                    <p
-                        id="urlError"
-                        style={{
-                            color: "var(--danger)",
-                            "font-size": "0.75rem",
-                            "margin-top": "6px",
-                            display: "flex",
-                            "align-items": "center"
-                        }}>
-                        <CircleAlertIcon /> &nbsp; Please enter a valid URL (including https://). Only secure URLs are supported
-                    </p>
-                </Show>
-                
             </div>
         </div>
     )
 }
+
+
 

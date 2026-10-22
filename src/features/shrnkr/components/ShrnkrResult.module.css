@@ -1,0 +1,42 @@
+
+
+.copy {
+    display: flex;
+
+    background-color: rgba(11, 15, 23, 0.8);
+    flex-wrap: nowrap;
+    padding: 0.5rem;
+    padding: 10px 12px;
+
+    span {
+        color: #60a5fa;
+        flex-shrink: 1;
+    }
+
+    button {
+        background: none;
+        margin-left: auto;
+        margin-right: 0.5rem;
+        flex-shrink: 0;
+    }
+    a {
+        flex-shrink: 0;
+    }
+}
+
+.qr {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    img {
+        height: 5rem;
+        aspect-ratio: 1;
+    }
+    a {
+        padding: 0.75rem;
+        text-decoration: none;
+        background-color: var(--primary);
+        color: black;
+        border-radius: var(--radius-full);
+    }
+}

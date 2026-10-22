@@ -94,14 +94,24 @@
 
 .workspace {
     margin-top: 2rem;
-    display: grid;
-    grid-template-columns: 7fr 5fr;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+
+    >:first-child {
+        width: 60%;
+    }
+
+    >:nth-child(2) {
+        flex: 1;
+    }
 }
 
 .formCard {
     padding: 28px;
     position: relative;
     overflow: hidden;
+    height: fit-content;
 }
 
 .panel {
@@ -111,6 +121,7 @@
     border: 1px solid var(--border-color);
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow-lg);
+    overflow: hidden;
 }
 
 .auth {
@@ -142,7 +153,6 @@
     }
 
     input {
-        background: none;
         background-color: var(--bg-input);
         border: none;
     }
@@ -162,5 +172,69 @@
 
     button {
         background: none;
+    }
+}
+
+.formControl {
+    width: 100%;
+
+    select {
+        width: 100%;
+        padding: 12px 14px;
+        background: var(--bg-input);
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-md);
+        color: #fff;
+        font-size: 0.875rem;
+        outline: none;
+        transition: var(--transition);
+    }
+
+    input {
+        width: 100%;
+        padding: 12px 14px;
+        background: var(--bg-input);
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-md);
+        color: #fff;
+        font-size: 0.875rem;
+        outline: none;
+        transition: var(--transition);
+    }
+}
+.inputGroup {
+    margin-top: 1rem;
+    display: flex;
+    gap: 0.5rem;
+}
+.custom {
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    height: 44px;
+
+    span {
+        padding-inline: 0.5rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.2);
+        border-right: 1px solid var(--border-color);
+        color: var(--text-dim);
+    }
+
+    input {
+        padding-inline: 0.5rem;
+        height: 100%;
+        background: var(--bg-input);
+        color: #fff;
+        font-size: 0.875rem;
+        outline: none;
+        transition: var(--transition);
+        border: none;
+        width: 100%;
     }
 }
