@@ -1,9 +1,10 @@
 import { GlobeIcon, ClipboardPasteIcon, CircleAlertIcon } from "@lucide/solid"
-import { StoreSetter, Show, For } from "solid-js"
+import { StoreSetter, Show, For, createEffect, latest, createMemo, createSignal, createOptimistic, action, useContext } from "solid-js"
 import styles from "./Shrnkr.module.css"
 import titleCase from "~/lib/titleCase"
 import { createShortUrl, Input, LinkCategory } from "../api"
-import { useAction, useSubmissions } from "@solidjs/router"
+import { user } from "~/features/auth/api"
+import { ToastContext } from "~/components/Toast/ToastContext"
 
 type P = {
     input: Input,
@@ -12,13 +13,30 @@ type P = {
 
 export function ShrnkrForm(props: P) {
     let inputRef!: HTMLInputElement
-    const invalidUrl = () => props.input.url && !/^https:\/\//.test(props.input.url)
-    
-    const submission = useSubmissions(createShortUrl)
+    const url = createMemo(() => latest(() => props.input.url))
+    const invalidUrl = () => url() && !/^https:\/\//.test(url())
+    const [submitting, setSubmitting] = createOptimistic(false);
+    const { addToast } = useContext(ToastContext)
+
+    const submit = action(async function* () {
+        setSubmitting(true)
+        const res = await createShortUrl(props.input)
+        if (res instanceof Error) {
+            addToast({
+                text: res.message,
+                type: "warning",
+                autoFades: false
+            })
+        }
+    })
+
     return (
-        <form 
+        <form
             method="post"
-            action={createShortUrl.with(props.input)}
+            onSubmit={async e => {
+                e.preventDefault();
+                submit()
+            }}
         >
             <div class={styles.formControl}>
                 <label for="destinationUrl">Destination URL <span style="color:var(--danger)">*</span></label>
@@ -32,7 +50,7 @@ export function ShrnkrForm(props: P) {
                         required
                         onChange={e => props.setInput(s => { s.url = e.currentTarget.value.trim() })}
                         placeholder="https://example.com/long-article-or-campaign-page"
-                        value={props.input.url}
+                        value={url()}
                     />
                     <button
                         class={styles.pasteBtn}
@@ -67,11 +85,18 @@ export function ShrnkrForm(props: P) {
                         <label >Custom Back-Half</label>
                         <div class={styles.custom}>
                             <span>cossie.dev/s/</span>
-                            <input 
-                                style={{"border-radius": "unset"}}
-                                type="text" 
-                                class={styles.formInput} 
-                                />
+                            <input
+                                onChange={e => {
+                                    props.setInput(s => {
+                                        s.customBackHalf = e.currentTarget.value
+                                    })
+                                }}
+                                style={{ "border-radius": "unset" }}
+                                type="text"
+                                class={styles.formInput}
+                                disabled={user()?.isAnonymous ?? true}
+                                title={user()?.isAnonymous ? "Anonymous users cannot use this feature" : undefined}
+                            />
                         </div>
                     </div>
                     <div class={styles.formControl}>
@@ -130,18 +155,18 @@ export function ShrnkrForm(props: P) {
                                     s.campaignTerm = e.currentTarget.value
                                 })
                             }}
-                            class={styles.formInput} 
+                            class={styles.formInput}
                             type="text" />
                     </div>
                 </div>
             </div>
-            <button 
+            <button
                 type="submit"
                 disabled={
-                    !props.input.url ||
+                    !url() ||
                     invalidUrl() ||
-                    props.input.customBackHalf.length > 0 && props.input.customBackHalf.length < 5 ||
-                    !!submission.at(-1)?.result
+                    props.input.customBackHalf!.length > 0 && props.input.customBackHalf!.length < 5 ||
+                    submitting()
                 }
             >
                 Create Short URL

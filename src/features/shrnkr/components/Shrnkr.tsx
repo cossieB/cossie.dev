@@ -10,7 +10,6 @@ import { createShortUrl, LinkCategory } from "../api";
 import { useSubmissions } from "@solidjs/router";
 import { env } from "virtual:env/client";
 
-
 export default function Shrnkr(props: ParentProps) {
     const [input, setInput] = createStore({
         url: "",

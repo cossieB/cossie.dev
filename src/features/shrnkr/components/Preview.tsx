@@ -48,20 +48,21 @@ async function fetchPreview(rawUrl: string): Promise<PreviewData> {
 
 export function ShrnkrPreview(props: Props) {
 
-    const preview = createMemo(() => fetchPreview(props.url))
+    const preview = createMemo(() => fetchPreview(props.url), {
+        loadingValue: defaults,        
+    })
 
     return (
         <div class={[styles.card, { [styles.refetching]: isPending(preview) }]}>
-            <Loading>
+            
                 <div class={[styles.imageWrapper,]}>
                     <img
-
                         src={preview().image || defaults.image}
                         alt={preview().title || defaults.title}
                         class={styles.image}
                         loading="lazy"
                     />
-                    <span class={`${styles.badge} ${styles[props.category]}`}>
+                    <span class={[styles.badge, styles[props.category]]}>
                         {props.category}
                     </span>
                 </div>
@@ -72,7 +73,7 @@ export function ShrnkrPreview(props: Props) {
                     <p class={styles.description}>{preview().description}</p>
 
                 </div>
-            </Loading>
+            
         </div>
     );
 }

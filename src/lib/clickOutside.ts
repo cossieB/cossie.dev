@@ -1,5 +1,3 @@
-import { onCleanup } from "solid-js";
-
 export default function clickOutside(handler: (e: MouseEvent) => void) {
   return (el: Element) => {
     const onClick = (e: MouseEvent) => {

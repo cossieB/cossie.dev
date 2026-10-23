@@ -1,5 +1,6 @@
 import type { ParentProps } from 'solid-js';
 import { HydrationScript } from '@solidjs/web';
+import { ToastProvider } from './components/Toast/ToastContext';
 
 // The document shell (the index.html replacement), picked up by the
 // src/Document.* convention; it must render the full <html> and ships no
@@ -41,7 +42,11 @@ export default function Document(props: ParentProps) {
         <title>Buntu Cossie</title>
         <HydrationScript />
       </head>
-      <body>{props.children}</body>
+      <body>
+        <ToastProvider>
+          {props.children}
+        </ToastProvider>
+      </body>
     </html>
   );
 }
