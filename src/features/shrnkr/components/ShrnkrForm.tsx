@@ -1,15 +1,22 @@
 import { GlobeIcon, ClipboardPasteIcon, CircleAlertIcon } from "@lucide/solid"
-import { StoreSetter, Show, For, createEffect, latest, createMemo, createSignal, createOptimistic, action, useContext } from "solid-js"
+import { StoreSetter, Show, For, createEffect, latest, createMemo, createSignal, createOptimistic, action, useContext, onSettled } from "solid-js"
 import styles from "./Shrnkr.module.css"
 import titleCase from "~/lib/titleCase"
-import { createShortUrl, Input, LinkCategory } from "../api"
 import { user } from "~/features/auth/api"
 import { ToastContext } from "~/components/Toast/ToastContext"
+import { State } from "./Shrnkr"
+import 'temporal-polyfill/global'
+import { createShortUrl } from "../api"
+import { LinkCategory } from "../services/schema"
 
 type P = {
-    input: Input,
-    setInput: StoreSetter<Input>
+    input: State,
+    setInput: StoreSetter<State>
+    onCreate: (shortenedUrl: string) => void
 }
+
+const TIMEZONES = Intl.supportedValuesOf("timeZone");
+if (!TIMEZONES.includes("UTC")) TIMEZONES.push("UTC")
 
 export function ShrnkrForm(props: P) {
     let inputRef!: HTMLInputElement
@@ -18,16 +25,36 @@ export function ShrnkrForm(props: P) {
     const [submitting, setSubmitting] = createOptimistic(false);
     const { addToast } = useContext(ToastContext)
 
+    const expiry = () => props.input.expiry.datetime ? Temporal.ZonedDateTime.from(`${props.input.expiry.datetime}[${props.input.expiry.timeZone}]`).epochMilliseconds : null
+
+    // check is intentionally higher than the server's 15 minutes to account for latency and clock skew
+    const isInvalidExpiry = () => (expiry() ?? Number.MAX_SAFE_INTEGER) - Date.now() < 30 * 60 * 1000
+
     const submit = action(async function* () {
         setSubmitting(true)
-        const res = await createShortUrl(props.input)
+        
+        if (isInvalidExpiry()) {
+            return
+        }
+        
+        const res = await createShortUrl({
+            ...props.input,
+            expiry: expiry()
+        })
         if (res instanceof Error) {
-            addToast({
+            return addToast({
                 text: res.message,
                 type: "warning",
                 autoFades: false
             })
         }
+        props.onCreate(res.shortCode)
+    })
+
+    onSettled(() => {
+        props.setInput(s => {
+            s.expiry.timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC"
+        })
     })
 
     return (
@@ -101,13 +128,59 @@ export function ShrnkrForm(props: P) {
                     </div>
                     <div class={styles.formControl}>
                         <label>Category</label>
-                        <select id="linkTag" class="form-select" onChange={(e) => { props.setInput(s => { s.category = e.currentTarget.value as LinkCategory }) }}>
+                        <select id="linkTag" onChange={(e) => { props.setInput(s => { s.category = e.currentTarget.value as LinkCategory }) }}>
                             <For each={["general", "marketing", "personal", "work", "social-media"]}>
                                 {opt => <option value={opt}> {titleCase(opt)} </option>}
                             </For>
                         </select>
                     </div>
                 </div>
+
+
+                <div class={styles.inputGroup} style={{ "margin-top": "1rem" }}>
+                    <div class={styles.formControl} >
+                        <label >Expires</label>
+                        <input
+                            type="datetime-local"
+                            onChange={e => {
+                                props.setInput(s => {
+                                    s.expiry.datetime = e.currentTarget.value
+                                })
+                            }}
+                        />
+                    </div>
+                    <div class={styles.formControl} >
+                        <label >Time Zone</label>
+                        <select
+                            id="linkTag"
+                            style={{
+                                height: "49px"
+                            }}
+                            onChange={e => {
+                                props.setInput(s => {
+                                    s.expiry.timeZone = e.currentTarget.value
+                                })
+                            }}
+                        >
+                            <For each={TIMEZONES}>
+                                {opt => <option value={opt} selected={opt === props.input.expiry.timeZone}> {opt} </option>}
+                            </For>
+                        </select>
+                    </div>
+                </div>
+                <Show when={isInvalidExpiry()}>
+                    <div
+                        style={{
+                            color: "var(--danger)",
+                            "font-size": "0.75rem",
+                            "margin-top": "6px",
+                            display: "flex",
+                            "align-items": "center"
+                        }}>
+                        <CircleAlertIcon /> &nbsp; Expiry date must be at least 15 minutes in the future
+                    </div>
+                </Show>
+
                 <div class={styles.inputGroup} >
                     <div class={styles.formControl}>
                         <label >Campaign Source</label>
@@ -164,9 +237,9 @@ export function ShrnkrForm(props: P) {
                 type="submit"
                 disabled={
                     !url() ||
+                    submitting() ||
                     invalidUrl() ||
-                    props.input.customBackHalf!.length > 0 && props.input.customBackHalf!.length < 5 ||
-                    submitting()
+                    props.input.customBackHalf!.length > 0 && props.input.customBackHalf!.length < 5
                 }
             >
                 Create Short URL

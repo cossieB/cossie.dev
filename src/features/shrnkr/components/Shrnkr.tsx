@@ -1,4 +1,4 @@
-import { action, createStore, Loading, ParentProps, Show } from "solid-js";
+import { action, createSignal, createStore, Loading, ParentProps, Show } from "solid-js";
 import styles from "./Shrnkr.module.css"
 import { user } from "~/features/auth/api";
 import { AuthButtonsGroup } from "~/features/auth/components/AuthButtonGroup";
@@ -6,22 +6,39 @@ import { Hero } from "./Hero";
 import { ShrnkrForm } from "./ShrnkrForm";
 import { ShrnkrPreview } from "./Preview";
 import { ShrnkrResult } from "./ShrnkrResult";
-import { createShortUrl, LinkCategory } from "../api";
-import { useSubmissions } from "@solidjs/router";
 import { env } from "virtual:env/client";
+import { LinkCategory } from "../services/schema";
+
+export type State = {
+    url: string;
+    customBackHalf: string;
+    category: "general" | "marketing" | "personal" | "work" | "social-media";
+    campaignSource: string;
+    campaignName: string;
+    campaignMedium: string;
+    campaignTerm: string;
+    expiry: {
+        datetime: string;
+        timeZone: string;
+    };
+}
 
 export default function Shrnkr(props: ParentProps) {
-    const [input, setInput] = createStore({
+    const [input, setInput] = createStore<State>({
         url: "",
         customBackHalf: "",
         category: "general" as LinkCategory,
         campaignSource: "",
         campaignName: "",
         campaignMedium: "",
-        campaignTerm: ""
+        campaignTerm: "",
+        expiry: {
+            datetime: "",
+            timeZone: "UTC"
+        }
     })
 
-    const submission = useSubmissions(createShortUrl)
+    const [shortCode, setShortCode] = createSignal<string>("dksdfk")
 
     return (
         <div class={styles.main}>
@@ -34,7 +51,7 @@ export default function Shrnkr(props: ParentProps) {
                                 when={user()}
                                 fallback={<AuthButtonsGroup />}
                             >
-                                <ShrnkrForm input={input} setInput={setInput} />
+                                <ShrnkrForm input={input} setInput={setInput} onCreate={setShortCode} />
                             </Show>
                         </Loading>
                     </div>
@@ -43,9 +60,9 @@ export default function Shrnkr(props: ParentProps) {
                             url={input.url}
                             category={input.category}
                         />
-                        <Show when={submission.at(-1)?.result}>
-                            {res => <ShrnkrResult
-                                shortenedUrl={`${env.VITE_APP_URL}/s/${res().shortCode}`}
+                        <Show when={shortCode()}>
+                            {shortCode => <ShrnkrResult
+                                shortenedUrl={`${env.VITE_APP_URL}/s/${shortCode()}`}
                             />}
                         </Show>
                     </div>
@@ -54,6 +71,3 @@ export default function Shrnkr(props: ParentProps) {
         </div>
     )
 }
-
-
-

@@ -1,7 +1,7 @@
 import { createMemo, isPending, Loading, Show } from "solid-js";
 import styles from "./Preview.module.css";
 import { validateUrl } from "~/lib/validateUrl";
-import { LinkCategory } from "../api";
+import { LinkCategory } from "../services/schema";
 
 type Props = {
     url: string;
