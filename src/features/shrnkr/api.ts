@@ -107,3 +107,26 @@ export const getShortenedLinks = GET(async (filter: Filter) => {
         .groupBy(urlLinks.linkId)
         .orderBy(desc(urlLinks.linkId))
 })
+
+export async function deleteShortLink(linkId: number) {
+    'use server'
+    await sleep(2000)
+    const headers = getRequestEvent()?.request.headers;    
+    if (!headers) {
+        return respond(new Error("Something went wrong. Please try again later"), { status: 500 });
+    }
+
+    const userSession = await auth.api.getSession({ headers });  
+    if (!userSession) return respond(new Error("Please login first"), {status: 401})  
+    const res = await db
+        .update(urlLinks)
+        .set({
+            isActive: false
+        })
+        .where(and(
+            eq(urlLinks.linkId, linkId),
+            eq(urlLinks.userId, userSession.user.id)
+        ))
+        .returning()
+    return res.at(0)
+}

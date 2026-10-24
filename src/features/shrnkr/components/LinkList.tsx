@@ -1,7 +1,7 @@
-import { createMemo, createStore, For, isPending, Loading } from "solid-js";
+import { action, affects, createMemo, createStore, For, isPending, Loading, refresh } from "solid-js";
 import titleCase from "~/lib/titleCase";
 import styles from "./LinkList.module.css"
-import { getShortenedLinks, LINKS_PER_PAGE } from "../api";
+import { deleteShortLink, getShortenedLinks, LINKS_PER_PAGE } from "../api";
 import { LinkCategory } from "../services/schema";
 import { BarChart3Icon, ChartSplineIcon, CircleChevronLeftIcon, CircleChevronRightIcon, CopyIcon, Trash, TrashIcon } from "@lucide/solid";
 import env from "virtual:env/client";
@@ -19,6 +19,7 @@ const links = createMemo(() => getShortenedLinks({
 }), {
     ssrSource: "client"
 })
+
 export function LinkList() {
     return (
         <div class={styles.links}>
@@ -107,6 +108,11 @@ type Prop = {
 
 function LinkRow(props: Prop) {
     const shortLink = () => `${env.VITE_APP_URL}/s/${props.link.shortCode}`
+    const del = action(function*() {
+        affects(links)
+        yield deleteShortLink(props.link.linkId)
+        refresh(links)
+    })
     return (
         <tr>
             <td>
@@ -153,6 +159,7 @@ function LinkRow(props: Prop) {
                             props.link.userId !== user()?.id ||
                             isPending(links)
                         }
+                        onClick={del}
                     >
                         <TrashIcon />
                     </button>
