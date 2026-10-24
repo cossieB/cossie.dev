@@ -27,7 +27,7 @@ export function ShrnkrForm(props: P) {
 
     const expiry = () => props.input.expiry.datetime ? Temporal.ZonedDateTime.from(`${props.input.expiry.datetime}[${props.input.expiry.timeZone}]`).epochMilliseconds : null
 
-    // check is intentionally higher than the server's 15 minutes to account for latency and clock skew
+    // check is intentionally higher than the server's 15 minutes to account for latency, clock skew and time spent filling the form
     const isInvalidExpiry = () => (expiry() ?? Number.MAX_SAFE_INTEGER) - Date.now() < 30 * 60 * 1000
 
     const submit = action(async function* () {

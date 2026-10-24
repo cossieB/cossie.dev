@@ -8,6 +8,7 @@ import { ShrnkrPreview } from "./Preview";
 import { ShrnkrResult } from "./ShrnkrResult";
 import { env } from "virtual:env/client";
 import { LinkCategory } from "../services/schema";
+import { LinkList } from "./LinkList";
 
 export type State = {
     url: string;
@@ -67,7 +68,9 @@ export default function Shrnkr(props: ParentProps) {
                         </Show>
                     </div>
                 </div>
+                <LinkList />
             </div>
         </div>
     )
 }
+

@@ -21,6 +21,7 @@ export const urlLinks = sqliteTable("url_links", {
 },
     (table) => [
         index("idx_links_user_created").on(table.userId, table.createdAt,),
+        index("idx_links_is_active").on(table.isActive)
     ],
 );
 

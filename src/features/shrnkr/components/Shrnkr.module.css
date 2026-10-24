@@ -76,6 +76,18 @@
             background-color: var(--text-dim);
         }
     }
+    input,
+    select {
+        width: 100%;
+        padding: 12px 14px;
+        background: var(--bg-input);
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-md);
+        color: #fff;
+        font-size: 0.875rem;
+        outline: none;
+        transition: var(--transition);
+    }    
 }
 
 .hero {
@@ -112,23 +124,22 @@
 
 .workspace {
     margin-top: 2rem;
-    display: flex;
+    display: grid;
     flex-wrap: wrap;
     gap: 0.5rem;
+    grid-template-columns: 1fr;
 
-    >:first-child {
-        width: 60%;
+    @media (width > 1200px) {
+        grid-template-columns: 7fr 5fr;
     }
-
-    >:nth-child(2) {
-        flex: 1;
-    }
+    
 }
 
 .formCard {
-    padding: 28px;
+    padding: 1rem;
     position: relative;
     overflow: hidden;
+    container-type: inline-size;
 }
 
 .panel {
@@ -175,19 +186,6 @@
         border: none;
     }
 
-    input,
-    select {
-        width: 100%;
-        padding: 12px 14px;
-        background: var(--bg-input);
-        border: 1px solid var(--border-color);
-        border-radius: var(--radius-md);
-        color: #fff;
-        font-size: 0.875rem;
-        outline: none;
-        transition: var(--transition);
-    }
-
     button {
         background: none;
     }
@@ -224,6 +222,11 @@
     margin-top: 1rem;
     display: flex;
     gap: 0.5rem;
+    flex-direction: column;
+
+    @container (width > 600px) {
+        flex-direction: row;
+    }
 }
 .custom {
     border: 1px solid var(--border-color);
