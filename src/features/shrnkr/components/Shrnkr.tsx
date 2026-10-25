@@ -1,4 +1,4 @@
-import { action, createSignal, createStore, Loading, ParentProps, Show } from "solid-js";
+import { createSignal, createStore, Loading, ParentProps, Show } from "solid-js";
 import styles from "./Shrnkr.module.css"
 import { user } from "~/features/auth/api";
 import { AuthButtonsGroup } from "~/features/auth/components/AuthButtonGroup";
@@ -39,7 +39,7 @@ export default function Shrnkr(props: ParentProps) {
         }
     })
 
-    const [shortCode, setShortCode] = createSignal<string>("dksdfk")
+    const [shortCode, setShortCode] = createSignal<string>()
 
     return (
         <div class={styles.main}>

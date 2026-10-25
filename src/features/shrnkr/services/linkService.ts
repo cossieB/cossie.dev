@@ -1,16 +1,18 @@
 import { createHash, randomBytes } from "node:crypto";
 import { db } from "~/drizzle/db";
-import { urlLinks } from "~/drizzle/schema/shrnkr";
-import { and, count, gte, eq } from "drizzle-orm";
+import { clickAnalytics, urlLinks } from "~/drizzle/schema/shrnkr";
+import { and, count, gte, eq, SQL, or, isNull, desc } from "drizzle-orm";
 import { checkUrlExists } from "../utils/checkUrlExists";
-import { Input } from "./schema";
+import { Filter, GetLinksSchema, Input } from "./schema";
+import { getServerSideUser } from "~/features/auth/api";
+import * as v from 'valibot';
 
 const TWENTY_EIGHT_DAYS_MS = 28 * 24 * 60 * 60 * 1000;
 
-export class LinkCreationError extends Error {
+export class AppError extends Error {
     constructor(message: string, public status: number) {
         super(message);
-        this.name = "LinkCreationError";
+        this.name = "AppError";
     }
 }
 
@@ -32,7 +34,7 @@ export async function checkUserLinkLimit(userId: string, isAnonymous: boolean) {
 
     const linkLimit = isAnonymous ? 5 : 20;
     if (linkCount >= linkLimit) {
-        throw new LinkCreationError(`You have reached your limit of ${linkLimit} links created in the past 28 days.`, 429);
+        throw new AppError(`You have reached your limit of ${linkLimit} links created in the past 28 days.`, 429);
     }
 }
 
@@ -40,12 +42,12 @@ export async function processAndValidateUrl(rawUrl: string, data: Input) {
     const url = new URL(rawUrl);
 
     if (url.protocol !== "https:") {
-        throw new LinkCreationError("Invalid URL. Only secure urls starting with https are allowed", 400);
+        throw new AppError("Invalid URL. Only secure urls starting with https are allowed", 400);
     }
 
     const isValidUrl = await checkUrlExists(url.toString());
     if (!isValidUrl) {
-        throw new LinkCreationError("The provided URL could not be reached or does not exist.", 400);
+        throw new AppError("The provided URL could not be reached or does not exist.", 400);
     }
 
     if (data.campaignSource) url.searchParams.set("utm_source", data.campaignSource);
@@ -80,7 +82,7 @@ export async function saveShortLink({
             return inserted;
         } catch (error) {
             if (isDuplicate(error)) {
-                throw new LinkCreationError("That short link is not available", 400);
+                throw new AppError("That short link is not available", 400);
             }
             throw error;
         }
@@ -109,5 +111,58 @@ export async function saveShortLink({
         }
     }
 
-    throw new LinkCreationError("Could not create short url", 500);
+    throw new AppError("Could not create short url", 500);
+}
+
+export const LINKS_PER_PAGE = 5
+
+export async function getLinks(filter: Filter) {
+    const {ownedLinksOnly, page, category} = v.parse(GetLinksSchema, filter)    
+    const conditions: (SQL | undefined)[] = [
+        eq(urlLinks.isActive, true),
+        or(
+            isNull(urlLinks.expiresAt),
+            gte(urlLinks.expiresAt, new Date())
+        )
+    ]
+
+    const userSession = await getServerSideUser()
+
+    if (ownedLinksOnly && userSession)
+        conditions.push(eq(urlLinks.userId, userSession.user.id))
+
+    if (category)
+        conditions.push(eq(urlLinks.category, category))
+    
+    return db
+        .select({
+            linkId: urlLinks.linkId,
+            shortCode: urlLinks.shortCode,
+            longUrl: urlLinks.longUrl,
+            category: urlLinks.category,
+            createdAt: urlLinks.createdAt,
+            userId: urlLinks.userId,
+            clickCount: count(clickAnalytics.id)
+        })
+        .from(urlLinks)
+        .leftJoin(clickAnalytics, eq(urlLinks.linkId, clickAnalytics.linkId))
+        .limit(LINKS_PER_PAGE + 1)
+        .offset(page * LINKS_PER_PAGE)
+        .where(and(...conditions))
+        .groupBy(urlLinks.linkId)
+        .orderBy(desc(urlLinks.linkId))
+}
+
+export async function deleteLink(linkId: number, userId: string) {
+        const res = await db
+        .update(urlLinks)
+        .set({
+            isActive: false
+        })
+        .where(and(
+            eq(urlLinks.linkId, linkId),
+            eq(urlLinks.userId, userId)
+        ))
+        .returning()
+    return res.at(0)
 }

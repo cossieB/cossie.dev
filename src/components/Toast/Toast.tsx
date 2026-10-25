@@ -33,8 +33,7 @@ export function Toast(props: { toast: TToast, i: number }) {
         removeToast(props.i)
     }
 
-    onSettled(() => {
-        console.log(props.toast.text)
+    onSettled(() => {        
         ref.showPopover()
         const audio = props.toast.type == "error" ? errorAudio : props.toast.type == "warning" ? warningAudio : infoAudio
         audio.play()

@@ -1,18 +1,19 @@
-import { action, affects, createMemo, createStore, For, isPending, Loading, refresh } from "solid-js";
+import { createMemo, createStore, For, isPending, Loading } from "solid-js";
 import titleCase from "~/lib/titleCase";
 import styles from "./LinkList.module.css"
-import { deleteShortLink, getShortenedLinks, LINKS_PER_PAGE } from "../api";
+import { getShortenedLinks } from "../api";
 import { LinkCategory } from "../services/schema";
-import { BarChart3Icon, ChartSplineIcon, CircleChevronLeftIcon, CircleChevronRightIcon, CopyIcon, Trash, TrashIcon } from "@lucide/solid";
-import env from "virtual:env/client";
+import { CircleChevronLeftIcon, CircleChevronRightIcon } from "@lucide/solid";
 import { user } from "~/features/auth/api";
+import { LinkRow } from "./LinkRow";
+import { LINKS_PER_PAGE } from "../services/linkService";
 
 const [filters, setFilters] = createStore({
     ownedLinksOnly: false,
     category: undefined as LinkCategory | undefined,
     page: 0
 })
-const links = createMemo(() => getShortenedLinks({
+export const links = createMemo(() => getShortenedLinks({
     ownedLinksOnly: filters.ownedLinksOnly,
     category: filters.category,
     page: filters.page
@@ -25,8 +26,7 @@ export function LinkList() {
         <div class={styles.links}>
             <header>
                 <h2>Recent Short Links</h2>
-                <div class={styles.toggles}>
-
+                <div class={styles.toggles}>        
                     <label class={styles.switchLabel}>Only show your links</label>
                     <label style={{ "margin-bottom": 0 }} class={styles.switch}>
                         <input
@@ -98,73 +98,5 @@ export function LinkList() {
                 </div>
             </div>
         </div>
-    )
-}
-
-
-type Prop = {
-    link: Awaited<ReturnType<typeof getShortenedLinks>>[number];
-};
-
-function LinkRow(props: Prop) {
-    const shortLink = () => `${env.VITE_APP_URL}/s/${props.link.shortCode}`
-    const del = action(function*() {
-        affects(links)
-        yield deleteShortLink(props.link.linkId)
-        refresh(links)
-    })
-    return (
-        <tr>
-            <td>
-                <div class={styles.linkInfo}>
-                    <a href={shortLink()} class={styles.shortCode}>{shortLink()}</a>
-                    <span class={styles.longUrl} title={props.link.longUrl}>{props.link.longUrl}</span>
-                </div>
-            </td>
-            <td>
-                <span class={[styles.badge, styles[props.link.category]]}>
-                    {props.link.category}
-                </span>
-            </td>
-            <td>
-                <div class={styles.clickCount}>
-                    <BarChart3Icon size="0.75rem" />
-                    {props.link.clickCount}
-                </div>
-            </td>
-            <td>{Intl.DateTimeFormat("default", { year: "numeric", month: "short", day: "2-digit" }).format(props.link.createdAt)}</td>
-            <td>
-                <div class={styles.actions}>
-                    <button
-                        class={styles.actionBtn}
-                        title="Copy Link"
-                        disabled={isPending(links)}
-                        onClick={() => {
-                            navigator.clipboard.writeText(shortLink())
-                        }}
-                    >
-                        <CopyIcon />
-                    </button>
-                    <button
-                        class={styles.actionBtn}
-                        title="View Analytics"
-                        disabled={isPending(links)}
-                    >
-                        <ChartSplineIcon />
-                    </button>
-                    <button
-                        class={[styles.actionBtn, styles.dangerBtn]}
-                        title="Delete Link"
-                        disabled={
-                            props.link.userId !== user()?.id ||
-                            isPending(links)
-                        }
-                        onClick={del}
-                    >
-                        <TrashIcon />
-                    </button>
-                </div>
-            </td>
-        </tr>
     )
 }

@@ -5,6 +5,7 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
+        flex-wrap: wrap;
 
         select {
             width: unset;
@@ -32,7 +33,7 @@
     margin-left: auto;
     display: flex;
     align-items: center;
-
+    flex-wrap: wrap;
     .switchLabel {
         margin-right: 0.25rem;
         margin-bottom: 0;
@@ -156,7 +157,7 @@
 /* Category badge styling */
 .badge {
     composes: badge from "./Preview.module.css";
-    position: static;
+    position: static !important;
     display: inline-block;
     padding: 2px 8px;
     border-radius: 9999px;

@@ -37,3 +37,11 @@ export const InputSchema = v.object({
 });
 
 export type Input = v.InferOutput<typeof InputSchema>;
+
+export const GetLinksSchema = v.object({
+    ownedLinksOnly: v.fallback(v.boolean(), false),
+    category: v.fallback(v.optional(LinkCategorySchema), undefined),
+    page: v.fallback(v.pipe(v.number(), v.integer(), v.minValue(0)), 0)
+})
+
+export type Filter = v.InferOutput<typeof GetLinksSchema>

@@ -1,5 +1,5 @@
 import { GlobeIcon, ClipboardPasteIcon, CircleAlertIcon } from "@lucide/solid"
-import { StoreSetter, Show, For, createEffect, latest, createMemo, createSignal, createOptimistic, action, useContext, onSettled } from "solid-js"
+import { StoreSetter, Show, For, latest, createMemo, createOptimistic, action, useContext, onSettled, refresh } from "solid-js"
 import styles from "./Shrnkr.module.css"
 import titleCase from "~/lib/titleCase"
 import { user } from "~/features/auth/api"
@@ -8,6 +8,7 @@ import { State } from "./Shrnkr"
 import 'temporal-polyfill/global'
 import { createShortUrl } from "../api"
 import { LinkCategory } from "../services/schema"
+import { links } from "./LinkList"
 
 type P = {
     input: State,
@@ -34,13 +35,17 @@ export function ShrnkrForm(props: P) {
         setSubmitting(true)
         
         if (isInvalidExpiry()) {
-            return
+            return addToast({
+                text: "Expiry date must be at least 15 minutes in the future",
+                type: "warning"
+            })
         }
         
         const res = await createShortUrl({
             ...props.input,
             expiry: expiry()
         })
+        yield;
         if (res instanceof Error) {
             return addToast({
                 text: res.message,
@@ -48,7 +53,8 @@ export function ShrnkrForm(props: P) {
                 autoFades: false
             })
         }
-        props.onCreate(res.shortCode)
+        props.onCreate(res.shortCode);
+        refresh(links)
     })
 
     onSettled(() => {

@@ -1,13 +1,13 @@
 import { getRequestEvent, respond } from "@solidjs/web";
 import * as v from 'valibot';
 import { auth } from "~/utils/auth";
-import { checkUserLinkLimit, processAndValidateUrl, saveShortLink, LinkCreationError } from "./services/linkService";
-import { Input, InputSchema, LinkCategory, LinkCategorySchema } from "./services/schema";
+import * as linkService from "./services/linkService";
+import { Filter, GetLinksSchema, Input, InputSchema, LinkCategorySchema } from "./services/schema";
 import { GET } from "@solidjs/web/server-functions";
 import { db } from "~/drizzle/db";
 import { clickAnalytics, urlLinks } from "~/drizzle/schema";
-import { and, count, desc, eq, getColumns, gte, isNull, or, SQL } from "drizzle-orm";
-import { sleep } from "~/lib/sleep";
+import { and, count, desc, eq, gte, isNull, or, SQL } from "drizzle-orm";
+import { getServerSideUser } from "../auth/api";
 
 export async function createShortUrl(input: Input) {
     'use server';
@@ -34,9 +34,9 @@ export async function createShortUrl(input: Input) {
     }
 
     try {
-        await checkUserLinkLimit(userSession.user.id, userSession.user.isAnonymous!);
-        const longUrl = await processAndValidateUrl(data.url, data);
-        const inserted = await saveShortLink({
+        // await checkUserLinkLimit(userSession.user.id, userSession.user.isAnonymous!);
+        const longUrl = await linkService.processAndValidateUrl(data.url, data);
+        const inserted = await linkService.saveShortLink({
             longUrl,
             userId: userSession.user.id,
             data
@@ -45,7 +45,7 @@ export async function createShortUrl(input: Input) {
         return inserted;
     }
     catch (error) {
-        if (error instanceof LinkCreationError) {
+        if (error instanceof linkService.AppError) {
             return respond(new Error(error.message), { status: error.status });
         }
 
@@ -54,79 +54,22 @@ export async function createShortUrl(input: Input) {
     }
 }
 
-export const LINKS_PER_PAGE = 5
 
-export const GetLinksSchema = v.object({
-    ownedLinksOnly: v.fallback(v.boolean(), false),
-    category: v.fallback(v.optional(LinkCategorySchema), undefined),
-    page: v.fallback(v.number(), 0)
-})
-
-export type Filter = v.InferOutput<typeof GetLinksSchema>
 
 export const getShortenedLinks = GET(async (filter: Filter) => {
     'use server';
-    const {ownedLinksOnly, page, category} = v.parse(GetLinksSchema, filter)
 
     const headers = getRequestEvent()?.request.headers;
     if (!headers) {
         return respond([], { status: 500 });
-    }
-
-    const userSession = await auth.api.getSession({ headers });
-
-    const conditions: (SQL | undefined)[] = [
-        eq(urlLinks.isActive, true),
-        or(
-            isNull(urlLinks.expiresAt),
-            gte(urlLinks.expiresAt, new Date())
-        )
-    ]
-
-    if (ownedLinksOnly && userSession)
-        conditions.push(eq(urlLinks.userId, userSession.user.id))
-
-    if (category)
-        conditions.push(eq(urlLinks.category, category))
-    
-    return db
-        .select({
-            linkId: urlLinks.linkId,
-            shortCode: urlLinks.shortCode,
-            longUrl: urlLinks.longUrl,
-            category: urlLinks.category,
-            createdAt: urlLinks.createdAt,
-            userId: urlLinks.userId,
-            clickCount: count(clickAnalytics.id)
-        })
-        .from(urlLinks)
-        .leftJoin(clickAnalytics, eq(urlLinks.linkId, clickAnalytics.linkId))
-        .limit(LINKS_PER_PAGE + 1)
-        .offset(page * LINKS_PER_PAGE)
-        .where(and(...conditions))
-        .groupBy(urlLinks.linkId)
-        .orderBy(desc(urlLinks.linkId))
+    }   
+    return linkService.getLinks(filter)    
 })
 
 export async function deleteShortLink(linkId: number) {
     'use server'
-    await sleep(2000)
-    const headers = getRequestEvent()?.request.headers;    
-    if (!headers) {
-        return respond(new Error("Something went wrong. Please try again later"), { status: 500 });
-    }
 
-    const userSession = await auth.api.getSession({ headers });  
+    const userSession = await getServerSideUser()
     if (!userSession) return respond(new Error("Please login first"), {status: 401})  
-    const res = await db
-        .update(urlLinks)
-        .set({
-            isActive: false
-        })
-        .where(and(
-            eq(urlLinks.linkId, linkId),
-            eq(urlLinks.userId, userSession.user.id)
-        ))
-        .returning()
-    return res.at(0)
+    return linkService.deleteLink(linkId, userSession.user.id)
 }

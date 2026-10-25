@@ -1,0 +1,45 @@
+.dialog {
+    width: min(90%, 600px);
+    background: #222;
+    top: 50%;
+    left: 50%;
+    translate: -50% -50%;
+    border: none;
+    padding: 1rem;
+
+    &:open {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .headline {
+        font-weight: bold;
+    }
+
+    button {
+        padding: 0.5rem 1rem;
+        background-color: rgba(17, 24, 39, 0.75);
+
+        &:last-child {
+            background-color: #dc2626 ;
+        }
+    }
+
+    &::backdrop {
+        backdrop-filter: blur(5px);
+    }
+
+
+    .btns {
+        display: flex;
+        gap: 1rem;
+
+        >button {
+            flex: 1;
+        }
+    }
+    div[role="group"] {
+        width: 100%;
+    }
+}

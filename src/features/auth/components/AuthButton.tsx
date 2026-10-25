@@ -12,7 +12,7 @@ export interface AuthButtonProps {
 }
 
 
-export function AuthButton(props: AuthButtonProps) {console.log(props.mini)
+export function AuthButton(props: AuthButtonProps) {
     const config = createMemo(() => {
         switch (props.provider) {
             case 'google':

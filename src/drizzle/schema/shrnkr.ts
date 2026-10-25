@@ -29,10 +29,11 @@ export const clickAnalytics = sqliteTable("click_analytics", {
     id: integer("id").primaryKey(),
     linkId: integer("link_id").notNull().references(() => urlLinks.linkId, { onDelete: "cascade", }),
     clickedAt: integer("clicked_at", { mode: "timestamp" }).notNull().default(sql`(unixepoch())`),
+    city: text("city"),
+    region: text("region"),
     countryCode: text("country_code", { length: 2 }),
     referrer: text("referrer", { length: 512 }),
     userAgent: text("user_agent"),
-    ipAddressHashed: text("ip_address_hashed", { length: 64 }),
 },
     (table) => [
         index("idx_analytics_link_time").on(table.linkId, table.clickedAt),
