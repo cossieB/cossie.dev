@@ -6,6 +6,7 @@ import { checkUrlExists } from "../utils/checkUrlExists";
 import { Filter, GetLinksSchema, Input } from "./schema";
 import { getServerSideUser } from "~/features/auth/api";
 import * as v from 'valibot';
+import { getRequestEvent, redirect } from "@solidjs/web";
 
 const TWENTY_EIGHT_DAYS_MS = 28 * 24 * 60 * 60 * 1000;
 
@@ -26,6 +27,7 @@ const isDuplicate = (error: unknown): boolean => {
 };
 
 export async function checkUserLinkLimit(userId: string, isAnonymous: boolean) {
+    'use server'
     const twentyEightDaysAgo = new Date(Date.now() - TWENTY_EIGHT_DAYS_MS);
     const [{ count: linkCount }] = await db
         .select({ count: count() })
@@ -67,6 +69,7 @@ export async function saveShortLink({
     userId: string;
     data: Input;
 }) {
+    'use server'
     const expiresAt = data.expiry ? new Date(data.expiry) : undefined;
 
     if (data.customBackHalf) {
@@ -117,7 +120,8 @@ export async function saveShortLink({
 export const LINKS_PER_PAGE = 5
 
 export async function getLinks(filter: Filter) {
-    const {ownedLinksOnly, page, category} = v.parse(GetLinksSchema, filter)    
+    'use server'
+    const { ownedLinksOnly, page, category } = v.parse(GetLinksSchema, filter)
     const conditions: (SQL | undefined)[] = [
         eq(urlLinks.isActive, true),
         or(
@@ -133,7 +137,7 @@ export async function getLinks(filter: Filter) {
 
     if (category)
         conditions.push(eq(urlLinks.category, category))
-    
+
     return db
         .select({
             linkId: urlLinks.linkId,
@@ -154,7 +158,8 @@ export async function getLinks(filter: Filter) {
 }
 
 export async function deleteLink(linkId: number, userId: string) {
-        const res = await db
+    'use server'
+    const res = await db
         .update(urlLinks)
         .set({
             isActive: false
@@ -165,4 +170,38 @@ export async function deleteLink(linkId: number, userId: string) {
         ))
         .returning()
     return res.at(0)
+}
+
+export async function gotoLongUrl(shortCode: string) {
+    'use server'
+    const request = getRequestEvent()?.request
+    const res = await db
+        .select()
+        .from(urlLinks)
+        .where(eq(urlLinks.shortCode, shortCode))
+
+    const link = res.at(0);
+    if (link) {
+        await db
+            .insert(clickAnalytics)
+            .values({
+                // @ts-expect-error don't know why TS is complaining here 🤔
+                linkId: link.linkId,
+                clickedAt: new Date,
+                countryCode: (request?.cf?.country as string)?.slice(0,2),
+                city: request?.cf?.city,
+                region: request?.cf?.region,
+                continent: request?.cf?.continent,
+                userAgent: request?.headers.get("user-agent"),
+                referrer: request?.headers.get("referer"),
+
+            })
+        throw redirect(link.longUrl, {
+            headers: {
+                "Cache-Control": "private; max-age=60"
+            },
+            status: 307
+        })
+    }
+    // fallthrough to the 404 page
 }

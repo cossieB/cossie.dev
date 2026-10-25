@@ -23,7 +23,7 @@ export function LinkRow(props: Prop) {
         <tr>
             <td>
                 <div class={styles.linkInfo}>
-                    <a href={shortLink()} class={styles.shortCode}>{shortLink()}</a>
+                    <a preload={"false"} href={shortLink()} class={styles.shortCode}>{shortLink()}</a>
                     <span class={styles.longUrl} title={props.link.longUrl}>{props.link.longUrl}</span>
                 </div>
             </td>

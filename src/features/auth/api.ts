@@ -21,6 +21,7 @@ export const logout = action(function* () {
 })
 
 export async function getServerSideUser() {
+    'use server'
     const headers = getRequestEvent()?.request.headers;
     if (!headers) {
         return respond(new Error("Something went wrong. Please try again later"), { status: 500 }) as never;

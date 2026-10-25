@@ -2,11 +2,9 @@ import { getRequestEvent, respond } from "@solidjs/web";
 import * as v from 'valibot';
 import { auth } from "~/utils/auth";
 import * as linkService from "./services/linkService";
-import { Filter, GetLinksSchema, Input, InputSchema, LinkCategorySchema } from "./services/schema";
+import { Filter, Input, InputSchema } from "./services/schema";
 import { GET } from "@solidjs/web/server-functions";
-import { db } from "~/drizzle/db";
-import { clickAnalytics, urlLinks } from "~/drizzle/schema";
-import { and, count, desc, eq, gte, isNull, or, SQL } from "drizzle-orm";
+
 import { getServerSideUser } from "../auth/api";
 
 export async function createShortUrl(input: Input) {

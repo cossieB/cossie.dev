@@ -34,6 +34,7 @@ export const clickAnalytics = sqliteTable("click_analytics", {
     countryCode: text("country_code", { length: 2 }),
     referrer: text("referrer", { length: 512 }),
     userAgent: text("user_agent"),
+    continent: text("continent")
 },
     (table) => [
         index("idx_analytics_link_time").on(table.linkId, table.clickedAt),
