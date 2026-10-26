@@ -1,7 +1,7 @@
 import { createHash, randomBytes } from "node:crypto";
 import { db } from "~/drizzle/db";
 import { clickAnalytics, urlLinks } from "~/drizzle/schema/shrnkr";
-import { and, count, gte, eq, SQL, or, isNull, desc } from "drizzle-orm";
+import { and, count, gte, eq, SQL, or, isNull, desc, sql } from "drizzle-orm";
 import { checkUrlExists } from "../utils/checkUrlExists";
 import { Filter, GetLinksSchema, Input } from "./schema";
 import { getServerSideUser } from "~/features/auth/api";
@@ -117,7 +117,7 @@ export async function saveShortLink({
     throw new AppError("Could not create short url", 500);
 }
 
-export const LINKS_PER_PAGE = 5
+export const LINKS_PER_PAGE = 20
 
 export async function getLinks(filter: Filter) {
     'use server'
@@ -188,7 +188,7 @@ export async function gotoLongUrl(shortCode: string) {
                 // @ts-expect-error don't know why TS is complaining here 🤔
                 linkId: link.linkId,
                 clickedAt: new Date,
-                countryCode: (request?.cf?.country as string)?.slice(0,2),
+                countryCode: (request?.cf?.country as string)?.slice(0, 2),
                 city: request?.cf?.city,
                 region: request?.cf?.region,
                 continent: request?.cf?.continent,
@@ -204,4 +204,58 @@ export async function gotoLongUrl(shortCode: string) {
         })
     }
     // fallthrough to the 404 page
+}
+
+export async function getLinkAnalytics(targetLinkId: number) {
+    'use server'
+    const [
+        [totalResult],
+        topCountries,
+        topReferrers,
+        byDate,
+    ] = await db.batch([
+        // 1. Get total clicks
+        db.select({ totalClicks: count() })
+            .from(clickAnalytics)
+            .where(eq(clickAnalytics.linkId, targetLinkId)),
+
+        // 2. Get top countries
+        db.select({
+            countryCode: clickAnalytics.countryCode,
+            count: count(),
+        })
+            .from(clickAnalytics)
+            .where(eq(clickAnalytics.linkId, targetLinkId))
+            .groupBy(clickAnalytics.countryCode)
+            .orderBy(desc(count()))
+            .limit(5),
+
+        // 3. Get top referrers
+        db.select({
+            referrer: clickAnalytics.referrer,
+            count: count(),
+        })
+            .from(clickAnalytics)
+            .where(eq(clickAnalytics.linkId, targetLinkId))
+            .groupBy(clickAnalytics.referrer)
+            .orderBy(desc(count()))
+            .limit(5),
+
+        // 4. Get clicks by date
+        db.select({
+            clickDate: sql<string>`date(clicked_at, 'unixepoch')`.as('click_date'),
+            dailyClicks: count(),
+        })
+            .from(clickAnalytics)
+            .where(eq(clickAnalytics.linkId, targetLinkId))
+            .groupBy(sql`click_date`)
+            .orderBy(desc(sql`click_date`)),
+    ]);
+
+    return {
+        totalClicks: totalResult?.totalClicks ?? 0,
+        topCountries,
+        topReferrers,
+        byDate,
+    };
 }

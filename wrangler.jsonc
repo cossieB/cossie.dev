@@ -20,7 +20,9 @@
   "d1_databases": [{
     "binding": "DB",
     "database_name": "portfolio",
-    "database_id": "d26a85b0-d106-4ec8-8f09-6fd13cc558b0"
+    "database_id": "d26a85b0-d106-4ec8-8f09-6fd13cc558b0",
+    "migrations_dir": "drizzle",
+    "migrations_pattern": "drizzle/*/migration.sql"
   }],
   "kv_namespaces": [{
     "binding": "KV",

@@ -1,4 +1,4 @@
-import { action, affects, isPending, refresh } from "solid-js";
+import { action, affects, createSignal, isPending, refresh, Show } from "solid-js";
 import styles from "./LinkList.module.css"
 import { deleteShortLink, getShortenedLinks } from "../api";
 import { BarChart3Icon, ChartSplineIcon, CopyIcon, TrashIcon } from "@lucide/solid";
@@ -6,6 +6,8 @@ import env from "virtual:env/client";
 import { user } from "~/features/auth/api";
 import { links } from "./LinkList";
 import { ConfirmDialog } from "~/components/Popover/Confirm";
+import { Portal } from "@solidjs/web";
+import AnalyticsDashboard from "./Analytics";
 
 type Prop = {
     link: Awaited<ReturnType<typeof getShortenedLinks>>[number];
@@ -19,11 +21,14 @@ export function LinkRow(props: Prop) {
         yield deleteShortLink(props.link.linkId)
         refresh(links)
     })
+
+    const [showAnalytics, setShowAnalytics] = createSignal(false)
+
     return (
         <tr>
             <td>
                 <div class={styles.linkInfo}>
-                    <a preload={"false"} href={shortLink()} class={styles.shortCode}>{shortLink()}</a>
+                    <a preload={"false"} target="_blank" prop:rel={"noopener"} href={shortLink()} class={styles.shortCode}>{shortLink()}</a>
                     <span class={styles.longUrl} title={props.link.longUrl}>{props.link.longUrl}</span>
                 </div>
             </td>
@@ -55,6 +60,7 @@ export function LinkRow(props: Prop) {
                         class={styles.actionBtn}
                         title="View Analytics"
                         disabled={isPending(links)}
+                        onClick={() => setShowAnalytics(true)}
                     >
                         <ChartSplineIcon />
                     </button>
@@ -77,6 +83,11 @@ export function LinkRow(props: Prop) {
                 headline="Delete this link?"
                 onConfirm={del}
             />
+            <Show when={showAnalytics()}>
+                <Portal>
+                    <AnalyticsDashboard linkId={props.link.linkId} close={() => setShowAnalytics(false)} />
+                </Portal>
+            </Show>
         </tr>
     )
 }
