@@ -46,7 +46,7 @@ export function Toast(props: { toast: TToast, i: number }) {
     })
     return (
         <div
-            class={`${styles.toast} ${styles[props.toast.type]} cutout`}
+            class={[styles.toast, styles[props.toast.type]]}
             ref={ref}
             popover="manual"
             style={{ "--idx": props.i }}

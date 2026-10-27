@@ -1,7 +1,8 @@
-import { Component, createMemo, For, Loading, Show } from "solid-js";
+import { Component, createMemo, For, Loading, onSettled, Show } from "solid-js";
 import styles from "./Analytics.module.css";
 import { getLinkAnalytics } from "../services/linkService";
 import { XIcon } from "@lucide/solid";
+import { ClickLineChart } from "./ClicksChart";
 
 export default function AnalyticsDashboard(props: { linkId: number, close(): void }) {
     const data = createMemo(() => getLinkAnalytics(props.linkId))
@@ -89,26 +90,7 @@ export default function AnalyticsDashboard(props: { linkId: number, close(): voi
                 {/* Historical Clicks Table / Chart View */}
                 <section class={styles.card}>
                     <h3 class={styles.cardTitle}>Clicks Over Time</h3>
-                    <div class={styles.tableWrapper}>
-                        <table class={styles.table}>
-                            <thead>
-                                <tr>
-                                    <th>Date</th>
-                                    <th style={{ "text-align": "right" }}>Daily Clicks</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <For each={data().byDate}>
-                                    {(row) => (
-                                        <tr>
-                                            <td>{row.clickDate}</td>
-                                            <td style={{ "text-align": "right" }}>{row.dailyClicks.toLocaleString()}</td>
-                                        </tr>
-                                    )}
-                                </For>
-                            </tbody>
-                        </table>
-                    </div>
+                    <ClickLineChart data={data().byDate} />
                 </section>
             </div>
         </Loading>
