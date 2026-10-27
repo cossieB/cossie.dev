@@ -15,12 +15,11 @@ export default function ShrnkrNotFound() {
     const param = useParams()
     const res = createMemo(() => query(() => gotoLongUrl(param.shortCode!), "goto"), {
         deferStream: true,
-
+        name: "goto"
     })
     httpStatus(404)
     return (
-        <Loading>
-            {res()}
+        <Loading on={res()}>
             <div class={styles.container}>
                 <div class={styles.card}>
                     {/* Brand Header */}
@@ -54,10 +53,10 @@ export default function ShrnkrNotFound() {
 
                     {/* Call to Actions */}
                     <div class={styles.actions}>
-                        <a href={paths["shrnkr"]} class={styles.primaryButton}>
+                        <a href={paths["shrnkr"]} class={styles.primaryButton} replace>
                             Create a New Short Link
                         </a>
-                        <a href="/" class={styles.secondaryButton}>
+                        <a href="/" class={styles.secondaryButton} replace>
                             Go Home
                         </a>
                     </div>

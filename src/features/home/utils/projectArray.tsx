@@ -47,8 +47,9 @@ export const projectArray: Projs[] = [
         external: false,
         path: "/shrnkr",
         repo: "https://github.com/cossieB/cossie.dev/tree/main/src/features/shrnkr",
-        stack: ["typescript", "sqlite", "cloudflare", "better-auth"],
+        stack: ["typescript", "solidjs", "sqlite", "cloudflare", "better-auth"],
         type: "full-stack",        
+        imgMobile: "/projects/shrnkr_mobile.jpg"
     }, {
         title: "OAuth2.1 Authorization Server",
         img: "/projects/oauth2.png",

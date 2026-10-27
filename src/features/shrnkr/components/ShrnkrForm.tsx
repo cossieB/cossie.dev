@@ -30,6 +30,7 @@ export function ShrnkrForm(props: P) {
 
     // check is intentionally higher than the server's 15 minutes to account for latency, clock skew and time spent filling the form
     const isInvalidExpiry = () => (expiry() ?? Number.MAX_SAFE_INTEGER) - Date.now() < 30 * 60 * 1000
+    const invalidBackHalf = () => props.input.customBackHalf!.length > 0 && props.input.customBackHalf!.length < 5
 
     const submit = action(async function* () {
         setSubmitting(true)
@@ -50,7 +51,7 @@ export function ShrnkrForm(props: P) {
                 type: "warning"
             })
         }
-        
+
         const res = await createShortUrl({
             ...props.input,
             expiry: expiry()
@@ -111,15 +112,7 @@ export function ShrnkrForm(props: P) {
 
                 </div>
                 <Show when={invalidUrl()}>
-                    <p
-                        id="urlError"
-                        style={{
-                            color: "var(--danger)",
-                            "font-size": "0.75rem",
-                            "margin-top": "6px",
-                            display: "flex",
-                            "align-items": "center"
-                        }}>
+                    <p class={styles.error}>
                         <CircleAlertIcon /> &nbsp; Please enter a valid URL (including https://). Only secure URLs are supported
                     </p>
                 </Show>
@@ -150,6 +143,11 @@ export function ShrnkrForm(props: P) {
                             </For>
                         </select>
                     </div>
+                    <Show when={invalidBackHalf()}>
+                        <p class={styles.error}>
+                            <CircleAlertIcon /> &nbsp; Custom alias has to be at least 5 characters
+                        </p>
+                    </Show>
                 </div>
 
 
@@ -185,16 +183,9 @@ export function ShrnkrForm(props: P) {
                     </div>
                 </div>
                 <Show when={isInvalidExpiry()}>
-                    <div
-                        style={{
-                            color: "var(--danger)",
-                            "font-size": "0.75rem",
-                            "margin-top": "6px",
-                            display: "flex",
-                            "align-items": "center"
-                        }}>
+                    <p class={styles.error}>
                         <CircleAlertIcon /> &nbsp; Expiry date must be at least 15 minutes in the future
-                    </div>
+                    </p>
                 </Show>
 
                 <div class={styles.inputGroup} >
@@ -255,7 +246,7 @@ export function ShrnkrForm(props: P) {
                     !url() ||
                     submitting() ||
                     invalidUrl() ||
-                    props.input.customBackHalf!.length > 0 && props.input.customBackHalf!.length < 5
+                    invalidBackHalf()
                 }
             >
                 Create Short URL
