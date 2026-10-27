@@ -17,7 +17,11 @@ export default {
     FROM: v.string(),
     TO: v.string(),
     RESEND_KEY: v.string(),
-    BETTER_AUTH_SECRET: v.string()
+    BETTER_AUTH_SECRET: v.string(),
+    GOOGLE_CLIENT_ID: v.string(),
+    GOOGLE_SECRET: v.string(),
+    GITHUB_CLIENT_ID: v.string(),
+    GITHUB_SECRET: v.string()
   },
   client: {
     VITE_APP_NAME: v.optional(v.pipe(v.string(), v.minLength(1)), 'cossie'),

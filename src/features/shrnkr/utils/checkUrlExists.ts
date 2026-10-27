@@ -7,7 +7,7 @@ export async function checkUrlExists(targetUrl: string, timeoutMs = 5000): Promi
             method: "HEAD",
             signal: controller.signal,
             headers: {
-                "User-Agent": "Shrnkr-Link-Validator/1.0",
+                "User-Agent": "Shrnkr-Bot/1.0",
             },
         });
 
@@ -16,7 +16,7 @@ export async function checkUrlExists(targetUrl: string, timeoutMs = 5000): Promi
                 method: "GET",
                 signal: controller.signal,
                 headers: {
-                    "User-Agent": "Shrnkr-Link-Validator/1.0",
+                    "User-Agent": "Shrnkr-Bot/1.0",
                 },
             });
         }

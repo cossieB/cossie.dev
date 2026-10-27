@@ -41,6 +41,15 @@ export const projectArray: Projs[] = [
         external: true,
         path: "https://github.com/cossieB/miniger/releases/"
     }, {
+        title: "Shrnkr",
+        img: "/projects/shrnkr.png",
+        description: () => "This URL shortener transforms long, cumbersome URLs into powerful, brandable short links with real-time metadata previews, QR code exports, and instant analytics tracking.",
+        external: false,
+        path: "/shrnkr",
+        repo: "https://github.com/cossieB/cossie.dev/tree/main/src/features/shrnkr",
+        stack: ["typescript", "sqlite", "cloudflare", "better-auth"],
+        type: "full-stack",        
+    }, {
         title: "OAuth2.1 Authorization Server",
         img: "/projects/oauth2.png",
         description: () => (

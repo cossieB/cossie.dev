@@ -92,14 +92,6 @@ declare module "virtual:file-routes" {
       $$route?: undefined;
     },
     {
-      path: "/s/:shortCode";
-      page: true;
-      $component: FileRouteLazyRef<typeof import("./src/routes/s/[shortCode]")>;
-      $GET: FileRouteLazyRef<typeof import("./src/routes/s/[shortCode]")>;
-      $HEAD: FileRouteLazyRef<typeof import("./src/routes/s/[shortCode]")>;
-      $$route?: undefined;
-    },
-    {
       path: "/shrnkr";
       page: true;
       $component: FileRouteLazyRef<typeof import("./src/routes/shrnkr")>;
@@ -115,6 +107,14 @@ declare module "virtual:file-routes" {
       path: "/wordle";
       page: true;
       $component: FileRouteLazyRef<typeof import("./src/routes/wordle")>;
+      $$route?: undefined;
+    },
+    {
+      path: "/s/:shortCode";
+      page: true;
+      $component: FileRouteLazyRef<typeof import("./src/routes/s/[shortCode]")>;
+      $GET: FileRouteLazyRef<typeof import("./src/routes/s/[shortCode]")>;
+      $HEAD: FileRouteLazyRef<typeof import("./src/routes/s/[shortCode]")>;
       $$route?: undefined;
     }
   ];

@@ -26,6 +26,10 @@ declare module 'virtual:env/server' {
     readonly "TO": __Out<__Schema["server"]["TO"]>;
     readonly "RESEND_KEY": __Out<__Schema["server"]["RESEND_KEY"]>;
     readonly "BETTER_AUTH_SECRET": __Out<__Schema["server"]["BETTER_AUTH_SECRET"]>;
+    readonly "GOOGLE_CLIENT_ID": __Out<__Schema["server"]["GOOGLE_CLIENT_ID"]>;
+    readonly "GOOGLE_SECRET": __Out<__Schema["server"]["GOOGLE_SECRET"]>;
+    readonly "GITHUB_CLIENT_ID": __Out<__Schema["server"]["GITHUB_CLIENT_ID"]>;
+    readonly "GITHUB_SECRET": __Out<__Schema["server"]["GITHUB_SECRET"]>;
     readonly "VITE_APP_NAME": __Out<__Schema["client"]["VITE_APP_NAME"]>;
     readonly "VITE_STORAGE_DOMAIN": __Out<__Schema["client"]["VITE_STORAGE_DOMAIN"]>;
     readonly "VITE_APP_URL": __Out<__Schema["client"]["VITE_APP_URL"]>;

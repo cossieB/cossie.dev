@@ -8,7 +8,10 @@ type Provider = 'google' | 'github' | 'anonymous'
 
 const login = action(async function*(provider: Provider) {
     affects(user)
-    const callback = provider === "anonymous" ? () => authClient.signIn.anonymous() : () => authClient.signIn.social({provider})
+    const callback = provider === "anonymous" ? () => authClient.signIn.anonymous() : () => authClient.signIn.social({
+        provider,
+        callbackURL: window.location.pathname,
+    })
     const {error} = await callback()
     yield;
     if (error) {

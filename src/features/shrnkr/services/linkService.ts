@@ -6,7 +6,9 @@ import { checkUrlExists } from "../utils/checkUrlExists";
 import { Filter, GetLinksSchema, Input } from "./schema";
 import { getServerSideUser } from "~/features/auth/api";
 import * as v from 'valibot';
-import { getRequestEvent, redirect } from "@solidjs/web";
+import { getRequestEvent, redirect, respond } from "@solidjs/web";
+import { GET } from "@solidjs/web/server-functions";
+import { waitUntil } from "cloudflare:workers";
 
 const TWENTY_EIGHT_DAYS_MS = 28 * 24 * 60 * 60 * 1000;
 
@@ -119,7 +121,7 @@ export async function saveShortLink({
 
 export const LINKS_PER_PAGE = 20
 
-export async function getLinks(filter: Filter) {
+export const getLinks = GET(async (filter: Filter) => {
     'use server'
     const { ownedLinksOnly, page, category } = v.parse(GetLinksSchema, filter)
     const conditions: (SQL | undefined)[] = [
@@ -138,6 +140,8 @@ export async function getLinks(filter: Filter) {
     if (category)
         conditions.push(eq(urlLinks.category, category))
 
+    getRequestEvent()?.response.headers.set("Cache-Control", "private; max-age=60")
+
     return db
         .select({
             linkId: urlLinks.linkId,
@@ -155,7 +159,8 @@ export async function getLinks(filter: Filter) {
         .where(and(...conditions))
         .groupBy(urlLinks.linkId)
         .orderBy(desc(urlLinks.linkId))
-}
+
+})
 
 export async function deleteLink(linkId: number, userId: string) {
     'use server'
@@ -172,8 +177,9 @@ export async function deleteLink(linkId: number, userId: string) {
     return res.at(0)
 }
 
-export async function gotoLongUrl(shortCode: string) {
+export const gotoLongUrl = GET(async (shortCode: string) => {
     'use server'
+    const now = Date.now()
     const request = getRequestEvent()?.request
     const res = await db
         .select()
@@ -182,31 +188,41 @@ export async function gotoLongUrl(shortCode: string) {
 
     const link = res.at(0);
     if (link) {
-        await db
-            .insert(clickAnalytics)
-            .values({
-                // @ts-expect-error don't know why TS is complaining here 🤔
-                linkId: link.linkId,
-                clickedAt: new Date,
-                countryCode: (request?.cf?.country as string)?.slice(0, 2),
-                city: request?.cf?.city,
-                region: request?.cf?.region,
-                continent: request?.cf?.continent,
-                userAgent: request?.headers.get("user-agent"),
-                referrer: request?.headers.get("referer"),
+        if ((link.expiresAt?.getTime() ?? Number.MAX_SAFE_INTEGER) > now) {
 
+            waitUntil(
+                db
+                    .insert(clickAnalytics)
+                    .values({
+                        // @ts-expect-error don't know why TS is complaining here 🤔
+                        linkId: link.linkId,
+                        clickedAt: new Date,
+                        countryCode: (request?.cf?.country as string)?.slice(0, 2),
+                        city: request?.cf?.city,
+                        region: request?.cf?.region,
+                        continent: request?.cf?.continent,
+                        userAgent: request?.headers.get("user-agent"),
+                        referrer: request?.headers.get("referer"),
+                    })
+            )
+            throw redirect(link.longUrl, {
+                headers: {
+                    "Cache-Control": "private; max-age=60"
+                },
+                status: 307
             })
-        throw redirect(link.longUrl, {
-            headers: {
-                "Cache-Control": "private; max-age=60"
-            },
-            status: 307
-        })
+        }
+        if (link.expiresAt) {
+            waitUntil(
+                db.update(urlLinks).set({ isActive: false }).where(eq(urlLinks.linkId, link.linkId))
+            )
+        }
     }
     // fallthrough to the 404 page
-}
+})
 
-export async function getLinkAnalytics(targetLinkId: number) {
+
+export const getLinkAnalytics = GET(async (targetLinkId: number) => {
     'use server'
     const [
         [totalResult],
@@ -251,11 +267,11 @@ export async function getLinkAnalytics(targetLinkId: number) {
             .groupBy(sql`click_date`)
             .orderBy(desc(sql`click_date`)),
     ]);
-
+    getRequestEvent()?.response.headers.set("Cache-Control", "public; max-age=300")
     return {
         totalClicks: totalResult?.totalClicks ?? 0,
         topCountries,
         topReferrers,
         byDate,
     };
-}
+})

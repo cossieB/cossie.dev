@@ -42,7 +42,7 @@ export default function Shrnkr(props: ParentProps) {
     const [shortCode, setShortCode] = createSignal<string>()
 
     return (
-        <div class={styles.main}>
+        <main class={styles.main}>
             <div class={styles.container}>
                 <Hero />
                 <div class={styles.workspace} >
@@ -70,7 +70,7 @@ export default function Shrnkr(props: ParentProps) {
                 </div>
                 <LinkList />
             </div>
-        </div>
+        </main>
     )
 }
 

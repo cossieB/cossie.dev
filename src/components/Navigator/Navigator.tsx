@@ -48,6 +48,7 @@ export function Navigator() {
                 setActiveCategory(null)
             })]}
             style={{ height: `${h()}px` }}
+            role="navigation"
         >
             <button
                 class={styles.toggle}

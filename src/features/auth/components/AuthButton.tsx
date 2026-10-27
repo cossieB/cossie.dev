@@ -30,7 +30,7 @@ export function AuthButton(props: AuthButtonProps) {
         <button
             type="button"
             onClick={() => props.onClick?.()}
-            class={`${styles.btn} ${config().className} ${props.mini ? styles.btnMini : ''}`}
+            class={[styles.btn, config().className, {[styles.btnMini]: props.mini}]}            
             aria-label={config().label}
             disabled={isPending(user)}
         >
