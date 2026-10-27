@@ -53,8 +53,6 @@ export async function createShortUrl(input: Input) {
     }
 }
 
-
-
 export const getShortenedLinks = GET(async (filter: Filter) => {
     'use server';
 

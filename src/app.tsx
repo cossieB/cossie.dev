@@ -2,7 +2,7 @@ import { Loading } from 'solid-js';
 // Typed client env, validated and baked in at build time (see env.ts).
 import { paths, Router } from './router';
 import './reset.css'
-import './App.css';
+import './app.css';
 import { Navigator } from './components/Navigator/Navigator';
 import { ToastProvider } from './components/Toast/ToastContext';
 import { ToastContainer } from './components/Toast/Toast';
