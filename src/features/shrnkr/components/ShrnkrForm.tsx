@@ -8,7 +8,7 @@ import { State } from "./Shrnkr"
 import 'temporal-polyfill/global'
 import { createShortUrl } from "../api"
 import { LinkCategory } from "../services/schema"
-import { links } from "./LinkList"
+import { links, setLinks } from "./LinkList"
 
 type P = {
     input: State,
@@ -33,7 +33,17 @@ export function ShrnkrForm(props: P) {
 
     const submit = action(async function* () {
         setSubmitting(true)
-        
+        setLinks(s => {
+            s.unshift({
+                category: props.input.category,
+                clickCount: 0,
+                createdAt: new Date,
+                linkId: -Math.random(),
+                longUrl: props.input.url,
+                shortCode: "",
+                userId: user()!.id
+            })
+        })
         if (isInvalidExpiry()) {
             return addToast({
                 text: "Expiry date must be at least 15 minutes in the future",

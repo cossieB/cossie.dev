@@ -1,4 +1,4 @@
-import { action, affects, createSignal, isPending, refresh, Show } from "solid-js";
+import { action, affects, createOptimistic, createSignal, isPending, refresh, Show } from "solid-js";
 import styles from "./LinkList.module.css"
 import { deleteShortLink, getShortenedLinks } from "../api";
 import { BarChart3Icon, ChartSplineIcon, CopyIcon, TrashIcon } from "@lucide/solid";
@@ -15,9 +15,11 @@ type Prop = {
 
 export function LinkRow(props: Prop) {
     let dialog!: HTMLDialogElement
+    const [isDeleting, setIsDeleting] = createOptimistic(false)
     const shortLink = () => `${env.VITE_APP_URL}/s/${props.link.shortCode}`
     const del = action(function* () {
         affects(links)
+        setIsDeleting(true)
         yield deleteShortLink(props.link.linkId)
         refresh(links)
     })
@@ -25,7 +27,9 @@ export function LinkRow(props: Prop) {
     const [showAnalytics, setShowAnalytics] = createSignal(false)
 
     return (
-        <tr>
+        <tr
+            class={{[styles.temp]: props.link.linkId < 0 || isDeleting()}}
+        >
             <td>
                 <div class={styles.linkInfo}>
                     <a preload={"false"} target="_blank" prop:rel={"noopener"} href={shortLink()} class={styles.shortCode}>{shortLink()}</a>
@@ -49,7 +53,7 @@ export function LinkRow(props: Prop) {
                     <button
                         class={styles.actionBtn}
                         title="Copy Link"
-                        disabled={isPending(links)}
+                        disabled={isPending(() => links)}
                         onClick={() => {
                             navigator.clipboard.writeText(shortLink())
                         }}
@@ -59,7 +63,7 @@ export function LinkRow(props: Prop) {
                     <button
                         class={styles.actionBtn}
                         title="View Analytics"
-                        disabled={isPending(links)}
+                        disabled={isPending(() => links)}
                         onClick={() => setShowAnalytics(true)}
                     >
                         <ChartSplineIcon />
@@ -70,7 +74,7 @@ export function LinkRow(props: Prop) {
                         onClick={() => dialog.showModal()}
                         disabled={
                             props.link.userId !== user()?.id ||
-                            isPending(links)
+                            isPending(() => links)
                         }
                     >
                         <TrashIcon />

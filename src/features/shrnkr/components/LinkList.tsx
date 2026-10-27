@@ -1,4 +1,4 @@
-import { createMemo, createStore, For, isPending, Loading } from "solid-js";
+import { createMemo, createOptimisticStore, createStore, For, isPending, Loading } from "solid-js";
 import titleCase from "~/lib/titleCase";
 import styles from "./LinkList.module.css"
 import { getShortenedLinks } from "../api";
@@ -13,12 +13,13 @@ const [filters, setFilters] = createStore({
     category: undefined as LinkCategory | undefined,
     page: 0
 })
-export const links = createMemo(() => getShortenedLinks({
+export const [links, setLinks] = createOptimisticStore(() => getShortenedLinks({
     ownedLinksOnly: filters.ownedLinksOnly,
     category: filters.category,
     page: filters.page
-}), {
-    ssrSource: "client"
+}), [], {
+    ssrSource: "client",
+    key: link => link.linkId
 })
 
 export function LinkList() {
@@ -26,7 +27,7 @@ export function LinkList() {
         <div class={styles.links}>
             <header>
                 <h2>Recent Short Links</h2>
-                <div class={styles.toggles}>        
+                <div class={styles.toggles}>
                     <label class={styles.switchLabel}>Only show your links</label>
                     <label style={{ "margin-bottom": 0 }} class={styles.switch}>
                         <input
@@ -53,50 +54,53 @@ export function LinkList() {
                     </select>
                 </div>
             </header>
-            <div class={styles.tableContainer}>
-                <table class={styles.table}>
-                    <thead>
-                        <tr>
-                            <th>Link</th>
-                            <th>Category</th>
-                            <th>Clicks</th>
-                            <th>Created</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody
-                        class={{ [styles.refetching]: isPending(links) }}
-                    >
-                        <Loading>
-                            <For each={links().slice(0, LINKS_PER_PAGE)}>
+            <Loading>
+
+                <div class={styles.tableContainer}>
+                    <table class={styles.table}>
+                        <thead>
+                            <tr>
+                                <th>Link</th>
+                                <th>Category</th>
+                                <th>Clicks</th>
+                                <th>Created</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody
+                            class={{ [styles.refetching]: isPending(() => links) }}
+                        >
+
+                            <For each={links.slice(0, 3)}>
                                 {link => <LinkRow link={link} />}
                             </For>
-                        </Loading>
-                    </tbody>
-                </table>
-                <div class={styles.pageBtns}>
-                    <button
-                        disabled={filters.page == 0}
-                        onClick={() => {
-                            setFilters(s => {
-                                s.page--
-                            })
-                        }}
-                    >
-                        Prev Page <CircleChevronLeftIcon />
-                    </button>
-                    <button
-                        disabled={links().length <= LINKS_PER_PAGE}
-                        onClick={() => {
-                            setFilters(s => {
-                                s.page++
-                            })
-                        }}
-                    >
-                        <CircleChevronRightIcon /> Next Page
-                    </button>
+
+                        </tbody>
+                    </table>
+                    <div class={styles.pageBtns}>
+                        <button
+                            disabled={filters.page == 0}
+                            onClick={() => {
+                                setFilters(s => {
+                                    s.page--
+                                })
+                            }}
+                        >
+                            Prev Page <CircleChevronLeftIcon />
+                        </button>
+                        <button
+                            disabled={links.length <= LINKS_PER_PAGE}
+                            onClick={() => {
+                                setFilters(s => {
+                                    s.page++
+                                })
+                            }}
+                        >
+                            <CircleChevronRightIcon /> Next Page
+                        </button>
+                    </div>
                 </div>
-            </div>
+            </Loading>
         </div>
     )
 }

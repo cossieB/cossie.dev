@@ -1,9 +1,11 @@
-import { createSignal, For, onSettled } from "solid-js";
+import { createSignal, For, Loading, onSettled, Show } from "solid-js";
 import styles from "./Navigator.module.css";
 import { ChevronLeftIcon, ChevronRightIcon, MenuIcon } from "@lucide/solid";
 import { projectArray } from "~/features/home/utils/projectArray";
 import titleCase from "~/lib/titleCase";
 import clickOutside from "~/lib/clickOutside";
+import { user } from "~/features/auth/api";
+import { LogoutBtn } from "~/features/auth/components/LogoutBtn";
 
 type Project = typeof projectArray[number]['type'];
 
@@ -91,6 +93,11 @@ export function Navigator() {
                         </button>
                     )}
                 </For>
+                <Loading>
+                    <Show when={user()}>
+                        <LogoutBtn />
+                    </Show>
+                </Loading>
             </div>
 
             {/* Options panel */}

@@ -6,10 +6,11 @@ import { Filter, Input, InputSchema } from "./services/schema";
 import { GET } from "@solidjs/web/server-functions";
 
 import { getServerSideUser } from "../auth/api";
+import { sleep } from "~/lib/sleep";
 
 export async function createShortUrl(input: Input) {
     'use server';
-
+ 
     const headers = getRequestEvent()?.request.headers;
     if (!headers) {
         return respond(new Error("Something went wrong. Please try again later."), { status: 500 });
@@ -32,7 +33,7 @@ export async function createShortUrl(input: Input) {
     }
 
     try {
-        // await checkUserLinkLimit(userSession.user.id, userSession.user.isAnonymous!);
+        await linkService.checkUserLinkLimit(userSession.user.id, userSession.user.isAnonymous!);
         const longUrl = await linkService.processAndValidateUrl(data.url, data);
         const inserted = await linkService.saveShortLink({
             longUrl,
