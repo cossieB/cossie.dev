@@ -1,5 +1,5 @@
 import { createSignal, For, Loading, onSettled, Show } from "solid-js";
-import styles from "./Navigator.module.css";
+import styles from "./navigator.module.css";
 import { ChevronLeftIcon, ChevronRightIcon, MenuIcon } from "@lucide/solid";
 import { projectArray } from "~/features/home/utils/projectArray";
 import titleCase from "~/lib/titleCase";

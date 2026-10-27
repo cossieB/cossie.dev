@@ -1,5 +1,4 @@
 import type { Element } from "solid-js";
-import styles from "./navigator.module.css";
 
 type Props = {
     href: string;

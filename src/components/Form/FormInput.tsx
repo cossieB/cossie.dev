@@ -1,7 +1,4 @@
-import { ComponentProps, StoreSetter } from "solid-js"
 import styles from "./Form.module.css"
-import titleCase from "~/lib/titleCase"
-import { KeysWithValuesOfType } from "~/lib/utilityTypes"
 import { JSX } from "@solidjs/web/jsx-runtime"
 
 type Props<T extends object> = {
