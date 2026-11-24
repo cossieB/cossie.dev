@@ -2,7 +2,7 @@ import { ChevronDownIcon } from "@lucide/solid"
 import styles from "./home.module.css"
 import { Header } from "./Header"
 import { projectArray, Projs } from "../utils/projectArray"
-import { createEffect, createSignal, For, onCleanup } from "solid-js"
+import { createEffect, createSignal, For, onCleanup, onSettled } from "solid-js"
 import { LargeProject, SmallProject } from "./Project"
 import { ContactMe } from "./ContactMe"
 import env from "virtual:solid-env/client"
@@ -19,7 +19,9 @@ export function HomePage() {
             body.classList.remove("no-scroll")
     })
 
-    onCleanup(() => document.body.classList.remove("no-scroll"))
+    onSettled(() => {
+        return () => document.body.classList.remove("no-scroll")
+    })
     return (
         <div class={styles.main}>
             <section class={styles.landing}>

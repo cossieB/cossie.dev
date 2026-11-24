@@ -35,7 +35,7 @@ export function ProjectDetails(props: Props) {
             </div>
             <div aria-label="Technologies used" class={styles.stack} >
                 <For each={props.proj.stack}>
-                    {tool => <img title={tool} class={styles.tool} src={`${env.VITE_STORAGE_DOMAIN}/stack/${tool}.png`} alt="" />}
+                    {tool => <img title={tool} class={styles.tool} src={`${env.VITE_STORAGE_DOMAIN}/stack/${tool}.png`} alt={tool} />}
                 </For>
             </div>
         </article>

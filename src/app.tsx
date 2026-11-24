@@ -4,10 +4,8 @@ import './reset.css'
 import './app.css';
 import { Navigator } from './components/Navigator/Navigator';
 import { ToastContainer } from './components/Toast/Toast';
-import { announceRoutes } from "@solidjs/prerender";
 
 export default function App() {
-  announceRoutes(Router)
   return (
     <Router>
       {(props) => (

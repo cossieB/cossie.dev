@@ -3,8 +3,6 @@ import { fileRoutes } from 'filesystem-routing/vite';
 import { defineConfig } from 'vitest/config';
 import solid from '@solidjs/vite-plugin';
 import { cloudflare } from "@cloudflare/vite-plugin";
-import { prerender } from "prerender-crawler/vite";
-import { serverFunctions } from "@solidjs/prerender/integration";
 
 export default defineConfig({
   resolve: {
@@ -43,7 +41,6 @@ export default defineConfig({
     }),
     // `httpMethods` also scans route modules for GET/POST/... exports (API
     // routes); handler modules never enter the client bundle.
-    prerender({mode: "static", integrations: [serverFunctions()]}),
     fileRoutes({ httpMethods: true, types: true }),
   ],
   server: {
