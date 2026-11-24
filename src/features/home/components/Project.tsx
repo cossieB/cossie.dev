@@ -4,7 +4,7 @@ import styles from "./home.module.css"
 import { Setter } from "solid-js";
 import { ProjectDetails } from "./ProjectDetails";
 import { dynamic, Dynamic } from "@solidjs/web";
-import env from "virtual:env/client";
+import env from "virtual:solid-env/client";
 
 
 type Props = {

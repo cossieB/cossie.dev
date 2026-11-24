@@ -2,11 +2,10 @@ import { ChevronDownIcon } from "@lucide/solid"
 import styles from "./home.module.css"
 import { Header } from "./Header"
 import { projectArray, Projs } from "../utils/projectArray"
-import { createEffect, createSignal, For, onCleanup, onSettled, Show } from "solid-js"
-import { ProjectDetails } from "./ProjectDetails"
+import { createEffect, createSignal, For, onCleanup } from "solid-js"
 import { LargeProject, SmallProject } from "./Project"
 import { ContactMe } from "./ContactMe"
-import env from "virtual:env/client"
+import env from "virtual:solid-env/client"
 
 export function HomePage() {
     const [selectedProject, setSelectedProject] = createSignal<Projs | undefined>()

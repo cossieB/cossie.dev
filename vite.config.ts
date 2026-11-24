@@ -3,6 +3,8 @@ import { fileRoutes } from 'filesystem-routing/vite';
 import { defineConfig } from 'vitest/config';
 import solid from '@solidjs/vite-plugin';
 import { cloudflare } from "@cloudflare/vite-plugin";
+import { prerender } from "prerender-crawler/vite";
+import { serverFunctions } from "@solidjs/prerender/integration";
 
 export default defineConfig({
   resolve: {
@@ -23,7 +25,7 @@ export default defineConfig({
         middleware: './src/middleware.ts',
         // Emit dist/server/node.js: a ready-to-run Node server (static
         // assets + the handler). Other platforms import dist/server/server.js.
-        node: false,
+        nodeServer: false,
         // Typed env is on by convention: ./env.ts is probed automatically.
         // (Set `env: false` here to opt out.)
       },
@@ -34,13 +36,14 @@ export default defineConfig({
       diagnostics: true,
       // The configure module runs in the handler graph before any dispatch —
       // it registers the router's single-flight collector.
-      serverFunctions: { configure: './src/server-config.ts' },
+      serverFunctions: { serverSetup: './src/server-config.ts' },
       // `extensions` makes @solidjs/vite-plugin also compile the `?pick=` route
       // modules the fileRoutes plugin emits (their ids end in a query string).
       extensions: ['.jsx', '.tsx'],
     }),
     // `httpMethods` also scans route modules for GET/POST/... exports (API
     // routes); handler modules never enter the client bundle.
+    prerender({mode: "static", integrations: [serverFunctions()]}),
     fileRoutes({ httpMethods: true, types: true }),
   ],
   server: {
@@ -73,7 +76,7 @@ export default defineConfig({
             // Tests run outside the turnkey server: the plugin's env module
             // is stubbed with the same contract (live process.env reads).
             {
-              find: 'virtual:env/server',
+              find: 'virtual:solid-env/server',
               replacement: fileURLToPath(
                 new URL('./vitest-env-server-stub.ts', import.meta.url),
               ),

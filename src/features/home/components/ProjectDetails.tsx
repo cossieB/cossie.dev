@@ -4,7 +4,7 @@ import { Projs } from "../utils/projectArray";
 import styles from "./home.module.css"
 import clickOutside from "~/lib/clickOutside";
 import { dynamic, Dynamic } from "@solidjs/web";
-import env from "virtual:env/client";
+import env from "virtual:solid-env/client";
 
 false && clickOutside
 

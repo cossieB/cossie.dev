@@ -1,5 +1,5 @@
 .main {
-    padding: 2rem;
+    
     margin-inline: auto;
 
     font-family: 'Inter', sans-serif;
@@ -41,6 +41,10 @@
     --transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
     --glass-filter: blur(12px);
+
+    @media (min-width: 768px) {
+        padding: 2rem;
+    }
     
 }
 

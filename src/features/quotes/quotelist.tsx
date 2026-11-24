@@ -92,7 +92,7 @@ export const quotes: Quote[] = [
     }, {
         quote: "If this comedy thing doesn't work out, I've always got poverty to fall back on.",
         author: 'Trevor Noah',
-        tags: new Set(["humorous", "non-fiction", "existential humor"])
+        tags: new Set(["humorous", "non-fiction", ])
     }, {
         quote: 'We hold these truths to be self-evident. All men and women are created, by the you know, you know the thing.',
         author: 'Joe Biden',
@@ -180,7 +180,7 @@ export const quotes: Quote[] = [
     }, {
         quote: 'It is our basic human right to be screw-ups. This civilization was founded on screw-ups and that makes me proud.',
         author: 'Gary King',
-        tags: new Set(["humorous", "fiction", "existential humor"])
+        tags: new Set(["humorous", "fiction", ])
     }, {
         quote: "You know, I have one simple request, and that is to have sharks with frickin' laser beams attached to their heads!",
         author: 'Dr. Evil',
@@ -396,31 +396,31 @@ export const quotes: Quote[] = [
     }, {
         quote: "Never put off till tomorrow, what you can do the day after tomorrow.",
         author: "Mark Twain",
-        tags: new Set(["humorous", "existential humor", "non-fiction", "mark twain"])
+        tags: new Set(["humorous", "non-fiction", "mark twain"])
     }, {
         quote: "The only thing to do with good advice is pass it on. It is never any use to oneself.",
         author: "Oscar Wilde",
-        tags: new Set(["humorous", "existential humor", "non-fiction", "oscar wilde"])
+        tags: new Set(["humorous", "non-fiction", "oscar wilde"])
     }, {
         quote: "Some cause happiness wherever they go; others whenever they go.",
         author: "Oscar Wilde",
-        tags: new Set(["humorous", "existential humor", "non-fiction", "oscar wilde"])
+        tags: new Set(["humorous", "non-fiction", "oscar wilde"])
     }, {
         quote: "The world is a stage, but the play is badly cast.",
         author: "Oscar Wilde",
-        tags: new Set(["humorous", "existential humor", "non-fiction", "oscar wilde"])
+        tags: new Set(["humorous", "non-fiction", "oscar wilde"])
     }, {
         quote: "I don't want to go to heaven. None of my friends are there.",
         author: "Oscar Wilde",
-        tags: new Set(["humorous", "existential humor", "non-fiction", "oscar wilde"])
+        tags: new Set(["humorous", "non-fiction", "oscar wilde"])
     }, {
         quote: "Classic - A book people praise and don't read.",
         author: "Mark Twain",
-        tags: new Set(["humorous", "existential humor", "non-fiction", "mark twain"])
+        tags: new Set(["humorous", "non-fiction", "mark twain"])
     }, {
         quote: "Never argue with idiots, they will drag you down to their level and beat you with experience.",
         author: "Mark Twain",
-        tags: new Set(["humorous", "mark twain", "existential humor", "non-fiction"])
+        tags: new Set(["humorous", "mark twain", "non-fiction"])
     }, {
         quote: "Politicians and diapers must be changed often, and for the same reason.",
         author: "Mark Twain",
@@ -556,7 +556,7 @@ export const quotes: Quote[] = [
     }, {
         quote: "Think of how stupid the average person is, then realize half of them are dumber than that.",
         author: "George Carlin",
-        tags: new Set(["humorous", "non-fiction", "existential humor"])
+        tags: new Set(["humorous", "non-fiction", ])
     }, {
         quote: "It wasn't a lie it was alternative facts.",
         author: "Kellyanne Conway",
@@ -596,11 +596,11 @@ export const quotes: Quote[] = [
     }, {
         quote: "In this world nothing can be said to be certain, except death and taxes.",
         author: "Benjamin Franklin",
-        tags: new Set(["humorous", "non-fiction", "existential humor"])
+        tags: new Set(["humorous", "non-fiction", ])
     }, {
         quote: "The ancient Oracle said that I was the wisest of all the Greeks. It is because I alone, of all the Greeks, know that I know nothing.",
         author: "Socrates",
-        tags: new Set(["humorous", "non-fiction", "existential humor"])
+        tags: new Set(["humorous", "non-fiction", ])
     }, {
         quote: "As it turns out, Mount Kilimanjaro is not wi-fi enabled, so I had to spend two weeks in Tanzania talking to the people in my trip.",
         author: "Nancy Bonds",
@@ -628,7 +628,7 @@ export const quotes: Quote[] = [
     }, {
         quote: "Money, if it does not bring you happiness, will at least help you be miserable in comfort.",
         author: "Helen Gurley Brown",
-        tags: new Set(["humorous", "non-fiction", "existential humor"])
+        tags: new Set(["humorous", "non-fiction", ])
     }, {
         quote: "A man on a horse is spiritually as well as physically bigger than a man on foot.",
         author: "John Steinbeck",
@@ -680,7 +680,7 @@ export const quotes: Quote[] = [
     }, {
         quote: "Benjamin Franklin may have discovered electricity, but it was the man who invented the meter who made the money.",
         author: "Earl Wilson",
-        tags: new Set(["humorous", "non-fiction", "existential humor", "economic"])
+        tags: new Set(["humorous", "non-fiction", "economic"])
     }, {
         quote: "Radio is the theater of the mind; television is the theater of the mindless.",
         author: "Steve Allen",
@@ -704,7 +704,7 @@ export const quotes: Quote[] = [
     }, {
         quote: "The single biggest problem in communication is the illusion that it has taken place.",
         author: "Geroge Bernard Shaw",
-        tags: new Set(["humorous", "non-fiction", "existential humor"])
+        tags: new Set(["humorous", "non-fiction", ])
     }, {
         quote: "I've lived through some terrible things in my life, some of which actually happened.",
         author: "Mark Twain",
@@ -716,7 +716,7 @@ export const quotes: Quote[] = [
     }, {
         quote: "Well, well, well. If it isn't the consequences of my own actions",
         author: "geraldinreverse",
-        tags: new Set(["humorous", "non-fiction", "existential humor", "social media"])
+        tags: new Set(["humorous", "non-fiction", "social media"])
     }, {
         quote: "Doing business without advertising is like winking at a girl in the dark. You know what you are doing but nodbody else does.",
         author: "Steuart Henderson Britt",
@@ -744,7 +744,7 @@ export const quotes: Quote[] = [
     }, {
         quote: "Do not take life too seriously. You will never get out of it alive.",
         author: "Elbet Hubbard",
-        tags: new Set(["humorous", "non-fiction", "existential humor", "dark"])
+        tags: new Set(["humorous", "non-fiction", "dark"])
     }, {
         quote: "Had I known that you'd be so willing to sacrifice yourself to save the world I wouldn't have tried to kill you.",
         author: "Matt Miller",
@@ -788,7 +788,7 @@ export const quotes: Quote[] = [
     }, {
         quote: "Music to drown by. Now I know I'm in first class",
         author: "Tommy Ryan",
-        tags: new Set(["humorous", "fiction", "dark", "existential humor", "movie"])
+        tags: new Set(["humorous", "fiction", "dark", "movie"])
     }, {
         quote: "You know it's a law of nature. Nothing good ever happens in Long Island",
         author: "Charles Haden Savage",
@@ -864,7 +864,7 @@ export const quotes: Quote[] = [
     }, {
         quote: "It is better to remain silent and be thought a fool than to talk and remove all doubt.",
         author: "unknown",
-        tags: new Set(["humorous", "non-fiction", "existential humor"])
+        tags: new Set(["humorous", "non-fiction", ])
     }, {
         quote: "Why are you the way that you are? Honestly, every time I try to do something fun or exciting you make it not that way.",
         author: "Michael Scott",
@@ -884,7 +884,7 @@ export const quotes: Quote[] = [
     }, {
         quote: "Flowers are for two things: dead people and dead marriages",
         author: "Barbara",
-        tags: new Set(["humorous", 'dark', "existential humor", "ted lasso", "tv series"])
+        tags: new Set(["humorous", 'dark', "ted lasso", "tv series"])
     }, {
         quote: "Stand on the ashes of a trillion dead souls and ask the ghosts if honor matters. The silence is your answer",
         author: "Javik",
@@ -1068,7 +1068,7 @@ export const quotes: Quote[] = [
     }, {
         quote: "If Tetris has taught me anything, it's that errors pile up and achievements disappear.",
         author: "Unknown",
-        tags: new Set(['humorous', 'existential humor', 'nerdy'])
+        tags: new Set(['humorous', 'nerdy'])
     }, {
         quote: "Con men leave their marks angry. Con artists leave them smiling.",
         author: "Rolan Quarn",
@@ -1141,5 +1141,9 @@ export const quotes: Quote[] = [
         quote: "Give a man a program, frustrate him for a day. Teach a man to program, frustrate him for a lifetime.",
         author: "Muhammad Waseem",
         tags: new Set(["non-fiction", "humorous", "programming", "nerdy"])
+    }, {
+        quote: "That is our lot, I suppose. But there may come a day when so many have been sacrificed, it will be impossible to tell who won",
+        author: "Commander Rentola",
+        tags: new Set(["fiction", "video game", "mass effect", "dark"])
     }
 ]

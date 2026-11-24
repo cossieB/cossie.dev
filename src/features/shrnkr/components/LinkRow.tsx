@@ -1,19 +1,20 @@
-import { action, affects, createOptimistic, createSignal, isPending, refresh, Show } from "solid-js";
+import { action, affects, createEffect, createOptimistic, createSignal, isPending, refresh, Show } from "solid-js";
 import styles from "./LinkList.module.css"
 import { deleteShortLink, getShortenedLinks } from "../api";
 import { BarChart3Icon, ChartSplineIcon, CopyIcon, TrashIcon } from "@lucide/solid";
-import env from "virtual:env/client";
 import { user } from "~/features/auth/api";
 import { links } from "./LinkList";
 import { ConfirmDialog } from "~/components/Popover/Confirm";
 import { Portal } from "@solidjs/web";
 import AnalyticsDashboard from "./Analytics";
+import env from "virtual:solid-env/client";
 
 type Prop = {
     link: Awaited<ReturnType<typeof getShortenedLinks>>[number];
 };
 
 export function LinkRow(props: Prop) {
+
     let dialog!: HTMLDialogElement
     const [isDeleting, setIsDeleting] = createOptimistic(false)
     const shortLink = () => `${env.VITE_APP_URL}/s/${props.link.shortCode}`

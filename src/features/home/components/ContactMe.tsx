@@ -1,12 +1,12 @@
-import { action, useSubmissions } from "@solidjs/router";
+import { formAction, useSubmissions } from "@solidjs/router";
 import { createStore } from "solid-js";
 import styles from "./home.module.css"
 import { Match, Show, Switch } from "solid-js";
 import Loader from "~/components/Loader/Loader";
 import { CheckIcon } from "@lucide/solid";
-import env from "virtual:env/server";
+import env from "virtual:solid-env/server";
 
-const sendAction = action(async (body: { name: string, email: string, company: string, message: string }) => {
+const sendAction = formAction(async (body: { name: string, email: string, company: string, message: string }) => {
     'use server';
     try {
         const errors: string[] = [];

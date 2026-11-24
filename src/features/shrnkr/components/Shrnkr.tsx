@@ -6,7 +6,7 @@ import { Hero } from "./Hero";
 import { ShrnkrForm } from "./ShrnkrForm";
 import { ShrnkrPreview } from "./Preview";
 import { ShrnkrResult } from "./ShrnkrResult";
-import { env } from "virtual:env/client";
+import { env } from "virtual:solid-env/client";
 import { LinkCategory } from "../services/schema";
 import { LinkList } from "./LinkList";
 
